@@ -1,12 +1,3 @@
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        getStoreAddressFormat('countryGeoId');
-        Event.observe($('countryGeoId'), 'change', function(){
-            getAssociatedStateList('countryGeoId', 'stateProvinceGeoId', 'divStateProvinceGeoId', 'divAddress3');
-            getStoreAddressFormat('countryGeoId');
-          });
-    });
-</script>
 <#if mode?has_content>
   <#if party?has_content>
     <#assign groupName = Static["org.ofbiz.party.party.PartyHelper"].getPartyName(party)/>
@@ -175,8 +166,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <span class="USA CAN">${uiLabelMap.CityCaption}</span>
-          <span class="OTHER">${uiLabelMap.TownOrCityCaption}</span>
+          <span>${uiLabelMap.TownOrCityCaption}</span>
         </label>
       </div>
       <div class="infoValue">
@@ -189,9 +179,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <span class="USA">${uiLabelMap.StateCaption}</span>
-          <span class="CAN">${uiLabelMap.ProvinceCaption}</span>
-          <span class="OTHER">${uiLabelMap.StateOrProvinceCaption}</span>
+          <span>${uiLabelMap.StateOrProvinceCaption}</span>
         </label>
       </div>
       <div class="infoValue">
@@ -210,9 +198,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <span class="USA">${uiLabelMap.ZipCodeCaption}</span>
-          <span class="CAN">${uiLabelMap.PostalCodeCaption}</span>
-          <span class="OTHER">${uiLabelMap.ZipOrPostalCodeCaption}</span>
+          <span>${uiLabelMap.ZipOrPostalCodeCaption}</span>
         </label>
       </div>
       <div class="infoValue">
@@ -321,5 +307,5 @@
     </div>
   </div>
 <#else>
-    ${uiLabelMap.NoDataAvailableInfo}
+      ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

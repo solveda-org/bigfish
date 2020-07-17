@@ -70,12 +70,12 @@
             <#if compareDivResult.type == "2" && compareDivResult.key?has_content>
               <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareDivResult.key)>
               <#assign addKeyTooltipText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","AddKeyTooltip",keyMap, locale ) />
-              <a href="<@ofbizUrl>addMissingDivSeqItem?addKey=${compareDivResult.key?if_exists}&amp;screen=${compareDivResult.screen?if_exists}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()" class="createIcon"></a>
+              <a href="<@ofbizUrl>addMissingDivSeqItem?addKey=${compareDivResult.key?if_exists}&amp;screenType=${compareDivResult.screen?if_exists}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()"><span class="createIcon"></span></a>
             </#if>
             <#if compareDivResult.type == "3" && compareDivResult.key?has_content && valuesMatch == "false">
               <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareDivResult.key, "value", valueCompareToLabelFile)>
               <#assign addKeyTooltipText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SyncKeyAndValueTooltip",keyMap, locale ) />
-              <a href="<@ofbizUrl>changeDivSeqItemValue?key=${compareDivResult.key?if_exists}&amp;screen=${compareDivResult.screen?if_exists}&amp;newValue=${valueCompareToLabelFile}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()" class="syncIcon"></a>
+              <a href="<@ofbizUrl>changeDivSeqItemValue?key=${compareDivResult.key?if_exists}&amp;screenType=${compareDivResult.screen?if_exists}&amp;newValue=${valueCompareToLabelFile}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()"><span class="syncIcon"></span></a>
             </#if>
           </#if>
         </td>

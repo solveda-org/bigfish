@@ -475,10 +475,12 @@
         <field name="productImageLargeUrl" type="string" indexed="false" stored="true" required="false"/>
         <field name="listPrice" type="float" indexed="true" stored="true" required="false"/>
         <field name="price" type="float" indexed="true" stored="true" required="false"/>
+        <field name="recurrencePrice" type="float" indexed="true" stored="true" required="false"/>
         <field name="customerRating" type="float" indexed="true" stored="true" required="false"/>
         <field name="sequenceNum" type="string" indexed="true" stored="true" required="false"/>
         <field name="totalTimesViewed" type="long" indexed="true" stored="true" required="false"/>
         <field name="totalQuantityOrdered" type="float" indexed="true" stored="true" required="false"/>
+        <field name="introductionDate" type="date" indexed="true" stored="true" required="false" datetimeformat="yyyy-MM-dd'T'HH:mm:sss'Z'"/>
         <!-- fields for finding facet grouping  -->
         <field name="productFeatureGroupId" type="string" indexed="true" stored="true" required="false"/>
         <field name="productFeatureGroupDescription" type="string" indexed="false" stored="true" required="false"/>
@@ -486,11 +488,11 @@
         <field name="productCategoryFacetGroups" type="text_ws" indexed="true" stored="true" required="false" omitNorms="true"/>        
         <!-- fields for finding product facility location Region  -->
         <field name="productFacilityIds" type="string" indexed="true" stored="true" required="false"/>
-
+        
         <field name="spell" type="textSpell" indexed="true" stored="true" multiValued="true"/>
         <field name="autocomplete_text" type="edgytext" indexed="true" stored="false"  multiValued="true" omitNorms="true" omitTermFreqAndPositions="false" />
         <!--  dynamicField element -->
-        <dynamicField name="productFeature_*" type="text_ws" indexed="true" stored="true" required="false" multiValued="true" omitNorms="true"/>
+        <dynamicField name="*" type="text_ws" indexed="true" stored="true" required="false" multiValued="true" omitNorms="true"/>
 
        <!-- catchall field, containing all other searchable text fields (implemented
             via copyField further on in this schema  -->
@@ -524,19 +526,19 @@
    <copyField source="categoryDescription" dest="searchText"/>
    <copyField source="categoryName" dest="searchText"/>
    <copyField source="price" dest="searchText"/>
-   <copyField source="productFeature_*" dest="searchText"/>
+   <copyField source="*" dest="searchText"/>
       
    <copyField source="name" dest="autocomplete_text"/> 
    <copyField source="internalName" dest="autocomplete_text"/>
    <copyField source="description" dest="autocomplete_text"/>
    <copyField source="categoryName" dest="autocomplete_text"/>
    <copyField source="categoryDescription" dest="autocomplete_text"/>
-   <copyField source="productFeature_*" dest="autocomplete_text"/>
+   <copyField source="*" dest="autocomplete_text"/>
 
    <copyField source="name" dest="spell"/>
    <copyField source="internalName" dest="spell"/>
    <copyField source="description" dest="spell"/>
    <copyField source="categoryName" dest="spell"/>
    <copyField source="categoryDescription" dest="spell"/>
-   <copyField source="productFeature_*" dest="spell"/>
+   <copyField source="*" dest="spell"/>
 </schema>

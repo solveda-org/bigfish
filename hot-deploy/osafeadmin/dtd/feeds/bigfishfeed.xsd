@@ -13,17 +13,9 @@
       <xsd:element name="CustomerId" type="xsd:string" default=""/>
       <xsd:element name="FirstName" type="xsd:string" default=""/>
       <xsd:element name="LastName" type="xsd:string" default=""/>
-      <xsd:element name="Title" type="xsd:string" default=""/>
-      <xsd:element name="Gender" type="xsd:string" default=""/>
-      <xsd:element name="IsDownloaded" type="xsd:string" default=""/>
       <xsd:element name="DateRegistered" type="xsd:string" default=""/>
       <xsd:element name="EmailAddress" type="xsd:string" default=""/>
-      <xsd:element name="EmailFormat" type="xsd:string" default=""/>
       <xsd:element name="EmailOptIn" type="xsd:string" default=""/>
-      <xsd:element name="DOB_DDMMYYYY" type="xsd:string" default=""/>
-      <xsd:element name="DOB_DDMM" type="xsd:string" default=""/>
-      <xsd:element name="DOB_MMDDYYYY" type="xsd:string" default=""/>
-      <xsd:element name="DOB_MMDD" type="xsd:string" default=""/>
       <xsd:element name="HomePhone" type="xsd:string" default=""/>
       <xsd:element name="CellPhone" type="xsd:string" default=""/>
       <xsd:element name="WorkPhone" type="xsd:string" default=""/>
@@ -31,10 +23,17 @@
       <xsd:element maxOccurs="unbounded" name="BillingAddress" type="BillingAddressType" />
       <xsd:element maxOccurs="unbounded" name="ShippingAddress" type="ShippingAddressType" />
       <xsd:element name="UserLogin" type="UserLoginType" />
+      <xsd:element name="CustomerAttribute" type="CustomerAttributeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CustomerAttributeType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="Attribute" type="AttributeType" />
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="ShippingAddressType">
     <xsd:sequence>
+      <xsd:element name="ToName" type="xsd:string" default=""/>
       <xsd:element name="Country" type="xsd:string" default=""/>
       <xsd:element name="Address1" type="xsd:string" default=""/>
       <xsd:element name="Address2" type="xsd:string" default=""/>
@@ -46,6 +45,7 @@
   </xsd:complexType>
   <xsd:complexType name="BillingAddressType">
     <xsd:sequence>
+      <xsd:element name="ToName" type="xsd:string" default=""/>
       <xsd:element name="Country" type="xsd:string" default=""/>
       <xsd:element name="Address1" type="xsd:string" default=""/>
       <xsd:element name="Address2" type="xsd:string" default=""/>
@@ -73,35 +73,90 @@
   </xsd:complexType>
   <xsd:complexType name="OrderType">
     <xsd:sequence>
-      <xsd:element name="ProductStoreId" type="xsd:string" />
-      <xsd:element name="Customer" type="CustomerType" />
       <xsd:element name="OrderHeader" type="OrderHeaderType" />
-      <xsd:element maxOccurs="unbounded" name="CartPromotion" type="CartPromotionType" />
+      <xsd:element name="Customer" type="CustomerType" />
+      <xsd:element name="OrderShipment" type="OrderShipmentType" />
       <xsd:element name="OrderLineItems" type="OrderLineItemsType" />
-      <xsd:element name="OrderPayment" type="OrderPaymentType" />
+      <xsd:element name="OrderPayment" type="OrderPaymentType"/>
+      <xsd:element name="OrderAdjustment" type="OrderAdjustmentType" />
       <xsd:element name="OrderAttribute" type="OrderAttributeType" />
     </xsd:sequence>
   </xsd:complexType>
+  
   <xsd:complexType name="OrderPaymentType">
     <xsd:sequence>
-	  <xsd:element name="PaymentMethod" type="xsd:string" />
-      <xsd:element name="CardType" type="xsd:string" />
-      <xsd:element name="Last4Digits" type="xsd:string" />
-	  <xsd:element name="CardNumber" type="xsd:string" />
-	  <xsd:element name="ExpiryDate" type="xsd:string" />
-	  <xsd:element name="AuthAmount" type="xsd:string" />
-	  <xsd:element name="PayerId" type="xsd:string" />
-	  <xsd:element name="TransactionId" type="xsd:string" />
-      <xsd:element name="PaymentId" type="xsd:string" />
-      <xsd:element name="MerchantReferenceNumber" type="xsd:string" />
-	  <xsd:element name="PaymentToken" type="xsd:string" />
-	  <xsd:element name="AuthReferenceNumber" type="xsd:string" />
-	  <xsd:element name="AuthDateTime" type="xsd:string" />
-	  <xsd:element name="CaptureAmount" type="xsd:string" />
-	  <xsd:element name="CaptureReferenceNumber" type="xsd:string" />
-	  <xsd:element name="CaptureDateTime" type="xsd:string" />
+      <xsd:element maxOccurs="unbounded" name="Payment" type="PaymentType" />
 	</xsd:sequence>
   </xsd:complexType>
+  
+  <xsd:complexType name="PaymentType">
+    <xsd:sequence>
+      <xsd:element name="PaymentMethodId" type="xsd:string" />
+	  <xsd:element name="PaymentMethod" type="xsd:string" />
+	  <xsd:element name="StatusId" type="xsd:string" />
+	  <xsd:element name="Amount" type="xsd:string" />
+      <xsd:element name="CardType" type="xsd:string" />
+      <xsd:element name="CardNumber" type="xsd:string" />
+	  <xsd:element name="ExpiryDate" type="xsd:string" />
+	  <xsd:element name="SagePayPaymentToken" type="xsd:string" />
+	  <xsd:element name="PayPalPaymentToken" type="xsd:string" />
+	  <xsd:element name="PayPalPayerId" type="xsd:string" />
+	  <xsd:element name="PayPalPayerStatus" type="xsd:string" />
+      <xsd:element name="MerchantReferenceNumber" type="xsd:string" />
+      <xsd:element name="MerchantTransactionId" type="xsd:string" />
+      <xsd:element name="PayPalTransactionId" type="xsd:string" />
+      <xsd:element name="EbsTransactionId" type="xsd:string" />
+      <xsd:element name="EbsPaymentId" type="xsd:string" />
+      <xsd:element name="PaymentGatewayResponse" type="PaymentGatewayResponseType" />
+	</xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PaymentGatewayResponseType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="GatewayResponse" type="GatewayResponseType" />
+	</xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="GatewayResponseType">
+    <xsd:sequence>
+      <xsd:element name="TransCodeEnumId" type="xsd:string" />
+      <xsd:element name="Amount" type="xsd:string" />
+      <xsd:element name="ReferenceNumber" type="xsd:string" />
+      <xsd:element name="AltReferenceNumber" type="xsd:string" />
+      <xsd:element name="TransactionDate" type="xsd:string" />
+      <xsd:element name="GatewayCode" type="xsd:string" />
+      <xsd:element name="GatewayFlag" type="xsd:string" />
+      <xsd:element name="GatewayMessage" type="xsd:string" />
+	</xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="OrderShipmentType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="Shipment" type="ShipmentType" />
+	</xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ShipmentType">
+    <xsd:sequence>
+      <xsd:element name="ShipGroupSequenceId" type="xsd:string" />
+      <xsd:element name="ShippingAddress" type="ShippingAddressType" />
+      <xsd:element name="Carrier" type="xsd:string" />
+      <xsd:element name="ShippingMethod" type="xsd:string" />
+      <xsd:element name="TrackingNumber" type="xsd:string" />
+      <xsd:element name="ShippingInstructions" type="xsd:string" />
+      <xsd:element name="ShipGroupLineItem" type="ShipGroupLineItemType" maxOccurs="unbounded"/>
+	</xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ShipGroupLineItemType">
+    <xsd:sequence>
+      <xsd:element name="ProductId" type="xsd:string" />
+      <xsd:element name="SequenceId" type="xsd:string" />
+      <xsd:element name="Quantity" type="xsd:int" />
+      <xsd:element name="OrderLineAttribute" type="OrderLineAttributeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
   <xsd:complexType name="OrderLineItemsType">
     <xsd:sequence>
       <xsd:element maxOccurs="unbounded" name="OrderLine" type="OrderLineType" />
@@ -109,41 +164,68 @@
   </xsd:complexType>
   <xsd:complexType name="OrderLineType">
     <xsd:sequence>
+      <xsd:element name="StatusId" type="xsd:string" />
       <xsd:element name="ProductId" type="xsd:string" />
       <xsd:element name="SequenceId" type="xsd:string" />
       <xsd:element name="Quantity" type="xsd:int" />
       <xsd:element name="Price" type="xsd:string" />
+      <xsd:element name="ListPrice" type="xsd:string" />
       <xsd:element name="OfferPrice" type="xsd:string" />
-      <xsd:element name="LineTotalGross" type="xsd:string" />
-      <xsd:element name="SalesTax" type="xsd:string" />
-      <xsd:element name="ShippingCharge" type="xsd:string" />
-      <xsd:element name="ShippingTax" type="xsd:string" />
-      <xsd:element name="Carrier" type="xsd:string" />
-      <xsd:element name="CarrierCustomInfo" type="xsd:string" />
+      <xsd:element name="IsPromo" type="xsd:string" />
+      <xsd:element name="IsModifiedPrice" type="xsd:string" />
+      <xsd:element name="LineTotalAmount" type="xsd:string" />
+      <xsd:element maxOccurs="unbounded" name="OrderLineSalesTax" type="OrderLineSalesTaxType" />
+      <xsd:element maxOccurs="unbounded" name="OrderLineShippingCharge" type="OrderLineShippingChargeType" />
       <xsd:element maxOccurs="unbounded" name="OrderLinePromotion" type="OrderLinePromotionType" />
+      <xsd:element name="OrderLineAttribute" type="OrderLineAttributeType" />
     </xsd:sequence>
   </xsd:complexType>
+  
+  <xsd:complexType name="OrderLineAttributeType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="Attribute" type="AttributeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
   <xsd:complexType name="OrderLinePromotionType">
     <xsd:sequence>
+      <xsd:element name="ShipGroupSequenceId" type="xsd:string" />
       <xsd:element name="PromotionCode" type="xsd:string" />
       <xsd:element name="PromotionAmount" type="xsd:string" />
     </xsd:sequence>
   </xsd:complexType>
-  <xsd:complexType name="CartPromotionType">
+  
+  <xsd:complexType name="OrderLineSalesTaxType">
     <xsd:sequence>
-      <xsd:element name="PromotionCode" type="xsd:string" />
-      <xsd:element name="PromotionAmount" type="xsd:string" />
+      <xsd:element name="ShipGroupSequenceId" type="xsd:string" />
+      <xsd:element name="TaxPercent" type="xsd:string" />
+      <xsd:element name="TaxAuthorityGeo" type="xsd:string" />
+      <xsd:element name="TaxAuthorityParty" type="xsd:string" />
+      <xsd:element name="SalesTax" type="xsd:string" />
     </xsd:sequence>
   </xsd:complexType>
+  
+  <xsd:complexType name="OrderLineShippingChargeType">
+    <xsd:sequence>
+      <xsd:element name="ShipGroupSequenceId" type="xsd:string" />
+      <xsd:element name="ShippingCharge" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
   <xsd:complexType name="OrderHeaderType">
     <xsd:sequence>
       <xsd:element name="OrderId" type="xsd:string" />
       <xsd:element name="OrderDate" type="xsd:string" />
+      <xsd:element name="EntryDate" type="xsd:string" />
+      <xsd:element name="StatusId" type="xsd:string" />
+      <xsd:element name="CreatedBy" type="xsd:string" />
+      <xsd:element name="ProductStoreId" type="xsd:string" />
+      <xsd:element name="OrderSubTotal" type="xsd:string" />
       <xsd:element name="OrderTotalItem" type="xsd:string" />
       <xsd:element name="OrderTotalAdjustment" type="xsd:string" />
-      <xsd:element name="OrderShippingChargeGross" type="xsd:string" />
-      <xsd:element name="OrderTotalTax" type="xsd:string" />
-      <xsd:element name="OrderTotalNet" type="xsd:string" />
+      <xsd:element name="OrderShippingCharge" type="xsd:string" />
+      <xsd:element name="OrderTax" type="xsd:string" />
+      <xsd:element name="OrderTotalAmount" type="xsd:string" />
       <xsd:element name="Currency" type="xsd:string" />
     </xsd:sequence>
   </xsd:complexType>
@@ -158,6 +240,28 @@
       <xsd:element name="Value" type="xsd:string" />
     </xsd:sequence>
   </xsd:complexType>
+  
+  <xsd:complexType name="OrderAdjustmentType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="Adjustment" type="AdjustmentType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AdjustmentType">
+    <xsd:sequence>
+      <xsd:element name="ShipGroupSequenceId" type="xsd:string" />
+      <xsd:element name="AdjustmentType" type="xsd:string" />
+      <xsd:element name="Amount" type="xsd:string" />
+      <xsd:element name="TaxPercent" type="xsd:string" />
+      <xsd:element name="TaxAuthorityGeo" type="xsd:string" />
+      <xsd:element name="TaxAuthorityParty" type="xsd:string" />
+      <xsd:element name="AdjustMethod" type="xsd:string" />
+      <xsd:element name="AdjustPoints" type="xsd:string" />
+      <xsd:element name="AdjustConversion" type="xsd:string" />
+      <xsd:element name="AdjustMemberId" type="xsd:string" />
+      <xsd:element name="PromotionCode" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
   
   <!-- definition of Customer ContactUs elements -->
   <xsd:element name="BigFishContactUsFeed" type="BigFishContactUsFeedType" />
@@ -208,381 +312,395 @@
   </xsd:complexType>
   
   <!-- definition of BigFish Product Feed elements -->
-  <xsd:element name="BigFishProductFeed" type="BigFishProductFeedType" />
+  <xsd:element name="BigFishProductFeed" type="BigFishProductFeedType"/>
   <xsd:complexType name="BigFishProductFeedType">
-    <xsd:sequence>
-      <xsd:element name="ProductCategory" type="ProductCategoryType" />
-      <xsd:element name="Products" type="ProductsType" />
-      <xsd:element name="ProductAssociation" type="ProductAssociationType" />
-      <xsd:element name="ProductFeatureSwatch" type="ProductFeatureSwatchType" />
-      <xsd:element name="ProductManufacturer" type="ProductManufacturerType" />
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element name="ProductCategory" type="ProductCategoryType" minOccurs="0"/>
+      <xsd:element name="Products" type="ProductsType" minOccurs="0"/>
+      <xsd:element name="ProductAssociation" type="ProductAssociationType" minOccurs="0"/>
+      <xsd:element name="ProductFeatureSwatch" type="ProductFeatureSwatchType" minOccurs="0"/>
+      <xsd:element name="ProductManufacturer" type="ProductManufacturerType" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <!-- definition of Product Category elements -->
   <xsd:complexType name="ProductCategoryType">
     <xsd:sequence>
-      <xsd:element type="CategoryType" name="Category" maxOccurs="unbounded"/>
+      <xsd:element type="CategoryType" name="Category" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="CategoryType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="CategoryId" default=""/>
-      <xsd:element type="xsd:string" name="ParentCategoryId" default=""/>
-      <xsd:element type="xsd:string" name="CategoryName" default=""/>
-      <xsd:element type="xsd:string" name="Description" default=""/>
-      <xsd:element type="xsd:string" name="LongDescription" default=""/>
-      <xsd:element type="xsd:string" name="AdditionalPlpText" default=""/>
-      <xsd:element type="xsd:string" name="AdditionalPdpText" default=""/>
-      <xsd:element type="PlpImageType" name="PlpImage"/>
-      <xsd:element type="xsd:string" name="FromDate" default=""/>
-      <xsd:element type="xsd:string" name="ThruDate" default=""/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="CategoryId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="ParentCategoryId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="CategoryName" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="Description" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="LongDescription" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="AdditionalPlpText" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="AdditionalPdpText" default="" minOccurs="0"/>
+      <xsd:element type="PlpImageType" name="PlpImage" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="FromDate" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="ThruDate" default="" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PlpImageType">
     <xsd:sequence>
-      <xsd:element ref="Url"/>
+      <xsd:element ref="Url" minOccurs="1"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <!-- definition of Product elements -->
   <xsd:complexType name="ProductsType">
     <xsd:sequence>
-      <xsd:element maxOccurs="unbounded" name="Product" type="ProductType" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="Product" type="ProductType" />
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="ProductType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="MasterProductId" default=""/>
-      <xsd:element type="xsd:string" name="ProductId" default=""/>
-      <xsd:element type="xsd:string" name="InternalName" default=""/>
-      <xsd:element type="xsd:string" name="ProductName" default=""/>
-      <xsd:element type="xsd:string" name="SalesPitch" default=""/>
-      <xsd:element type="xsd:string" name="LongDescription" default=""/>
-      <xsd:element type="xsd:string" name="SpecialInstructions" default=""/>
-      <xsd:element type="xsd:string" name="DeliveryInfo" default=""/>
-      <xsd:element type="xsd:string" name="Directions" default=""/>
-      <xsd:element type="xsd:string" name="TermsAndConds" default=""/>
-      <xsd:element type="xsd:string" name="Ingredients" default=""/>
-      <xsd:element type="xsd:string" name="Warnings" default=""/>
-      <xsd:element type="xsd:string" name="PlpLabel" default=""/>
-      <xsd:element type="xsd:string" name="PdpLabel" default=""/>
-      <xsd:element type="xsd:string" name="ProductHeight" default=""/>
-      <xsd:element type="xsd:string" name="ProductWidth" default=""/>
-      <xsd:element type="xsd:string" name="ProductDepth" default=""/>
-      <xsd:element type="xsd:string" name="Returnable" default=""/>
-      <xsd:element type="xsd:string" name="Taxable" default=""/>
-      <xsd:element type="xsd:string" name="ChargeShipping" default=""/>
-      <xsd:element type="xsd:string" name="ManufacturerId" default=""/>
-      <xsd:element type="xsd:string" name="FromDate" default=""/>
-      <xsd:element type="xsd:string" name="ThruDate" default=""/>
-      <xsd:element type="ProductPriceType" name="ProductPrice"/>
-      <xsd:element type="ProductCategoryMemberType" name="ProductCategoryMember"/>
-      <xsd:element type="ProductSelectableFeatureType" name="ProductSelectableFeature"/>
-      <xsd:element type="ProductDescriptiveFeatureType" name="ProductDescriptiveFeature"/>
-      <xsd:element type="ProductImageType" name="ProductImage"/>
-      <xsd:element type="GoodIdentificationType" name="GoodIdentification"/>
-      <xsd:element type="ProductInventoryType" name="ProductInventory"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="MasterProductId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="ProductId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="ProductStoreId" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="InternalName" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ProductName" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="SalesPitch" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="LongDescription" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="SpecialInstructions" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="DeliveryInfo" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Directions" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="TermsAndConds" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Ingredients" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Warnings" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="PlpLabel" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="PdpLabel" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ProductWidth" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ProductDepth" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ProductHeight" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ProductWeight" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Returnable" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Taxable" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ChargeShipping" default="" minOccurs="0"/>      
+      <xsd:element type="xsd:string" name="IntroDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="DiscoDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ManufacturerId" default="" minOccurs="0"/>
+      <xsd:element type="ProductPriceType" name="ProductPrice" minOccurs="0"/>
+      <xsd:element type="ProductCategoryMemberType" name="ProductCategoryMember" minOccurs="0"/>
+      <xsd:element type="ProductSelectableFeatureType" name="ProductSelectableFeature" minOccurs="0"/>
+      <xsd:element type="ProductDescriptiveFeatureType" name="ProductDescriptiveFeature" minOccurs="0"/>
+      <xsd:element type="ProductImageType" name="ProductImage" minOccurs="0"/>
+      <xsd:element type="GoodIdentificationType" name="ProductGoodIdentification" minOccurs="0"/>
+      <xsd:element type="ProductInventoryType" name="ProductInventory" minOccurs="0"/>
+      <xsd:element type="ProductAttributeType" name="ProductAttribute" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="ProductPriceType">
-    <xsd:sequence>
-      <xsd:element type="ListPriceType" name="ListPrice"/>
-      <xsd:element type="SalesPriceType" name="SalesPrice"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="ListPriceType" name="ListPrice" minOccurs="1"/>
+      <xsd:element type="SalesPriceType" name="SalesPrice" minOccurs="1"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="ListPriceType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="Price" default=""/>
-      <xsd:element type="xsd:string" name="Currency" default=""/>
-      <xsd:element type="xsd:string" name="FromDate" default=""/>
-      <xsd:element type="xsd:string" name="ThruDate" default=""/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="Price" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Currency" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="FromDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ThruDate" default="" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="SalesPriceType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="Price" default=""/>
-      <xsd:element type="xsd:string" name="Currency" default=""/>
-      <xsd:element type="xsd:string" name="FromDate" default=""/>
-      <xsd:element type="xsd:string" name="ThruDate" default=""/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="Price" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Currency" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="FromDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ThruDate" default="" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
                   
   <xsd:complexType name="ProductCategoryMemberType">
     <xsd:sequence>
-      <xsd:element type="CategoryMemberType" name="Category" maxOccurs="unbounded"/>
+      <xsd:element type="CategoryMemberType" name="Category" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="CategoryMemberType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="CategoryId" default=""/>
-      <xsd:element type="xsd:string" name="SequenceNum" default=""/>
-      <xsd:element type="xsd:string" name="FromDate" default=""/>
-      <xsd:element type="xsd:string" name="ThruDate" default=""/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="CategoryId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="SequenceNum" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="FromDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ThruDate" default="" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="ProductSelectableFeatureType">
     <xsd:sequence>
-      <xsd:element type="FeatureType" name="Feature" maxOccurs="unbounded"/>
+      <xsd:element type="FeatureType" name="Feature" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="ProductDescriptiveFeatureType">
     <xsd:sequence>
-      <xsd:element type="FeatureType" name="Feature" maxOccurs="unbounded"/>
+      <xsd:element type="FeatureType" name="Feature" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="FeatureType">
     <xsd:sequence>
-      <xsd:element type="xsd:string" name="FeatureId" default=""/>
-      <xsd:element type="xsd:string" name="Value" maxOccurs="unbounded" default=""/>
-      <xsd:element type="xsd:string" name="Description" default=""/>
-      <xsd:element type="xsd:string" name="SequenceNum" default=""/>
-      <xsd:element type="xsd:string" name="FromDate" default=""/>
-      <xsd:element type="xsd:string" name="ThruDate" default=""/>
+      <xsd:element type="xsd:string" name="FeatureId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="Value" default="" minOccurs="1" maxOccurs="unbounded"/>
+      <xsd:element type="xsd:string" name="Description" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="SequenceNum" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="FromDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ThruDate" default="" minOccurs="0"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="ProductImageType">
-    <xsd:sequence>
-      <xsd:element type="PlpSwatchType" name="PlpSwatch"/>
-      <xsd:element type="PdpSwatchType" name="PdpSwatch"/>
-      <xsd:element type="PlpSmallImageType" name="PlpSmallImage"/>
-      <xsd:element type="PlpSmallAltImageType" name="PlpSmallAltImage"/>
-      <xsd:element type="PdpThumbnailImageType" name="PdpThumbnailImage"/>
-      <xsd:element type="PdpLargeImageType" name="PdpLargeImage"/>
-      <xsd:element type="PdpDetailImageType" name="PdpDetailImage"/>
-      <xsd:element type="PdpVideoType" name="PdpVideoImage"/>
-      <xsd:element type="PdpVideo360Type" name="PdpVideo360Image"/>
-      <xsd:element type="PdpAlternateImageType" name="PdpAlternateImage"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="PlpSwatchType" name="PlpSwatch" minOccurs="0"/>
+      <xsd:element type="PdpSwatchType" name="PdpSwatch" minOccurs="0"/>
+      <xsd:element type="PlpSmallImageType" name="PlpSmallImage" minOccurs="0"/>
+      <xsd:element type="PlpSmallAltImageType" name="PlpSmallAltImage" minOccurs="0"/>
+      <xsd:element type="PdpThumbnailImageType" name="PdpThumbnailImage" minOccurs="0"/>
+      <xsd:element type="PdpLargeImageType" name="PdpLargeImage" minOccurs="0"/>
+      <xsd:element type="PdpDetailImageType" name="PdpDetailImage" minOccurs="0"/>
+      <xsd:element type="PdpVideoType" name="PdpVideoImage" minOccurs="0"/>
+      <xsd:element type="PdpVideo360Type" name="PdpVideo360Image" minOccurs="0"/>
+      <xsd:element type="PdpAlternateImageType" name="PdpAlternateImage" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:element type="xsd:string" name="Url" default=""/>
   <xsd:element type="xsd:string" name="ThruDate" default=""/>
   
   <xsd:complexType name="PlpSwatchType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpSwatchType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PlpSmallImageType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpThumbnailImageType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpLargeImageType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpDetailImageType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpVideoType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpVideo360Type">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PlpSmallAltImageType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpAlternateImageType">
     <xsd:sequence>
-      <xsd:element type="PdpAdditionalImageType" name="PdpAdditionalImage" maxOccurs="10"/>
+      <xsd:element type="PdpAdditionalImageType" name="PdpAdditionalImage" minOccurs="0" maxOccurs="10"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PdpAdditionalImageType">
-    <xsd:sequence>
-      <xsd:element type="PdpAdditionalThumbImageType" name="PdpAdditionalThumbImage"/>
-      <xsd:element type="PdpAdditionalLargeImageType" name="PdpAdditionalLargeImage"/>
-      <xsd:element type="PdpAdditionalDetailImageType" name="PdpAdditionalDetailImage"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="PdpAdditionalThumbImageType" name="PdpAdditionalThumbImage" minOccurs="0"/>
+      <xsd:element type="PdpAdditionalLargeImageType" name="PdpAdditionalLargeImage" minOccurs="0"/>
+      <xsd:element type="PdpAdditionalDetailImageType" name="PdpAdditionalDetailImage" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpAdditionalThumbImageType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpAdditionalLargeImageType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="PdpAdditionalDetailImageType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="GoodIdentificationType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="Sku" default=""/>
-      <xsd:element type="xsd:string" name="GoogleId" default=""/>
-      <xsd:element type="xsd:string" name="Isbn" default=""/>
-      <xsd:element type="xsd:string" name="ManuId" default=""/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="Sku" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="GoogleId" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Isbn" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ManuId" default="" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="ProductInventoryType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="BigfishInventoryTotal" default=""/>
-      <xsd:element type="xsd:string" name="BigfishInventoryWarehouse" default=""/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="BigfishInventoryTotal" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="BigfishInventoryWarehouse" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ProductAttributeType">
+    <xsd:all>
+      <xsd:element type="xsd:string" name="PdpSelectMultiVariant" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="PdpCheckoutGiftMessage" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="PdpQtyMin" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="PdpQtyMax" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="PdpQtyDefault" default="" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <!-- definition of Product Association elements -->
   <xsd:complexType name="ProductAssociationType">
     <xsd:sequence>
-      <xsd:element maxOccurs="unbounded" name="Association" type="AssociationType" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="Association" type="AssociationType" />
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="AssociationType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="MasterProductId" default=""/>
-      <xsd:element type="xsd:string" name="MasterProductIdTo" default=""/>
-      <xsd:element type="xsd:string" name="ProductAssocType" default=""/>
-      <xsd:element type="xsd:string" name="FromDate" default=""/>
-      <xsd:element type="xsd:string" name="ThruDate" default=""/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="MasterProductId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="MasterProductIdTo" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="ProductAssocType" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="FromDate" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="ThruDate" default="" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <!-- definition of Product Feature Swatch elements -->
   <xsd:complexType name="ProductFeatureSwatchType">
     <xsd:sequence>
-      <xsd:element type="FeatureSwatchType" name="Feature" maxOccurs="unbounded"/>
+      <xsd:element type="FeatureSwatchType" name="Feature" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="FeatureSwatchType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="FeatureId" default=""/>
-      <xsd:element type="xsd:string" name="Value" default=""/>
-      <xsd:element type="PlpSwatchType" name="PlpSwatch"/>
-      <xsd:element type="PdpSwatchType" name="PdpSwatch"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="FeatureId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="Value" default="" minOccurs="1"/>
+      <xsd:element type="PlpSwatchType" name="PlpSwatch" minOccurs="0"/>
+      <xsd:element type="PdpSwatchType" name="PdpSwatch" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <!-- definition of Product Feature Swatch elements -->
   <xsd:complexType name="ProductManufacturerType">
     <xsd:sequence>
-      <xsd:element type="ManufacturerType" name="Manufacturer" maxOccurs="unbounded"/>
+      <xsd:element type="ManufacturerType" name="Manufacturer" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="ManufacturerType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="ManufacturerId" default=""/>
-      <xsd:element type="xsd:string" name="ManufacturerName" default=""/>
-      <xsd:element type="xsd:string" name="Description" default=""/>
-      <xsd:element type="xsd:string" name="LongDescription" default=""/>
-      <xsd:element type="ManufacturerImageType" name="ManufacturerImage"/>
-      <xsd:element type="ManufacturerAddressType" name="Address"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="ManufacturerId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="ManufacturerName" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="Description" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="LongDescription" default="" minOccurs="0"/>
+      <xsd:element type="ManufacturerImageType" name="ManufacturerImage" minOccurs="0"/>
+      <xsd:element type="ManufacturerAddressType" name="Address" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="ManufacturerImageType">
-    <xsd:sequence>
-      <xsd:element ref="Url"/>
-      <xsd:element ref="ThruDate"/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element ref="Url" minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
   </xsd:complexType>
   
   <xsd:complexType name="ManufacturerAddressType">
-    <xsd:sequence>
-      <xsd:element name="Address1" type="xsd:string" default=""/>
-      <xsd:element name="CityTown" type="xsd:string" default=""/>
-      <xsd:element name="StateProvince" type="xsd:string" default=""/>
-      <xsd:element name="ZipPostCode" type="xsd:string" default=""/>
-      <xsd:element name="Country" type="xsd:string" default=""/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element name="Address1" type="xsd:string" default="" minOccurs="1"/>
+      <xsd:element name="CityTown" type="xsd:string" default="" minOccurs="1"/>
+      <xsd:element name="StateProvince" type="xsd:string" default="" minOccurs="1"/>
+      <xsd:element name="ZipPostCode" type="xsd:string" default="" minOccurs="1"/>
+      <xsd:element name="Country" type="xsd:string" default="" minOccurs="1"/>
+    </xsd:all>
   </xsd:complexType>
   
   <!-- definition of Order Status elements -->
-  <xsd:element name="BigFishOrderStatusUpdateFeed" type="BigFishOrderStatusUpdateFeedType" />
+  <xsd:element name="BigFishOrderStatusUpdateFeed" type="BigFishOrderStatusUpdateFeedType"/>
   <xsd:complexType name="BigFishOrderStatusUpdateFeedType">
     <xsd:sequence>
-      <xsd:element maxOccurs="unbounded" name="Order" type="OrderStatusType" />
+      <xsd:element maxOccurs="unbounded" name="Order" type="OrderStatusType"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="OrderStatusType">
     <xsd:sequence>
-      <xsd:element type="xsd:string" name="ProductStoreId"/>
-      <xsd:element type="xsd:string" name="OrderId"/>
-      <xsd:element type="xsd:string" name="OrderStatus"/>
-      <xsd:element type="xsd:string" name="OrderShipDate" default=""/>
-      <xsd:element type="xsd:string" name="OrderShipCarrier" default=""/>
-      <xsd:element type="xsd:string" name="OrderShipMethod" default=""/>
-      <xsd:element type="xsd:string" name="OrderTrackingNumber" default=""/>
-      <xsd:element type="xsd:string" name="OrderNote" default=""/>
-      <xsd:element type="OrderItemType" name="OrderItem" maxOccurs="unbounded"/>
+      <xsd:element type="xsd:string" name="ProductStoreId" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="OrderId" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="OrderStatus" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderShipDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderShipCarrier" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderShipMethod" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderTrackingNumber" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderNote" default="" minOccurs="0"/>
+      <xsd:element type="OrderItemType" name="OrderItem" maxOccurs="unbounded" minOccurs="0"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="OrderItemType">
     <xsd:sequence>
-      <xsd:element type="xsd:string" name="ProductId"/>
-      <xsd:element type="xsd:string" name="SequenceId" default=""/>
-      <xsd:element type="xsd:string" name="OrderItemStatus"/>
-      <xsd:element type="xsd:string" name="OrderItemShipDate" default=""/>
-      <xsd:element type="xsd:string" name="OrderItemCarrier" default=""/>
-      <xsd:element type="xsd:string" name="OrderItemShipMethod" default=""/>
-      <xsd:element type="xsd:string" name="OrderItemTrackingNumber" default=""/>
+      <xsd:element type="xsd:string" name="ProductId" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ShipGroupSequenceId" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="SequenceId" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderItemStatus" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderItemShipDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderItemCarrier" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderItemShipMethod" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="OrderItemTrackingNumber" default="" minOccurs="0"/>
     </xsd:sequence>
   </xsd:complexType>
   
@@ -632,12 +750,12 @@
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="ProductRatingType">
-    <xsd:sequence>
-      <xsd:element type="xsd:string" name="ProductStoreId" default=""/>
-      <xsd:element name="ProductId" type="xsd:string" default=""/>
-      <xsd:element name="Sku" type="xsd:string" default=""/>
-      <xsd:element name="ProductRatingScore" type="xsd:string" default=""/>
-    </xsd:sequence>
+    <xsd:all>
+      <xsd:element type="xsd:string" name="ProductStoreId" default="" minOccurs="1"/>
+      <xsd:element name="ProductId" type="xsd:string" default="" minOccurs="0"/>
+      <xsd:element name="Sku" type="xsd:string" default="" minOccurs="0"/>
+      <xsd:element name="ProductRatingScore" type="xsd:string" default="" minOccurs="1"/>
+    </xsd:all>
   </xsd:complexType>
   
 </xsd:schema>

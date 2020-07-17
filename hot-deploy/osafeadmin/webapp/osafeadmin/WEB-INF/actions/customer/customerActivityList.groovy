@@ -214,4 +214,4 @@ if(UtilValidate.isNotEmpty(partyId))
     }
 }
 
-context.customerActivityList = UtilMisc.sortMaps(activityList, UtilMisc.toList("activityDate"));
+context.resultList = UtilMisc.sortMaps(activityList, UtilMisc.toList("activityDate"));

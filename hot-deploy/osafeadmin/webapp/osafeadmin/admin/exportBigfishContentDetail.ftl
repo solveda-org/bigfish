@@ -18,10 +18,14 @@
                  <input type="checkbox" class="checkBoxEntry" name="exportContentProdCat" id="exportContentProdCat" value="Y" <#if parameters.exportContentProdCat?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportContentProductCategorySpotsLabel}</br>
                  <input type="checkbox" class="checkBoxEntry" name="exportContentEmail" id="exportContentEmail" value="Y" <#if parameters.exportContentEmail?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportContentEmailLabel}</br>
                  <input type="checkbox" class="checkBoxEntry" name="exportContentTxtTemplate" id="exportContentTxtTemplate" value="Y" <#if parameters.exportContentTxtTemplate?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportContentTxtTemplateLabel}</br>
+                 <input type="checkbox" class="checkBoxEntry" name="exportPageTagging" id="exportPageTagging" value="Y" <#if parameters.exportPageTagging?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportPageTaggingLabel}</br>
+                 <input type="checkbox" class="checkBoxEntry" name="exportPaymentGatewaySettings" id="exportPaymentGatewaySettings" value="Y" <#if parameters.exportPaymentGatewaySettings?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportPaymentGatewaySettingsLabel}</br>
+                 <input type="checkbox" class="checkBoxEntry" name="exportShippingCharges" id="exportShippingCharges" value="Y" <#if parameters.exportShippingCharges?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportShippingChargesLabel}</br>
+                 <input type="checkbox" class="checkBoxEntry" name="exportSalesTaxes" id="exportSalesTaxes" value="Y" <#if parameters.exportSalesTaxes?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportSalesTaxesLabel}</br>
              </div>
         </div>
       </div>
 
   <#else>
-      ${uiLabelMap.NoDataAvailableInfo}
+      ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
   </#if>

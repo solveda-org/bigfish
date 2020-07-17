@@ -7,8 +7,9 @@
           <label>${uiLabelMap.PinCodeCaption}</label>
           <input type="text" maxlength="255" name="pincode" id="pincode" value="${parameters.pincode!""}"/>
       </div>
-      <div class="entryButtons">
+      <div class="container button">
           <input type="submit" value="${uiLabelMap.CheckPinCodeBtn}" class="standardBtn action"/>
-      </div>
+          <a href="javascript:void(0);" class="standardBtn js_cancelPinCodeChecker">${uiLabelMap.CloseBtn!}</a>
+     </div>
   </form>
 </div>

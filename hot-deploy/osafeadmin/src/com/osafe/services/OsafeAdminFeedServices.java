@@ -1,8 +1,14 @@
 package com.osafe.services;
 
 import java.io.BufferedWriter;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,6 +20,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -25,6 +32,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
@@ -38,19 +46,21 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 
-import com.osafe.feeds.osafefeeds.BigFishCustomerFeedType;
-import com.osafe.feeds.osafefeeds.BigFishOrderStatusUpdateFeedType;
-import com.osafe.feeds.osafefeeds.CustomerType;
-import com.osafe.feeds.osafefeeds.OrderStatusType;
+import com.osafe.feeds.FeedsUtil;
+import com.osafe.feeds.osafefeeds.*;
 import com.osafe.util.OsafeAdminUtil;
+import org.ofbiz.base.util.MessageString;
 
-public class OsafeAdminFeedServices {
+public class OsafeAdminFeedServices 
+{
     public static final String module = OsafeAdminFeedServices.class.getName();
     private static final String resource = "OSafeAdminUiLabels";
     
-    public static Map<String, Object> clientProductRatingUpdate(DispatchContext dctx, Map<String, ? extends Object> context) {
+    public static Map<String, Object> clientProductRatingUpdate(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
         
@@ -74,78 +84,180 @@ public class OsafeAdminFeedServices {
         {
         	feedsInErrorSubDir = OsafeAdminUtil.getProductStoreParm(delegator, productStoreId, "FEEDS_IN_ERROR_SUB_DIR");
         }
-        String processedDir = "_"+UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss");
-        if(UtilValidate.isNotEmpty(feedsInSuccessSubDir)) {
+        
+        String currentDateTimeString = UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss");
+        
+        String processedDir = "_"+currentDateTimeString;
+        if(UtilValidate.isNotEmpty(feedsInSuccessSubDir)) 
+        {
         	processedDir = feedsInSuccessSubDir + processedDir; 
         }
-        String errorDir = "_"+UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss");
-        if(UtilValidate.isNotEmpty(feedsInErrorSubDir)) {
+        String errorDir = "_"+currentDateTimeString;
+        if(UtilValidate.isNotEmpty(feedsInErrorSubDir)) 
+        {
         	errorDir = feedsInErrorSubDir + errorDir; 
         }
         
-        if (UtilValidate.isNotEmpty(feedsInRatingDir)) {
+        if (UtilValidate.isNotEmpty(feedsInRatingDir)) 
+        {
             long pauseLong = 0;
             File baseDir = new File(feedsInRatingDir);
 
-            if (baseDir.isDirectory() && baseDir.canRead()) {
+            if (baseDir.isDirectory() && baseDir.canRead()) 
+            {
                 File[] fileArray = baseDir.listFiles();
                 FastList<File> files = FastList.newInstance();
                 
-                for (File file: fileArray) {
-                    if (file.getName().toUpperCase().endsWith("XML")) {
+                for (File file: fileArray) 
+                {
+                    if (file.getName().toUpperCase().endsWith("XML")) 
+                    {
                         files.add(file);
                     }
                 }
                 int passes=0;
                 int lastUnprocessedFilesCount = 0;
+                
+                File fOutFile =null;
+                BufferedWriter bwOutFile = null;
+                String rowString = new String();
+                try
+                {
+                	if(files.size()>0)
+                	{
+                		fOutFile = new File(feedsInRatingDir, "productRatingLog_"+currentDateTimeString+".log");
+                        if (fOutFile.createNewFile()) 
+                        {
+                        	bwOutFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fOutFile), "UTF-8"));
+                        }
+                	}
+                }
+                catch(Exception e)
+                {
+                	
+                }
+                
                 FastList<File> unprocessedFiles = FastList.newInstance();
-                while (files.size()>0 &&
-                        files.size() != lastUnprocessedFilesCount) {
+                while (files.size()>0 && files.size() != lastUnprocessedFilesCount) 
+                {
                     lastUnprocessedFilesCount = files.size();
                     unprocessedFiles = FastList.newInstance();
-                    for (File f: files) {
+                    for (File f: files) 
+                    {
                     	String uploadTempDir = System.getProperty("ofbiz.home") + "/runtime/tmp/upload/";
-                    	try {
+                    	try 
+                    	{
                     	    FileUtils.copyFileToDirectory(f, new File(uploadTempDir));
-                    	} catch (IOException e) {
+                    	} 
+                    	catch (IOException e) 
+                    	{
                     		Debug.log("Can not copy file " + f.getName() + " to Directory " +uploadTempDir);
 						}
                     	
                         Map<String, Object> importClientProductRatingXMLTemplateCtx = UtilMisc.toMap("xmlDataDir", uploadTempDir,
                                 "autoLoad", Boolean.TRUE,
                                 "userLogin", userLogin);
+                        try 
+                        {
+                        	writeFeedLogMessage(bwOutFile, "*******************START PROCESSING FILE "+f.getName()+" ******************");
+                        	
+	                        String xmlDataFile = uploadTempDir + f.getName();
+	                        List<String> errorMessageList = FastList.newInstance();
+                    		List productRatingDataList = FastList.newInstance();
+                    		List<String> dataErrorMessageList = FastList.newInstance();
+                    		List validateErrorMessageList = FastList.newInstance();
+                    		
+                    		if (UtilValidate.isNotEmpty(uploadTempDir) && UtilValidate.isNotEmpty(f.getName())) 
+                    		{
+                    			Map<String, Object> productRatingDataListSvcCtx = FastMap.newInstance();
+                    			productRatingDataListSvcCtx.put("productRatingFilePath", uploadTempDir);
+                    			productRatingDataListSvcCtx.put("productRatingFileName", f.getName());
+                    			
+                    			Map productRatingDataListSvcRes = dispatcher.runSync("getProductRatingDataListFromFile", productRatingDataListSvcCtx);
+                    			productRatingDataList = UtilGenerics.checkList(productRatingDataListSvcRes.get("productRatingDataList"), Map.class);
+                    			dataErrorMessageList = UtilGenerics.checkList(productRatingDataListSvcRes.get("errorMessageList"), String.class);
+                    		}
+                    		
+                    		if(dataErrorMessageList.size() > 0)
+                    		{
+                    		}
+                    		else
+                    		{
+                    			Map<String, Object> svcCtx = FastMap.newInstance();
+    	                        svcCtx.put("productRatingDataList", productRatingDataList);
 
-                        try {
-                        	String xmlDataFile = uploadTempDir + f.getName();
-                            importClientProductRatingXMLTemplateCtx.put("xmlDataFile", xmlDataFile);
-                            Map result  = dispatcher.runSync("importClientProductRatingXMLTemplate", importClientProductRatingXMLTemplateCtx);
-                            List<String> serviceMsg = (List)result.get("messages");
-                            if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) {
-                                try {
-                        	        FileUtils.copyFileToDirectory(f, new File(feedsInRatingDir , processedDir));
-                        	        f.delete();
-                        	    } catch (IOException e) {
-                        		    Debug.log("Can not copy file " + f.getName() + " to Directory " +processedDir);
-    						    }
-                            } else {
-                            	try {
+    	                        Map svcRes = dispatcher.runSync("validateProductRatingData", svcCtx);
+
+    	                        validateErrorMessageList = UtilGenerics.checkList(svcRes.get("errorMessageList"), String.class);
+                    		}
+                    		
+                            
+	                        validateErrorMessageList.addAll(dataErrorMessageList);
+	                        errorMessageList.addAll(validateErrorMessageList);
+	                        
+	                        if(errorMessageList.size() > 0)
+	                        {
+	                        }
+	                        else
+	                        {
+	                            importClientProductRatingXMLTemplateCtx.put("xmlDataFile", xmlDataFile);
+	                            Map result  = dispatcher.runSync("importClientProductRatingXMLTemplate", importClientProductRatingXMLTemplateCtx);
+	                            List<String> serviceMsg = (List)result.get("messages");
+	                            if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) 
+	                            {
+	                            } 
+	                            else 
+	                            {
+	                            	errorMessageList.add(result.get("errorMessage").toString());
+	                            }
+	                        }
+	                        
+	                        if(errorMessageList.size() > 0)
+                            {
+                            	for(String errorMessage : errorMessageList)
+                    			{
+                    				rowString = "ERROR: " + errorMessage;
+                    				writeFeedLogMessage(bwOutFile, rowString);
+                    			}
+                            	try 
+                            	{
                         	        FileUtils.copyFileToDirectory(f, new File(feedsInRatingDir , errorDir));
                         	        f.delete();
-                        	    } catch (IOException e) {
+                        	    } 
+                            	catch (IOException e) 
+                            	{
                         		    Debug.log("Can not copy file " + f.getName() + " to Directory " +errorDir);
     						    }
                             }
-                            
-                        } catch (Exception e) {
+                            else
+                            {
+                            	try 
+                                {
+                        	        FileUtils.copyFileToDirectory(f, new File(feedsInRatingDir , processedDir));
+                        	        f.delete();
+                        	    } 
+                                catch (IOException e) 
+                                {
+                        		    Debug.log("Can not copy file " + f.getName() + " to Directory " +processedDir);
+    						    }
+                            }
+	                        writeFeedLogMessage(bwOutFile, "*******************END PROCESSING FILE "+f.getName()+" ******************");
+                        } 
+                        catch (Exception e) 
+                        {
                             unprocessedFiles.add(f);
                             Debug.log("Failed " + f + " adding to retry list for next pass");
                         }
                         // pause in between files
-                        if (pauseLong > 0) {
+                        if (pauseLong > 0) 
+                        {
                             Debug.log("Pausing for [" + pauseLong + "] seconds - " + UtilDateTime.nowTimestamp());
-                            try {
+                            try 
+                            {
                                 Thread.sleep((pauseLong * 1000));
-                            } catch (InterruptedException ie) {
+                            } 
+                            catch (InterruptedException ie) 
+                            {
                                 Debug.log("Pause finished - " + UtilDateTime.nowTimestamp());
                             }
                         }
@@ -153,12 +265,34 @@ public class OsafeAdminFeedServices {
                     files = unprocessedFiles;
                     passes++;
                 }
+                try
+                {
+                    bwOutFile.flush();
+                }
+                catch (Exception e) 
+                {
+      	        }
+                finally 
+                {
+                    try {
+                        if (bwOutFile != null) {
+                   	        bwOutFile.close();
+                        }
+                    }  
+                    catch (IOException ioe) {
+                        Debug.logError(ioe, module);
+                    }
+                }
                 lastUnprocessedFilesCount=unprocessedFiles.size();
                 
-            } else {
+            } 
+            else 
+            {
             	Debug.log("path not found or can't be read");
             }
-        } else {
+        } 
+        else 
+        {
         	Debug.log("No path specified, doing nothing.");
         }
         
@@ -166,7 +300,8 @@ public class OsafeAdminFeedServices {
     }
     
     
-    public static Map<String, Object> clientProductUpdate(DispatchContext dctx, Map<String, ? extends Object> context) {
+    public static Map<String, Object> clientProductUpdate(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
         
@@ -176,7 +311,8 @@ public class OsafeAdminFeedServices {
         String feedsInProductDir = (String)context.get("feedsInProductDir");
         String feedsInSuccessSubDir = (String)context.get("feedsInSuccessSubDir");
         String feedsInErrorSubDir = (String)context.get("feedsInErrorSubDir");
-
+        
+        String currentDateTimeString = UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss");
         // Check passed params
         if (UtilValidate.isEmpty(feedsInProductDir)) 
         {
@@ -191,75 +327,252 @@ public class OsafeAdminFeedServices {
         	feedsInErrorSubDir = OsafeAdminUtil.getProductStoreParm(delegator, productStoreId, "FEEDS_IN_ERROR_SUB_DIR");
         }
 
-        String processedDir = "_"+UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss");
-        if(UtilValidate.isNotEmpty(feedsInSuccessSubDir)) {
+        String processedDir = "_"+currentDateTimeString;
+        if(UtilValidate.isNotEmpty(feedsInSuccessSubDir)) 
+        {
         	processedDir = feedsInSuccessSubDir + processedDir; 
         }
-        String errorDir = "_"+UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss");
-        if(UtilValidate.isNotEmpty(feedsInErrorSubDir)) {
+        String errorDir = "_"+currentDateTimeString;
+        if(UtilValidate.isNotEmpty(feedsInErrorSubDir)) 
+        {
         	errorDir = feedsInErrorSubDir + errorDir; 
         }
         
-        if (UtilValidate.isNotEmpty(feedsInProductDir)) {
+        if (UtilValidate.isNotEmpty(feedsInProductDir)) 
+        {
             long pauseLong = 0;
             File baseDir = new File(feedsInProductDir);
 
-            if (baseDir.isDirectory() && baseDir.canRead()) {
+            if (baseDir.isDirectory() && baseDir.canRead()) 
+            {
                 File[] fileArray = baseDir.listFiles();
                 FastList<File> files = FastList.newInstance();
                 
-                for (File file: fileArray) {
-                    if (file.getName().toUpperCase().endsWith("XML")) {
+                for (File file: fileArray) 
+                {
+                    if (file.getName().toUpperCase().endsWith("XML")) 
+                    {
                         files.add(file);
                     }
                 }
                 int passes=0;
                 int lastUnprocessedFilesCount = 0;
+                
+                File fOutFile =null;
+                BufferedWriter bwOutFile = null;
+                String rowString = new String();
+                try
+                {
+                	if(files.size()>0)
+                	{
+                		fOutFile = new File(feedsInProductDir, "productLog_"+currentDateTimeString+".log");
+                        if (fOutFile.createNewFile()) 
+                        {
+                        	bwOutFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fOutFile), "UTF-8"));
+                        }
+                	}
+                }
+                catch(Exception e)
+                {
+                	
+                }
+                
                 FastList<File> unprocessedFiles = FastList.newInstance();
-                while (files.size()>0 &&
-                        files.size() != lastUnprocessedFilesCount) {
+                while (files.size()>0 && files.size() != lastUnprocessedFilesCount) 
+                {
                     lastUnprocessedFilesCount = files.size();
                     unprocessedFiles = FastList.newInstance();
-                    for (File f: files) {
+                    for (File f: files) 
+                    {
                     	String uploadTempDir = System.getProperty("ofbiz.home") + "/runtime/tmp/upload/";
-                    	try {
+                    	try 
+                    	{
                     	    FileUtils.copyFileToDirectory(f, new File(uploadTempDir));
-                    	} catch (IOException e) {
+                    	} 
+                    	catch (IOException e) 
+                    	{
                     		Debug.log("Can not copy file " + f.getName() + " to Directory " +uploadTempDir);
 						}
                     	
-                        Map<String, Object> importClientProductTemplateCtx = UtilMisc.toMap("xmlDataDir", uploadTempDir,"removeAll",Boolean.FALSE,"autoLoad",Boolean.TRUE,"userLogin",userLogin);
-                        try {
+                        Map<String, Object> importClientProductTemplateCtx = UtilMisc.toMap("xmlDataDir", uploadTempDir,"removeAll",Boolean.FALSE,"autoLoad",Boolean.TRUE,"userLogin",userLogin,"productStoreId",productStoreId);
+                        try 
+                        {
+                        	writeFeedLogMessage(bwOutFile, "*******************START PROCESSING FILE "+f.getName()+" ******************");
+                        	
                         	String xmlDataFile = uploadTempDir + f.getName();
                         	importClientProductTemplateCtx.put("xmlDataFile", xmlDataFile);
-                            Map result  = dispatcher.runSync("importClientProductXMLTemplate", importClientProductTemplateCtx);
-                            List<String> serviceMsg = (List)result.get("messages");
-                            if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) {
-                                try {
-                        	        FileUtils.copyFileToDirectory(f, new File(feedsInProductDir , processedDir));
-                        	        f.delete();
-                        	    } catch (IOException e) {
-                        		    Debug.log("Can not copy file " + f.getName() + " to Directory " +processedDir);
-    						    }
-                            } else {
-                            	try {
+                        	
+                        	List<String> prodCatErrorList = FastList.newInstance();
+	                        List<String> prodCatWarningList = FastList.newInstance();
+	                        List<String> productErrorList = FastList.newInstance();
+	                        List<String> productWarningList = FastList.newInstance();
+	                        List<String> productAssocErrorList = FastList.newInstance();
+	                        List<String> productAssocWarningList = FastList.newInstance();
+	                        List<String> productFeatureSwatchErrorList = FastList.newInstance();
+	                        List<String> productFeatureSwatchWarningList = FastList.newInstance();
+	                        List<String> productManufacturerErrorList = FastList.newInstance();
+	                        List<String> productManufacturerWarningList = FastList.newInstance();
+                        	
+                        	List productCatDataList = FastList.newInstance();
+                        	List productDataList = FastList.newInstance();
+                        	List productAssocDataList = FastList.newInstance();
+                        	List productFeatureSwatchDataList = FastList.newInstance();
+                        	List manufacturerDataList = FastList.newInstance();
+                        	List<String> errorMessageList = FastList.newInstance();
+                        		
+                        	if (UtilValidate.isNotEmpty(uploadTempDir) && UtilValidate.isNotEmpty(f.getName())) 
+                        	{
+                        		Map<String, Object> productDataListSvcCtx = FastMap.newInstance();
+                        		productDataListSvcCtx.put("productFilePath", uploadTempDir);
+                        		productDataListSvcCtx.put("productFileName", f.getName());
+                        			
+                        		Map productDataListSvcRes = dispatcher.runSync("getProductDataListFromFile", productDataListSvcCtx);
+                        			
+                        		productCatDataList = UtilGenerics.checkList(productDataListSvcRes.get("productCatDataList"), Map.class);
+                        		productDataList = UtilGenerics.checkList(productDataListSvcRes.get("productDataList"), Map.class);
+                        		productAssocDataList = UtilGenerics.checkList(productDataListSvcRes.get("productAssocDataList"), Map.class);
+                        		productFeatureSwatchDataList = UtilGenerics.checkList(productDataListSvcRes.get("productFeatureSwatchDataList"), Map.class);
+                        		manufacturerDataList = UtilGenerics.checkList(productDataListSvcRes.get("manufacturerDataList"), Map.class);
+                        		errorMessageList = UtilGenerics.checkList(productDataListSvcRes.get("errorMessageList"), String.class);
+                        	}
+                        	if(errorMessageList.size() > 0)
+                        	{
+                        		// Log the Errors and Warnings into Log File
+                        	}
+                        	else
+                        	{
+	                            Map<String, Object> svcCtx = FastMap.newInstance();
+		                        svcCtx.put("productCatDataList", productCatDataList);
+		                        svcCtx.put("productDataList", productDataList);
+		                        svcCtx.put("productAssocDataList", productAssocDataList);
+		                        svcCtx.put("productFeatureSwatchDataList", productFeatureSwatchDataList);
+		                        svcCtx.put("manufacturerDataList", manufacturerDataList);
+
+		                        Map svcRes = dispatcher.runSync("validateProductData", svcCtx);
+		                        prodCatErrorList = UtilGenerics.checkList(svcRes.get("prodCatErrorList"), String.class);
+		                        prodCatWarningList = UtilGenerics.checkList(svcRes.get("prodCatWarningList"), String.class);
+		                        productErrorList = UtilGenerics.checkList(svcRes.get("productErrorList"), String.class);
+		                        productWarningList = UtilGenerics.checkList(svcRes.get("productWarningList"), String.class);
+		                        productAssocErrorList = UtilGenerics.checkList(svcRes.get("productAssocErrorList"), String.class);
+		                        productAssocWarningList = UtilGenerics.checkList(svcRes.get("productAssocWarningList"), String.class);
+		                        productFeatureSwatchErrorList = UtilGenerics.checkList(svcRes.get("productFeatureSwatchErrorList"), String.class);
+		                        productFeatureSwatchWarningList = UtilGenerics.checkList(svcRes.get("productFeatureSwatchWarningList"), String.class);
+		                        productManufacturerErrorList = UtilGenerics.checkList(svcRes.get("productManufacturerErrorList"), String.class);
+		                        productManufacturerWarningList = UtilGenerics.checkList(svcRes.get("productManufacturerWarningList"), String.class);
+		                        errorMessageList = UtilGenerics.checkList(svcRes.get("errorMessageList"), String.class);
+                        	}
+                        	if(errorMessageList.size() > 0 || prodCatErrorList.size() > 0 || productErrorList.size()>0 || productAssocErrorList.size()>0 || productFeatureSwatchErrorList.size()>0 || productManufacturerErrorList.size()>0)
+                        	{
+                        		// Log the Errors and Warnings into Log File
+                        	}
+                        	else
+                        	{
+                        		Map result  = dispatcher.runSync("importClientProductXMLTemplate", importClientProductTemplateCtx);
+                                List<String> serviceMsg = (List)result.get("messages");
+                                if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) 
+                                {
+                                } 
+                                else 
+                                {
+                                	errorMessageList.add(result.get("errorMessage").toString());
+                                }
+                        	}
+                        	if(errorMessageList.size() > 0 || prodCatErrorList.size() > 0 || productErrorList.size()>0 || productAssocErrorList.size()>0 || productFeatureSwatchErrorList.size()>0 || productManufacturerErrorList.size()>0)
+                            {
+                            	for(String errorMessage : errorMessageList)
+                    			{
+                    				rowString = "ERROR: " + errorMessage;
+                    				writeFeedLogMessage(bwOutFile, rowString);
+                    			}
+                                for(String errorMessage : prodCatErrorList)
+                        		{
+                        		    rowString = "PRODUCT CATEGORY ERROR: " + errorMessage;
+                        			writeFeedLogMessage(bwOutFile, rowString);
+                        		}
+                                for(String errorMessage : productErrorList)
+                        		{
+                        		    rowString = "PRODUCT ERROR: " + errorMessage;
+                        			writeFeedLogMessage(bwOutFile, rowString);
+                        		}
+                                for(String errorMessage : productAssocErrorList)
+                        		{
+                        		    rowString = "PRODUCT ASSOC ERROR: " + errorMessage;
+                        			writeFeedLogMessage(bwOutFile, rowString);
+                        		}
+                                for(String errorMessage : productFeatureSwatchErrorList)
+                        		{
+                        		    rowString = "PRODUCT FEATURE SWATCH ERROR: " + errorMessage;
+                        			writeFeedLogMessage(bwOutFile, rowString);
+                        		}
+                                for(String errorMessage : productManufacturerErrorList)
+                        		{
+                        		    rowString = "PRODUCT MANUFACTURER ERROR: " + errorMessage;
+                        			writeFeedLogMessage(bwOutFile, rowString);
+                        		}
+                            	try 
+                            	{
                         	        FileUtils.copyFileToDirectory(f, new File(feedsInProductDir , errorDir));
                         	        f.delete();
-                        	    } catch (IOException e) {
+                        	    } 
+                            	catch (IOException e) 
+                            	{
                         		    Debug.log("Can not copy file " + f.getName() + " to Directory " +errorDir);
     						    }
                             }
-                            
-                        } catch (Exception e) {
+                            else
+                            {
+                            	try 
+                                {
+                        	        FileUtils.copyFileToDirectory(f, new File(feedsInProductDir , processedDir));
+                        	        f.delete();
+                        	    } 
+                                catch (IOException e) 
+                                {
+                        		    Debug.log("Can not copy file " + f.getName() + " to Directory " +processedDir);
+    						    }
+                            }
+                        	for(String warningMessage : prodCatWarningList)
+                    		{
+                    		    rowString = "PRODUCT CATEGORY WARNING: " + warningMessage;
+                    			writeFeedLogMessage(bwOutFile, rowString);
+                    		}
+                            for(String warningMessage : productWarningList)
+                    		{
+                    		    rowString = "PRODUCT WARNING: " + warningMessage;
+                    			writeFeedLogMessage(bwOutFile, rowString);
+                    		}
+                            for(String warningMessage : productAssocWarningList)
+                    		{
+                    		    rowString = "PRODUCT ASSOC WARNING: " + warningMessage;
+                    			writeFeedLogMessage(bwOutFile, rowString);
+                    		}
+                            for(String warningMessage : productFeatureSwatchWarningList)
+                    		{
+                    		    rowString = "PRODUCT FEATURE SWATCH WARNING: " + warningMessage;
+                    			writeFeedLogMessage(bwOutFile, rowString);
+                    		}
+                            for(String warningMessage : productManufacturerWarningList)
+                    		{
+                    		    rowString = "PRODUCT MANUFACTURER WARNING: " + warningMessage;
+                    			writeFeedLogMessage(bwOutFile, rowString);
+                    		}
+	                        writeFeedLogMessage(bwOutFile, "*******************END PROCESSING FILE "+f.getName()+" ******************");
+                        } 
+                        catch (Exception e) 
+                        {
                             unprocessedFiles.add(f);
                             Debug.log("Failed " + f + " adding to retry list for next pass");
                         }
                         // pause in between files
-                        if (pauseLong > 0) {
+                        if (pauseLong > 0) 
+                        {
                             Debug.log("Pausing for [" + pauseLong + "] seconds - " + UtilDateTime.nowTimestamp());
-                            try {
+                            try 
+                            {
                                 Thread.sleep((pauseLong * 1000));
-                            } catch (InterruptedException ie) {
+                            } 
+                            catch (InterruptedException ie) 
+                            {
                                 Debug.log("Pause finished - " + UtilDateTime.nowTimestamp());
                             }
                         }
@@ -267,15 +580,36 @@ public class OsafeAdminFeedServices {
                     files = unprocessedFiles;
                     passes++;
                 }
+                try
+                {
+                    bwOutFile.flush();
+                }
+                catch (Exception e) 
+                {
+      	        }
+                finally 
+                {
+                    try {
+                        if (bwOutFile != null) {
+                   	        bwOutFile.close();
+                        }
+                    }  
+                    catch (IOException ioe) {
+                        Debug.logError(ioe, module);
+                    }
+                }
                 lastUnprocessedFilesCount=unprocessedFiles.size();
                 
-            } else {
+            } 
+            else 
+            {
             	Debug.log("path not found or can't be read");
             }
-        } else {
+        } 
+        else 
+        {
         	Debug.log("No path specified, doing nothing.");
         }
-        
         return ServiceUtil.returnSuccess();
     }
     
@@ -392,7 +726,8 @@ public class OsafeAdminFeedServices {
         return ServiceUtil.returnSuccess();
     }
     
-    public static Map<String, Object> clientOrderStatusUpdate(DispatchContext dctx, Map<String, ? extends Object> context) {
+    public static Map<String, Object> clientOrderStatusUpdate(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
         
@@ -416,89 +751,214 @@ public class OsafeAdminFeedServices {
         {
         	feedsInErrorSubDir = OsafeAdminUtil.getProductStoreParm(delegator, productStoreId, "FEEDS_IN_ERROR_SUB_DIR");
         }
-
-        String processedDir = "_"+UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss");
-        if(UtilValidate.isNotEmpty(feedsInSuccessSubDir)) {
+        
+        String currentDateTimeString = UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss");
+        
+        String processedDir = "_"+currentDateTimeString;
+        if(UtilValidate.isNotEmpty(feedsInSuccessSubDir)) 
+        {
         	processedDir = feedsInSuccessSubDir + processedDir; 
         }
-        String errorDir = "_"+UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss");
-        if(UtilValidate.isNotEmpty(feedsInErrorSubDir)) {
+        String errorDir = "_"+currentDateTimeString;
+        if(UtilValidate.isNotEmpty(feedsInErrorSubDir)) 
+        {
         	errorDir = feedsInErrorSubDir + errorDir; 
         }
         
-        if (UtilValidate.isNotEmpty(feedsInOrderStatusDir)) {
+        if (UtilValidate.isNotEmpty(feedsInOrderStatusDir)) 
+        {
             long pauseLong = 0;
             File baseDir = new File(feedsInOrderStatusDir);
 
-            if (baseDir.isDirectory() && baseDir.canRead()) {
+            if (baseDir.isDirectory() && baseDir.canRead()) 
+            {
                 File[] fileArray = baseDir.listFiles();
                 FastList<File> files = FastList.newInstance();
                 
-                for (File file: fileArray) {
-                    if (file.getName().toUpperCase().endsWith("XML")) {
+                for (File file: fileArray) 
+                {
+                    if (file.getName().toUpperCase().endsWith("XML")) 
+                    {
                         files.add(file);
                     }
                 }
                 int passes=0;
                 int lastUnprocessedFilesCount = 0;
+                
+                File fOutFile =null;
+                BufferedWriter bwOutFile = null;
+                String rowString = new String();
+                try
+                {
+                	if(files.size()>0)
+                	{
+                		fOutFile = new File(feedsInOrderStatusDir, "orderStatusLog_"+currentDateTimeString+".log");
+                        if (fOutFile.createNewFile()) 
+                        {
+                        	bwOutFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fOutFile), "UTF-8"));
+                        }
+                	}
+                }
+                catch(Exception e)
+                {
+                	
+                }
+                
                 FastList<File> unprocessedFiles = FastList.newInstance();
-                while (files.size()>0 &&
-                        files.size() != lastUnprocessedFilesCount) {
+                while (files.size()>0 && files.size() != lastUnprocessedFilesCount) 
+                {
                     lastUnprocessedFilesCount = files.size();
                     unprocessedFiles = FastList.newInstance();
-                    for (File f: files) {
+                    for (File f: files) 
+                    {
+                    	
                     	String uploadTempDir = System.getProperty("ofbiz.home") + "/runtime/tmp/upload/";
-                    	try {
+                    	try 
+                    	{
                     	    FileUtils.copyFileToDirectory(f, new File(uploadTempDir));
-                    	} catch (IOException e) {
+                    	} 
+                    	catch (IOException e) 
+                    	{
                     		Debug.log("Can not copy file " + f.getName() + " to Directory " +uploadTempDir);
 						}
                     	
                         Map<String, Object> importClientOrderStatusXMLTemplateCtx = UtilMisc.toMap("xmlDataDir", uploadTempDir,"autoLoad",Boolean.TRUE,"userLogin",userLogin);
-                        try {
+                        try 
+                        {
+                        	writeFeedLogMessage(bwOutFile, "*******************START PROCESSING FILE "+f.getName()+" ******************");
+                            
                         	String xmlDataFile = uploadTempDir + f.getName();
-                        	importClientOrderStatusXMLTemplateCtx.put("xmlDataFile", xmlDataFile);
-                            Map result  = dispatcher.runSync("importClientOrderStatusXMLTemplate", importClientOrderStatusXMLTemplateCtx);
-                            List<String> serviceMsg = (List)result.get("messages");
-                            if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) {
-                                try {
-                        	        FileUtils.copyFileToDirectory(f, new File(feedsInOrderStatusDir , processedDir));
-                        	        f.delete();
-                        	    } catch (IOException e) {
-                        		    Debug.log("Can not copy file " + f.getName() + " to Directory " +processedDir);
-    						    }
-                            } else {
-                            	try {
+                        	
+                        	
+                        	List<String> errorMessageList = FastList.newInstance();
+                    		List orderStatusDataList = FastList.newInstance();
+                    		List<String> dataErrorMessageList = FastList.newInstance();
+                    		List validateErrorMessageList = FastList.newInstance();
+                    		
+                    		if (UtilValidate.isNotEmpty(uploadTempDir) && UtilValidate.isNotEmpty(f.getName())) 
+                    		{
+                    			Map<String, Object> orderStatusDataListSvcCtx = FastMap.newInstance();
+                    			orderStatusDataListSvcCtx.put("orderStatusFilePath", uploadTempDir);
+                    			orderStatusDataListSvcCtx.put("orderStatusFileName", f.getName());
+                    			
+                    			Map orderStatusDataListSvcRes = dispatcher.runSync("getOrderStatusDataListFromFile", orderStatusDataListSvcCtx);
+                    			orderStatusDataList = UtilGenerics.checkList(orderStatusDataListSvcRes.get("orderStatusDataList"), Map.class);
+                    			dataErrorMessageList = UtilGenerics.checkList(orderStatusDataListSvcRes.get("errorMessageList"), String.class);
+                    		}
+                    		if(dataErrorMessageList.size() > 0)
+                    		{
+                    		}
+                    		else
+                    		{
+                    			Map<String, Object> svcCtx = FastMap.newInstance();
+    	                        svcCtx.put("orderStatusDataList", orderStatusDataList);
+    	                        svcCtx.put("productStoreId", productStoreId);
+
+    	                        Map svcRes = dispatcher.runSync("validateOrderStatusData", svcCtx);
+
+    	                        validateErrorMessageList = UtilGenerics.checkList(svcRes.get("errorMessageList"), String.class);
+                    		}
+                            
+	                        validateErrorMessageList.addAll(dataErrorMessageList);
+	                        errorMessageList.addAll(validateErrorMessageList);
+	                        
+	                        if(errorMessageList.size() > 0)
+	                        {
+	                        }
+	                        else
+	                        {
+	                        	importClientOrderStatusXMLTemplateCtx.put("xmlDataFile", xmlDataFile);
+	                            Map result  = dispatcher.runSync("importClientOrderStatusXMLTemplate", importClientOrderStatusXMLTemplateCtx);
+	                            List<String> serviceMsg = (List)result.get("messages");
+	                            if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) 
+	                            {
+	                            } 
+	                            else 
+	                            {
+	                            	errorMessageList.add(result.get("errorMessage").toString());
+	                            }
+	                        }
+	                        if(errorMessageList.size() > 0)
+                            {
+                            	for(String errorMessage : errorMessageList)
+                    			{
+                    				rowString = "ERROR: " + errorMessage;
+                    				writeFeedLogMessage(bwOutFile, rowString);
+                    			}
+                            	try 
+                            	{
                         	        FileUtils.copyFileToDirectory(f, new File(feedsInOrderStatusDir , errorDir));
                         	        f.delete();
-                        	    } catch (IOException e) {
+                        	    }
+                            	catch (IOException e) 
+                            	{
                         		    Debug.log("Can not copy file " + f.getName() + " to Directory " +errorDir);
     						    }
                             }
-                            
-                        } catch (Exception e) {
+                            else
+                            {
+                            	try 
+                                {
+                        	        FileUtils.copyFileToDirectory(f, new File(feedsInOrderStatusDir , processedDir));
+                        	        f.delete();
+                        	    } 
+                                catch (IOException e) 
+                                {
+                        		    Debug.log("Can not copy file " + f.getName() + " to Directory " +processedDir);
+    						    }
+                            }
+                        } 
+                        catch (Exception e) 
+                        {
                             unprocessedFiles.add(f);
                             Debug.log("Failed " + f + " adding to retry list for next pass");
                         }
                         // pause in between files
-                        if (pauseLong > 0) {
+                        if (pauseLong > 0) 
+                        {
                             Debug.log("Pausing for [" + pauseLong + "] seconds - " + UtilDateTime.nowTimestamp());
-                            try {
+                            try 
+                            {
                                 Thread.sleep((pauseLong * 1000));
-                            } catch (InterruptedException ie) {
+                            } 
+                            catch (InterruptedException ie) 
+                            {
                                 Debug.log("Pause finished - " + UtilDateTime.nowTimestamp());
                             }
                         }
+                        writeFeedLogMessage(bwOutFile, "*******************END PROCESSING FILE "+f.getName()+" ******************");
                     }
                     files = unprocessedFiles;
                     passes++;
                 }
+                try
+                {
+                    bwOutFile.flush();
+                }
+                catch (Exception e) 
+                {
+      	        }
+                finally 
+                {
+                    try {
+                        if (bwOutFile != null) {
+                   	        bwOutFile.close();
+                        }
+                    }  
+                    catch (IOException ioe) {
+                        Debug.logError(ioe, module);
+                    }
+                }
                 lastUnprocessedFilesCount=unprocessedFiles.size();
                 
-            } else {
+            } 
+            else 
+            {
             	Debug.log("path not found or can't be read");
             }
-        } else {
+        } 
+        else 
+        {
         	Debug.log("No path specified, doing nothing.");
         }
         
@@ -807,7 +1267,6 @@ public class OsafeAdminFeedServices {
 	        		try {
 	        	        FileUtils.copyFile(exportedFileSrc, new File(feedsOutRequestCatalogDir, exportedFileName));
 	        	        exportedFileSrc.delete();
-	        	        
 	        	      //Set the IS_DOWNLOADED Attribute to 'Y'
 	        	        if(UtilValidate.isNotEmpty(feedsExportedIdList)) {
 	        	        	Map<String, Object> createUpdateDownloadedArrtibuteCtx = UtilMisc.toMap("feedsExportedIdList", feedsExportedIdList,
@@ -830,243 +1289,6 @@ public class OsafeAdminFeedServices {
         
         return ServiceUtil.returnSuccess();
     }
-    
-    
-    public static Map<String, Object> importOrderStatusChangeXml(DispatchContext dctx, Map<String, ? extends Object> context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String productStoreId = (String)context.get("productStoreId");
-        String uploadedFileName = (String)context.get("_uploadedFile_fileName");
-        ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
-        List<String> error_list = new ArrayList<String>();
-        if(UtilValidate.isEmpty(uploadedFileName)) {
-        	error_list.add(UtilProperties.getMessage(resource, "BlankFeedFileError", locale));
-        }
-        Map result = FastMap.newInstance();
-        if(UtilValidate.isNotEmpty(uploadedFileName)) {
-        	if(!(uploadedFileName.toUpperCase()).endsWith("XML")) {
-        		error_list.add(UtilProperties.getMessage(resource, "FeedFileNotXmlError", locale));	
-        	} else {
-        		Map<String, Object> uploadFileCtx = FastMap.newInstance();
-                uploadFileCtx.put("userLogin",userLogin);
-                uploadFileCtx.put("uploadedFile",uploadBytes);
-                uploadFileCtx.put("_uploadedFile_fileName",uploadedFileName);
-                
-                try {
-        			result = dispatcher.runSync("uploadFile", uploadFileCtx);
-        		} catch (GenericServiceException e) {
-        			e.printStackTrace();
-        		}
-        	}
-        }
-        if(UtilValidate.isNotEmpty(result.get("uploadFilePath")) && UtilValidate.isNotEmpty(result.get("uploadFileName"))) {
-        	try {
-        	    JAXBContext jaxbContext = JAXBContext.newInstance("com.osafe.feeds.osafefeeds");
-        	    Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        	    JAXBElement<BigFishOrderStatusUpdateFeedType> bfOrderStatusUpdateFeedType;
-				bfOrderStatusUpdateFeedType = (JAXBElement<BigFishOrderStatusUpdateFeedType>)unmarshaller.unmarshal(new File((String)result.get("uploadFilePath") + (String)result.get("uploadFileName")));
-				List<OrderStatusType> orderList = bfOrderStatusUpdateFeedType.getValue().getOrder();
-				List<String> carrierIdList = FastList.newInstance();
-				List<String> shippingMethodIdList = FastList.newInstance();
-				try {
-					
-					List<GenericValue> carrierShipmentMethodList = delegator.findByAnd("ProductStoreShipmentMethView", UtilMisc.toMap("productStoreId", productStoreId));
-					if(UtilValidate.isNotEmpty(carrierShipmentMethodList)) {
-						for(GenericValue carrierMethod : carrierShipmentMethodList) {
-							carrierIdList.add(carrierMethod.getString("partyId"));
-							shippingMethodIdList.add(carrierMethod.getString("shipmentMethodTypeId"));
-						}
-					}
-					
-				} catch (GenericEntityException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				if(orderList.size() > 0) {
-					List dataRows = ImportServices.buildOrderStatusXMLDataRows(orderList);
-					for (int i=0 ; i < dataRows.size() ; i++) 
-	                {
-		            	 Map mRow = (Map)dataRows.get(i);
-		            	 
-			             if(Integer.parseInt((String)mRow.get("totalOrderItems")) > 0) {
-			            	 for(int orderItemNo = 0; orderItemNo < Integer.parseInt((String)mRow.get("totalOrderItems")); orderItemNo++) {
-			            		boolean carrierIdMatch = true;
-			            		boolean shippingMethodIdMatch = true;
-			            		List<GenericValue> orderItems = FastList.newInstance();
-		             		    try {
-		             		    	if(UtilValidate.isNotEmpty(mRow.get("productId_" + (orderItemNo + 1))) && UtilValidate.isEmpty(mRow.get("orderItemSequenceId_" + (orderItemNo + 1)))) {
-		         					    orderItems = delegator.findByAnd("OrderItem", UtilMisc.toMap("orderId", mRow.get("orderId"), "productId", mRow.get("productId_" + (orderItemNo + 1))));
-		         					    if(UtilValidate.isEmpty(orderItems)) {
-		         					    	error_list.add(UtilProperties.getMessage(resource, "OrderItemProductIdMatchingError", UtilMisc.toMap("productId", mRow.get("productId_" + (orderItemNo + 1))), locale));
-		         					    }
-		             		    	}
-		             		    	if(UtilValidate.isNotEmpty(mRow.get("productId_" + (orderItemNo + 1))) && UtilValidate.isNotEmpty(mRow.get("orderItemSequenceId_" + (orderItemNo + 1)))) {
-		         					    orderItems = delegator.findByAnd("OrderItem", UtilMisc.toMap("orderId", mRow.get("orderId"), "productId", mRow.get("productId_" + (orderItemNo + 1)), "orderItemSeqId", mRow.get("orderItemSequenceId_" + (orderItemNo + 1))));
-		         					    if(UtilValidate.isEmpty(orderItems)) {
-		         						    error_list.add(UtilProperties.getMessage(resource, "OrderItemProductIdSeqIdMatchingError", UtilMisc.toMap("productId", mRow.get("productId_" + (orderItemNo + 1)), "sequenceId", mRow.get("orderItemSequenceId_" + (orderItemNo + 1))), locale));
-		         					    }
-		             		    	}
-		             		    	if(UtilValidate.isNotEmpty(mRow.get("orderItemCarrier_" + (orderItemNo + 1)))) {
-		             		    		if(!carrierIdList.contains(mRow.get("orderItemCarrier_" + (orderItemNo + 1)))) {
-		             		    			carrierIdMatch = false;
-		             		    		}
-		             		    	}
-		             		    	if(UtilValidate.isNotEmpty(mRow.get("orderItemShipMethod_" + (orderItemNo + 1)))) {
-                                        if(!shippingMethodIdList.contains(mRow.get("orderItemShipMethod_" + (orderItemNo + 1)))) {
-                                        	shippingMethodIdMatch = false;
-		             		    		}
-		             		    	}
-		             		    	if(!carrierIdMatch || !shippingMethodIdMatch) {
-		             		    		error_list.add(UtilProperties.getMessage(resource, "OrderItemShippingMethodMatchingError", UtilMisc.toMap("carrierId", mRow.get("orderItemCarrier_" + (orderItemNo + 1)), "shippingMethodId", mRow.get("orderItemShipMethod_" + (orderItemNo + 1))), locale));
-		             		    	}
-		             		    } catch (GenericEntityException e) {
-		         					e.printStackTrace();
-		         				}
-			            	}
-			             } else {
-			            	boolean carrierIdMatch = true;
-			            	boolean shippingMethodIdMatch = true;
-			            	if(UtilValidate.isNotEmpty(mRow.get("orderShipCarrier"))) {
-                                if(!carrierIdList.contains(mRow.get("orderShipCarrier"))) {
-                                	 carrierIdMatch = false;
-	             		     }
-	             		    }
-			            	if(UtilValidate.isNotEmpty(mRow.get("orderShipMethod"))) {
-                                if(!shippingMethodIdList.contains(mRow.get("orderShipMethod"))) {
-                                 	shippingMethodIdMatch = false;
-	             		    	}
-	             		    }
-	             		    if(!carrierIdMatch || !shippingMethodIdMatch) {
-	             		        error_list.add(UtilProperties.getMessage(resource, "OrderItemShippingMethodMatchingError", UtilMisc.toMap("carrierId", mRow.get("orderShipCarrier"), "shippingMethodId", mRow.get("orderShipMethod")), locale));
-	             		    }
-			             }
-		                 
-		             }
-				}
-			} catch (JAXBException e) {
-				e.printStackTrace();
-			}
-        	
-        	
-        }
-        
-        if(error_list.size() > 0) {
-            return ServiceUtil.returnError(error_list);
-        }
-        
-		
-		Map<String, Object> importOrderStatusChangeXMLTemplateCtx = FastMap.newInstance();
-		importOrderStatusChangeXMLTemplateCtx.put("userLogin",userLogin);
-		importOrderStatusChangeXMLTemplateCtx.put("xmlDataFile",(String)result.get("uploadFilePath") + (String)result.get("uploadFileName"));
-		importOrderStatusChangeXMLTemplateCtx.put("xmlDataDir",(String)result.get("uploadFilePath"));
-		importOrderStatusChangeXMLTemplateCtx.put("autoLoad",Boolean.TRUE);
-		try {
-			dispatcher.runSync("importClientOrderStatusXMLTemplate", importOrderStatusChangeXMLTemplateCtx);
-		} catch (GenericServiceException e) {
-			e.printStackTrace();
-		}
-        return ServiceUtil.returnSuccess();
-    }
-    
-    
-    public static Map<String, Object> importCustomerXml(DispatchContext dctx, Map<String, ? extends Object> context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String productStoreId = (String)context.get("productStoreId");
-        String uploadedFileName = (String)context.get("_uploadedFile_fileName");
-        ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
-        List<String> error_list = new ArrayList<String>();
-        if(UtilValidate.isEmpty(uploadedFileName)) {
-        	error_list.add(UtilProperties.getMessage(resource, "BlankFeedFileError", locale));
-        }
-        Map result = FastMap.newInstance();
-        if(UtilValidate.isNotEmpty(uploadedFileName)) {
-        	if(!(uploadedFileName.toUpperCase()).endsWith("XML")) {
-        		error_list.add(UtilProperties.getMessage(resource, "FeedFileNotXmlError", locale));	
-        	} else {
-        		Map<String, Object> uploadFileCtx = FastMap.newInstance();
-                uploadFileCtx.put("userLogin",userLogin);
-                uploadFileCtx.put("uploadedFile",uploadBytes);
-                uploadFileCtx.put("_uploadedFile_fileName",uploadedFileName);
-                
-                try {
-        			result = dispatcher.runSync("uploadFile", uploadFileCtx);
-        		} catch (GenericServiceException e) {
-        			e.printStackTrace();
-        		}
-        	}
-        }
-        if(UtilValidate.isNotEmpty(result.get("uploadFilePath")) && UtilValidate.isNotEmpty(result.get("uploadFileName"))) {
-        	try {
-        	    JAXBContext jaxbContext = JAXBContext.newInstance("com.osafe.feeds.osafefeeds");
-        	    Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        	    JAXBElement<BigFishCustomerFeedType> bfCustomerFeedType;
-        	    bfCustomerFeedType = (JAXBElement<BigFishCustomerFeedType>)unmarshaller.unmarshal(new File((String)result.get("uploadFilePath") + (String)result.get("uploadFileName")));
-				List<CustomerType> customerList = bfCustomerFeedType.getValue().getCustomer();
-				
-				if(customerList.size() > 0) {
-					List dataRows = ImportServices.buildCustomerXMLDataRows(customerList);
-					for (int i=0 ; i < dataRows.size() ; i++) 
-	                {
-		            	 Map mRow = (Map)dataRows.get(i);
-		            	 if(UtilValidate.isNotEmpty(mRow.get("userName"))) {
-		            		 if(UtilValidate.isNotEmpty(mRow.get("customerId")))
-			            	 {
-			            		 try {
-			            		     GenericValue userLoginGv = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", mRow.get("userName")));
-			            		     if(UtilValidate.isNotEmpty(userLoginGv) && !userLoginGv.getString("partyId").equals(mRow.get("customerId")))
-			            		     {
-			            			     error_list.add(UtilProperties.getMessage(resource, "UserNameUniqueError", UtilMisc.toMap(), locale));
-			            		     }
-			            		 }
-			            		 catch (GenericEntityException gee) {
-			            			 gee.printStackTrace();
-			            		 }
-			            	 } else {
-			            		 try {
-			            			 GenericValue userLoginGv = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", mRow.get("userName")));
-				            		 if(UtilValidate.isNotEmpty(userLoginGv)) {
-				            			 error_list.add(UtilProperties.getMessage(resource, "UserNameAssociateAnotherPartyIdError", UtilMisc.toMap(), locale));
-				            		 }	 
-			            		 } catch (GenericEntityException gee) {
-			            			 gee.printStackTrace();
-								}
-			            	 }
-		            	 }
-		            	 
-		             }
-				}
-			} catch (JAXBException e) {
-				e.printStackTrace();
-			}
-        	
-        	
-        }
-        
-        if(error_list.size() > 0) {
-            return ServiceUtil.returnError(error_list);
-        }
-        
-		
-		Map<String, Object> importCustomerXMLTemplateCtx = FastMap.newInstance();
-		importCustomerXMLTemplateCtx.put("userLogin",userLogin);
-		importCustomerXMLTemplateCtx.put("xmlDataFile",(String)result.get("uploadFilePath") + (String)result.get("uploadFileName"));
-		importCustomerXMLTemplateCtx.put("xmlDataDir",(String)result.get("uploadFilePath"));
-		importCustomerXMLTemplateCtx.put("autoLoad",Boolean.TRUE);
-		try {
-			dispatcher.runSync("importCustomerXMLTemplate", importCustomerXMLTemplateCtx);
-		} catch (GenericServiceException e) {
-			e.printStackTrace();
-		}
-        return ServiceUtil.returnSuccess();
-    }
-    
     
     
     public static Map<String, Object> importBluedartPrepaid(DispatchContext dctx, Map<String, ? extends Object> context) 
@@ -1300,5 +1522,551 @@ public class OsafeAdminFeedServices {
 			e.printStackTrace();
 		}
         return ServiceUtil.returnSuccess();
+    }
+    
+    
+    public static Map<String, Object> convertProductRatings(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String uploadedFileName = (String)context.get("_uploadedFile_fileName");
+        ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
+        
+        String productStoreId = (String)context.get("productStoreId");
+        
+        List<String> error_list = new ArrayList<String>();
+        
+        String bigfishXmlFile = "";
+        
+        String importDataPath = getConvertedBigfishXMLFilePath();
+        
+        if (!new File(importDataPath).exists()) 
+        {
+            new File(importDataPath).mkdirs();
+        }
+        
+        if(UtilValidate.isEmpty(uploadedFileName)) 
+        {
+        	error_list.add(UtilProperties.getMessage(resource, "BlankXLSFileError", locale));
+        }
+        Map result = FastMap.newInstance();
+        Map resultUploadSvc = FastMap.newInstance();
+        if(UtilValidate.isNotEmpty(uploadedFileName)) 
+        {
+        	if(!((uploadedFileName.toUpperCase()).endsWith("XLS") || (uploadedFileName.toUpperCase()).endsWith("XLSX"))) 
+        	{
+        		error_list.add(UtilProperties.getMessage(resource, "FeedFileNotXlsError", locale));	
+        	} 
+        	else 
+        	{
+        		Map<String, Object> uploadFileCtx = FastMap.newInstance();
+                uploadFileCtx.put("userLogin",userLogin);
+                uploadFileCtx.put("uploadedFile",uploadBytes);
+                uploadFileCtx.put("_uploadedFile_fileName",uploadedFileName);
+                
+                try 
+                {
+                	resultUploadSvc = dispatcher.runSync("uploadFile", uploadFileCtx);
+        		} 
+                catch (GenericServiceException e) 
+                {
+        			e.printStackTrace();
+        		}
+        	}
+        }
+        
+        if(UtilValidate.isNotEmpty(resultUploadSvc.get("uploadFilePath")) && UtilValidate.isNotEmpty(resultUploadSvc.get("uploadFileName"))) 
+        {
+        	try 
+        	{
+        		bigfishXmlFile = UtilDateTime.nowDateString("yyyyMMddHHmmss")+".xml";
+        		File inputWorkbook = new File((String)resultUploadSvc.get("uploadFilePath") + (String)resultUploadSvc.get("uploadFileName"));
+        		if (inputWorkbook != null) 
+                {
+        			WorkbookSettings ws = new WorkbookSettings();
+                    ws.setLocale(new Locale("en", "EN"));
+                    Workbook wb = Workbook.getWorkbook(inputWorkbook,ws);
+                    
+                    ObjectFactory factory = new ObjectFactory();
+                    
+                    BigFishProductRatingFeedType bfProductRatingFeedType = factory.createBigFishProductRatingFeedType();
+                    
+                    File tempFile = new File(importDataPath, "temp" + bigfishXmlFile);
+                    
+                    for (int sheet = 0; sheet < wb.getNumberOfSheets(); sheet++) 
+                    {
+                        BufferedWriter bw = null; 
+                        try 
+                        {
+                            Sheet s = wb.getSheet(sheet);
+                            String sTabName=s.getName();
+                            
+                            if (sheet == 0)
+                            {
+                            	List dataRows = ImportServices.buildDataRows(ImportServices.buildProductRatingHeader(),s);
+                            	List productRatingList =  bfProductRatingFeedType.getProductRating();
+                            	ImportServices.createProductRatingXmlFromXls(factory, productRatingList, dataRows, productStoreId);
+                            }
+                        } 
+                        catch (Exception exc) 
+                        {
+                            Debug.logError(exc, module);
+                        } 
+                    }
+                    
+                    FeedsUtil.marshalObject(new JAXBElement<BigFishProductRatingFeedType>(new QName("", "BigFishProductRatingFeed"), BigFishProductRatingFeedType.class, null, bfProductRatingFeedType), tempFile);
+              	    
+              	    new File(importDataPath, bigfishXmlFile).delete();
+                    File renameFile =new File(importDataPath, bigfishXmlFile);
+                    RandomAccessFile out = new RandomAccessFile(renameFile, "rw");
+                    InputStream inputStr = new FileInputStream(tempFile);
+                    byte[] bytes = new byte[102400];
+                    int bytesRead;
+                    while ((bytesRead = inputStr.read(bytes)) != -1)
+                    {
+                        out.write(bytes, 0, bytesRead);
+                    }
+                    out.close();
+                    inputStr.close();
+                    tempFile.delete();
+                }
+        	}
+        	catch(Exception e)
+        	{
+        		
+        	}
+        }
+        
+        if(error_list.size() > 0) 
+        {
+            return ServiceUtil.returnError(error_list);
+        }
+        result.put("convertedFileName", bigfishXmlFile);
+        return result;
+    }
+    
+    public static Map<String, Object> convertStores(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String uploadedFileName = (String)context.get("_uploadedFile_fileName");
+        ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
+        
+        String productStoreId = (String)context.get("productStoreId");
+        
+        List<String> error_list = new ArrayList<String>();
+        
+        String bigfishXmlFile = "";
+        
+        String importDataPath = getConvertedBigfishXMLFilePath();
+        
+        if (!new File(importDataPath).exists()) 
+        {
+            new File(importDataPath).mkdirs();
+        }
+        
+        if(UtilValidate.isEmpty(uploadedFileName)) 
+        {
+        	error_list.add(UtilProperties.getMessage(resource, "BlankXLSFileError", locale));
+        }
+        Map result = FastMap.newInstance();
+        Map resultUploadSvc = FastMap.newInstance();
+        if(UtilValidate.isNotEmpty(uploadedFileName)) 
+        {
+        	if(!((uploadedFileName.toUpperCase()).endsWith("XLS") || (uploadedFileName.toUpperCase()).endsWith("XLSX"))) 
+        	{
+        		error_list.add(UtilProperties.getMessage(resource, "FeedFileNotXlsError", locale));	
+        	} 
+        	else 
+        	{
+        		Map<String, Object> uploadFileCtx = FastMap.newInstance();
+                uploadFileCtx.put("userLogin",userLogin);
+                uploadFileCtx.put("uploadedFile",uploadBytes);
+                uploadFileCtx.put("_uploadedFile_fileName",uploadedFileName);
+                
+                try 
+                {
+                	resultUploadSvc = dispatcher.runSync("uploadFile", uploadFileCtx);
+        		} 
+                catch (GenericServiceException e) 
+                {
+        			e.printStackTrace();
+        		}
+        	}
+        }
+        
+        if(UtilValidate.isNotEmpty(resultUploadSvc.get("uploadFilePath")) && UtilValidate.isNotEmpty(resultUploadSvc.get("uploadFileName"))) 
+        {
+        	try 
+        	{
+        		bigfishXmlFile = UtilDateTime.nowDateString("yyyyMMddHHmmss")+".xml";
+        		File inputWorkbook = new File((String)resultUploadSvc.get("uploadFilePath") + (String)resultUploadSvc.get("uploadFileName"));
+        		if (inputWorkbook != null) 
+                {
+        			WorkbookSettings ws = new WorkbookSettings();
+                    ws.setLocale(new Locale("en", "EN"));
+                    Workbook wb = Workbook.getWorkbook(inputWorkbook,ws);
+                    
+                    ObjectFactory factory = new ObjectFactory();
+                    
+                    BigFishStoreFeedType bfStoreFeedType = factory.createBigFishStoreFeedType();
+                    
+                    File tempFile = new File(importDataPath, "temp" + bigfishXmlFile);
+                    
+                    for (int sheet = 0; sheet < wb.getNumberOfSheets(); sheet++) 
+                    {
+                        BufferedWriter bw = null; 
+                        try 
+                        {
+                            Sheet s = wb.getSheet(sheet);
+                            String sTabName=s.getName();
+                            
+                            if (sheet == 0)
+                            {
+                            	List dataRows = ImportServices.buildDataRows(ImportServices.buildStoreHeader(),s);
+                            	List storeList =  bfStoreFeedType.getStore();
+                            	ImportServices.createStoreXmlFromXls(factory, storeList, dataRows, productStoreId);
+                            }
+                        } 
+                        catch (Exception exc) 
+                        {
+                            Debug.logError(exc, module);
+                        } 
+                    }
+                    
+                    FeedsUtil.marshalObject(new JAXBElement<BigFishStoreFeedType>(new QName("", "BigFishStoreFeed"), BigFishStoreFeedType.class, null, bfStoreFeedType), tempFile);
+              	    
+              	    new File(importDataPath, bigfishXmlFile).delete();
+                    File renameFile =new File(importDataPath, bigfishXmlFile);
+                    RandomAccessFile out = new RandomAccessFile(renameFile, "rw");
+                    InputStream inputStr = new FileInputStream(tempFile);
+                    byte[] bytes = new byte[102400];
+                    int bytesRead;
+                    while ((bytesRead = inputStr.read(bytes)) != -1)
+                    {
+                        out.write(bytes, 0, bytesRead);
+                    }
+                    out.close();
+                    inputStr.close();
+                    tempFile.delete();
+                }
+        	}
+        	catch(Exception e)
+        	{
+        		
+        	}
+        }
+        
+        if(error_list.size() > 0) 
+        {
+            return ServiceUtil.returnError(error_list);
+        }
+        result.put("convertedFileName", bigfishXmlFile);
+        return result;
+    }
+    
+    public static Map<String, Object> convertOrderStatus(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String uploadedFileName = (String)context.get("_uploadedFile_fileName");
+        ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
+        
+        String productStoreId = (String)context.get("productStoreId");
+        
+        List<String> error_list = new ArrayList<String>();
+        
+        String bigfishXmlFile = "";
+        
+        String importDataPath = getConvertedBigfishXMLFilePath();
+        
+        if (!new File(importDataPath).exists()) 
+        {
+            new File(importDataPath).mkdirs();
+        }
+        
+        if(UtilValidate.isEmpty(uploadedFileName)) 
+        {
+        	error_list.add(UtilProperties.getMessage(resource, "BlankXLSFileError", locale));
+        }
+        Map result = FastMap.newInstance();
+        Map resultUploadSvc = FastMap.newInstance();
+        if(UtilValidate.isNotEmpty(uploadedFileName)) 
+        {
+        	if(!((uploadedFileName.toUpperCase()).endsWith("XLS") || (uploadedFileName.toUpperCase()).endsWith("XLSX"))) 
+        	{
+        		error_list.add(UtilProperties.getMessage(resource, "FeedFileNotXlsError", locale));	
+        	} 
+        	else 
+        	{
+        		Map<String, Object> uploadFileCtx = FastMap.newInstance();
+                uploadFileCtx.put("userLogin",userLogin);
+                uploadFileCtx.put("uploadedFile",uploadBytes);
+                uploadFileCtx.put("_uploadedFile_fileName",uploadedFileName);
+                
+                try 
+                {
+                	resultUploadSvc = dispatcher.runSync("uploadFile", uploadFileCtx);
+        		} 
+                catch (GenericServiceException e) 
+                {
+        			e.printStackTrace();
+        		}
+        	}
+        }
+        
+        if(UtilValidate.isNotEmpty(resultUploadSvc.get("uploadFilePath")) && UtilValidate.isNotEmpty(resultUploadSvc.get("uploadFileName"))) 
+        {
+        	try 
+        	{
+        		bigfishXmlFile = UtilDateTime.nowDateString("yyyyMMddHHmmss")+".xml";
+        		File inputWorkbook = new File((String)resultUploadSvc.get("uploadFilePath") + (String)resultUploadSvc.get("uploadFileName"));
+        		if (inputWorkbook != null) 
+                {
+        			WorkbookSettings ws = new WorkbookSettings();
+                    ws.setLocale(new Locale("en", "EN"));
+                    Workbook wb = Workbook.getWorkbook(inputWorkbook,ws);
+                    
+                    ObjectFactory factory = new ObjectFactory();
+                    
+                    BigFishOrderStatusUpdateFeedType bfOrderStatusUpdateFeedType = factory.createBigFishOrderStatusUpdateFeedType();
+                    
+                    File tempFile = new File(importDataPath, "temp" + bigfishXmlFile);
+                    
+                    for (int sheet = 0; sheet < wb.getNumberOfSheets(); sheet++) 
+                    {
+                        BufferedWriter bw = null; 
+                        try 
+                        {
+                            Sheet s = wb.getSheet(sheet);
+                            String sTabName=s.getName();
+                            
+                            if (sheet == 0)
+                            {
+                            	List dataRows = ImportServices.buildDataRows(ImportServices.buildOrderStatusUpdateHeader(),s);
+                            	List orderStatusUpdateList =  bfOrderStatusUpdateFeedType.getOrder();
+                            	ImportServices.createOrderStatusUpdateXmlFromXls(factory, orderStatusUpdateList, dataRows, productStoreId);
+                            }
+                        } 
+                        catch (Exception exc) 
+                        {
+                            Debug.logError(exc, module);
+                        } 
+                    }
+                    
+                    FeedsUtil.marshalObject(new JAXBElement<BigFishOrderStatusUpdateFeedType>(new QName("", "BigFishOrderStatusUpdateFeed"), BigFishOrderStatusUpdateFeedType.class, null, bfOrderStatusUpdateFeedType), tempFile);
+              	    
+              	    new File(importDataPath, bigfishXmlFile).delete();
+                    File renameFile =new File(importDataPath, bigfishXmlFile);
+                    RandomAccessFile out = new RandomAccessFile(renameFile, "rw");
+                    InputStream inputStr = new FileInputStream(tempFile);
+                    byte[] bytes = new byte[102400];
+                    int bytesRead;
+                    while ((bytesRead = inputStr.read(bytes)) != -1)
+                    {
+                        out.write(bytes, 0, bytesRead);
+                    }
+                    out.close();
+                    inputStr.close();
+                    tempFile.delete();
+                }
+        	}
+        	catch(Exception e)
+        	{
+        		
+        	}
+        }
+        
+        if(error_list.size() > 0) 
+        {
+            return ServiceUtil.returnError(error_list);
+        }
+        result.put("convertedFileName", bigfishXmlFile);
+        return result;
+    }
+    
+    public static Map<String, Object> convertProductLoadFile(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String uploadedFileName = (String)context.get("_uploadedFile_fileName");
+        ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
+        
+        String productStoreId = (String)context.get("productStoreId");
+        
+        List<String> error_list = new ArrayList<String>();
+        
+        String bigfishXmlFile = "";
+        
+        String importDataPath = getConvertedBigfishXMLFilePath();
+        
+        if (!new File(importDataPath).exists()) 
+        {
+            new File(importDataPath).mkdirs();
+        }
+        
+        if(UtilValidate.isEmpty(uploadedFileName)) 
+        {
+        	error_list.add(UtilProperties.getMessage(resource, "BlankXLSFileError", locale));
+        }
+        Map result = FastMap.newInstance();
+        Map resultUploadSvc = FastMap.newInstance();
+        if(UtilValidate.isNotEmpty(uploadedFileName)) 
+        {
+        	if(!((uploadedFileName.toUpperCase()).endsWith("XLS") || (uploadedFileName.toUpperCase()).endsWith("XLSX"))) 
+        	{
+        		error_list.add(UtilProperties.getMessage(resource, "FeedFileNotXlsError", locale));	
+        	} 
+        	else 
+        	{
+        		Map<String, Object> uploadFileCtx = FastMap.newInstance();
+                uploadFileCtx.put("userLogin",userLogin);
+                uploadFileCtx.put("uploadedFile",uploadBytes);
+                uploadFileCtx.put("_uploadedFile_fileName",uploadedFileName);
+                
+                try 
+                {
+                	resultUploadSvc = dispatcher.runSync("uploadFile", uploadFileCtx);
+        		} 
+                catch (GenericServiceException e) 
+                {
+        			e.printStackTrace();
+        		}
+        	}
+        }
+        
+        if(UtilValidate.isNotEmpty(resultUploadSvc.get("uploadFilePath")) && UtilValidate.isNotEmpty(resultUploadSvc.get("uploadFileName"))) 
+        {
+        	try 
+        	{
+        		bigfishXmlFile = UtilDateTime.nowDateString("yyyyMMddHHmmss")+".xml";
+        		File inputWorkbook = new File((String)resultUploadSvc.get("uploadFilePath") + (String)resultUploadSvc.get("uploadFileName"));
+        		if (inputWorkbook != null) 
+                {
+        			WorkbookSettings ws = new WorkbookSettings();
+                    ws.setLocale(new Locale("en", "EN"));
+                    Workbook wb = Workbook.getWorkbook(inputWorkbook,ws);
+                    
+                    ObjectFactory factory = new ObjectFactory();
+                    
+                    BigFishProductFeedType bfProductFeedType = factory.createBigFishProductFeedType();
+                    
+                    File tempFile = new File(importDataPath, "temp" + bigfishXmlFile);
+                    
+                    for (int sheet = 0; sheet < wb.getNumberOfSheets(); sheet++) 
+                    {
+                        BufferedWriter bw = null; 
+                        try 
+                        {
+                            Sheet s = wb.getSheet(sheet);
+                            String sTabName=s.getName();
+                            
+                            if (sheet == 1)
+                            {
+                                List dataRows = ImportServices.buildDataRows(ImportServices.buildCategoryHeader(),s);
+                                ProductCategoryType productCategoryType = factory.createProductCategoryType();
+                    	        List productCategoryList =  productCategoryType.getCategory();
+                    	        ImportServices.createProductCategoryXmlFromXls(factory, productCategoryList, dataRows);
+                    	  	    bfProductFeedType.setProductCategory(productCategoryType);
+                            }
+                            if (sheet == 2)
+                            {
+                                List dataRows = ImportServices.buildDataRows(ImportServices.buildProductHeader(),s);
+                                ProductsType productsType = factory.createProductsType();
+                    	  	    List productList = productsType.getProduct();
+                    	  	    ImportServices.createProductXmlFromXls(factory, productList, dataRows);
+                    	  	    bfProductFeedType.setProducts(productsType);
+                            }
+                            if (sheet == 3)
+                            {
+                                List dataRows = ImportServices.buildDataRows(ImportServices.buildProductAssocHeader(),s);
+                                ProductAssociationType productAssociationType = factory.createProductAssociationType();
+                    	  	    List productAssocList = productAssociationType.getAssociation();
+                    	  	    ImportServices.createProductAssocXmlFromXls(factory, productAssocList, dataRows);
+                    	  	    bfProductFeedType.setProductAssociation(productAssociationType);
+                            }
+                            if (sheet == 4)
+                            {
+                                List dataRows = ImportServices.buildDataRows(ImportServices.buildProductFeatureSwatchHeader(),s);
+                                ProductFeatureSwatchType productFeatureSwatchType = factory.createProductFeatureSwatchType();
+                    	  	    List featureList = productFeatureSwatchType.getFeature();
+                    	  	    ImportServices.createProductFeatureSwatchXmlFromXls(factory, featureList, dataRows);
+                    	  	    bfProductFeedType.setProductFeatureSwatch(productFeatureSwatchType);
+                            }
+                            if (sheet == 5)
+                            {
+                                List dataRows = ImportServices.buildDataRows(ImportServices.buildManufacturerHeader(),s);
+                                ProductManufacturerType productManufacturerType = factory.createProductManufacturerType();
+                    	  	    List manufacturerList = productManufacturerType.getManufacturer();
+                    	  	    ImportServices.createProductManufacturerXmlFromXls(factory, manufacturerList, dataRows);
+                    	  	    bfProductFeedType.setProductManufacturer(productManufacturerType);
+                            }
+                        } 
+                        catch (Exception exc) 
+                        {
+                            Debug.logError(exc, module);
+                        } 
+                    }
+                    
+                    FeedsUtil.marshalObject(new JAXBElement<BigFishProductFeedType>(new QName("", "BigFishProductFeed"), BigFishProductFeedType.class, null, bfProductFeedType), tempFile);
+              	    
+              	    new File(importDataPath, bigfishXmlFile).delete();
+                    File renameFile =new File(importDataPath, bigfishXmlFile);
+                    RandomAccessFile out = new RandomAccessFile(renameFile, "rw");
+                    InputStream inputStr = new FileInputStream(tempFile);
+                    byte[] bytes = new byte[102400];
+                    int bytesRead;
+                    while ((bytesRead = inputStr.read(bytes)) != -1)
+                    {
+                        out.write(bytes, 0, bytesRead);
+                    }
+                    out.close();
+                    inputStr.close();
+                    tempFile.delete();
+                }
+        	}
+        	catch(Exception e)
+        	{
+        		
+        	}
+        }
+        
+        if(error_list.size() > 0) 
+        {
+            return ServiceUtil.returnError(error_list);
+        }
+        result.put("convertedFileName", bigfishXmlFile);
+        return result;
+    }
+    
+    public static String getConvertedBigfishXMLFilePath()
+    {
+    	return System.getProperty("ofbiz.home") + "/runtime/tmp/upload/bigfishXmlFile/";
+    }
+    
+    private static void writeFeedLogMessage(BufferedWriter bfOutFile, String message) 
+    {
+    	try 
+    	{
+    		bfOutFile.newLine();
+    		bfOutFile.write(message);
+    		bfOutFile.newLine();
+            bfOutFile.flush();
+    	}
+    	catch (Exception e)
+    	{
+    	}
     }
 }

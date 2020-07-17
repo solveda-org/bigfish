@@ -1,0 +1,4189 @@
+@charset "utf-8";
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+object {
+    display: inline-block;
+}
+
+/* apply a natural box layout model to all elements */
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+ }
+ 
+input::-webkit-outer-spin-button, /* Removes all trace of spin buttons on input[number]; webkit only;*/
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; 
+}
+
+input::-moz-focus-inner /* Removes padding/margin discrepancy between anchor buttons and input buttons */
+{ 
+    border: 0;
+    padding: 0;
+}
+
+body {
+    color: #000000;
+     font-family: Arial,Helvetica,sans-serif;
+    -webkit-text-size-adjust: 100%; /* for iPad font-size rendering issue */
+}
+
+p,
+span,
+th,
+td,
+a,
+li {
+    color: #2B2B2B;
+    font-size: 14px; /* Default Font Size; consider label and caption font sizes below */
+}
+
+fieldset {
+    width: 100%;
+}
+
+input,
+select,
+option,
+textarea {
+    border: 1px solid #afafaf;
+    color: #797979;
+    font-family: Arial, Helvetica, sans-serif; /* To over ride text area defaults */
+    font-size: 13px;
+    padding: 2px;
+}
+
+select {
+    padding: 1px!important; /* select default heights are different then other inputs */
+}
+
+option,
+input[type="file"] {
+    border: none!important;
+    padding: 0!important;      
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    border: none;
+}
+
+:focus { /* remember to define focus styles! */
+    outline: 0;
+}
+
+input:focus,
+select:focus,
+textarea:focus { /* Default Input Focus Styles */
+    border: 1px solid #2b2b2b;
+}
+
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+    border: none;
+}
+
+textarea {
+    float: left;
+}
+
+textarea.largeArea {
+    width: 100%;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: "";
+}
+
+blockquote,
+q {
+    quotes: "" "";
+}
+
+em {
+    font-style: italic;
+}
+
+strong {
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+}
+
+a span {
+    color: inherit;
+}
+
+a:hover,
+a > span:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+a:hover>span { /* prevents 'double underline' effect */
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 25px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+}
+
+h2 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+h4 {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.headerHelper {
+    font-size: small;
+    font-weight: normal;
+    width: auto !important;
+}
+
+label,
+.caption,
+label span {
+    color: #4D4D4D;
+    display: inline-block;
+    font-size: 14px; /* Default Font Size; consider default font sizes above */
+    font-weight: 700;
+    padding: 0 5px 0 0;
+    text-align: right;
+}
+
+label span {
+    padding: 0!important;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* === Display and Box Markup  === */
+
+
+/* --- Containers  --- */
+.container {
+    clear: both;
+    float: left;
+    margin: 0 0 20px;
+    width: 100%;
+}
+
+.ptsSpot,
+.pesSpot {
+    float: left;
+    width: 100%;
+}
+
+.plpEspot img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* --- Box List Item --- */
+
+.boxListItemGrid {
+    float: left;
+    margin: 0 10px 10px 0;
+    width: 220px!important;  /* default width; can be overridden on using page level classes CLP, PLP; (247)*/
+}
+
+.boxListItemGrid .displayList li div {
+    padding: 0;
+}
+
+.boxListItemTabular {
+    border: 1px solid #aaaaaa;
+    float: left;
+    margin: 5px 0;
+    width: 100%;
+}
+
+.boxListItemTabular .group {
+    float: left; /* default alignment; override as needed */
+}
+
+
+.boxListItemTabular .displayList li {  /* default styles */
+    float: left;
+    max-width: 150px;
+    min-height: 40px; /* provides smooth wrapping for spans without content */
+}
+
+.boxListItemTabular .displayList li li {  /* default styles */
+    max-width: none;
+}
+
+.boxListItemTabular label,
+.boxListItemTabular span,
+.boxListItemTabular .displayList li div a {
+    display: block;
+    text-align: left; /* Default Alignment */
+}
+
+.boxListItemTabular .displayList li.action div a {
+    display: inline-block;
+    width: auto; /* for buttons */
+}
+
+
+/* --- Display Boxes  --- */
+
+.displayBoxList .displayBox {
+    clear: both;
+    display: block;
+    margin: 0 10px 20px;
+    overflow: auto;
+}
+
+/* --- Display List  --- */
+
+.displayList {
+    float: left;
+    width: 100%;
+}
+
+.displayList li:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+.displayList li.even {
+     background: none repeat scroll 0 0 #eeeeee;
+}
+
+.displayList li div {
+    display: table;
+    padding: 4px;
+    width: 100%;
+}
+
+.displayList li div>div {
+    padding: 0; /* cancels out padding in nested divs */
+}
+
+.displayList li ul li, 
+.displayList li ul li:last-child {  /* default styles to remove nested borders */
+   border: none;
+   min-height: 0 !important;
+}
+
+.displayList li div.inputCol input[type="checkbox"] {
+    width: auto;
+}
+
+/* --- Display List Summary --- */
+
+.displayList.summary {
+    display: inline-block;
+    text-align: right;
+}
+
+
+.displayList.summary label {
+    text-align: right;
+}
+
+.displayList.summary span {
+    display: inline-block;
+    text-align: left;
+    width: 130px; /* adjust to accommodate price length */
+}
+
+.displayList.summary:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+.displayList.summary div {
+  padding: 2px 0;
+}
+
+/* --- Display Action List --- */
+
+.displayActionList {
+    width: 100%;
+}
+
+.displayActionList li:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+.displayActionList li div {
+    display: table-cell;
+    padding: 4px;
+    vertical-align: middle;
+}
+
+.displayActionList li div label {
+    width: auto;
+}
+
+.displayActionList li div input {
+    display: inline-block;
+    margin: 0 0 10px 0;
+}
+
+.displayActionList li div a.action{
+    display: inline-block;
+    margin: 0 0 10px 0;
+}
+
+/* --- Action Result Item (success messages for promocodes, gift cards, etc.) --- */
+
+.actionResultItem {
+    background: none repeat scroll 0 0 #CCFFCC;
+    border: 1px solid #169909;
+}
+
+.actionResultItem li {
+    margin: 0 10px 0 0;
+    max-width: none !important;
+}
+
+.actionResultItem li:last-child {
+    margin: 0;
+}
+
+.actionResultItem li.remove {
+    float: right !important;
+    text-align: center;
+}
+
+.actionResultItem li.remove span {
+    color: #BF0000;
+}
+
+
+/* --- Display Detail --- */
+
+.displayList.displayDetail {
+    display: inline-block;
+}
+
+.displayDetail li {
+    clear: left;
+}
+
+.displayDetail li div {
+    padding: 2px 0;
+}
+
+.displayDetail label {
+    float: left; 
+    text-align: left;
+    width: 110px;
+}
+
+.displayDetail span {
+
+}
+
+.displayList.displayDetail:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+/* --- Entry Form --- */
+
+.required {
+    color: #BF0000; 
+}
+
+.entryForm .entry {
+    display: block;
+    margin: 10px 0 0;
+}
+
+.entryForm .entry label {
+    float: left;
+    padding: 0 5px 0 0;
+    text-align: right;
+    width: 250px;
+}
+
+.entryField {
+    display: inline-block;
+}
+
+.counter {
+    clear: left;
+    float: left;
+}
+
+.instructions {
+    display: block;
+    margin: 0 0 5px;
+}
+
+.textCounter {
+    display: block;
+    font-size: 12px;
+}
+
+.entryHelper {
+    font-size: 12px;
+     display: block;  
+}
+
+.entry .standardBtn {
+    margin: -5px 0 0 5px; /* vertically aligns button; top margin relative to button padding */
+}
+
+#forgottenPassword {
+    clear: left;
+    float: left;
+}
+
+.loginTip {
+    clear: left;
+    float: left;
+    font-size: 11px;
+    margin: 10px 0;
+}
+
+.entryForm .displayBox h3,
+.cartForm .displayBox h3 {
+    border-bottom: 3px dotted #C7C7C7;
+    margin: 25px 0 10px;
+    padding: 0 0 2px;
+}
+
+.entry.userName label { /* shorter entry labels; forgot password page */
+    width: 100px;
+}
+
+.entry.radioOption {
+    float: left;
+    padding: 0 0 5px;
+    width: 100%;
+}
+
+.entry.radioOption input[type="radio"] {
+    float: left;
+    margin: 2px 5px;
+}
+
+.entry.radioOption .radioOptionText {
+    float: left;
+}
+
+.shippingMethod .entry.radioOption {
+    border-bottom: 2px dotted #666666;
+}
+
+.entry.radioOption .radioOptionTextAdditional {
+    float: right;
+}
+
+.addressSection {
+   clear: left; /* for 'same as billing' checkbox */
+}
+
+.displayList.address {
+    display: inline-block;
+    float: none;
+    width: auto;
+}
+
+.displayList.address li {
+    display: block;
+    float: none;
+    width: auto;
+}
+
+.displayList.address li div {
+    padding: 2px 0!important;
+}
+
+.displayList.address li div span {
+    display: inline;
+    margin: 0 2px 0 0;
+}
+
+/* --- input lengths and styles  ---  */
+
+.firstName input {
+     width: 250px;
+}
+
+.lastName input {
+     width: 250px;
+}
+
+.address1 input {
+     width: 250px;
+}
+
+.address2 input {
+     width: 250px;
+}
+
+.address3 input {
+     width: 250px;
+}
+
+.cityTown input {
+     width: 250px;
+}
+
+.stateProvinc select {
+    width: auto;
+}
+
+.zipPostcode input {
+     width: 100px;
+}
+
+.userLogin input {
+     width: 200px;
+}
+
+.userLoginConfirm input {
+     width: 200px;
+}
+
+.userPassword input {
+     width: 200px;
+}
+
+.userPasswordConfirm input {
+     width: 200px;
+}
+
+.entry .telephone {
+    display: inline-block;
+}
+
+.phone3 {
+     width: 30px;
+}
+
+.phone4 {
+     width: 40px;
+}
+
+.innerLabel {
+    color: #4D4D4D;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.phoneExt {
+     width: 50px;
+}
+
+.reviewerNickname input {
+     width: 200px;
+}
+
+.reviewerTitle input {
+     width: 200px;
+}
+
+.reviewerLocation input {
+     width: 200px;
+}
+
+.reviewerText textarea {
+     width: 100%;
+}
+
+/* === Buttons === */	
+
+/* === 1.4 Buttons === */	
+
+/* ---- Standard Button ---- */
+
+input.standardBtn[type="submit"],
+input.standardBtn[type="button"], 
+a.standardBtn { /* Styles defined here will apply to other buttons unless overridden */
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #666666;
+    color: #2b2b2b;
+    display: inline-block;
+    font-size: 14px;
+    padding: 5px 10px;
+    white-space: nowrap;
+}
+
+input.standardBtn[type="submit"] span,
+input.standardBtn[type="button"] span, 
+a.standardBtn span { /* Styles defined here will apply to other buttons unless overridden */
+    font-size: inherit;
+}
+
+input.standardBtn[type="submit"]:hover,
+input.standardBtn[type="button"]:hover,
+a.standardBtn:hover { /* Styles defined here will apply to other button:hovers unless overridden */
+    background: none repeat scroll 0 0 #CECECE;
+    text-decoration: none!important;
+}
+
+input.standardBtn[type="submit"]:hover span,
+input.standardBtn[type="button"]:hover span,
+a.standardBtn:hover span { /* Styles defined here will apply to other button:hovers unless overridden */
+    text-decoration: none!important;  
+}
+
+input.standardBtn[type="submit"]:active,
+input.standardBtn[type="button"]:active,
+a.standardBtn:active { /* Styles defined here will apply to other button:actives unless overridden */
+
+}
+
+/* ---- Positive Button ---- */
+
+input.positive[type="submit"],
+input.positive[type="button"],
+a.positive{
+    background: url("/osafe_theme/images/user_content/images/positiveButtonUp.png") repeat-x right 50%;
+    padding: 5px 25px 5px 10px;
+}
+
+input.positive[type="submit"] span,
+input.positive[type="button"] span,
+a.positive span {
+
+}
+
+input.positive[type="submit"]:hover,
+input.positive[type="button"]:hover,
+a.positive:hover {
+    background: url("/osafe_theme/images/user_content/images/positiveButtonHover.png") repeat-x right 50%;
+}
+
+input.positive[type="submit"]:hover span,
+input.positive[type="button"]:hover span,
+a.positive:hover span {
+
+}
+
+input.positive[type="submit"]:active,
+input.positive[type="button"]:active,
+a.positive:active {
+
+}
+
+/* ---- Negative Button ---- */
+
+input.negative[type="submit"],
+input.negative[type="button"],
+a.negative {
+    background: url("/osafe_theme/images/user_content/images/negativeButtonUp.png") repeat-x left 50%;
+    padding: 5px 10px 5px 25px;
+}
+
+input.negative[type="submit"] span,
+input.negative[type="button"] span,
+a.negative span {
+
+}
+
+input.negative[type="submit"]:hover,
+input.negative[type="button"]:hover,
+a.negative:hover {
+    background: url("/osafe_theme/images/user_content/images/negativeButtonHover.png") repeat-x left 50%;
+}
+
+input.negative[type="submit"]:hover span,
+input.negative[type="button"]:hover span,
+a.negative:hover span {
+
+}
+
+input.negative[type="submit"]:active,
+input.negative[type="button"]:active,
+a.negative:active {
+
+}
+
+/* ---- Action Button ---- */
+
+input.action[type="submit"],
+input.action[type="button"],
+a.action {
+
+}
+
+input.action[type="submit"] span,
+input.action[type="button"] span,
+a.action span {
+
+}
+
+input.action[type="submit"]:hover,
+input.action[type="button"]:hover,
+a.action:hover {
+
+}
+
+input.action[type="submit"]:hover span,
+input.action[type="button"]:hover span,
+a.action:hover span {
+
+}
+
+input.action[type="submit"]:active,
+input.action[type="button"]:active,
+a.action:active {
+
+}
+
+/* ---- Update Button ---- */
+
+input.update[type="submit"],
+input.update[type="button"],
+a.update{
+    background: url("/osafe_theme/images/user_content/images/updateButtonUp.png") repeat-x right 50%;
+    padding: 5px 30px 5px 10px;
+}
+
+input.update[type="submit"] span,
+input.update[type="button"] span,
+a.update span {
+
+}
+
+input.update[type="submit"]:hover,
+input.update[type="button"]:hover,
+a.update:hover {
+    background: url("/osafe_theme/images/user_content/images/updateButtonHover.png") repeat-x right 50%;
+}
+
+input.update[type="submit"]:hover span,
+input.update[type="button"]:hover span,
+a.update:hover span {
+
+}
+
+input.update[type="submit"]:active,
+input.update[type="button"]:active,
+a.action:update{
+
+}
+
+/* ---- Delete Button ---- */
+
+input.delete[type="submit"],
+input.delete[type="button"],
+a.delete {
+    background: url("/osafe_theme/images/user_content/images/deleteButtonUp.png") repeat-x right 50%;
+    padding: 5px 25px 5px 10px;
+    color: #a50000;
+}
+
+input.delete[type="submit"] span,
+input.delete[type="button"] span,
+a.delete span {
+
+}
+
+input.delete[type="submit"]:hover,
+input.delete[type="button"]:hover,
+a.delete:hover {
+    background: url("/osafe_theme/images/user_content/images/deleteButtonHover.png") repeat-x right 50%;
+}
+
+input.delete[type="submit"]:hover span,
+input.delete[type="button"]:hover span,
+a.delete:hover span {
+
+}
+
+input.delete[type="submit"]:active,
+input.delete[type="button"]:active,
+a.delete:update {
+
+}
+
+/* ---- Add To Cart Button ---- */
+
+input.addToCart[type="submit"],
+input.addToCart[type="button"],
+a.addToCart {
+    font-weight: 700;
+    padding: 10px;
+    text-transform: uppercase;
+}
+
+input.addToCart[type="submit"] span,
+input.addToCart[type="button"] span,
+a.addToCart span {
+    color: inherit;
+}
+
+input.addToCart[type="submit"]:hover,
+input.addToCart[type="button"]:hover,
+a.addToCart:hover {
+
+}
+
+input.addToCart[type="submit"]:hover span,
+input.addToCart[type="button"]:hover span,
+a.addToCart:hover span {
+
+}
+
+input.addToCart[type="submit"]:active,
+input.addToCart[type="button"]:active,
+a.addToCart:active {
+
+}
+
+/* ---- Add To Wish List Button ---- */
+
+input.addToWishlist[type="submit"],
+input.addToWishlist[type="button"],
+a.addToWishlist{
+    font-weight: 700;
+    padding: 10px;
+    text-transform: uppercase;
+}
+
+input.addToWishlist[type="submit"] span,
+input.addToWishlist[type="button"] span,
+a.addToWishlist span {
+    color: inherit;
+}
+
+
+input.addToWishlist[type="submit"]:hover,
+input.addToWishlist[type="button"]:hover,
+a.addToWishlist:hover {
+
+}
+
+input.addToWishlist[type="submit"]:hover span,
+input.addToWishlist[type="button"]:hover span,
+a.addToWishlist:hover span {
+
+}
+
+input.addToWishlist[type="submit"]:active,
+input.addToWishlist[type="button"]:active,
+a.addToWishlist:active {
+
+}
+
+/* ---- Inactive Cart & Wish List Button ---- */
+
+input[type="submit"].addToCart.inactiveAddToCart,
+input[type="button"].addToCart.inactiveAddToCart,
+a.addToCart.inactiveAddToCart,
+input[type="submit"].addToWishlist.inactiveAddToWishlist,
+input[type="button"].addToWishlist.inactiveAddToWishlist,
+a.addToWishlist.inactiveAddToWishlist {
+    background: none repeat scroll 0 0 #CECECE;
+    border: 1px solid #EBEBEB;
+    color: #929292;
+    text-shadow: none;
+}
+
+input[type="submit"].addToCart.inactiveAddToCart:hover,
+input[type="button"].addToCart.inactiveAddToCart:hover,
+a.addToCart.inactiveAddToCart:hover,
+input[type="submit"].addToWishlist.inactiveAddToWishlist:hover,
+input[type="button"].addToWishlist.inactiveAddToWishlist:hover,
+a.addToWishlist.inactiveAddToWishlist:hover {
+	background: #CECECE!important;
+	color: #929292!important;
+	border: 1px solid #EBEBEB!important;
+	cursor: default!important;
+        text-shadow: none!important;
+}
+
+
+input[type="submit"].addToCart.inactiveAddToCart span:hover,
+input[type="button"].addToCart.inactiveAddToCart span:hover,
+a.addToCart.inactiveAddToCart span:hover,
+input[type="submit"].addToWishlist.inactiveAddToWishlist span:hover,
+input[type="button"].addToWishlist.inactiveAddToWishlist span:hover,
+a.addToWishlist.inactiveAddToWishlist span:hover {
+	cursor: default!important;
+}
+
+
+/* ---- Submit Order Button ---- */
+
+input.submitOrder[type="submit"],
+input.submitOrder[type="button"],
+a.submitOrder {
+    text-transform: uppercase;
+}
+
+input.submitOrder[type="submit"] span,
+input.submitOrder[type="button"] span,
+a.submitOrder span {
+    font-size: larger;
+}
+
+input.submitOrder[type="submit"]:hover,
+input.submitOrder[type="button"]:hover,
+a.submitOrder:hover {
+
+}
+
+input.submitOrder[type="submit"]:hover span,
+input.submitOrder[type="button"]:hover span,
+a.submitOrder:hover span {
+
+}
+
+input.submitOrder[type="submit"]:active,
+input.submitOrder[type="button"]:active,
+a.submitOrder:active {
+
+}
+
+.button { /* generic class for button containers */
+    clear: both;
+    float: left;
+    margin: 20px 0 0 0;
+    width: 100%;
+    *clear: none; /* IE7 prevents buttons from stacking*/
+}
+
+.previousButton {
+    float: left;
+    margin: 20px 0 0;
+}
+
+.continueButton {
+    float: right;
+    margin: 20px 0 0;
+}
+
+.submitButton {
+    float: right;
+    margin: 20px 0 0;
+}
+
+.cancelButton {
+    float: left;
+    margin: 20px 0 0;
+}
+
+.exportToPdfButton {
+    float: left;
+    margin: 20px 0 0;
+}
+
+.showCartButton {
+    float: left;
+    margin: 20px 0 0;
+}
+
+.addressButton  {
+    float: left;
+    margin: 20px 0 0 10px;
+}
+
+
+/* === Miscellaneous === */	
+
+
+#eCommerceHeader:after, #eCommercePageBody:after, #eCommerceFooter:after, #eCommerceProductDetailContainer:after { /* everything else */
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
+/* === Layout Containers === */
+
+
+/* --- Outer Containers --- */
+
+#eCommerceOuterBasicBevelWrap {
+    margin: 0 10%;
+    padding: 0;
+    overflow: hidden;
+
+}
+	
+#eCommerceInnerBasicBevelWrapper {
+	width: 100%;
+	float: left;
+}
+
+#eCommerceOuterBasicBevelWrap:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
+/* --- Inner Containers --- */
+
+#eCommerceContent {
+	width: 100%;
+}
+
+/* === Header Content === */
+
+/* --- Header Links --- */
+	
+.siteHeaderLinks {
+    float: right;
+    margin: 0 0 25px;
+    width: 100%;
+}
+
+.siteHeaderLinks ul {
+    float: right;
+}
+
+.siteHeaderLinks ul li {
+    border-right: 1px solid #7E7D7D;
+    float: left;
+    padding: 0 0 0 10px;
+}
+
+.siteHeaderLinks li:first-child {
+	border-left: none;
+}
+
+.siteHeaderLinks li:last-child {
+	border-right: none;
+}
+
+
+.siteHeaderLinks ul li a {
+    padding: 0 9px 0 0;
+}
+
+.siteHeaderLinks li:first-child a {
+	border-left: none;
+}
+
+.siteHeaderLinks li:first-child a {
+	border-left: none;
+}
+
+/* --- Header  --- */
+
+#eCommerceHeader {
+    float: left;
+    padding: 10px;
+    position: relative;
+    width: 100%;
+    z-index: 3;
+}
+
+/* --- Site Logo  --- */
+
+.siteHeaderLogo {
+    float: left;
+}
+
+/* --- Shopping Cart  --- */
+
+.siteHeaderCart {
+    float: left;
+    margin: 10px 0 0 100px;
+}
+
+.siteHeaderCart p {
+    display: inline-block;
+}
+
+.siteHeaderCart #siteCartStats {
+    display: inline-block;
+}
+
+.siteHeaderCart #siteCartStats a#siteShoppingCartSize {
+    background: url("/osafe_theme/images/user_content/images/viewCart_small.jpeg") no-repeat scroll left 50% transparent;
+    padding: 10px 3px 10px 30px;
+    position: relative;
+}
+
+.siteHeaderCart #siteCartStats .price {
+    display: none;
+}
+
+.siteHeaderCart #viewCartButton {
+	display: none;
+}
+
+/* --- Product Search  --- */
+
+.siteHeaderSearch {
+    clear: right;
+    float: right;
+    margin: 0 0 0 50px;
+}
+
+#searchContainer {
+    height: auto;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 285px;
+}
+
+#searchContainer input[type="text"] {
+    border: 1px solid #E3E3E3;
+    border-radius: 5px 5px 5px 5px;
+    display: inline-block;
+    float: left;
+    margin: 0 3px 0 0;
+    padding: 10px;
+    vertical-align: middle;
+    width: 240px;
+}
+
+#searchContainer input.searchSubmit {
+    background: url("/osafe_theme/images/user_content/images/searchButton.png") no-repeat scroll 50% 50% #e3e3e3;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+    float: right;
+    height: 38px;
+    margin: 0;
+    padding: 0;
+    width: 40px;
+}
+
+#searchAutoComplete ul.ui-autocomplete {
+    width: 240px !important;
+    z-index: 3!important;
+}
+
+#searchButton {
+    float: right;
+    width: 40px;
+}
+
+#searchField {
+    float: none;
+    overflow: hidden;
+    padding: 0 5px 0 0; /* Provides spacing between search field and search button */
+    width: auto;
+}
+
+/* --- Mailing List  --- */
+
+.siteHeaderMailingList  {
+
+}
+
+.siteHeaderMailingList  a { 
+
+}
+
+.siteHeaderMailingList  a:hover {
+
+}
+
+/* === Navigation Bar  === */
+	
+#eCommerceNavBar {
+    background: none repeat scroll 0 0 #CECECE;
+    float: left;
+    position: relative;
+    width: 100%;
+    z-index: 2;
+}
+
+#eCommerceNavBarWidget {
+    display: none;
+}
+
+#eCommerceNavBar ul#eCommerceNavBarMenu {
+    float: left;
+    position: relative;
+    width: 100%;
+}
+
+/* --- Default Nav Styles  --- */
+
+#eCommerceNavBarMenu li a {
+    display: block;
+}
+
+/* --- Top Level Nav Styles  --- */
+
+#eCommerceNavBarMenu li.topLevel {
+    float: left;
+    position: relative;
+}
+
+#eCommerceNavBarMenu li.navSpacer {
+    float: left;
+}
+
+#eCommerceNavBarMenu li.topLevel>a { /* Only applies to links on the top level */
+    font-size: 15px;
+    font-weight: 700;
+    padding: 5px 10px;
+    text-align: center;
+}
+
+/* --- Top Level Nav Hover Styles  --- */
+
+#eCommerceNavBarMenu>li:hover {  /* Will allow hover state to remain active when selecting a subnav item */
+    color: #FFFFFF;
+    visibility: inherit;
+}
+
+#eCommerceNavBarMenu li:hover>a {
+    background: none repeat scroll 0 0 #1E1E1E;
+    color: #FFFFFF;
+}
+
+/* --- Sub level/Drop Down Nav Styles  --- */
+
+#eCommerceNavBarMenu ul {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #1E1E1E;
+    border-color: -moz-use-text-color #2B2B2B #2B2B2B;
+    border-image: none;
+    border-right: 1px solid #2B2B2B;
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
+    left: -9999px;
+    min-width: 150px;
+    position: absolute;
+    z-index: 999;
+}
+
+#eCommerceNavBarMenu ul li a {
+    color: #FFFFFF;
+    display: block;
+    padding: 4px 5px;
+    white-space: nowrap;
+}
+
+/* --- Sub Level Nav Hover Styles  --- */
+
+#eCommerceNavBarMenu li:hover ul,
+#eCommerceNavBarMenu li.sfHover ul {
+	left: 0;
+}
+
+#eCommerceNavBarMenu li li a:hover {
+
+}
+
+/* --- Mega Menu Default Styles  --- */
+
+.ecommerceMegaMenu ul {
+    border: medium none !important;
+    left: auto !important;
+    position: static !important;
+}
+
+.ecommerceMegaMenu div>div {
+    float: left;
+    width: 200px;
+}
+
+.ecommerceMegaMenu ul li strong  {
+     margin: 0 0 0 10px;
+}
+
+.ecommerceMegaMenuAlt { /* alternate menu; hidden on desktop and exposed in small device */
+    display: none;
+}
+
+/* === eCommercePageBody and Components  === */
+
+#eCommercePageBody {
+    display: block;
+    clear: both;
+	z-index: 1;
+}
+
+#eCommercePageBody #eCommerceMainPanel.homePage {
+    float: left;
+    margin: 0 0 25px;
+    width: 100%;
+}
+
+#eCommerceMainPanel.leftPanel { /* Main content area used with #eCommerceLeftPanel; CLP, PLP, etc.  */
+    border-left: 1px solid #E3E3E3;
+    display: inline;
+    float: left;
+    margin: 25px 0;
+    padding: 0 15px;
+    width: 80%;
+    z-index: 0;
+}
+
+#eCommercePageBody #eCommerceMainPanel.mainPanel {
+    float: left;
+    min-height: 400px;
+    padding: 10px;
+    width: 100%;
+}
+
+#eCommerceLeftPanel { /* Facet Menu used with #eCommerceMainPanel.leftPanel; CLP, PLP, etc.  */
+    display: inline;
+    float: left;
+    margin: 25px 0;
+    padding: 0 15px 0 15px;
+    width: 20%;
+}
+
+/* === Breadcrumb  === */
+	
+.breadcrumbs {
+    display: inline-block;
+    margin: 0 0 15px;
+    width: 100%;
+}
+
+#breadcrumb {
+    float: left;
+    height: 15px;
+    width: 100%;
+}
+
+#breadcrumb .intro {
+    display: inline;
+    float: left;
+    width: auto;
+    font-weight: 700;
+    margin: 0 6px 0 0;
+	padding: 2px 0 0 0;
+}
+
+#breadcrumb li {
+    background: url("/osafe_theme/images/user_content/images/breadcrumbBullet.png") no-repeat scroll 5px 50% transparent;
+    display: inline;
+    float: left;
+    padding: 0 0 0 16px;
+}
+
+#breadcrumb li>span {
+    color: #inherit;
+}
+
+#breadcrumb li.first {
+    background: none;
+    padding: 0;
+}
+
+#breadcrumb li a {
+    font-weight: normal;
+    font-size: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted;
+}
+
+#breadcrumb li a:hover,
+#breadcrumb li a:active {
+    background-color: transparent;
+    text-decoration: none;
+    border-bottom: 1px solid;
+}
+
+#breadcrumb li a.removeFacet {
+    background: url("/osafe_theme/images/user_content/images/removeFacetIcon.png") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    display: inline-block;
+    height: 8px;
+    position: relative;
+    top: -7px;
+    width: 8px;
+}
+
+#breadcrumb li a.removeFacet:hover {
+    background-position: 0 -37px;
+}
+
+.facetNavNoResultMsg {
+	font-size: 22px;
+}
+
+.facetNavNoResultSuggestionMsg {
+	font-size: 18px;
+}
+
+/* === Global Style Classes   === */
+
+/* Below are style classes used throughout bigFish's UI.  At this level they will apply to every example of the class and may be overridden or appended in the respective pages below. */
+
+/* --- Alignment Classed --- */
+
+.currency label,
+.currency span {
+    text-align: right;
+}
+
+.number label,
+.number span,
+.displayList li.number div a {
+    text-align: center;
+}
+
+.date label,
+.date span {
+    text-align: center;
+}
+
+.input {
+    text-align: center;
+}
+
+.action span {
+  
+}
+
+.action label {
+    display: none !important;
+}
+
+.itemGiftMessageLink label {
+    display: block!important; /* action label override */
+}
+
+.image a {
+    display: block;
+    text-align: center;
+}
+
+.qty input {
+    float: none !important;
+    margin: 0 !important;
+    width: 20px;
+}
+
+.eCommerceHotSpot img {
+    display: inline-block;
+    height: auto;
+    max-width: 100%;
+}
+
+.productItemList li {
+    margin: 0 0 5px 0;
+}
+
+/* === Home Page  === */
+
+.eCommerceHotSpot {
+    display: inline-block;
+    vertical-align: top;
+    width: auto;
+}
+
+.eCommerceHotSpot img {
+    display: block;
+}
+
+#eCommerceHomeSpot_1 {
+    display: block;
+}
+
+
+/* === Facet Bar Section === */
+
+h3.CategoryFacetTitle {
+    margin: 0 0 20px;
+}
+
+h3.facetGroup {
+    color: #000000;
+}
+
+h3.facetGroup.seeMoreFacetGroupLink {
+    cursor: pointer;
+    background: url("/osafe_theme/images/user_content/images/facetCollapseArrow.png") no-repeat scroll left 50% transparent
+}
+
+h3.facetGroup.seeLessFacetGroupLink {
+    cursor: pointer;
+    background: url("/osafe_theme/images/user_content/images/facetExpandArrow.png") no-repeat scroll left 50% transparent
+}
+
+ul.facetGroup li {
+	padding: 2px 0 2px 0px;
+	margin: 0 0 5px 0;
+}
+
+ul.facetGroup li:last-child {
+    margin: 0 0 20px;
+}
+
+a.seeMoreLink,
+a.seeLessLink {
+    border-bottom: 1px dotted;
+    color: #2b2b2b;
+    padding: 0 0 1px 0;
+}
+
+a.seeMoreLink:hover,
+a.seeLessLink:hover {
+    border-bottom: 1px solid !important;
+    text-decoration: none;
+}
+
+/* === CLP Section === */
+
+/*	Styles specific to the Category List Page (CLP) */
+
+#eCommerceCategoryListContainer {
+    float: left;
+    width: 100%;
+}
+	
+.resultCategoryListContainer {
+    float: left;
+    width: 100%;
+}
+
+.resultCategoryListContainer:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+#eCommerceCategoryList {
+    float: left;
+    margin: 15px 0 0;
+    width: 100%;
+}
+
+.thumbImage {
+
+}
+
+/* === PLP Section === */
+
+/* Styles specific to the Product List Page (PLP) */
+
+#eCommerceProductListContainer {
+    float: right;
+    width: 100%;
+}
+
+.resultProductListContainer {
+    float: left;
+    width: 100%;
+}
+
+.resultProdcutListContainer:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+#eCommerceProductList {
+    float: left;
+    margin: 15px 0 0;
+    width: 100%;
+}
+
+.boxListItemGrid.productItem.PLP {
+    min-height: 265px; /* Custom; contingent on height needed to clear PLP grid items */
+}
+
+.boxListItemGrid.productItem.PLP label {
+    width: 75px; /* accommodates the longest label; adjust as needed */
+}
+
+.eCommerceThumbNailHolder {
+    position: relative;
+}
+
+.plpQuicklookIcon {
+    height: 32px !important; /* height of quickLook.png */
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 32px !important;  /* width of quickLook.png */
+}
+
+.plpThumbImage {
+    margin: 0 0 5px 0;
+}
+
+.productItemList li.action { /* centers add to cart and wishlist buttons */
+    text-align: center;
+}
+
+/* === PLP Results Navigation  === */
+
+/* position of paging icons are influenced by font-size */
+
+.resultListContainer {
+    float: left;
+    width: 100%;
+}
+
+.resultsNavigation {
+    display: table;
+    width: 100%;
+}
+
+#resultsNavigationTop {
+    float: left;
+    width: 100%;
+}
+
+#resultsNavigationBottom {
+    clear: both;
+    float: left;
+    margin: 15px 0 0;
+    width: 100%;
+}
+
+.sortingOptions {
+    display: table-cell;
+}
+
+.sortingOptions label {
+
+}
+
+.pagingLinks {
+    display: table-cell;
+    text-align: right;
+}
+
+.pagingBtn.first {
+   margin: 0 33px 0 0;
+}
+
+.pagingBtn.first a {
+    background-image: url("/osafe_theme/images/user_content/images/resultsNavFirst.png");
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+    padding: 0 0 0 26px;
+}
+
+.pagingBtn.first.disabled {
+    background-image: url("/osafe_theme/images/user_content/images/resultsNavFirstDisabled.png");
+    background-position: 5px 50%;
+    background-repeat: no-repeat;
+    padding: 0 0 0 30px
+}
+
+.pagingBtn.previous a {
+    background-image: url("/osafe_theme/images/user_content/images/resultsNavPrev.png");
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+    padding: 0 0 0 16px;
+}
+
+.pagingBtn.previous.disabled {
+    background-image: url("/osafe_theme/images/user_content/images/resultsNavPrevDisabled.png");
+    background-position: 5px 50%;
+    background-repeat: no-repeat;
+    padding: 0 0 0 20px;
+}
+
+.pagingBtn.next a {
+    background-image: url("/osafe_theme/images/user_content/images/resultsNavNext.png");
+    background-position: 32px 50%;
+    background-repeat: no-repeat;
+    padding: 0 10px 0 0;
+}
+
+.pagingBtn.next.disabled {
+    background-image: url("/osafe_theme/images/user_content/images/resultsNavNextDisabled.png");
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+    padding: 0 13px 0 0;
+}
+
+.pagingBtn.last {
+    margin: 0 0 0 33px;
+}
+
+.pagingBtn.last a {
+    background-image: url("/osafe_theme/images/user_content/images/resultsNavLast.png");
+    background-position: 32px 50%;
+    background-repeat: no-repeat;
+    padding: 0 18px 0 0;
+}
+
+.pagingBtn.last.disabled {
+    background-image: url("/osafe_theme/images/user_content/images/resultsNavLastDisabled.png");
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+    padding: 0 25px 0 0;
+}
+
+.pagingBtn.showall {
+   margin: 0 0 0 33px;
+}
+
+.pagingBtn a {
+    border-bottom: 1px dotted;
+}
+
+.pagingBtn a:hover {
+     border-bottom: 1px solid; 
+     text-decoration: none;
+}
+
+.pagingLinks li {
+    display: inline;
+}
+
+.pagingLinks li.pages{
+    margin: 0 15px;
+}
+
+.pagingLinks li.disabled {
+    background-image: none;
+}
+
+/* === Quicklook === */
+
+.plpQuicklook_displayDialog {
+    left: auto !important;
+    margin: 0 16%;
+    top: 10% !important;
+}
+
+.Quicklook.group1 {
+    float: left;
+    width: 100%
+}
+
+.Quicklook.group2 {
+    float: left;
+}
+
+.Quicklook.group3 {
+    float: left;
+    margin: 0 0 0 20px;
+    max-width: 390px;
+    min-height: 390px;
+}
+
+.Quicklook.group3 .displayList li {
+    text-align: left!important; 
+}
+
+.Quicklook.group3 label {
+    float: left;
+    text-align: right;
+    width: 120px;
+}
+
+.Quicklook.group3 span {
+    color: inherit;
+}
+
+.addToCart.quicklookAddToCart {
+   display: inline-block;
+}
+
+.addToWishlist.quicklookAddToWishlist {
+   display: inline-block;
+}
+
+
+/* === PDP === */
+
+.PDP.group1 {
+    float: left;
+}
+
+.PDP.group2 {
+    clear: left;
+    float: left;
+}
+
+.PDP.group3 {
+    float: left;
+    margin: 0 0 0 20px;
+    max-width: 390px;
+}
+
+.PDP.group4 {
+    float: left;
+    margin: 0 0 0 20px;
+}
+
+.PDP.group5 {
+    clear: both;
+    float: left;
+}
+
+.PDP.group6 {
+    clear: both;
+    float: left;
+    width: 100%;
+}
+
+.PDP.group3 label {
+    float: left;
+    text-align: right;
+    width: 100px;
+}
+
+.selectableFeature {  /* takes padding off container; each feature determines padding; see below */
+    clear: none; /*cancels out default container class */
+    float: none; /*cancels out default container class */
+    margin: 0; /*cancels out default container class */
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.selectableFeatures {  /* applies padding to each feature; see above */
+    padding: 4px 0 !important;
+}
+
+.selectableFeatures select {  
+    float: left; /* necessary if tool tips are used */
+}
+
+.selectableFeature ul { /* default shows select boxes; hides list items */
+    display: none;
+}
+
+.selectableFeature .toolTipLink {
+    margin: 0 0 0 5px;
+}
+
+.selectableFeature ul.multiVariantList { /* exposes multi select boxes */
+   display: block;
+   margin: 0 0 0 150px;
+}
+
+.pdpAddToCart {
+    display: inline-block;
+    padding: 0 0 0 105px;
+}
+
+.pdpAlternateImage ul  {
+     text-align: center;
+}
+
+.pdpAddToWishlist {
+    display: inline-block;
+}
+
+.pdpAlternateImage ul li  {
+    display: inline-block;
+    float: none!important; /* default floats applied in JS; cancel out if you want alt images centered */
+    margin: 0 5px;
+}
+
+.pdpAlternateImage a {
+    display: block;
+}
+
+li.pdpLongDescription {
+    margin: 20px 0 0 0;
+}
+
+.pdpDistinguishingFeature {
+    margin: 20px 0 0 0;
+}
+
+.pdpDistinguishingFeatureList div {
+    border-bottom: 2px dotted #CECECE;
+}
+
+.pdpDistinguishingFeatureList label {
+    float: left;
+    width: auto !important;
+}
+
+.pdpDistinguishingFeatureList a { /* Feature Tool Tip */
+    float: left;
+}
+
+.pdpDistinguishingFeatureList span {
+    float: right;
+}
+
+.boxListItemGrid.PDPComplement {
+    width: 200px!important;
+}
+
+.boxListItemGrid.PDPAccessory {
+    width: 200px!important;
+}
+
+.boxListItemGrid.PDPRecent {
+    width: 200px!important;
+}
+
+.pdpReviewRead {
+    display: inline-block;
+}
+
+.pdpReviewWrite {
+    display: inline-block;
+}
+
+.pdpReviewWrite.noReviews {
+    display: block;
+    text-align: center;
+}
+
+/* === Review Styles === */
+
+/* --- PDP Review List Styles */
+
+.pdpReviewList {
+    width: 100%;
+}
+
+.PDPReviewList.group1 {
+   margin: 20px 0 0 0;
+}
+
+.reviewItem.PDPReviewListItems {
+    background: none;
+    border: none;
+}
+
+.reviewItemList.PDPReviewListItems {
+    border-bottom: 3px dotted #cecece;
+    padding: 0 0 10px 0;
+}
+
+.PDPReviewListItems label {
+    display: none;
+}
+
+.pdpReviewListItemsOverallStars span {
+    display: none;
+}
+
+.reviewItemList.PDPReviewListItems li {
+    float: none;
+    max-width: none;
+    min-height: 0;
+}
+
+.reviewItemList.PDPReviewListItems li div {
+    display: table-cell;
+}
+
+.pdpReviewListItemsReviewerNickname {
+    display: inline-block;
+}
+
+.pdpReviewListItemsReviewerNickname span {
+    font-weight: 700;
+}
+
+.pdpReviewListItemsReviewDate {
+    font-style: italic;
+}
+
+.pdpReviewListItemsReviewDate {
+    display: inline-block;
+}
+
+.pdpReviewListItemsReviewerTitle {
+    margin: 0 0 0 8px;  /* To compensate for pull quotes */
+}
+
+.pdpReviewListItemsReviewerTitle span {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 0 -10px; 
+}
+
+.pdpReviewListItemsReviewerTitle span:before {
+	content: open-quote;
+}
+
+.pdpReviewListItemsReviewerTitle span:after {
+	content: close-quote;
+}
+
+.ratingBar {
+    background: url("/osafe_theme/images/user_content/images/starOff.gif") repeat-x scroll 0 0 transparent;
+    width: 75px !important;
+}
+
+.ratingDisplayValue, .ratingLegendValue {
+    display: inline-block;
+    padding: 0 0 0 3px;
+}
+
+#overallRatingRow {
+    display: inline-block;
+    margin: 0 0 0 5px;
+}
+
+#overallHover {
+    background: url("/osafe_theme/images/user_content/images/starOn.gif") repeat-x scroll 0 0 transparent;
+}
+
+#overallFilled {
+    background: url("/osafe_theme/images/user_content/images/starOff.gif") repeat-x scroll 0 0 transparent;
+}
+
+#overallHover {
+    background: url("/osafe_theme/images/user_content/images/starOn.gif") repeat-x scroll 0 0 transparent;
+}
+#overallFilled {
+    background: url("/osafe_theme/images/user_content/images/starOff.gif") repeat-x scroll 0 0 transparent;
+}
+#rateObj0RatingBar {
+    background: url("/osafe_theme/images/user_content/images/starOff.gif") repeat-x scroll 0 0 transparent;
+}
+#rateObj0Hover {
+    background: url("/osafe_theme/images/user_content/images/starOn.gif") repeat-x scroll 0 0 transparent;
+}
+
+.ratingDisplayValue, .ratingLegendValue {
+    color: #666666;
+    display: inline-block;
+    font-size: 14px;
+    padding: 0 0 0 3px;
+}
+
+table#overallRatingBar {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+table#overallHover {
+	background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+}
+
+table#overallFilled {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+table#rateObj0RatingBar {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+table#rateObj0Hover {
+	background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+}
+
+table#rateObj0Filled {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+table#rateObj1RatingBar {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+table#rateObj1Hover {
+	background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+}
+
+table#rateObj1Filled {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+table#rateObj2RatingBar {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+table#rateObj2Hover {
+	background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+}
+
+table#rateObj2Filled {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+.rating_bar {
+  background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+    padding: 0 !important;
+    height: 17px;
+    width: 85px !important; 
+  *text-align: left !important; /*IE7 Only*/
+}
+
+.rating_bar div {
+  height: 17px;  /* must match .rating_bar height */
+  background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+  display: inline-block !important;
+}
+
+.ratingFacetBar {
+    width: 65px;
+}
+
+.rating_bar_submit_ {
+  height: 18px;
+  width: 0px;
+}
+
+.rating_bar_submit_1 {
+  height: 12px;
+  width: 15px;
+}
+
+.rating_bar_submit_2 {
+  height: 12px;
+  width: 30px;
+}
+
+
+.rating_bar_submit_3 {
+  height: 12px;
+  width: 45px;
+}
+
+.rating_bar_submit_4 {
+  height: 12px;
+  width: 60px;
+}
+
+.rating_bar_submit_5 {
+  height: 12px;
+  width: 75px;
+}
+
+.WriteReviewProduct.group.group2 {
+    float: left;
+}
+
+.WriteReviewProduct.group.group3 {
+    float: left;
+    margin: 0 0 0 10px;
+    width: 50%;
+}
+
+.reviewTermsCondLink {
+    float: right;
+}
+
+.reviewGuidelinesLink {
+    clear: right;
+    float: right;
+}
+
+/* --- Facet Tool Tip --- */
+
+.tooltipIcon {
+    background: url("/osafe_theme/images/user_content/images/tooltipIcon.png") no-repeat scroll 0 0 transparent;
+    display: inline-block;
+    height: 16px;
+    position: relative;
+    top: 3px;
+    width: 16px;
+}
+
+#tooltip {
+    display: none;
+    position: absolute;
+    width: auto;
+    z-index: 999;
+}
+
+.tooltipMiddle {
+    background-color: #FFFFFF;  /* matches tooltipBottomArrow.png */
+    background-position: left bottom;
+    border: 1px solid #666666;  /* matches tooltipBottomArrow.png */
+    float: left;
+    padding: 5px;
+    max-width: 200px;
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.tooltipMiddle span {
+    color: #666666;
+}
+
+.tooltipBottomArrow {
+    background: url("/osafe_theme/images/user_content/images/tooltipBottomArrow.png") no-repeat scroll 5px 0 transparent;
+    background-repeat: no-repeat;
+    clear: both;
+    height: 13px;
+    position: relative;
+    top: -1px;
+    width: auto;
+}
+
+.tooltipTopArrow {
+    background: url("/osafe_theme/images/user_content/images/tooltipTopArrow.png") no-repeat scroll 5px 0 transparent;
+    background-repeat: no-repeat;
+    clear: both;
+    height: 13px;
+    position: relative;
+    top: 1px;
+    width: auto;
+}
+
+.productListItem:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+/* === Log In Page === */
+
+#eCommerceLoginContainer label {
+    width: 96px;
+}
+
+/* === My Account Pages ===*/
+
+/*--- Payment Information ---*/
+
+.PaymentMethodItems li {
+     width: 14.285714285714285714285714285714%;
+     max-width: none!important;
+     min-width: 120px;
+}
+
+.paymentMethodItemList li div {
+    height: 45px;
+}
+
+.paymentMethodItemsSetAsDefaultButton {
+    float: right !important; 
+}
+
+/* --- Address Book --- */
+
+.addressBookItem {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid;
+    min-height: 220px;
+    min-width: 200px;
+    padding: 10px 10px 40px 10px; /* Bottom padding covers absolute position buttons below */
+    position: relative;
+    width: auto !important;
+}
+
+.addressBookItem .button {
+    bottom: 10px;
+    margin: 10px 0 0;
+    position: absolute;
+}
+
+/* --- Order Status --- */
+
+.OrderHistoryOrderDetails li {
+     width: 16.66666666666666666666666666%;
+     max-width: none!important;
+     min-width: 120px;
+}
+
+.OrderHistoryOrderDetails li div {
+    height: 45px;
+}
+
+.orderHistoryOrderDetailsReorderButton {
+    float: right!important; 
+}
+
+.orderHistoryOrderDetailsReorderButton div {
+    float: right !important;
+    text-align: right;
+}
+
+/* --- Order Detail --- */
+
+.OrderDetailOrderItems li,
+.OrderDetailOrderItems li.itemQty {
+    width: 12.5%!important;
+}
+
+.OrderDetailOrderItems li.orderDetailOrderItemsItemTotal  {
+    float: right;
+    padding-right: 0 !important;
+}
+
+/* --- Re-order Product Page --- */
+
+.displayList.orderItemList > li {
+    padding: 10px 0 0;
+}
+
+.itemName.reorderItemsItemName {
+    width: 200px !important;
+}
+
+.itemDescription.reorderItemsItemDescription {
+    width: 150px !important;
+}
+
+/* --- Login Information --- */
+
+.myAccountUpdateLogin label {
+    width: 110px!important;
+}
+
+.myAccountUpdateLogin span {
+    display: inline-block;
+    margin: 0 0 15px 0;
+    width: 200px; /* to accommodate usernames and password lengths */
+}
+
+/* === Shopping Cart Page Defaults === */
+
+.displayList.cartItemList > li {
+    padding: 10px 0 0;
+}
+
+.itemPrice,
+.itemTotal,
+.itemOfferPrice {
+    min-width: 100px;
+    padding: 10px 0 0 10px !important;
+}
+
+/* --- Show Cart Groups --- */
+
+.boxListItemTabular.cartItem .group1 {
+    float: left;
+}
+
+.boxListItemTabular.cartItem .group2 {
+
+}
+
+.boxListItemTabular.cartItem .group3 {
+
+
+}
+
+.boxListItemTabular.cartItem .group4 {
+    float: right;
+}
+
+.boxListItemTabular.cartItem .group5 {
+
+}
+
+.displayList.cartItemList label {
+    visibility: hidden; /* exposed using .firstRow */
+    float: none;
+    padding: 0;
+}
+
+.firstRow label {
+    visibility: visible !important;
+}
+
+.itemName {
+    max-width: none !important;
+    width: 250px !important;
+}
+
+.itemDescription {
+    max-width: none !important;
+    width: 200px !important;
+}
+
+.itemDescription div label {
+    text-align: left;
+}
+
+.itemDescription .productFeature div {
+    height: auto !important;
+    padding: 0 !important;
+}
+
+.productFeature div span {
+    text-align: left;
+}
+
+.itemQty {
+    max-width: 90px!important;
+}
+
+.itemQty div label {
+    text-align: center;
+}
+
+.itemQty div input {
+    display: block;
+    margin: 5px auto 0;
+    text-align: center;
+    width: 20px;
+}
+
+.itemOfferPrice {
+    min-width: 90px;
+}
+
+.itemUpdateButton {
+    width: 26px!important;
+}
+
+.itemUpdateButton div {
+    padding: 0;
+}
+
+.itemUpdateButton .update {  
+    background: url("/osafe_theme/images/user_content/images/cartUpdate.png") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    display: block!important;
+    height: 18px;
+    margin: 25px 0 0;
+    padding: 0;
+    position: relative;
+    width: 18px;
+}
+
+.itemUpdateButton .update:hover {
+    background: url("/osafe_theme/images/user_content/images/cartUpdate.png") no-repeat scroll 0 0 transparent;
+    border: none!important;
+}
+
+.itemUpdateButton .update span {
+    display: none !important;
+}
+
+.itemRemoveButton {
+    clear: left;
+    width: 26px!important;
+}
+
+.itemRemoveButton .delete {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+    padding: 0;
+}
+
+.itemRemoveButton .delete:hover {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: none!important;
+}
+
+.itemRemoveButton .delete span {
+    font-size: x-small;
+}
+
+.itemCheckbox {
+    max-width: 90px !important;
+}
+
+.itemCheckbox div input {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* --- Light Cart --- */
+
+.LightBoxOrderItems.group1 li {
+    padding: 0 !important;
+}
+
+.LightBoxOrderItems.group2 {
+   float: left !important;
+}
+
+.LightBoxOrderItems.group2 li {
+    float: none;
+    padding: 0 !important;
+}
+
+.LightBoxOrderItems.group2 li.currency span {
+    text-align: left;
+}
+
+.boxListItemTabular.cartItem .LightBoxOrderItems.group3 {
+     clear: none;
+     float: right;
+}
+
+.lightBoxOrderItemsItemTotal {
+
+}
+
+
+/* --- Promo Code --- */ 
+
+
+/* --- Loyalty Points --- */
+
+.loyaltyPointItem li.input input {
+    display: inline-block;
+    width: 60px;
+}
+
+.loyaltyPointItem li.input .standardBtn.update {
+    background: url("/osafe_theme/images/user_content/images/cartUpdate.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+    display: inline-block;
+    height: 18px;
+    padding: 0;
+    position: relative;
+    top: 5px;
+    width: 18px;
+}
+
+.loyaltyPointItem li.input .standardBtn.update span {
+    display: none;
+}
+
+/* --- Shipping Instructions --- */
+
+.shippingInstructions label {
+    width: auto !important;
+}
+
+.multiAddress a,
+.shippingGroupSummary a {
+    border-bottom: 1px dotted;
+    color: #666;
+}
+
+.multiAddress a:hover,
+.shippingGroupSummary a:hover {
+    border-bottom: 1px solid;
+    text-decoration: none;
+}
+
+.multiAddressItems.group2,
+.multiShipOptionsOptions.group2,
+.shippingGroupShipGroupItem.group2 {
+    width: 350px; /* sized to accommodate length of shipping options */
+}
+
+.radioOptionText .displayList.address {
+    max-width: 315px;  /* maximum address width; wraps address under radio button */
+}
+
+.multiAddressItemAddress,
+.multiShipOptionsShipOptions  {
+    max-width: none !important;
+}
+
+.multiShipOptions,
+.shippingGroupSummary {
+    float: none;
+    overflow: auto;
+}
+
+.multiShipOptions .radioOptionText {
+     max-width: 60%;
+}
+
+.multiAddressItemAddress .entry.radioOption {
+    border: medium none;
+    margin: 5px 0 0;
+    padding: 0;
+}
+
+.multiShipOpionsOptions .entry.radioOption {
+    border-bottom: 1px dotted;
+    margin: 5px 0 0;
+    padding: 0;
+}
+
+.shippingGroupShipGroupItem.group2 .shippingGroupSummary,
+.shippingGroupCartItem.group2 .shippingGroupSummary {
+    float: left!important;
+    width: 50%;
+}
+
+/* === Store Locator ===*/
+
+.StoreLocatorItems.group2 {
+    float: right;
+}
+
+.storeLocatorItemsDistance {
+    max-width: none !important;
+    width: 90px !important;
+}
+
+.storeLocatorItemsNotice {
+    max-width: none !important;
+    width: 190px;
+}
+
+.storeLocatorItemsHours {
+    max-width: none !important;
+    width: 170px;
+}
+
+.storeCity, 
+.storeState,
+.storeZip {
+    display: inline-block !important;
+}
+
+.action.walkingIcon.storeLocatorItemsWalkingIcon .storeDetailIcon {
+    background-image: url("/osafe_theme/images/user_content/images/storeDetailIcon.png");
+    background-repeat: no-repeat;
+    display: block;
+    font-size: 15px;
+    height: 23px;
+    width: 29px!important;
+}
+
+.drivingDirectionIcon {
+    background-image: url("/osafe_theme/images/user_content/images/drivingDirection.png");
+    background-repeat: no-repeat;
+    display: block;
+    font-size: 15px;
+    height: 23px;
+    width: 29px!important;
+}
+
+.walkingDirectionIcon {
+    background-image: url("/osafe_theme/images/user_content/images/walkingDirection.png");
+    background-repeat: no-repeat;
+    display: block;
+    font-size: 15px;
+    height: 23px;
+    width: 29px!important;
+}
+
+.bicyclingDirectionIcon {
+    background-image: url("/osafe_theme/images/user_content/images/bicyclingDirection.png");
+    background-repeat: no-repeat;
+    display: block;
+    font-size: 15px;
+    height: 23px;
+    width: 29px!important;
+}
+
+.selectStoreButton {
+    clear: left;
+    max-width: 160px!important;
+}
+
+/* --- Google Map --- */
+
+.storeLocatorGoogleMap {
+    float: left;
+    padding: 20px 0;
+    width: 100%;
+}
+
+.mapCanvas {
+    border: 1px solid #666666;
+    margin: 0 auto;
+    width: 75% !important;
+}
+
+.mapCanvas.mapCanvasWithDirection {
+    float: left;
+    height: 400px !important; 
+    width: 50% !important;
+}
+
+.mapDirection {
+    float: right;
+    height: auto!important;
+    width: 50%;
+}
+
+.routeDirection {
+    height: 400px !important;
+    overflow-y: auto;
+}
+
+.closeDirection {
+    float: right;
+    margin: 10px 0 0 0;
+}
+
+.adp-placemark {
+    margin: 0!important; /* Google CSS override */
+}
+
+
+
+/* === FootPrint === */
+
+#eCommerceCartFootprintContainer {
+    display: inline-block;
+    font-size: 15px;
+    margin: 10px 0;
+    width: 100%;
+}
+
+#eCommerceCartFootprintContainer li {
+    color: #FFFFFF;
+    float: left;
+    margin: 0;
+    padding-left: 30px;
+    width: 20%;
+}
+
+#eCommerceCartFootprintContainer li span {
+    display: inline-block;
+    padding: 6px 0;
+    vertical-align: middle;
+}
+
+#eCommerceCartFootprintContainer li a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+#eCommerceCartFootprintContainer li a:hover {
+	text-decoration: underline;
+}
+
+#eCommerceCartFootprintContainer li.first {
+    background: url("/osafe_theme/images/user_content/images/first.png") no-repeat scroll 0 0 #666666;
+}
+
+#eCommerceCartFootprintContainer li.first span {
+    color: #ffffff
+}
+
+#eCommerceCartFootprintContainer li.on {
+    background: url("/osafe_theme/images/user_content/images/current-on.png") no-repeat scroll 0 0 #666666;
+}
+
+#eCommerceCartFootprintContainer li.on span {
+    color: #ffffff
+}
+
+#eCommerceCartFootprintContainer li.current {
+    background: url("/osafe_theme/images/user_content/images/current-on.png") no-repeat scroll 0 0 #666666;
+}
+
+#eCommerceCartFootprintContainer li.current span {
+    color: #ffffff
+}
+
+#eCommerceCartFootprintContainer li.next {
+    background: url("/osafe_theme/images/user_content/images/next.png") no-repeat scroll 0 0 #C7C7C7;
+}
+
+#eCommerceCartFootprintContainer li.off,
+#eCommerceCartFootprintContainer li.last {
+    background: url("/osafe_theme/images/user_content/images/off.png") no-repeat scroll 0 0 #C7C7C7;;
+}
+
+#eCommerceCartFootprintContainer li#confirmation.off,
+#eCommerceCartFootprintContainer li#confirmation.last { 
+
+}
+
+#eCommerceCartFootprintContainer li#confirmation.off span,
+#eCommerceCartFootprintContainer li#confirmation.last span { 
+    background: url("/osafe_theme/images/user_content/images/last-off-top.png") no-repeat scroll right top transparent;
+    width: 100% !important;
+}
+
+#eCommerceCartFootprintContainer li#confirmation.next { 
+    padding-right: 15px;
+    background: url("/osafe_theme/images/user_content/images/last-next.png") no-repeat scroll 0 0 transparent;
+}
+
+#eCommerceCartFootprintContainer li#confirmation.current { 
+   padding-right: 15px;
+    background: url("/osafe_theme/images/user_content/images/last-on.png") no-repeat scroll 0 0 transparent;
+}
+
+/* === Wish List Page === */
+
+.showWishlistOrderItemsItemName {
+    width: 170px !important;
+}
+
+.showWishlistOrderItemsItemDescription {
+    width: 150px !important;
+}
+
+.showWishlistOrderItemsItemRemoveButton .delete {
+     margin: 10px 0 0;
+}
+
+
+/* === Payment Method === */
+
+.ebsCheckoutImage {
+    background: url("http://www.ebs.in/images/logo_ebs.png") no-repeat scroll 50% center;
+    display: inline-block;
+    height: 90px;
+    width: 80px;
+}
+
+.ebsCheckoutImage span {
+   display: none;
+}
+
+.payNetzCheckoutImage {
+    background: url("http://www.atomtech.in/images/logo.png") no-repeat scroll 50% center;
+    display: inline-block;
+    height: 68px;
+    width: 129px;
+}
+
+.payNetzCheckoutImage span {
+   display: none;
+}
+
+.payPalCheckoutImage { /* Checkout; Order Summary */
+    background: url("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif") no-repeat scroll 50% center;
+    display: inline-block;
+    height: 42px;
+    width: 145px;
+}
+
+.payPalCheckoutImage span { /* Checkout; Order Summary */
+      display: none;
+}
+
+.payPalImage { /* Order Confirmation */
+    background: url("/osafe_theme/images/user_content/images/payPalConfirmation.png") no-repeat scroll 50% center;
+    display: inline-block;
+    height: 23px;
+    position: relative;
+    top: 7px;
+    width: 90px;
+}
+
+.payPalImage span { /* Order Confirmation */
+   display: none;
+}
+
+.ccvContainer {
+    display: inline-block;
+    margin: 0 15px 10px 0;
+}
+
+.ccvContainer span {
+    display: block;
+}
+
+.ccvContainer + .ccvContainer {
+    margin: 0;
+}
+
+/* === Previously Purchased Products === */
+
+.ReorderItems_Group_1 {
+    float: left;
+}
+
+.ReorderItems_Group_2 {
+    float: left;
+}
+
+.ReorderItems_Group_3 {
+    float: right;
+}
+
+.itemCheckbox div input {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* === Error Messages  === */
+
+.content-messages {
+    clear: left;
+    color: #000000;
+    float: left;
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+}
+
+.content-messages p {
+    float: left;
+    font-size: 14px;
+    margin: 3px 0 0 5px;
+}
+
+.content-messages ul {
+    clear: left;
+    float: left;
+    margin: 5px 0 0 50px;
+}
+
+.content-messages ul li {
+    margin: 5px 0 0;
+}
+
+.eCommerceErrorMessage {
+    border: 1px solid #F00;
+    background-color: #FBE7E8; /* Light Red */
+}
+
+.eCommerceErrorMessage .errorImage {
+    background-image: url("/osafe_theme/images/user_content/images/errorIcon.png");
+    background-position: 50% center;
+    background-repeat: no-repeat;
+    float: left;
+    height: 24px;
+    width: 24px;
+}
+
+.eCommerceSuccessMessage {
+	border: 1px solid #076B17;
+	background-color: #CCFFCC; /* Green */
+}
+
+.eCommerceSuccessMessage .eventImage {
+    background-image: url("/osafe_theme/images/user_content/images/successIcon.png");
+    background-position: 50% center;
+    background-repeat: no-repeat;
+    float: left;
+    height: 24px;
+    width: 24px;
+}
+
+.eCommerceWarningMessage {
+	border: 1px solid #ffcb61;
+	background-color: #FFFF99; /* Yellow */
+}
+
+.eCommerceWarningMessage .infoImage {
+    background-image: url("/osafe_theme/images/user_content/images/warningIcon.png");
+    background-position: 50% center;
+    background-repeat: no-repeat;
+    float: left;
+    height: 24px;
+    width: 24px;
+}
+
+.inError, .inError:focus {
+    background: none repeat scroll 0 0 #FBE7E8 !important;
+    border: 1px solid #C00000 !important;
+}
+
+.fieldErrorMessage {
+    display: inline-block;
+}
+
+.fieldErrorMessage li {
+    color: #FF0000;
+    font-size: 12px;
+}
+
+.pagingContainer {
+    float: left;
+    margin: 10px 0 0;
+    width: 100%;
+}
+
+.paginationContainer {
+    float: right;
+    font-size: 14px;
+}
+
+#pageLink a {
+    border-bottom: 1px dotted;
+}
+
+#pageLink a:hover {
+    border-bottom: 1px solid;
+}
+
+#nextPageLink a {
+    border-bottom: 1px dotted;
+    margin: 0 0 0 5px;
+}
+
+#nextPageLink a:hover {
+    border-bottom: 1px solid;
+}
+
+#prevPageLink a {
+    border-bottom: 1px dotted;
+    margin: 0 5px 0 0;
+} 
+
+#prevPageLink a:hover {
+    border-bottom: 1px solid;
+}
+
+/* === Dialog Box Styles ===*/
+
+#search_displayDialog {
+    max-width: 600px !important;
+}
+
+#storePickup_displayDialog {
+    max-width: 900px !important;
+}
+
+#pincodeChecker_displayDialog {
+    max-width: 600px !important;
+}
+
+#confirm_displayDialog {
+    max-width: 600px !important;
+}
+
+#lightCart_displayDialog {
+    max-height: 420px !important;
+}
+
+/* === Static Page and User Content Styles === */
+
+.staticContent p {
+    display: block;
+    margin: 0 0 20px;
+}
+
+.staticContent ul,
+.termsAndConditions ul,
+.longDescription ul, 
+.deliveryInfo ul,
+.salesPitch ul,
+.ingredients ul,
+.specialInstructions ul,
+.warnings ul {
+    list-style: disc inside none;
+}
+
+.staticContent ul li ul,
+.termsAndConditions ul li ul,
+.longDescription ul li ul, 
+.deliveryInfo ul li ul,
+.salesPitch ul li ul
+.ingredients ul li ul,
+.specialInstructions ul li ul,
+.warnings ul  li ul {
+    list-style: circle inside none;
+    margin: 0 0 0 15px;
+}
+
+
+/* === Footer Styles === */
+
+#eCommerceFooter {
+    float: left;
+    position: relative;
+    width: 100%; 
+}
+
+.footerColumn {
+    border-left: 1px solid #CECECE;
+    float: left;
+    margin: 0 0 20px;
+    min-width: 150px;  /* Columns will wrap after they collapse beyond 150px */
+    padding: 0 0 0 10px;
+    width: 25%;
+}
+
+.footerColumn h3 {
+
+}
+
+.footerLinks li {
+    margin: 2px 0 0;
+}
+
+a.facebook {
+    background: url("/osafe_theme/images/user_content/images/facebook.png") no-repeat scroll 0 0 transparent;
+    padding: 0 0 0 20px;
+}
+
+a.twitter {
+    background: url("/osafe_theme/images/user_content/images/twitterSmall.png") no-repeat scroll 0 0 transparent;
+    padding: 0 0 0 20px;
+}
+
+a.pinterest {
+    background: url("/osafe_theme/images/user_content/images/pinterestSmall.png") no-repeat scroll 0 0 transparent;
+    padding: 0 0 0 20px;
+}
+
+a.googlePlus {
+    background: url("/osafe_theme/images/user_content/images/google.png") no-repeat scroll 0 0 transparent;
+    padding: 0 0 0 20px;
+}
+
+a.blog {
+    background: url("/osafe_theme/images/user_content/images/blog.png") no-repeat scroll 0 0 transparent;
+    padding: 0 0 0 20px;
+}
+
+/* === Built By === */
+
+#eCommerceBuiltByBevelWrapper{
+    background: url("/osafe_theme/images/user_content/images/tornPaperBackgoundRight.png") repeat-y top right;
+    float: left;
+    width: 100%;
+}
+
+#eCommerceBuiltBy {
+    float: right;
+    padding: 10px;
+}
+
+#eCommerceBuiltBy p {
+    color: #aaaaaa;
+    font-size: 11px;
+    text-align: right;
+}
+
+#eCommerceBuiltBy a {
+    color: #aaaaaa;
+    font-size: 11px;
+}
+
+
+/* === 15. Miscellaneous Styles === */
+
+/* === 15.1 jQuery UI Theme Style Tabs, Dialog Boxes, Date Picker, ect.  === */
+
+/*
+ * jQuery UI CSS Framework 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Theming/API
+ */
+
+/* Layout helpers
+----------------------------------*/
+.ui-helper-hidden { display: none; }
+.ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px 1px 1px 1px); clip: rect(1px,1px,1px,1px); }
+.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.ui-helper-clearfix:before, .ui-helper-clearfix:after { content: ""; display: table; }
+.ui-helper-clearfix:after { clear: both; }
+.ui-helper-clearfix { zoom: 1; }
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-disabled { cursor: default !important; }
+
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+.ui-widget-overlay { 
+     position: absolute;
+     top: 0; left: 0;
+     width: 100%;
+     height: 100%;
+     position: fixed;  /* Needed to have prevent scroll bars and accommodate expansion */
+}
+
+
+/*
+ * jQuery UI CSS Framework 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Theming/API
+ *
+ * To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Verdana,Arial,sans-serif&fwDefault=normal&fsDefault=1.1em&cornerRadius=4px&bgColorHeader=cccccc&bgTextureHeader=03_highlight_soft.png&bgImgOpacityHeader=75&borderColorHeader=aaaaaa&fcHeader=222222&iconColorHeader=222222&bgColorContent=ffffff&bgTextureContent=01_flat.png&bgImgOpacityContent=75&borderColorContent=aaaaaa&fcContent=222222&iconColorContent=222222&bgColorDefault=e6e6e6&bgTextureDefault=02_glass.png&bgImgOpacityDefault=75&borderColorDefault=d3d3d3&fcDefault=555555&iconColorDefault=888888&bgColorHover=dadada&bgTextureHover=02_glass.png&bgImgOpacityHover=75&borderColorHover=999999&fcHover=212121&iconColorHover=454545&bgColorActive=ffffff&bgTextureActive=02_glass.png&bgImgOpacityActive=65&borderColorActive=aaaaaa&fcActive=212121&iconColorActive=454545&bgColorHighlight=fbf9ee&bgTextureHighlight=02_glass.png&bgImgOpacityHighlight=55&borderColorHighlight=fcefa1&fcHighlight=363636&iconColorHighlight=2e83ff&bgColorError=fef1ec&bgTextureError=02_glass.png&bgImgOpacityError=95&borderColorError=cd0a0a&fcError=cd0a0a&iconColorError=cd0a0a&bgColorOverlay=aaaaaa&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=0&opacityOverlay=30&bgColorShadow=aaaaaa&bgTextureShadow=01_flat.png&bgImgOpacityShadow=0&opacityShadow=30&thicknessShadow=8px&offsetTopShadow=-8px&offsetLeftShadow=-8px&cornerRadiusShadow=8px
+ */
+
+
+/* Component containers
+----------------------------------*/
+
+.ui-widget-content { border: 1px solid #aaaaaa; background: #ffffff url("/osafe_theme/images/user_content/images/ui-bg_flat_75_ffffff_40x100.png") 50% 50% repeat-x; color: #222222; }
+.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url("/osafe_theme/images/user_content/images/ui-bg_highlight-soft_75_cccccc_1x100.png") 50% 50% repeat-x; color: #222222; font-weight: bold; }
+.ui-widget-header a { color: #222222; }
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon { width: 16px; height: 16px; background-image: url("/osafe_theme/images/user_content/images/ui-icons_222222_256x240.png"); }
+.ui-widget-content .ui-icon {background-image: url("/osafe_theme/images/user_content/images/ui-icons_222222_256x240.png"); }
+.ui-widget-header .ui-icon {background-image: url("/osafe_theme/images/user_content/images/ui-icons_222222_256x240.png"); }
+.ui-state-default .ui-icon { background-image: url("/osafe_theme/images/user_content/images/ui-icons_888888_256x240.png"); }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url("/osafe_theme/images/user_content/images/ui-icons_454545_256x240.png"); }
+.ui-state-active .ui-icon {background-image: url("/osafe_theme/images/user_content/images/ui-icons_454545_256x240.png"); }
+.ui-state-highlight .ui-icon {background-image: url("/osafe_theme/images/user_content/images/ui-icons_2e83ff_256x240.png"); }
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url("/osafe_theme/images/user_content/images/ui-icons_cd0a0a_256x240.png"); }
+
+/* positioning */
+.ui-icon-carat-1-n { background-position: 0 0; }
+.ui-icon-carat-1-ne { background-position: -16px 0; }
+.ui-icon-carat-1-e { background-position: -32px 0; }
+.ui-icon-carat-1-se { background-position: -48px 0; }
+.ui-icon-carat-1-s { background-position: -64px 0; }
+.ui-icon-carat-1-sw { background-position: -80px 0; }
+.ui-icon-carat-1-w { background-position: -96px 0; }
+.ui-icon-carat-1-nw { background-position: -112px 0; }
+.ui-icon-carat-2-n-s { background-position: -128px 0; }
+.ui-icon-carat-2-e-w { background-position: -144px 0; }
+.ui-icon-triangle-1-n { background-position: 0 -16px; }
+.ui-icon-triangle-1-ne { background-position: -16px -16px; }
+.ui-icon-triangle-1-e { background-position: -32px -16px; }
+.ui-icon-triangle-1-se { background-position: -48px -16px; }
+.ui-icon-triangle-1-s { background-position: -64px -16px; }
+.ui-icon-triangle-1-sw { background-position: -80px -16px; }
+.ui-icon-triangle-1-w { background-position: -96px -16px; }
+.ui-icon-triangle-1-nw { background-position: -112px -16px; }
+.ui-icon-triangle-2-n-s { background-position: -128px -16px; }
+.ui-icon-triangle-2-e-w { background-position: -144px -16px; }
+.ui-icon-arrow-1-n { background-position: 0 -32px; }
+.ui-icon-arrow-1-ne { background-position: -16px -32px; }
+.ui-icon-arrow-1-e { background-position: -32px -32px; }
+.ui-icon-arrow-1-se { background-position: -48px -32px; }
+.ui-icon-arrow-1-s { background-position: -64px -32px; }
+.ui-icon-arrow-1-sw { background-position: -80px -32px; }
+.ui-icon-arrow-1-w { background-position: -96px -32px; }
+.ui-icon-arrow-1-nw { background-position: -112px -32px; }
+.ui-icon-arrow-2-n-s { background-position: -128px -32px; }
+.ui-icon-arrow-2-ne-sw { background-position: -144px -32px; }
+.ui-icon-arrow-2-e-w { background-position: -160px -32px; }
+.ui-icon-arrow-2-se-nw { background-position: -176px -32px; }
+.ui-icon-arrowstop-1-n { background-position: -192px -32px; }
+.ui-icon-arrowstop-1-e { background-position: -208px -32px; }
+.ui-icon-arrowstop-1-s { background-position: -224px -32px; }
+.ui-icon-arrowstop-1-w { background-position: -240px -32px; }
+.ui-icon-arrowthick-1-n { background-position: 0 -48px; }
+.ui-icon-arrowthick-1-ne { background-position: -16px -48px; }
+
+.ui-icon-arrowthick-1-e { background-position: -32px -48px; }
+.ui-icon-arrowthick-1-se { background-position: -48px -48px; }
+.ui-icon-arrowthick-1-s { background-position: -64px -48px; }
+
+.ui-icon-arrowthick-1-sw { background-position: -80px -48px; }
+.ui-icon-arrowthick-1-w { background-position: -96px -48px; }
+.ui-icon-arrowthick-1-nw { background-position: -112px -48px; }
+.ui-icon-arrowthick-2-n-s { background-position: -128px -48px; }
+.ui-icon-arrowthick-2-ne-sw { background-position: -144px -48px; }
+.ui-icon-arrowthick-2-e-w { background-position: -160px -48px; }
+.ui-icon-arrowthick-2-se-nw { background-position: -176px -48px; }
+.ui-icon-arrowthickstop-1-n { background-position: -192px -48px; }
+.ui-icon-arrowthickstop-1-e { background-position: -208px -48px; }
+.ui-icon-arrowthickstop-1-s { background-position: -224px -48px; }
+.ui-icon-arrowthickstop-1-w { background-position: -240px -48px; }
+.ui-icon-arrowreturnthick-1-w { background-position: 0 -64px; }
+.ui-icon-arrowreturnthick-1-n { background-position: -16px -64px; }
+.ui-icon-arrowreturnthick-1-e { background-position: -32px -64px; }
+.ui-icon-arrowreturnthick-1-s { background-position: -48px -64px; }
+.ui-icon-arrowreturn-1-w { background-position: -64px -64px; }
+.ui-icon-arrowreturn-1-n { background-position: -80px -64px; }
+.ui-icon-arrowreturn-1-e { background-position: -96px -64px; }
+.ui-icon-arrowreturn-1-s { background-position: -112px -64px; }
+.ui-icon-arrowrefresh-1-w { background-position: -128px -64px; }
+.ui-icon-arrowrefresh-1-n { background-position: -144px -64px; }
+.ui-icon-arrowrefresh-1-e { background-position: -160px -64px; }
+.ui-icon-arrowrefresh-1-s { background-position: -176px -64px; }
+.ui-icon-arrow-4 { background-position: 0 -80px; }
+.ui-icon-arrow-4-diag { background-position: -16px -80px; }
+.ui-icon-extlink { background-position: -32px -80px; }
+.ui-icon-newwin { background-position: -48px -80px; }
+.ui-icon-refresh { background-position: -64px -80px; }
+.ui-icon-shuffle { background-position: -80px -80px; }
+.ui-icon-transfer-e-w { background-position: -96px -80px; }
+.ui-icon-transferthick-e-w { background-position: -112px -80px; }
+.ui-icon-folder-collapsed { background-position: 0 -96px; }
+.ui-icon-folder-open { background-position: -16px -96px; }
+.ui-icon-document { background-position: -32px -96px; }
+.ui-icon-document-b { background-position: -48px -96px; }
+.ui-icon-note { background-position: -64px -96px; }
+.ui-icon-mail-closed { background-position: -80px -96px; }
+.ui-icon-mail-open { background-position: -96px -96px; }
+.ui-icon-suitcase { background-position: -112px -96px; }
+.ui-icon-comment { background-position: -128px -96px; }
+.ui-icon-person { background-position: -144px -96px; }
+.ui-icon-print { background-position: -160px -96px; }
+.ui-icon-trash { background-position: -176px -96px; }
+.ui-icon-locked { background-position: -192px -96px; }
+.ui-icon-unlocked { background-position: -208px -96px; }
+.ui-icon-bookmark { background-position: -224px -96px; }
+.ui-icon-tag { background-position: -240px -96px; }
+.ui-icon-home { background-position: 0 -112px; }
+.ui-icon-flag { background-position: -16px -112px; }
+.ui-icon-calendar { background-position: -32px -112px; }
+.ui-icon-cart { background-position: -48px -112px; }
+.ui-icon-pencil { background-position: -64px -112px; }
+.ui-icon-clock { background-position: -80px -112px; }
+.ui-icon-disk { background-position: -96px -112px; }
+.ui-icon-calculator { background-position: -112px -112px; }
+.ui-icon-zoomin { background-position: -128px -112px; }
+.ui-icon-zoomout { background-position: -144px -112px; }
+.ui-icon-search { background-position: -160px -112px; }
+.ui-icon-wrench { background-position: -176px -112px; }
+.ui-icon-gear { background-position: -192px -112px; }
+.ui-icon-heart { background-position: -208px -112px; }
+.ui-icon-star { background-position: -224px -112px; }
+.ui-icon-link { background-position: -240px -112px; }
+.ui-icon-cancel { background-position: 0 -128px; }
+
+.ui-icon-plus { background-position: -16px -128px; }
+.ui-icon-plusthick { background-position: -32px -128px; }
+.ui-icon-minus { background-position: -48px -128px; }
+.ui-icon-minusthick { background-position: -64px -128px; }
+.ui-icon-close { background-position: -80px -128px; }
+.ui-icon-closethick { background-position: -96px -128px; }
+.ui-icon-key { background-position: -112px -128px; }
+.ui-icon-lightbulb { background-position: -128px -128px; }
+.ui-icon-scissors { background-position: -144px -128px; }
+.ui-icon-clipboard { background-position: -160px -128px; }
+.ui-icon-copy { background-position: -176px -128px; }
+.ui-icon-contact { background-position: -192px -128px; }
+.ui-icon-image { background-position: -208px -128px; }
+.ui-icon-video { background-position: -224px -128px; }
+.ui-icon-script { background-position: -240px -128px; }
+.ui-icon-alert { background-position: 0 -144px; }
+.ui-icon-info { background-position: -16px -144px; }
+.ui-icon-notice { background-position: -32px -144px; }
+.ui-icon-help { background-position: -48px -144px; }
+.ui-icon-check { background-position: -64px -144px; }
+.ui-icon-bullet { background-position: -80px -144px; }
+.ui-icon-radio-off { background-position: -96px -144px; }
+.ui-icon-radio-on { background-position: -112px -144px; }
+.ui-icon-pin-w { background-position: -128px -144px; }
+.ui-icon-pin-s { background-position: -144px -144px; }
+.ui-icon-play { background-position: 0 -160px; }
+.ui-icon-pause { background-position: -16px -160px; }
+.ui-icon-seek-next { background-position: -32px -160px; }
+.ui-icon-seek-prev { background-position: -48px -160px; }
+.ui-icon-seek-end { background-position: -64px -160px; }
+.ui-icon-seek-start { background-position: -80px -160px; }
+/* ui-icon-seek-first is deprecated, use ui-icon-seek-start instead */
+.ui-icon-seek-first { background-position: -80px -160px; }
+.ui-icon-stop { background-position: -96px -160px; }
+.ui-icon-eject { background-position: -112px -160px; }
+.ui-icon-volume-off { background-position: -128px -160px; }
+.ui-icon-volume-on { background-position: -144px -160px; }
+.ui-icon-power { background-position: 0 -176px; }
+.ui-icon-signal-diag { background-position: -16px -176px; }
+.ui-icon-signal { background-position: -32px -176px; }
+.ui-icon-battery-0 { background-position: -48px -176px; }
+.ui-icon-battery-1 { background-position: -64px -176px; }
+.ui-icon-battery-2 { background-position: -80px -176px; }
+.ui-icon-battery-3 { background-position: -96px -176px; }
+.ui-icon-circle-plus { background-position: 0 -192px; }
+.ui-icon-circle-minus { background-position: -16px -192px; }
+.ui-icon-circle-close { background-position: -32px -192px; }
+.ui-icon-circle-triangle-e { background-position: -48px -192px; }
+.ui-icon-circle-triangle-s { background-position: -64px -192px; }
+.ui-icon-circle-triangle-w { background-position: -80px -192px; }
+.ui-icon-circle-triangle-n { background-position: -96px -192px; }
+.ui-icon-circle-arrow-e { background-position: -112px -192px; }
+.ui-icon-circle-arrow-s { background-position: -128px -192px; }
+.ui-icon-circle-arrow-w { background-position: -144px -192px; }
+.ui-icon-circle-arrow-n { background-position: -160px -192px; }
+.ui-icon-circle-zoomin { background-position: -176px -192px; }
+.ui-icon-circle-zoomout { background-position: -192px -192px; }
+.ui-icon-circle-check { background-position: -208px -192px; }
+.ui-icon-circlesmall-plus { background-position: 0 -208px; }
+.ui-icon-circlesmall-minus { background-position: -16px -208px; }
+.ui-icon-circlesmall-close { background-position: -32px -208px; }
+.ui-icon-squaresmall-plus { background-position: -48px -208px; }
+.ui-icon-squaresmall-minus { background-position: -64px -208px; }
+.ui-icon-squaresmall-close { background-position: -80px -208px; }
+.ui-icon-grip-dotted-vertical { background-position: 0 -224px; }
+.ui-icon-grip-dotted-horizontal { background-position: -16px -224px; }
+.ui-icon-grip-solid-vertical { background-position: -32px -224px; }
+.ui-icon-grip-solid-horizontal { background-position: -48px -224px; }
+.ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
+.ui-icon-grip-diagonal-se { background-position: -80px -224px; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Corner radius */
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl { -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; -khtml-border-top-left-radius: 4px; border-top-left-radius: 0px; }
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr { -moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; -khtml-border-top-right-radius: 4px; border-top-right-radius: 0px; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl { -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; -khtml-border-bottom-left-radius: 4px; border-bottom-left-radius: 0px; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { -moz-border-radius-bottomright: 4px; -webkit-border-bottom-right-radius: 4px; -khtml-border-bottom-right-radius: 4px; border-bottom-right-radius: 0px; }
+
+/* Overlays */
+.ui-widget-overlay { background: #aaaaaa url("/osafe_theme/images/user_content/images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x; opacity: .30;filter:Alpha(Opacity=30); }
+.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #aaaaaa url("/osafe_theme/images/user_content/images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x; opacity: .30;filter:Alpha(Opacity=30); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }
+/*
+ * jQuery UI Resizable 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Resizable#theming
+ */
+.ui-resizable { position: relative;}
+.ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
+.ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }
+.ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }
+.ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0; height: 100%; }
+.ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }
+.ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }
+.ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }
+.ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }
+.ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}
+/*
+ * jQuery UI Selectable 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Selectable#theming
+ */
+.ui-selectable-helper { position: absolute; z-index: 100; border:1px dotted black; }
+/*
+ * jQuery UI Accordion 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Accordion#theming
+ */
+/* IE/Win - Fix animation bug - #4615 */
+.ui-accordion { width: 100%; }
+.ui-accordion .ui-accordion-header { cursor: pointer; position: relative; margin-top: 1px; zoom: 1; }
+.ui-accordion .ui-accordion-li-fix { display: inline; }
+.ui-accordion .ui-accordion-header-active { border-bottom: 0 !important; }
+.ui-accordion .ui-accordion-header a { display: block; font-size: 1em; padding: .5em .5em .5em .7em; }
+.ui-accordion-icons .ui-accordion-header a { padding-left: 2.2em; }
+.ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
+.ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; }
+.ui-accordion .ui-accordion-content-active { display: block; }
+/*
+ * jQuery UI Autocomplete 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Autocomplete#theming
+ */
+.ui-autocomplete { position: absolute; cursor: default; }	
+
+/* workarounds */
+* html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
+
+/*
+ * jQuery UI Menu 1.8.21
+ *
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Menu#theming
+ */
+.ui-menu {
+	list-style:none;
+	padding: 2px;
+	margin: 0;
+	display:block;
+	float: left;
+}
+.ui-menu .ui-menu {
+	margin-top: -3px;
+}
+.ui-menu .ui-menu-item {
+	margin:0;
+	padding: 0;
+	zoom: 1;
+	float: left;
+	clear: left;
+	width: 100%;
+}
+.ui-menu .ui-menu-item a {
+	text-decoration:none;
+	display:block;
+	padding:.2em .4em;
+	line-height:1.5;
+	zoom:1;
+}
+.ui-menu .ui-menu-item a.ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-active {
+	font-weight: normal;
+	/* margin: -1px; */
+}
+/*
+ * jQuery UI Button 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Button#theming
+ */
+.ui-button { display: inline-block; position: relative; padding: 0; margin-right: .1em; text-decoration: none !important; cursor: pointer; text-align: center; zoom: 1; overflow: visible; } /* the overflow property removes extra width in IE */
+.ui-button-icon-only { width: 2.2em; } /* to make room for the icon, a width needs to be set here */
+button.ui-button-icon-only { width: 2.4em; } /* button elements seem to need a little more width */
+.ui-button-icons-only { width: 3.4em; } 
+button.ui-button-icons-only { width: 3.7em; } 
+
+/*button text element */
+.ui-button .ui-button-text { display: block; line-height: 1.4;  }
+.ui-button-text-only .ui-button-text { padding: .4em 1em; }
+.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text { padding: .4em; text-indent: -9999999px; }
+.ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 1em .4em 2.1em; }
+.ui-button-text-icon-secondary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 2.1em .4em 1em; }
+.ui-button-text-icons .ui-button-text { padding-left: 2.1em; padding-right: 2.1em; }
+/* no icon support for input elements, provide padding by default */
+input.ui-button { padding: .4em 1em; }
+
+/*button icon element(s) */
+.ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon { position: absolute; top: 50%; margin-top: -8px; }
+.ui-button-icon-only .ui-icon { left: 50%; margin-left: -8px; }
+.ui-button-text-icon-primary .ui-button-icon-primary, .ui-button-text-icons .ui-button-icon-primary, .ui-button-icons-only .ui-button-icon-primary { left: .5em; }
+.ui-button-text-icon-secondary .ui-button-icon-secondary, .ui-button-text-icons .ui-button-icon-secondary, .ui-button-icons-only .ui-button-icon-secondary { right: .5em; }
+.ui-button-text-icons .ui-button-icon-secondary, .ui-button-icons-only .ui-button-icon-secondary { right: .5em; }
+
+/*button sets*/
+.ui-buttonset { margin-right: 7px; }
+.ui-buttonset .ui-button { margin-left: 0; margin-right: -.3em; }
+
+/* workarounds */
+button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra padding in Firefox */
+/*
+ * jQuery UI Dialog 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Dialog#theming
+ */
+.ui-dialog { position: absolute; padding: .2em; width: 300px; overflow: hidden; }
+.ui-dialog .ui-dialog-titlebar { padding: .4em 1em; position: relative; width: auto!important;}
+.ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .1em 0;} 
+.ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
+.ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
+.ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
+.ui-dialog .ui-dialog-content { position: relative; border: 0; background: none; overflow: auto; zoom: 1; }
+.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background-image: none; margin: .5em 0 0 0; padding: .3em 1em .5em .4em; }
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
+.ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }
+.ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
+.ui-draggable .ui-dialog-titlebar { cursor: move; }
+/*
+ * jQuery UI Slider 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Slider#theming
+ */
+.ui-slider { position: relative; text-align: left; }
+.ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 1.2em; height: 1.2em; cursor: default; }
+.ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; background-position: 0 0; }
+
+.ui-slider-horizontal { height: .8em; }
+.ui-slider-horizontal .ui-slider-handle { top: -.3em; margin-left: -.6em; }
+.ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
+.ui-slider-horizontal .ui-slider-range-min { left: 0; }
+.ui-slider-horizontal .ui-slider-range-max { right: 0; }
+
+.ui-slider-vertical { width: .8em; height: 100px; }
+.ui-slider-vertical .ui-slider-handle { left: -.3em; margin-left: 0; margin-bottom: -.6em; }
+.ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }
+.ui-slider-vertical .ui-slider-range-min { bottom: 0; }
+.ui-slider-vertical .ui-slider-range-max { top: 0; }
+/*
+ * jQuery UI Tabs 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Tabs#theming
+ */
+.ui-tabs { position: relative; padding: .2em; zoom: 1; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; }
+.ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; top: 1px; margin: 0 .2em 1px 0; border-bottom: 0 !important; padding: 0; white-space: nowrap; }
+.ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em; text-decoration: none; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 1px; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {padding-bottom: 1px; margin-bottom: -1px;}
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 10px; background: none;border: 1px solid #cecece;height: 170px;overflow-y: auto; }
+/*.ui-tabs .ui-tabs-hide { display: none !important; }*/
+/*
+ * jQuery UI Datepicker 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Datepicker#theming
+ */
+.ui-datepicker { width: 17em; padding: .2em .2em 0; display: none; }
+.ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
+.ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
+.ui-datepicker .ui-datepicker-prev { left:2px; }
+.ui-datepicker .ui-datepicker-next { right:2px; }
+.ui-datepicker .ui-datepicker-prev-hover { left:1px; }
+.ui-datepicker .ui-datepicker-next-hover { right:1px; }
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px;  }
+.ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; }
+.ui-datepicker .ui-datepicker-title select { font-size:1em; margin:1px 0; }
+.ui-datepicker select.ui-datepicker-month-year {width: 100%;}
+.ui-datepicker select.ui-datepicker-month, 
+
+.ui-datepicker select.ui-datepicker-year { width: 49%;}
+.ui-datepicker table {width: 100%; font-size: .9em; border-collapse: collapse; margin:0 0 .4em; }
+.ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
+.ui-datepicker td { border: 0; padding: 1px; }
+.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .2em; text-align: right; text-decoration: none; }
+.ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
+.ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }
+.ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float:left; }
+
+/* with multiple calendars */
+.ui-datepicker.ui-datepicker-multi { width:auto; }
+.ui-datepicker-multi .ui-datepicker-group { float:left; }
+.ui-datepicker-multi .ui-datepicker-group table { width:95%; margin:0 auto .4em; }
+.ui-datepicker-multi-2 .ui-datepicker-group { width:50%; }
+.ui-datepicker-multi-3 .ui-datepicker-group { width:33.3%; }
+.ui-datepicker-multi-4 .ui-datepicker-group { width:25%; }
+.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-buttonpane { clear:left; }
+.ui-datepicker-row-break { clear:both; width:100%; font-size:0em; }
+
+/* RTL support */
+.ui-datepicker-rtl { direction: rtl; }
+.ui-datepicker-rtl .ui-datepicker-prev { right: 2px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next { left: 2px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-prev:hover { right: 1px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next:hover { left: 1px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane { clear:right; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane button { float: left; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current { float:right; }
+.ui-datepicker-rtl .ui-datepicker-group { float:right; }
+.ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+.ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+
+/* IE6 IFRAME FIX (taken from datepicker 1.5.3 */
+.ui-datepicker-cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 200px; /*must have*/
+    height: 200px; /*must have*/
+}
+/*
+ * jQuery UI Progressbar 1.8.21
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Progressbar#theming
+ */
+.ui-progressbar { height:2em; text-align: left; overflow: hidden; }
+.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }
+
+
+/* --- Scroll to Top Feature  ---*/
+
+#scrollToTop {
+    position: fixed;
+    right: 20px;
+    top: 40%;
+}
+
+/* === Carousel Styles  === */
+
+.menu {
+	margin-bottom: 40px;
+	text-align: center;
+	color: #999;
+}
+
+.menu a {
+	color: #999;
+}
+
+.menu a.active {
+	font-weight: bold;
+}
+
+/* Showcase
+-------------*/
+
+#awOnePageButton,
+#awOnePageButton .view-slide { /* Hides view-slide button */
+     display: none;
+}
+
+/* This class is removed after the showcase is loaded */
+/* Assign the correct showcase height to prevent loading jumps in IE */
+
+.showcase-load {
+	height: 391px; /* Same as showcase javascript option */
+	overflow: hidden;
+}
+
+/* Container when content is shown in slider */
+.showcase {
+    z-index: 1;
+	position: relative;
+	margin: auto;    
+}
+	
+/* Navigation arrows */
+
+.showcase-arrow-previous,
+.showcase-arrow-next {
+	position: absolute;
+	background: url('/osafe_theme/images/user_content/images/carousel-nav-arrows.png');
+	width: 33px;
+	height: 33px;
+	top: 220px;
+	cursor: pointer;
+	display: none; /* temp until we finalize the JS; can show hide in options */
+}
+	
+.showcase-arrow-previous {
+	left: -60px;
+}
+	
+.showcase-arrow-previous:hover {
+	background-position: 0px -34px;
+}
+	
+.showcase-arrow-next {
+	right: -56px;
+	background-position: -34px 0;
+}
+	
+.showcase-arrow-next:hover {
+	background-position: -34px -34px;
+}
+
+	/* Content */
+	
+.showcase-content {
+	text-align: center;       
+}
+		
+.showcase-content-wrapper { /* size is equal to image and hotspot size */
+ 	text-align: center;
+	height: 411px;
+	width: 411px;
+	display: table-cell;
+	vertical-align: middle;
+}
+		
+/* Styling the tooltips */
+
+.showcase-plus-anchor {
+	background: url('/osafe_theme/images/user_content/images/carousel-hotspot-icons.png');
+	background-repeat: no-repeat;
+}
+		
+.showcase-plus-anchor:hover {
+	background-position: -32px 0;
+}
+		
+div.showcase-tooltip {
+	background-color: #fff;
+	color: #000;
+	text-align: left;
+	padding: 5px 8px;
+	background: url('/osafe_theme/images/user_content/images/carousel-white-opacity-80.png');
+}
+		
+/* Styling the caption */
+
+.showcase-caption {
+	color: #000;
+	padding: 8px 15px;
+	text-align: left;
+	position: absolute;
+	bottom: 10px; left: 10px; right: 10px;
+	display: none;
+	background: url('/osafe_theme/images/user_content/images/carousel-white-opacity-80.png');
+}
+		
+.showcase-onepage .showcase-content {
+	margin-bottom: 10px;
+}
+	
+/* Button Wrapper */
+
+.showcase-button-wrapper {
+	clear: both;
+	margin-top: 10px;
+	text-align: center;
+	margin-right: 3px;
+	padding: 2px 5px 0px 5px;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+.showcase-button-wrapper span {
+	color: #eaeaea;
+}
+
+.showcase-button-wrapper span.active {
+	color: #085080;
+}
+	
+/* Thumbnails */
+
+.showcase-thumbnail-container { /* Used for backgrounds, no other styling!!! */
+	background-color: #000;
+}
+	
+.showcase-thumbnail-wrapper {
+	overflow: hidden;
+}
+		
+.showcase-thumbnail {
+	width: 120px;
+	height: 90px;
+	cursor: pointer;
+	border: solid 1px #333;
+	position: relative;
+}
+		
+.showcase-thumbnail-caption {
+	position: absolute;
+	bottom: 2px;
+	padding-left: 10px;
+	padding-bottom: 5px;
+}
+			
+.showcase-thumbnail-content {
+	padding: 10px;
+	text-align: center;
+	padding-top: 25px;
+}
+			
+.showcase-thumbnail-cover {
+	background: url('/osafe_theme/images/user_content/images/carousel-black-opacity-80.png');
+	position: absolute;
+	top: 0; 
+	bottom: 0;
+	left: 0; 
+	right: 0;
+}
+		
+.showcase-thumbnail:hover {
+	border: solid 1px #999;
+}
+		
+.showcase-thumbnail:hover .showcase-thumbnail-cover {
+	display: none;
+}
+		
+.showcase-thumbnail.active {
+	border: solid 1px #999;
+}
+		
+.showcase-thumbnail.active .showcase-thumbnail-cover {
+	display: none;
+}
+	
+.showcase-thumbnail-wrapper-horizontal {
+	padding: 10px;
+}
+	
+.showcase-thumbnail-wrapper-horizontal .showcase-thumbnail {
+	margin-right: 10px;
+	width: 116px;
+}
+	
+.showcase-thumbnail-wrapper-vertical {
+	padding: 10px;
+}
+	
+.showcase-thumbnail-wrapper-vertical .showcase-thumbnail {
+	margin-bottom: 10px;
+}
+		
+.showcase-thumbnail-button-backward,
+.showcase-thumbnail-button-forward {
+	padding: 7px;
+	cursor: pointer;
+}
+	
+.showcase-thumbnail-button-backward {
+	padding-bottom: 0px;
+	padding-right: 0px;
+}
+	
+.showcase-thumbnail-button-backward .showcase-thumbnail-vertical,
+.showcase-thumbnail-button-forward .showcase-thumbnail-vertical,
+.showcase-thumbnail-button-forward .showcase-thumbnail-horizontal,
+.showcase-thumbnail-button-backward .showcase-thumbnail-horizontal {
+	background: url('/osafe_theme/images/user_content/images/carousel-nav-arrows-small.png');
+	background-repeat: no-repeat;
+	display: block;
+	width: 17px;
+	height: 17px;
+}
+		
+.showcase-thumbnail-button-backward .showcase-thumbnail-vertical {
+	background-position: 0 -51px;
+	margin-left: 55px;
+}
+
+.showcase-thumbnail-button-backward:hover .showcase-thumbnail-vertical {
+	background-position: -17px -51px;
+}
+		
+.showcase-thumbnail-button-forward .showcase-thumbnail-vertical {
+	background-position: 0 -34px;
+	margin-left: 55px;
+}
+
+.showcase-thumbnail-button-forward:hover .showcase-thumbnail-vertical {
+	background-position: -17px -34px;
+}
+		
+.showcase-thumbnail-button-backward .showcase-thumbnail-horizontal {
+	background-position: 0 -17px;
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+.showcase-thumbnail-button-backward:hover .showcase-thumbnail-horizontal {
+	background-position: -17px -17px;
+}
+		
+.showcase-thumbnail-button-forward .showcase-thumbnail-horizontal {
+	background-position: 0 0;
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+
+.showcase-thumbnail-button-forward:hover .showcase-thumbnail-horizontal {
+	background-position: -17px 0;
+}
+		
+/* Hide button text */
+.showcase-thumbnail-button-forward span span,
+.showcase-thumbnail-button-backward span span {
+display: none;
+}
+	
+/* Clear (used for horizontal thumbnails)
+-------------------------------------------*/
+
+.showcase .clear {
+	clear: both;
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+	float: none;
+}
+
+/* === Inline Zoom Styles  === */
+
+/*********************************************************
+/ When clicking on thumbs jqzoom will add the class
+/ "zoomThumbActive" on the anchor selected
+/*********************************************************/
+
+.cloud-zoom-lens {
+    background-color: #FFFFFF;
+    border: 4px solid #888888;
+    cursor: move;
+    margin: -4px;
+}
+.cloud-zoom-title {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 3px;
+    position: absolute !important;
+    text-align: center;
+    top: 0;
+    width: 100%;
+}
+.cloud-zoom-big {
+    border: 4px solid #CCCCCC;
+    overflow: hidden;
+}
+.cloud-zoom-loading {
+    background: none repeat scroll 0 0 #222222;
+    border: 1px solid #000000;
+    color: white;
+    padding: 3px;
+}
+
+.zoomPad {
+    cursor: crosshair;
+    float: left;
+    padding: 0 !important;
+    position: relative;
+    z-index: 0;
+}
+
+.zoomPreload {
+   -moz-opacity:0.8;
+   opacity: 0.8;
+   filter: alpha(opacity = 80);
+   color: #333;
+   font-size: 12px;
+   text-decoration: none;
+   border: 1px solid #CCC;
+   background-color: white;
+   padding: 8px;
+   text-align:center;
+   background-image: url(/osafe_theme/images/user_content/images/loading.gif);
+   background-repeat: no-repeat;
+   background-position: 50%;
+   z-index:110;
+   width:90px!mportant;
+   height:43px;
+   position:absolute;
+   top:0px;
+   left:0px;
+    * width:100px;
+    * height:49px;
+}
+
+.zoomPup {
+	overflow:hidden;
+	background-color: #FFF;
+	-moz-opacity:0.6;
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
+	z-index:120;
+	position:absolute;
+	border:1px solid #CCC;
+	z-index:101;
+	cursor:crosshair;
+}
+
+.zoomOverlay {
+	position:absolute;
+	left:0px;
+	top:0px;
+	background:#FFF;
+	z-index:5000;
+	width:100%;
+	height:100%;
+	display:none;
+	z-index:101;
+}
+
+.zoomWindow {
+	position:absolute;
+	left:110%;
+	top:40px;
+	background:#FFF;
+	z-index:6000;
+	height:auto;
+	z-index:10000;
+	z-index:110;
+
+}
+.zoomWrapper {
+	position:relative;
+	border: none!important;
+        overflow: hidden;
+	z-index:110;
+}
+.zoomWrapperTitle {
+	display:none!important;
+	background:#999;
+	color:#FFF;
+	height:18px;
+	line-height:18px;
+	width:100%;
+  	overflow:hidden;
+	text-align:center;
+	font-size:10px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:120;
+	-moz-opacity:0.6;
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
+}
+.zoomWrapperImage {
+	display:block;
+	position:relative;
+	overflow:hidden;
+	z-index:110;
+
+}
+.zoomWrapperImage img {
+	border:0px;
+	display:block;
+	position:absolute;
+	z-index:101;
+}
+
+.zoomIframe {
+	z-index: -1;
+	filter:alpha(opacity=0);
+	-moz-opacity: 0.80;
+	opacity: 0.80;
+	position:absolute;
+	display:block;
+}

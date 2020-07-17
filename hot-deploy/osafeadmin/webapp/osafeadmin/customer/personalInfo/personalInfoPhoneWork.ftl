@@ -19,12 +19,13 @@
     </#if>
 </#if>
 
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <#-- Displays the work phone entry -->
-<div class ="personalInfoPhoneWork">
+<div class="${request.getAttribute("attributeClass")!}">
     <div class="infoRow">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label>${uiLabelMap.WorkPhoneCaption}</label>
+                <label><#if mandatory == "Y"><span class="required">*</span></#if>${uiLabelMap.WorkPhoneCaption}</label>
             </div>
             <div class="infoValue">
                 <input type="hidden" name="workPhoneContactMechId" value="${telecomWorkNoContactMechId!}" />
@@ -34,13 +35,14 @@
                     <input type="text" class="phone3" id="phoneWorkContact3" name="phoneWorkContact3" value="${parameters.phoneWorkContact3!contactNumber3Work!""}" maxlength="3"/>
                     <input type="text" class="phone4" id="phoneWorkContact4" name="phoneWorkContact4" value="${parameters.phoneWorkContact4!contactNumber4Work!""}" maxlength="4"/>
                     ${uiLabelMap.PhoneExtCaption}
-                    <input type="text" class="phoneExt" id="phoneWorkExt" name="phoneWorkExt" value="${parameters.phoneWorkExt!extensionWork!""}" maxlength="10"/>
+                    <input type="text" class="phoneExt" id="phoneWorkExt" name="phoneWorkExt" value="${parameters.phoneWorkExt!extensionWork!""}" maxlength="4"/>
                 </span>
                 <span style="display:none" class="USER_OTHER">
                     <input type="text" class="address" id="phoneWorkContactOther" name="phoneWorkContactOther" value="${parameters.phoneWorkContactOther!contactNumberWork!""}" />
                     ${uiLabelMap.PhoneExtCaption}
-                    <input type="text" class="phoneExt" id="phoneWorkExtOther" name="phoneWorkExtOther" value="${parameters.phoneWorkExtOther!extensionWork!""}" maxlength="10"/>
+                    <input type="text" class="phoneExt" id="phoneWorkExtOther" name="phoneWorkExtOther" value="${parameters.phoneWorkExtOther!extensionWork!""}" maxlength="4"/>
                 </span>
+                <input type="hidden" id="phoneWork_mandatory" name="phoneWork_mandatory" value="${mandatory}"/>
             </div>
         </div>
     </div>

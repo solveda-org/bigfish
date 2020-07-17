@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
     <Geo geoId="AHUST" geoTypeId="GROUP" geoName="Alaska/Hawaii/Territories" geoCode="AHUST" abbreviation="AHUST" lastUpdatedStamp="2011-07-19 14:36:33.14" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.857" createdTxStamp="2008-05-07 11:45:36.677"/>
     <Geo geoId="AKHI" geoTypeId="GROUP" geoName="Alaska/Hawaii" geoCode="AKHI" abbreviation="AKHI" lastUpdatedStamp="2011-07-19 14:36:33.233" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.843" createdTxStamp="2008-05-07 11:45:36.677"/>
     <Geo geoId="EU" geoTypeId="GROUP" geoName="European Union" geoCode="EU" abbreviation="EU" lastUpdatedStamp="2011-07-19 14:36:38.25" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.327" createdTxStamp="2008-05-07 11:45:36.067"/>
@@ -9,3 +11,4 @@
     <Geo geoId="USCN" geoTypeId="GROUP" geoName="US Continental" geoCode="USCN" abbreviation="USCN" lastUpdatedStamp="2011-07-19 14:49:44.02" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.86" createdTxStamp="2008-05-07 11:45:36.677"/>
     <Geo geoId="USMEXCAN" geoTypeId="GROUP" geoName="US/Mexico/Canada" geoCode="USMEXCAN" abbreviation="USMEXCAN" lastUpdatedStamp="2011-07-19 14:49:44.053" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.923" createdTxStamp="2008-05-07 11:45:36.677"/>
     <Geo geoId="USTR" geoTypeId="GROUP" geoName="US Territories" geoCode="USTR" abbreviation="USTR" lastUpdatedStamp="2011-07-19 14:49:44.083" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.847" createdTxStamp="2008-05-07 11:45:36.677"/>
+</entity-engine-xml>

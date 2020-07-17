@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+
+<!-- Company-->
+<Party partyId="@store.storePrefix@_COMPANY" partyTypeId="PARTY_GROUP" externalId="" preferredCurrencyUomId="" description="" statusId="PARTY_ENABLED" createdDate="" createdByUserLogin="" lastModifiedDate="" lastModifiedByUserLogin="" dataSourceId="" isUnread="" />
+<PartyGroup partyId="@store.storePrefix@_COMPANY" groupName="Company Name" logoImageUrl="/osafe_theme/images/user_content/image/logo.gif"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="BILL_FROM_VENDOR"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="BILL_TO_CUSTOMER"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="BUYER"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="INTERNAL_ORGANIZATIO"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="ORGANIZATION_ROLE"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="SHIP_FROM_VENDOR"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="SHIP_TO_CUSTOMER"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="SUPPLIER"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="VENDOR"/>
+<PartyRole partyId="@store.storePrefix@_COMPANY" roleTypeId="_NA_" />
+<ContactMech contactMechId="@store.storePrefix@_1000" contactMechTypeId="POSTAL_ADDRESS" infoString="" />
+<ContactMech contactMechId="@store.storePrefix@_1001" contactMechTypeId="TELECOM_NUMBER" infoString="" />
+<ContactMech contactMechId="@store.storePrefix@_1002" contactMechTypeId="EMAIL_ADDRESS" infoString="company@company.com" />
+<PartyContactMech partyId="@store.storePrefix@_COMPANY" contactMechId="@store.storePrefix@_1000" fromDate="2011-01-01 00:00:00.0" thruDate="" roleTypeId="" allowSolicitation="N" extension="" verified="" comments="" yearsWithContactMech="" monthsWithContactMech="" />
+<PartyContactMech partyId="@store.storePrefix@_COMPANY" contactMechId="@store.storePrefix@_1001" fromDate="2011-01-01 00:00:00.0" thruDate="" roleTypeId="" allowSolicitation="N" extension="" verified="" comments="" yearsWithContactMech="" monthsWithContactMech="" />
+<PartyContactMech partyId="@store.storePrefix@_COMPANY" contactMechId="@store.storePrefix@_1002" fromDate="2011-01-01 00:00:00.0" thruDate="" roleTypeId="" allowSolicitation="N" extension="" verified="" comments="" yearsWithContactMech="" monthsWithContactMech="" />
+<PartyContactMechPurpose partyId="@store.storePrefix@_COMPANY" contactMechId="@store.storePrefix@_1000" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2011-01-01 00:00:00.0" thruDate="" />
+<PartyContactMechPurpose partyId="@store.storePrefix@_COMPANY" contactMechId="@store.storePrefix@_1001" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2011-01-01 00:00:00.0" thruDate="" />
+<PartyContactMechPurpose partyId="@store.storePrefix@_COMPANY" contactMechId="@store.storePrefix@_1002" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2011-01-01 00:00:00.0" thruDate="" />
+<PostalAddress contactMechId="@store.storePrefix@_1000" toName="" attnName="" address1="100 Company Blvd." address2="" city="Company City" stateProvinceGeoId="NY" postalCode="11530" countryGeoId="USA" />
+<TelecomNumber contactMechId="@store.storePrefix@_1001" areaCode="516" contactNumber="7427888" />
+
+<!-- Product Store -->
+<Facility facilityId="@store.storePrefix@_FAC" facilityTypeId="WAREHOUSE" ownerPartyId="@store.storePrefix@_COMPANY" defaultInventoryItemTypeId="NON_SERIAL_INV_ITEM" facilityName="Warehouse"/>
+<ProductStore productStoreId="@store.productStoreId@" primaryStoreGroupId="" storeName="@store.storePrefix@ Store Name" companyName="Company Name" title="Store Title" subtitle="Store Sub Title" payToPartyId="@store.storePrefix@_COMPANY" daysToCancelNonPay="30" manualAuthIsCapture="Y" prorateShipping="Y" prorateTaxes="Y" viewCartOnAdd="N" autoSaveCart="Y" autoApproveReviews="N" isDemoStore="N" isImmediatelyFulfilled="Y" inventoryFacilityId="@store.storePrefix@_FAC" oneInventoryFacility="Y" checkInventory="N" reserveInventory="N" reserveOrderEnumId="" requireInventory="N" balanceResOnOrderCreation="N" requirementMethodEnumId="" orderNumberPrefix="WS" defaultLocaleString="@ofbiz.locale.default@" defaultCurrencyUomId="@currency.uom.id.default@" defaultSalesChannelEnumId="WEB_SALES_CHANNEL" allowPassword="Y" defaultPassword="" explodeOrderItems="N" checkGcBalance="N" retryFailedAuths="N" headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED" digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED" itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED" itemCancelStatus="ITEM_CANCELLED" authDeclinedMessage="There has been a problem with your method of payment. Please  try a  different method or call customer service." authFraudMessage="Your order has been rejected and  your account  has been disabled due to fraud." authErrorMessage="" visualThemeId="OSAFE_DEFAULT" storeCreditAccountEnumId="FIN_ACCOUNT" usePrimaryEmailUsername="N" requireCustomerRole="N" autoInvoiceDigitalItems="Y" reqShipAddrForDigItems="Y" showCheckoutGiftOptions="Y" selectPaymentTypePerItem="N" showPricesWithVatTax="N" showTaxIsExempt="Y" vatTaxAuthGeoId="" vatTaxAuthPartyId="" enableAutoSuggestionList="N" enableDigProdUpload="N" prodSearchExcludeVariants="Y" digProdUploadCategoryId="" autoOrderCcTryExp="Y" autoOrderCcTryOtherCards="Y" autoOrderCcTryLaterNsf="Y" autoOrderCcTryLaterMax="" storeCreditValidDays="90" autoApproveInvoice="Y" autoApproveOrder="Y" shipIfCaptureFails="Y" setOwnerUponIssuance="N" reqReturnInventoryReceive="N" addToCartRemoveIncompat="N" addToCartReplaceUpsell="N" splitPayPrefPerShpGrp="N" showOutOfStockProducts="N" />
+<ProdCatalog prodCatalogId="@store.storePrefix@_CATALOG" catalogName="Product Catalog" useQuickAdd="N" />
+<ProductCategory productCategoryId="@store.productCategoryRootId@" productCategoryTypeId="CATALOG_CATEGORY" primaryParentCategoryId="" categoryName="Browse Root" description="Browse Root" longDescription="Browse Root" categoryImageUrl="" linkOneImageUrl="" linkTwoImageUrl="" detailScreen="" showInSelect="" />
+<ProdCatalogCategory prodCatalogId="@store.storePrefix@_CATALOG" productCategoryId="@store.productCategoryRootId@" prodCatalogCategoryTypeId="PCCT_BROWSE_ROOT" fromDate="2011-01-01 00:00:00.0" sequenceNum="10"/>
+<ProductStoreCatalog productStoreId="@store.productStoreId@" prodCatalogId="@store.storePrefix@_CATALOG" fromDate="2011-01-01 00:00:00.0" thruDate="" sequenceNum="1" />
+<ProductStoreFacility productStoreId="@store.productStoreId@" facilityId="@store.storePrefix@_FAC" fromDate="2001-01-01 00:00:00.0"/>
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_AUTH" paymentService="alwaysApproveCCProcessor" paymentCustomMethodId="CC_AUTH_ALWAYSAPPROV" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_CAPTURE" paymentService="testCCCapture" paymentCustomMethodId="CC_CAPTURE_TEST" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_REAUTH" paymentService="alwaysApproveCCProcessor" paymentCustomMethodId="CC_AUTH_ALWAYSAPPROV" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_REFUND" paymentService="testCCRefund" paymentCustomMethodId="CC_REFUND_TEST" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_RELEASE" paymentService="testCCRelease" paymentCustomMethodId="CC_RELEASE_TEST" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="EXT_PAYPAL" paymentServiceTypeEnumId="PRDS_PAY_AUTH" paymentService="payPalProcessor" paymentCustomMethodId="PAYPAL_AUTH" paymentGatewayConfigId="PAYPAL_CONFIG" applyToAllProducts="Y"/>
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="EXT_PAYPAL" paymentServiceTypeEnumId="PRDS_PAY_CAPTURE" paymentService="payPalCapture" paymentCustomMethodId="PAYPAL_CAPTURE" paymentGatewayConfigId="PAYPAL_CONFIG" applyToAllProducts="Y"/>
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="EXT_PAYPAL" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL" paymentGatewayConfigId="PAYPAL_CONFIG" applyToAllProducts="Y"/>
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="EXT_PAYPAL" paymentServiceTypeEnumId="PRDS_PAY_RELEASE" paymentGatewayConfigId="PAYPAL_CONFIG" paymentCustomMethodId="PAYPAL_RELEASE"/>
+
+<!-- Website -->
+<WebSite webSiteId="@store.webSiteId@" siteName="@store.storePrefix@ Site" httpHost="@url.http.host@" httpPort="@url.port.http@" httpsHost="@url.https.host@" httpsPort="@url.port.https@" enableHttps="Y" standardContentPrefix="" secureContentPrefix="" cookieDomain="" visualThemeSetId="ECOMMERCE" productStoreId="@store.productStoreId@" allowProductStoreChange="N" />
+<WebSite webSiteId="@store.storePrefix@_admin_site" siteName="@store.storePrefix@ Admin Site" httpHost="@url.http.host@" httpPort="@url.port.http@" httpsHost="@url.https.host@" httpsPort="@url.port.https@" enableHttps="Y" standardContentPrefix="" secureContentPrefix="" cookieDomain="" visualThemeSetId="ECOMMERCE" productStoreId="@store.productStoreId@" allowProductStoreChange="N" />
+<Content contentId="OTS_PPOINT@extendedStore.suffix@" contentTypeId="WEB_SITE_PUB_PT" contentName="Web Site Publish Point" description="" localeString="en_US" />
+<WebSiteContent webSiteId="@store.webSiteId@" contentId="OTS_PPOINT@extendedStore.suffix@" webSiteContentTypeId="PUBLISH_POINT" fromDate="2011-01-01 00:00:00.0"/>
+
+
+<!-- WEBSTIE PUBLISH POINT -->
+<Content contentId="OTS_PPOINT@extendedStore.suffix@" contentTypeId="WEB_SITE_PUB_PT" contentName="Web Site Publish Point" description="" localeString="en_US" />
+<!-- ***************END WEBSTIE PUBLISH POINT****************** -->
+
+<!-- HOME PAGE (DEFAULT) -->
+<DataResource dataResourceId="OSAFE_HOME" dataResourceTypeId="URL_RESOURCE" dataTemplateTypeId="SCREEN_COMBINED" objectInfo="component://osafe/widget/CommonScreens.xml#homePage" localeString="en_US"/>
+<Content contentId="OSAFE_HOME" contentTypeId="DOCUMENT" contentName="Home Page" dataResourceId="OSAFE_HOME" localeString="en_US"/>
+<ContentAssoc contentId="OTS_PPOINT@extendedStore.suffix@" contentIdTo="OSAFE_HOME" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="homePage"/>
+<!-- ***************END HOME PAGE****************** -->
+
+<!-- SITE INFO-->
+<DataResource dataResourceId="SI_HEADER@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SI_FOOTER@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SI_LOGO@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SI_CART@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SI_SEARCH@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SI_MAILING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SI_HEAD_TAG@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<ElectronicText dataResourceId="SI_HEADER@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SI_FOOTER@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SI_LOGO@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SI_CART@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SI_SEARCH@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SI_MAILING@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SI_HEAD_TAG@extendedStore.suffix@"/>
+<Content contentId="SI_HEADER@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main Site HEADER Content displayed on every page" contentName="Main Site HEADER Content" dataResourceId="SI_HEADER@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SI_FOOTER@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main Site FOOTER Content displayed on every page" contentName="Main Site FOOTER Content" dataResourceId="SI_FOOTER@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SI_LOGO@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main client logo displayed on every page" contentName="Site Logo" dataResourceId="SI_LOGO@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SI_CART@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main Site View Cart displayed on every page" contentName="Site Shopping Cart" dataResourceId="SI_CART@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SI_SEARCH@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main Site SEARCH displayed on every page" contentName="Site Search" dataResourceId="SI_SEARCH@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SI_MAILING@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Join Mailing List Option logo displayed on every page" contentName="Join Mailing List" dataResourceId="SI_MAILING@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SI_HEAD_TAG@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main Site HEAD TAG Content displayed on every page" contentName="Main Site HEAD TAG Content" dataResourceId="SI_HEAD_TAG@extendedStore.suffix@" localeString="en_US"/>
+<ContentPurpose contentId="SI_HEADER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_FOOTER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_LOGO@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_CART@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_SEARCH@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_MAILING@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_HEAD_TAG@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<!-- **************END SITE INFO******************* -->
+
+
+<!-- HOME PAGE SPOTS -->
+<DataResource dataResourceId="HPS_01@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_02@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_03@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_04@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_05@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_06@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_07@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_08@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_09@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_10@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_11@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_12@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_13@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_14@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_15@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="HPS_16@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>    
+<ElectronicText dataResourceId="HPS_01@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_02@extendedStore.suffix@" />
+<ElectronicText dataResourceId="HPS_03@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_04@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_05@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_06@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_07@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_08@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_09@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_10@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_11@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_12@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_13@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_14@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_15@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="HPS_16@extendedStore.suffix@"/>
+<Content contentId="HPS_01@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_01@extendedStore.suffix@"  description="Home Page Spot 1" contentName="Home Page Spot 1" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_02@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_02@extendedStore.suffix@"  description="Home Page Spot 2" contentName="Home Page Spot 2" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_03@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_03@extendedStore.suffix@"  description="Home Page Spot 3" contentName="Home Page Spot 3" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_04@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_04@extendedStore.suffix@"  description="Home Page Spot 4" contentName="Home Page Spot 4" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_05@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_05@extendedStore.suffix@"  description="Home Page Spot 5" contentName="Home Page Spot 5" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_06@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_06@extendedStore.suffix@"  description="Home Page Spot 6" contentName="Home Page Spot 6" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_07@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_07@extendedStore.suffix@"  description="Home Page Spot 7" contentName="Home Page Spot 7" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_08@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_08@extendedStore.suffix@"  description="Home Page Spot 8" contentName="Home Page Spot 8" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_09@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_09@extendedStore.suffix@"  description="Home Page Spot 9" contentName="Home Page Spot 9" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_10@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_10@extendedStore.suffix@"  description="Home Page Spot 10" contentName="Home Page Spot 10" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_11@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_11@extendedStore.suffix@"  description="Home Page Spot 11" contentName="Home Page Spot 11" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_12@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_12@extendedStore.suffix@"  description="Home Page Spot 12" contentName="Home Page Spot 12" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_13@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_13@extendedStore.suffix@"  description="Home Page Spot 13" contentName="Home Page Spot 13" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_14@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_14@extendedStore.suffix@"  description="Home Page Spot 14" contentName="Home Page Spot 14" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_15@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_15@extendedStore.suffix@"  description="Home Page Spot 15" contentName="Home Page Spot 15" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<Content contentId="HPS_16@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_16@extendedStore.suffix@"  description="Home Page Spot 16" contentName="Home Page Spot 16" statusId="CTNT_IN_PROGRESS" localeString="en_US"/>
+<!-- ***************END HOME PAGE SPOTS****************** -->
+
+
+<!-- ESPOTS -->
+<DataResource dataResourceId="PTS_ADDR_BV@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_ADDR_BE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_ACCOUNT@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_ORD_CONFIRM@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_ORD_STATUS@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_ORD_SUMMARY@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_SHIP_ADDR@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_SHIP_METH@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_CART@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_CONTACT_US@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_ST_LOC@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_MAILING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_LOGIN@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_LOGIN@extendedStore.suffix@_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_PERS_INF@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_CONFIRM@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_SRCH_NO_RSL@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_OS_CHKOUT@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_ST_PICKUP@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_WISHLIST@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_PMT_MV@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_PMT_ME@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_GIFT_MESS@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_EML_FRND@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+
+<DataResource dataResourceId="PES_ADDR_BV@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_ADDR_BE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_ACCOUNT@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_ORD_CONFIRM@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_ORD_STATUS@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_ORD_SUMMARY@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_SHIP_ADDR@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_SHIP_METH@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_CART@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_CONTACT_US@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_ST_LOC@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_MAILING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_LOGIN@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_LOGIN@extendedStore.suffix@_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_PERS_INF@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_CONFIRM@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_SRCH_NO_RSL@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_OS_CHKOUT@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_ST_PICKUP@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_WISHLIST@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_PMT_MV@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_PMT_ME@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_GIFT_MESS@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_EML_FRND@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+
+<DataResource dataResourceId="PDP_CONTENT_01@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_01@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PDP_CONTENT_02@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_02@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PDP_CONTENT_03@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_03@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PDP_CONTENT_04@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_04@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PDP_CONTENT_05@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
+
+<DataResource dataResourceId="CHECKOUT_CC_VRFY@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="CHECKOUT_CC_VRFY@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="MULTI_ADDR@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_ADDR@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="MULTI_SHIPPING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_SHIPPING@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PS_OUT_OF_STOCK@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PS_OUT_OF_STOCK@extendedStore.suffix@" localeString="en_US"/>
+
+<ElectronicText dataResourceId="PTS_ADDR_BV@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_ADDR_BE@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_ACCOUNT@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_ORD_CONFIRM@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_ORD_STATUS@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_ORD_SUMMARY@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_SHIP_ADDR@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_SHIP_METH@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_CART@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_CONTACT_US@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_ST_LOC@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_MAILING@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_LOGIN@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_LOGIN@extendedStore.suffix@_INFO"/>
+<ElectronicText dataResourceId="PTS_PERS_INF@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_CONFIRM@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_SRCH_NO_RSL@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_OS_CHKOUT@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_ST_PICKUP@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_WISHLIST@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_PMT_MV@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_PMT_ME@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_GIFT_MESS@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_EML_FRND@extendedStore.suffix@"/>
+
+<ElectronicText dataResourceId="PES_ADDR_BV@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_ADDR_BE@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_ACCOUNT@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_ORD_CONFIRM@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_ORD_STATUS@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_ORD_SUMMARY@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_SHIP_ADDR@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_SHIP_METH@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_CART@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_CONTACT_US@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_ST_LOC@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_MAILING@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_LOGIN@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_LOGIN@extendedStore.suffix@_INFO"/>
+<ElectronicText dataResourceId="PES_PERS_INF@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_CONFIRM@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_SRCH_NO_RSL@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_OS_CHKOUT@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_ST_PICKUP@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_WISHLIST@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_PMT_MV@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_PMT_ME@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_GIFT_MESS@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_EML_FRND@extendedStore.suffix@"/>
+
+<ElectronicText dataResourceId="PDP_CONTENT_01@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PDP_CONTENT_02@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PDP_CONTENT_03@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PDP_CONTENT_04@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PDP_CONTENT_05@extendedStore.suffix@"/>
+
+<ElectronicText dataResourceId="CHECKOUT_CC_VRFY@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="MULTI_ADDR@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="MULTI_SHIPPING@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PS_OUT_OF_STOCK@extendedStore.suffix@"/>
+
+<Content contentId="PTS_ADDR_BV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_ADDR_BE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BE@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_ACCOUNT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ACCOUNT@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORD_CONFIRM@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-CONFIRMATION page (part of the check-out flow)" contentName="Order Confirmation" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_ORD_STATUS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORD_STATUS@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-STATUS page" contentName="Order Status" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_ORD_SUMMARY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORD_SUMMARY@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-SUMMARY page (part of the check-out flow)" contentName="Order Summary" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_SHIP_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHIP_ADDR@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the SELECT-SHIPPING-ADDRESS page (part of the check-out flow)" contentName="Shipping Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_SHIP_METH@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHIP_METH@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_CART@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CART@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CONTACT_US@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_ST_LOC@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ST_LOC@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_MAILING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_MAILING@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_LOGIN@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_LOGIN@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_LOGIN@extendedStore.suffix@_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_LOGIN@extendedStore.suffix@_INFO" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Change-Login-Info Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_PERS_INF@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PERS_INF@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Personal Information page" contentName="Personal Information" createdByUserLogin="admin" lastModifiedDate="2011-01-01 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CONFIRM@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_SRCH_NO_RSL@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SRCH_NO_RSL@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on TOP of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_OS_CHKOUT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_OS_CHKOUT@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed at the top of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_ST_PICKUP@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ST_PICKUP@extendedStore.suffix@" statusId="CTNT_PUBLISHED"  description="Content Spot displayed on the YYY of the Store-Pickup 'pop' box" contentName="Store Pickup" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_WISHLIST@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_WISHLIST@extendedStore.suffix@" statusId="CTNT_PUBLISHED"  description="Content Spot displayed on the TOP of the Wish-List page" contentName="Wish List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_MV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)"  contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_ME@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)"   contentName="View Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_ME@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)"   contentName="View Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_GIFT_MESS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_GIFT_MESS@extendedStore.suffix@"  description="Content Spot displayed on the TOP of the Gift-Message page" contentName="Gift Message" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_EML_FRND@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_EML_FRND@extendedStore.suffix@"  description="Content Spot displayed on the TOP of the Email A Friend page" contentName="Email A Friend" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+
+<Content contentId="PES_ADDR_BV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_ADDR_BE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BE@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_ACCOUNT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ACCOUNT@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ORD_CONFIRM@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the ORDER-CONFIRMATION page (part of the check-out flow)" contentName="Order Confirmation" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_ORD_STATUS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ORD_STATUS@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the ORDER-STATUS page" contentName="Order Status" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_ORD_SUMMARY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ORD_SUMMARY@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the ORDER-SUMMARY page (part of the check-out flow)" contentName="Order Summary" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_SHIP_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SHIP_ADDR@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the SELECT-SHIPPING-ADDRESS page (part of the check-out flow)" contentName="Shipping Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_SHIP_METH@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SHIP_METH@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_CART@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CART@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CONTACT_US@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_ST_LOC@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ST_LOC@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_MAILING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_MAILING@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_LOGIN@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_LOGIN@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_LOGIN@extendedStore.suffix@_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_LOGIN@extendedStore.suffix@_INFO" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Change-Login-Info Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_PERS_INF@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_PERS_INF@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Personal Information page" contentName="Personal Information" createdByUserLogin="admin" lastModifiedDate="2011-01-01 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CONFIRM@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_SRCH_NO_RSL@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SRCH_NO_RSL@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on END of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_OS_CHKOUT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_OS_CHKOUT@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed at the END of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_ST_PICKUP@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ST_PICKUP@extendedStore.suffix@" statusId="CTNT_PUBLISHED"  description="Content Spot displayed on the YYY of the Store-Pickup 'pop' box" contentName="Store Pickup" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_WISHLIST@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_WISHLIST@extendedStore.suffix@" statusId="CTNT_PUBLISHED"  description="Content Spot displayed on the END of the Wish-List page" contentName="Wish List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_PMT_MV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)"  contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_PMT_ME@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)"  contentName="View Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_GIFT_MESS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_GIFT_MESS@extendedStore.suffix@"  description="Content Spot displayed on the END of the Gift-Message page" contentName="Gift Message" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_EML_FRND@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_EML_FRND@extendedStore.suffix@"  description="Content Spot displayed on the END of the Email A Friend page" contentName="Email A Friend" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+
+<Content contentId="PDP_CONTENT_01@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_01@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PDP_CONTENT_02@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_02@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PDP_CONTENT_03@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_03@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PDP_CONTENT_04@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_04@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PDP_CONTENT_05@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
+
+<Content contentId="CHECKOUT_CC_VRFY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout CC VRFY Content" contentName="Checkout CC VRFY Content" dataResourceId="CHECKOUT_CC_VRFY@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="MULTI_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout Multi Address Content" contentName="Checkout Multi Address Content" dataResourceId="MULTI_ADDR@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="MULTI_SHIPPING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout Multi Shipping Option Content" contentName="Checkout Multi Shipping Option Content" dataResourceId="MULTI_SHIPPING@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PS_OUT_OF_STOCK@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Out of Stock Content. Specific Page Content that may be included informing the customer that the Product is not available for purchase." contentName="out of stock" dataResourceId="PS_OUT_OF_STOCK@extendedStore.suffix@" localeString="en_US"/>
+
+<ContentRole contentId="PTS_ADDR_BV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_ADDR_BE@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_PMT_MV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_PMT_ME@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_PMT_MV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_PMT_ME@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_ACCOUNT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_ORD_CONFIRM@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_ORD_STATUS@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_ORD_SUMMARY@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_SHIP_ADDR@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_SHIP_METH@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_CART@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_CONTACT_US@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_ST_LOC@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_MAILING@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_LOGIN@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_LOGIN@extendedStore.suffix@_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_PERS_INF@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
+<ContentRole contentId="PTS_CONFIRM@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
+<ContentRole contentId="PTS_SRCH_NO_RSL@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_OS_CHKOUT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_ST_PICKUP@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_WISHLIST@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_GIFT_MESS@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_EML_FRND@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+
+<ContentRole contentId="PES_ADDR_BV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_ADDR_BE@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_ACCOUNT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_ORD_CONFIRM@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_ORD_STATUS@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_ORD_SUMMARY@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_SHIP_ADDR@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_SHIP_METH@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_CART@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_CONTACT_US@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_ST_LOC@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_MAILING@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_LOGIN@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_LOGIN@extendedStore.suffix@_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_PERS_INF@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
+<ContentRole contentId="PES_CONFIRM@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
+<ContentRole contentId="PES_SRCH_NO_RSL@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_OS_CHKOUT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_ST_PICKUP@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_WISHLIST@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_GIFT_MESS@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_EML_FRND@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+
+<ContentRole contentId="PDP_CONTENT_01@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PDP_CONTENT_02@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PDP_CONTENT_03@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PDP_CONTENT_04@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PDP_CONTENT_05@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+
+<ContentRole contentId="CHECKOUT_CC_VRFY@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="MULTI_ADDR@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="MULTI_SHIPPINGT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PS_OUT_OF_STOCK@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+
+<!-- *****************END ESPOTS**************** -->
+
+<!-- PDP SPOTS -->
+<DataResource dataResourceId="PS_INTRODUCED@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="espot1" localeString="en_US"/>
+<DataResource dataResourceId="PS_DISCONTINUED@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="espot1" localeString="en_US"/>
+<ElectronicText dataResourceId="PS_INTRODUCED@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PS_DISCONTINUED@extendedStore.suffix@"/>
+<Content contentId="PS_INTRODUCED@extendedStore.suffix@" contentTypeId="BF_PDP_SPOT"  description="A content-spot displayed on the PDP if the product is not yet available. Product Introduced Date is greater than [today]." contentName="PDP Product Available eSpot" dataResourceId="PS_INTRODUCED@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PS_DISCONTINUED@extendedStore.suffix@" contentTypeId="BF_PDP_SPOT"  description="A content-spot displayed on the PDP if [today] is after the Product Discontinued Date" contentName="PDP Product Sale Discontinuatiuon eSpot" dataResourceId="PS_DISCONTINUED@extendedStore.suffix@" localeString="en_US"/>
+<ContentRole contentId="PS_INTRODUCED@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PS_DISCONTINUED@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<!-- *****************END PDP SPOTS**************** -->
+
+<!-- STATIC PAGES-->
+<DataResource dataResourceId="SP_ABOUT_US@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SP_PRIV_POLICY@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+
+<DataResource dataResourceId="SP_TC@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SP_REVIEW_TERMS_COND" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SP_REVIEW_GUIDE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SP_SITE_MAP@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SP_ERROR_PAGE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SP_RETURN_POLICY@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SP_CONTACT_US@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<ElectronicText dataResourceId="SP_ABOUT_US@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SP_PRIV_POLICY@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SP_REVIEW_GUIDE@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SP_SITE_MAP@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SP_ERROR_PAGE@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SP_RETURN_POLICY@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SP_CONTACT_US@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SP_TC@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SP_REVIEW_TERMS_COND"/>
+<Content contentId="SP_ABOUT_US@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"  description="About Us (Seeded SAMPLE)" contentName="About Us" dataResourceId="SP_ABOUT_US@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SP_PRIV_POLICY@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"  description="Privacy Policy (Seeded SAMPLE)" contentName="Privacy Policy" dataResourceId="SP_PRIV_POLICY@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SP_TC@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"  description="Terms and Conditions (Seeded SAMPLE)" contentName="Terms and Conditions" dataResourceId="SP_TC@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SP_REVIEW_TERMS_COND" contentTypeId="BF_STATIC_PAGE"  description="Review Terms and Conditions (Seeded SAMPLE)" contentName="Review Terms and Conditions" dataResourceId="SP_REVIEW_TERMS_COND" localeString="en_US"/>
+<Content contentId="SP_REVIEW_GUIDE@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"  description="Review Guidlines (Seeded SAMPLE)" contentName="Review Gudlines" dataResourceId="SP_REVIEW_GUIDE@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SP_SITE_MAP@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"  description="Site Map (Seeded SAMPLE)" contentName="Site Map" dataResourceId="SP_SITE_MAP@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SP_ERROR_PAGE@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"  description="System error page used for Page-Not-Found conditions. You should not edit the ID." contentName="Error Page" dataResourceId="SP_ERROR_PAGE@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SP_RETURN_POLICY@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"  description="Return Policy (Seeded SAMPLE)" contentName="Return Policy" dataResourceId="SP_RETURN_POLICY@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SP_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"  description="Contact Us (Seeded SAMPLE)" contentName="Contact Us" dataResourceId="SP_CONTACT_US@extendedStore.suffix@" localeString="en_US"/>
+<ContentPurpose contentId="SP_ABOUT_US@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_PRIV_POLICY@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_TC@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_REVIEW_TERMS_COND" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_REVIEW_GUIDE@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_SITE_MAP@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_ERROR_PAGE@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_RETURN_POLICY@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_CONTACT_US@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<!-- ************END STATIC PAGES********************* -->
+
+<!-- CONTENT LIBRARY-->
+<!-- **************END CONTENT LIBRARY******************* -->
+
+<!-- EMAIL CONTENT-->
+    <!-- COMMON CLIENT EMAIL STYLES  -->
+<DataResource dataResourceId="E_HEAD_TAG@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_COMMON_STYLES@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_COMMON_HEADER@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_COMMON_FOOTER@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_NEW_CUSTOMER@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_CHNGE_CUST@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_FORGOT_PASS@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_ABANDON_CART@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_CONTACT_US@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_REQ_CATALOG@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_ORD_CONFIRM@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_ORD_CHNGE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_SHIP_REVIEW@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_ORD_DETAIL@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_MAILING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_SCHD_JOB_ALRT@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_TELL_FRIEND@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<ElectronicText dataResourceId="E_HEAD_TAG@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_COMMON_STYLES@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_COMMON_HEADER@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_COMMON_FOOTER@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_NEW_CUSTOMER@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_CHNGE_CUST@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_FORGOT_PASS@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_ABANDON_CART@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_CONTACT_US@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_REQ_CATALOG@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_ORD_CONFIRM@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_ORD_DETAIL@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_ORD_CHNGE@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_SHIP_REVIEW@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_ORD_DETAIL@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_MAILING@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_SCHD_JOB_ALRT@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_TELL_FRIEND@extendedStore.suffix@"/>
+<Content contentId="E_HEAD_TAG@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="Email Head Tag Include" contentName="Email Head Tag" dataResourceId="E_HEAD_TAG@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_COMMON_STYLES@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="Common Email Styles" contentName="Email Styles" dataResourceId="E_COMMON_STYLES@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_COMMON_HEADER@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included in the beginning of all BigFish generated emails. Use this to define standard heading information such as your logo and company information." contentName="Common Client Header" dataResourceId="E_COMMON_HEADER@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_COMMON_FOOTER@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included at the end of all BigFish generated emails. Use this to define standard closing information such as Yours-Sincerely and your company contact information. " contentName="Common Client Footer " dataResourceId="E_COMMON_FOOTER@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_NEW_CUSTOMER@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the New-Customer email (when the customer completes the registration form)." contentName="Create Party Email" dataResourceId="E_NEW_CUSTOMER@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_CHNGE_CUST@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Change-Customer email (when the customer updates their profile)." contentName="Change Party Email" dataResourceId="E_CHNGE_CUST@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_FORGOT_PASS@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Forgot-Password email." contentName="Forgot Password Email" dataResourceId="E_FORGOT_PASS@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_ABANDON_CART@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Abandoned Cart email. Other PARAMETERS control the timing of this email." contentName="Abandon Cart Email" dataResourceId="E_ABANDON_CART@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Contact-Us email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form." contentName="Contact Us Email" dataResourceId="E_CONTACT_US@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_REQ_CATALOG@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Request-Catalog email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form. " contentName="Request Catalog Email" dataResourceId="E_REQ_CATALOG@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Confirm Email" dataResourceId="E_ORD_CONFIRM@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_ORD_CHNGE@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Change email (when the Status on the Order gets modified from one state to another)." contentName="Order Notice Email" dataResourceId="E_ORD_CHNGE@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_SHIP_REVIEW@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE" description="The actual email content that will be included in the Ship Review email. Other PARAMETERS control the timing of this email." contentName="Ship Review Email" dataResourceId="E_SHIP_REVIEW@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_ORD_DETAIL@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content 'order detail' that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Detail Email" dataResourceId="E_ORD_DETAIL@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_MAILING@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Mailing-List email. This email sent to both the customer and the client." contentName="Mailing List Email" dataResourceId="E_MAILING@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_SCHD_JOB_ALRT@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Scheduled Job email. This email sent to both the customer and the client." contentName="Scheduled Job Email" dataResourceId="E_SCHD_JOB_ALRT@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_TELL_FRIEND@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Email A Friend Notification." contentName="Email A Friend" dataResourceId="E_TELL_FRIEND@extendedStore.suffix@" localeString="en_US"/>
+<ContentPurpose contentId="E_HEAD_TAG@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_COMMON_HEADER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_COMMON_STYLES@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_COMMON_FOOTER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_NEW_CUSTOMER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_CHNGE_CUST@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_FORGOT_PASS@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_ABANDON_CART@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_CONTACT_US@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_REQ_CATALOG@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_ORD_CONFIRM@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_ORD_CHNGE@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_SHIP_REVIEW@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_ORD_DETAIL@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_MAILING@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_SCHD_JOB_ALRT@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_TELL_FRIEND@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<Content contentId="E_HEAD_TAG@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_COMMON_HEADER@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_COMMON_STYLES@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_COMMON_FOOTER@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_NEW_CUSTOMER@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_CHNGE_CUST@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_FORGOT_PASS@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_ABANDON_CART@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_CONTACT_US@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_REQ_CATALOG@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_ORD_CONFIRM@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_ORD_CHNGE@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_SHIP_REVIEW@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_ORD_DETAIL@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_ORD_HEADER@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_ORD_PAYMENTS@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_ORD_SHIPMENTS@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_ORD_ITMS@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_ORD_ITM_SUMMARY@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_MAILING@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_SCHD_JOB_ALRT@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_TELL_FRIEND@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<!-- **************END EMAIL CONTENT******************* -->
+
+<!-- TXT MESSAGES CONTENT-->
+<DataResource dataResourceId="TXT_ABANDON_CART@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_NEW_CUSTOMER@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_ORDER_CHANGE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_ORDER_CONFIRM@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_FRGT_PASS@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_SHIP_REVIEW@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_CHG_CUST@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<ElectronicText dataResourceId="TXT_ABANDON_CART@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_NEW_CUSTOMER@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_ORDER_CHANGE@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_ORDER_CONFIRM@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_FRGT_PASS@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_SHIP_REVIEW@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_CHG_CUST@extendedStore.suffix@"/>
+<Content contentId="TXT_ABANDON_CART@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Abandoned Cart Text Message template" contentName="Abandoned Cart" dataResourceId="TXT_ABANDON_CART@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_NEW_CUSTOMER@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="New Customer Text Message template" contentName="New Customer" dataResourceId="TXT_NEW_CUSTOMER@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CHANGE@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Order Change Text Message template" contentName="Order Change" dataResourceId="TXT_ORDER_CHANGE@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CONFIRM@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Order Confirm Text Message template" contentName="Order Confirm" dataResourceId="TXT_ORDER_CONFIRM@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_FRGT_PASS@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Forgot Password Text Message template" contentName="Forgot Password" dataResourceId="TXT_FRGT_PASS@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_SHIP_REVIEW@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Ship Review Text Message template" contentName="Review" dataResourceId="TXT_SHIP_REVIEW" localeString="en_US@extendedStore.suffix@"/>
+<Content contentId="TXT_CHG_CUST@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Change Customer Text Message template" contentName="Change Customer" dataResourceId="TXT_CHG_CUST@extendedStore.suffix@"/>
+<ContentPurpose contentId="TXT_ABANDON_CART@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_NEW_CUSTOMER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_ORDER_CHANGE@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_ORDER_CONFIRM@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_FRGT_PASS@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_SHIP_REVIEW@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_CHG_CUST@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<Content contentId="TXT_ABANDON_CART@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_NEW_CUSTOMER@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CHANGE@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CONFIRM@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_FRGT_PASS@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_SHIP_REVIEW@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_CHG_CUST@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<!-- **************END TXT MESSAGES CONTENT******************* -->
+
+<!-- XContentXref content product store reference -->
+<!-- SITE INFO-->
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_HEADER_CONTENT" contentId="SI_HEADER@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_FOOTER_CONTENT" contentId="SI_FOOTER@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_LOGO" contentId="SI_LOGO@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SHOPPING_CART" contentId="SI_CART@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SEARCH" contentId="SI_SEARCH@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_MAILING_LIST" contentId="SI_MAILING@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_HEAD_TAG_CONTENT" contentId="SI_HEAD_TAG@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
+
+
+<!-- HOME PAGE SPOTS -->
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_01" contentId="HPS_01@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_02" contentId="HPS_02@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_03" contentId="HPS_03@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_04" contentId="HPS_04@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_05" contentId="HPS_05@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_06" contentId="HPS_06@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_07" contentId="HPS_07@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_08" contentId="HPS_08@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_09" contentId="HPS_09@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_10" contentId="HPS_10@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_11" contentId="HPS_11@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_12" contentId="HPS_12@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_13" contentId="HPS_13@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_14" contentId="HPS_14@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_15" contentId="HPS_15@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_16" contentId="HPS_16@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
+
+<!-- ESPOTS -->
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ADDR_BOOK_VIEW" contentId="PTS_ADDR_BV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ADDR_BOOK_EDIT" contentId="PTS_ADDR_BE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_MY_ACCOUNT" contentId="PTS_ACCOUNT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_CONFIRM" contentId="PTS_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_STATUS" contentId="PTS_ORD_STATUS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_SUMMARY" contentId="PTS_ORD_SUMMARY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHIPPING_ADDRESS" contentId="PTS_SHIP_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHIPPING_METHOD" contentId="PTS_SHIP_METH@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHOPPING_CART" contentId="PTS_CART@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_CONTACT_US" contentId="PTS_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_STORE_LOCATOR" contentId="PTS_ST_LOC@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_MAILING_LIST" contentId="PTS_MAILING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_LOGIN" contentId="PTS_LOGIN@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_LOGIN_INFO" contentId="PTS_LOGIN@extendedStore.suffix@_INFO" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PERSONAL_INFO" contentId="PTS_PERS_INF@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_CONFIRM" contentId="PTS_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SEARCH_NO_RESULT" contentId="PTS_SRCH_NO_RSL@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ONE_STEP_CHKOUT" contentId="PTS_OS_CHKOUT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_STORE_PICKUP" contentId="PTS_ST_PICKUP@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_WISHLIST" contentId="PTS_WISHLIST@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_VIEW" contentId="PTS_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_EDIT" contentId="PTS_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_GIFT_MESSAGE" contentId="PTS_GIFT_MESS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_EMAIL_A_FRIEND" contentId="PTS_EML_FRND@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_VIEW" contentId="PES_ADDR_BV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_EDIT" contentId="PES_ADDR_BE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_MY_ACCOUNT" contentId="PES_ACCOUNT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ORDER_CONFIRM" contentId="PES_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ORDER_STATUS" contentId="PES_ORD_STATUS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ORDER_SUMMARY" contentId="PES_ORD_SUMMARY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SHIPPING_ADDRESS" contentId="PES_SHIP_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SHIPPING_METHOD" contentId="PES_SHIP_METH@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SHOPPING_CART" contentId="PES_CART@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_CONTACT_US" contentId="PES_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_STORE_LOCATOR" contentId="PES_ST_LOC@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_MAILING_LIST" contentId="PES_MAILING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_LOGIN" contentId="PES_LOGIN@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_LOGIN_INFO" contentId="PES_LOGIN@extendedStore.suffix@_INFO" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PERSONAL_INFO" contentId="PES_PERS_INF@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_CONFIRM" contentId="PES_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SEARCH_NO_RESULT" contentId="PES_SRCH_NO_RSL@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ONE_STEP_CHKOUT" contentId="PES_OS_CHKOUT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_STORE_PICKUP" contentId="PES_ST_PICKUP@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_WISHLIST" contentId="PES_WISHLIST@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_VIEW" contentId="PES_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_EDIT" contentId="PES_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_GIFT_MESSAGE" contentId="PES_GIFT_MESS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_EMAIL_A_FRIEND" contentId="PES_EML_FRND@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_01" contentId="PDP_CONTENT_01@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_02" contentId="PDP_CONTENT_02@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_03" contentId="PDP_CONTENT_03@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_04" contentId="PDP_CONTENT_04@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_05" contentId="PDP_CONTENT_05@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="CHECKOUT_CC_VERIFY" contentId="CHECKOUT_CC_VRFY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="MULTI_ADDR_ESPOT" contentId="MULTI_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="MULTI_SHIPPING_ESPOT" contentId="MULTI_SHIPPING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_OUT_OF_STOCK" contentId="PS_OUT_OF_STOCK@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+
+<!-- PDP SPOTS -->
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_INTRODUCED" contentId="PS_INTRODUCED@extendedStore.suffix@" contentTypeId="BF_PDP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_DISCONTINUED" contentId="PS_DISCONTINUED@extendedStore.suffix@" contentTypeId="BF_PDP_SPOT"/>
+
+<!-- STATIC PAGES-->
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_ABOUT_US" contentId="SP_ABOUT_US@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_PRIVACY_POLICY" contentId="SP_PRIV_POLICY@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_TERMS_CONDITIONS" contentId="SP_TC@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_SITE_MAP" contentId="SP_SITE_MAP@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_ERROR_PAGE" contentId="SP_ERROR_PAGE@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_RETURN_POLICY" contentId="SP_RETURN_POLICY@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_CONTACT_US" contentId="SP_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_STATIC_PAGE"/>
+
+<!-- CONTENT LIBRARY-->
+
+<!-- EMAIL CONTENT-->
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_HEAD_TAG" contentId="E_HEAD_TAG@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_COMMON_HEADER" contentId="E_COMMON_HEADER@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_COMMON_STYLES" contentId="E_COMMON_STYLES@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_COMMON_FOOTER" contentId="E_COMMON_FOOTER@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_NEW_CUSTOMER" contentId="E_NEW_CUSTOMER@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_CHANGE_CUSTOMER" contentId="E_CHNGE_CUST@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_FORGOT_PASSWORD" contentId="E_FORGOT_PASS@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ABANDON_CART" contentId="E_ABANDON_CART@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_CONTACT_US" contentId="E_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_REQUEST_CATALOG" contentId="E_REQ_CATALOG@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_CONFIRM" contentId="E_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_CHANGE" contentId="E_ORD_CHNGE@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SHIP_REVIEW" contentId="E_SHIP_REVIEW@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_DETAIL" contentId="E_ORD_DETAIL@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_HEADER" contentId="E_ORD_HEADER@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_PAYMENTS" contentId="E_ORD_PAYMENTS@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_SHIPMENTS" contentId="E_ORD_SHIPMENTS@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_ITEMS" contentId="E_ORD_ITMS@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_ITEM_SUMMARY" contentId="E_ORD_ITM_SUMMARY@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_MAILING_LIST" contentId="E_MAILING@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SCHED_JOB_ALERT" contentId="E_SCHD_JOB_ALRT@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_TELL_FRIEND" contentId="E_TELL_FRIEND@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+
+<!-- TXT CONTENT-->
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ABANDON_CART" contentId="TXT_ABANDON_CART@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_NEW_CUSTOMER" contentId="TXT_NEW_CUSTOMER@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ORDER_CHANGE" contentId="TXT_ORDER_CHANGE@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ORDER_CONFIRM" contentId="TXT_ORDER_CONFIRM@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_FORGOT_PASSWORD" contentId="TXT_FRGT_PASS@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_SHIP_REVIEW" contentId="TXT_SHIP_REVIEW@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_CHANGE_CUSTOMER" contentId="TXT_CHG_CUST@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+
+<!-- END XContentXref content product store reference -->
+
+</entity-engine-xml>

@@ -6,7 +6,7 @@
     <simple-method method-name="updateNoteData" short-description="Update Note Data">
         <if-empty field="parameters.noteInfo">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankNoteError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="NOTEINFO" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="noteInfo" list="error_list"/>
         </if-empty>
         <check-errors/>
         <entity-one entity-name="NoteData" value-field="noteData"/>
@@ -19,7 +19,7 @@
     <simple-method method-name="createOrderNoteData" short-description="Create Order Header Note and Note Data">
         <if-empty field="parameters.noteInfo">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankNoteError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="NOTEINFO" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="noteInfo" list="error_list"/>
         </if-empty>
         <check-errors/>
         <set-service-fields service-name="createOrderNote" map="parameters" to-map="orderNoteCtx"/>
@@ -30,7 +30,7 @@
     <simple-method method-name="createCustomerNoteData" short-description="Create Party Note and Note Data">
         <if-empty field="parameters.noteInfo">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankNoteError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="NOTEINFO" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="noteInfo" list="error_list"/>
         </if-empty>
         <check-errors/>
         <set-service-fields service-name="createPartyNote" map="parameters" to-map="partyNoteCtx"/>

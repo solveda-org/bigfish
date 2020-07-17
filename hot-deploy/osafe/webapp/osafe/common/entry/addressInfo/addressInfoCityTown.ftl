@@ -6,13 +6,16 @@
     <#assign city = postalAddressData.city!"">
 </#if>
 <!-- address city entry -->
-<div class="addressInfoCityTown">
-    <div id="city" class="entry">
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
+    <div id="city">
         <label for="${fieldPurpose?if_exists}_CITY">
-            <span class="${fieldPurpose?if_exists}_USA ${fieldPurpose?if_exists}_CAN"><@required/>${uiLabelMap.CityCaption}</span>
-            <span class="${fieldPurpose?if_exists}_OTHER"><@required/>${uiLabelMap.TownOrCityCaption}</span>
+            <span><#if mandatory == "Y"><@required/></#if>${uiLabelMap.TownOrCityCaption}</span>
         </label>
-        <input type="text" maxlength="100" class="city" name="${fieldPurpose?if_exists}_CITY" id="${fieldPurpose?if_exists}_CITY" value="${requestParameters.get(fieldPurpose+"_CITY")!city!""}" />
-        <@fieldErrors fieldName="${fieldPurpose?if_exists}_CITY"/>
+        <div class="entryField">
+        	<input type="text" maxlength="100" class="city" name="${fieldPurpose?if_exists}_CITY" id="js_${fieldPurpose?if_exists}_CITY" value="${requestParameters.get(fieldPurpose+"_CITY")!city!""}" />
+        	<input type="hidden" id="${fieldPurpose?if_exists}_CITY_MANDATORY" name="${fieldPurpose?if_exists}_CITY_MANDATORY" value="${mandatory}"/>
+        	<@fieldErrors fieldName="${fieldPurpose?if_exists}_CITY"/>
+        </div>
     </div>
 </div>

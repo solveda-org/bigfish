@@ -17,5 +17,5 @@
     <#if localPrevButtonVisible == "Y"><a href="${localPrevButtonUrl}" class="${localPrevButtonClass}">${localPrevButtonDescription}</a></#if>
     <#if localNextButtonVisible == "Y"><a href="${localNextButtonUrl}" class="${localNextButtonClass}">${localNextButtonDescription}</a></#if>
     <#if localSubmitOrderButtonVisible == "Y">
-        <input type="button" id="submitOrderBtn" name="submitOrderBtn" value="${uiLabelMap.SubmitOrderBtn}" onclick="javascript:submitCheckoutForm(document.${formName!}, 'SO', '');" class="standardBtn submitOrder" />
+        <input type="button" id="js_submitOrderBtn" name="submitOrderBtn" value="${uiLabelMap.SubmitOrderBtn}" onclick="javascript:submitCheckoutForm(document.${formName!}, 'SO', '');" class="standardBtn submitOrder" />
     </#if>

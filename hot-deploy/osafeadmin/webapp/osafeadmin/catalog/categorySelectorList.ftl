@@ -7,7 +7,8 @@
   <#list topLevelList as category>
     <#if catContentWrappers?exists>
       <tr class="dataRow">
-        <td class="idCol firstCol" ><a class="leftMargin10" href="javascript:set_values('${category.productCategoryId!?if_exists}','${catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?if_exists}')">${catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?if_exists}</a></td>
+        <#assign categoryName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${catContentWrappers[category.productCategoryId!].get("CATEGORY_NAME")?if_exists}') />
+        <td class="idCol firstCol" ><a class="leftMargin10" href="javascript:set_values('${category.productCategoryId!?if_exists}','${categoryName}')">${catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?if_exists}</a></td>
       </tr>
       <#if showSubNav?exists && showSubNav =='Y'>
 		 <#if subCatRollUpMap?has_content>
@@ -17,7 +18,7 @@
           <#list subCatList as subCategory>
             <tr class="dataRow">
               <#assign categoryName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${catContentWrappers[subCategory.productCategoryId!].get("CATEGORY_NAME")?if_exists}') />
-              <td class="idCol spacer"><a href="javascript:set_values('${subCategory.productCategoryId!?if_exists}','${categoryName!}')">${catContentWrappers[subCategory.productCategoryId!].get("CATEGORY_NAME")?if_exists}</a></td>
+              <td class="idCol spacer"><a href="javascript:set_values('${subCategory.productCategoryId!?if_exists}','${categoryName}')">${catContentWrappers[subCategory.productCategoryId!].get("CATEGORY_NAME")?if_exists}</a></td>
             </tr>
           </#list>
         </#if>

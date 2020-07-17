@@ -1,9 +1,11 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
-<div class = "writeReviewReviewerTitle">
-    <div class="entry">
-      <label for="reviewTitle"><@required/>${uiLabelMap.ReviewTitleCaption}</label>
-      <input type="text" size="32" maxlength="100" onkeypress="return bvDisableReturn(event);" id="BVInputTitle" name="REVIEW_TITLE" value="${requestParameters.REVIEW_TITLE?if_exists}">
-      <span class="instructions">${uiLabelMap.TitleExampleInfo}</span>
-      <@fieldErrors fieldName="REVIEW_TITLE"/>
-    </div>
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class = "${request.getAttribute("attributeClass")!}">
+      <label for="reviewTitle"><#if mandatory == "Y"><@required/></#if>${uiLabelMap.ReviewTitleCaption}</label>
+      <div class="entryField">
+	      <input type="text" size="32" maxlength="100" onkeypress="return bvDisableReturn(event);" id="BVInputTitle" name="REVIEW_TITLE" value="${requestParameters.REVIEW_TITLE?if_exists}">
+	      <span class="entryHelper">${uiLabelMap.TitleExampleInfo}</span>
+	      <input type="hidden" name="REVIEW_TITLE_MANDATORY" value="${mandatory}"/>
+	      <@fieldErrors fieldName="REVIEW_TITLE"/>
+      </div>
 </div>

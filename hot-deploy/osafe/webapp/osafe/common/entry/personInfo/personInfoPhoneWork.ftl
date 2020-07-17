@@ -22,24 +22,27 @@
 </#if>
 
 <#-- Displays the work phone entry -->
-<div class = "personalInfoPhoneWork">
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
     <input type="hidden" name="workPhoneContactMechId" value="${telecomWorkNoContactMechId!}" />
-    <div class="entry">
-        <label for="PHONE_WORK_CONTACT">${workPhoneCaption!}</label>
-        <span class="USER_USA USER_CAN">
+      <label for="PHONE_WORK_CONTACT"><#if mandatory == "Y"><@required/></#if>${workPhoneCaption!}</label>
+      <div class="entryField telephone">
+        <span class="js_USER_USA js_USER_CAN">
             <input type="text" class="phone3" id="PHONE_WORK_AREA" name="PHONE_WORK_AREA" maxlength="3" value="${requestParameters.get("PHONE_WORK_AREA")!areaCodeWork!""}" />
             <input type="hidden" id="PHONE_WORK_CONTACT" name="PHONE_WORK_CONTACT" value="${requestParameters.get("PHONE_WORK_CONTACT")!contactNumberWork!""}"/>
+            <input type="hidden" name="PHONE_WORK_MANDATORY" value="${mandatory}"/>
             <input type="text" class="phone3" id="PHONE_WORK_CONTACT3" name="PHONE_WORK_CONTACT3" value="${requestParameters.get("PHONE_WORK_CONTACT3")!contactNumber3Work!""}" maxlength="3"/>
             <input type="text" class="phone4" id="PHONE_WORK_CONTACT4" name="PHONE_WORK_CONTACT4" value="${requestParameters.get("PHONE_WORK_CONTACT4")!contactNumber4Work!""}" maxlength="4"/>
             <span class="innerLabel">${uiLabelMap.PhoneExtCaption}</span>
-            <input type="text" class="phoneExt" id="PHONE_WORK_EXT" name="PHONE_WORK_EXT" value="${requestParameters.get("PHONE_WORK_EXT")!extensionWork!""}" maxlength="10"/>
+            <input type="text" class="phoneExt" id="PHONE_WORK_EXT" name="PHONE_WORK_EXT" value="${requestParameters.get("PHONE_WORK_EXT")!extensionWork!""}" maxlength="4"/>
         </span>
-        <span style="display:none" class="USER_OTHER">
-            <input type="text" class="address" id="PHONE_WORK_CONTACT_OTHER" name="PHONE_WORK_CONTACT_OTHER" value="${requestParameters.get("PHONE_WORK_CONTACT_OTHER")!contactNumberWork!""}" />
+        <span style="display:none" class="js_USER_OTHER">
+            <input type="text" class="phone10" id="PHONE_WORK_CONTACT_OTHER" name="PHONE_WORK_CONTACT_OTHER" value="${requestParameters.get("PHONE_WORK_CONTACT_OTHER")!contactNumberWork!""}" />
             <span class="innerLabel">${uiLabelMap.PhoneExtCaption}</span>
-            <input type="text" class="phoneExt" id="PHONE_WORK_EXT_OTHER" name="PHONE_WORK_EXT_OTHER" value="${requestParameters.get("PHONE_WORK_EXT_OTHER")!extensionWork!""}" maxlength="10"/>
+            <input type="text" class="phoneExt" id="PHONE_WORK_EXT_OTHER" name="PHONE_WORK_EXT_OTHER" value="${requestParameters.get("PHONE_WORK_EXT_OTHER")!extensionWork!""}" maxlength="4"/>
+            <input type="hidden" name="PHONE_WORK_CONTACT_OTHER_MANDATORY" value="${mandatory}"/>
         </span>
         <@fieldErrors fieldName="PHONE_WORK_AREA"/>
         <@fieldErrors fieldName="PHONE_WORK_CONTACT"/>
-    </div>
+      </div>
 </div>

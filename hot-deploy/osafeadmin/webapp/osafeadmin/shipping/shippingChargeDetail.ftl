@@ -1,7 +1,10 @@
 <#assign deliverToPOBox = parameters.deliverToPOBox! />
 <#assign selectedIncCountryType = parameters.includeGeoId! />
 <#assign selectedExcCountryType = parameters.excludeGeoId! />
+<#assign selectedIncFeatureGrp = parameters.includeFeatureGroupId! />
+<#assign selectedExcFeatureGrp = parameters.excludeFeatureGroupId! />
 <#assign selectedShipmentGatewayConfig = parameters.shipmentGatewayConfigId! />
+
 <#if mode?has_content>
   <#if shipCharge?has_content>
     <#assign productStoreShipMethId = shipCharge.productStoreShipMethId!"" />
@@ -9,14 +12,25 @@
     <#assign shipmentMethodTypeId = shipCharge.shipmentMethodTypeId!"" />
     <#assign minTotal = shipCharge.minTotal!"" />
     <#assign maxTotal = shipCharge.maxTotal!"" />
+    <#assign minWeight = shipCharge.minWeight!"" />
+    <#assign maxWeight = shipCharge.maxWeight!"" />
     <#assign sequenceNum = shipCharge.sequenceNumber!"" />
+    <#assign includeFeatureGroupId = shipCharge.includeFeatureGroup!"" />
+    <#assign excludeFeatureGroupId = shipCharge.excludeFeatureGroup!"" />
     <#assign includeGeoId = shipCharge.includeGeoId!"" />
     <#assign shipmentGatewayConfigId = shipCharge.shipmentGatewayConfigId!""/>
     <#assign excludeGeoId = shipCharge.excludeGeoId!"" />
+    <#assign selectedShipmentCustomMethodId = shipCharge.shipmentCustomMethodId!"" />
     <#if !deliverToPOBox?has_content>
         <#assign deliverToPOBox = shipCharge.allowPoBoxAddr!"" />
     </#if>
     <#assign selectedParty = shipCharge.partyId!""/>
+    <#if !selectedIncFeatureGrp?has_content>
+        <#assign selectedIncFeatureGrp = shipCharge.includeFeatureGroup!""/>
+    </#if>
+    <#if !selectedExcFeatureGrp?has_content>
+        <#assign selectedExcFeatureGrp = shipCharge.excludeFeatureGroup!""/>
+    </#if>
     <#if !selectedIncCountryType?has_content>
         <#assign selectedIncCountryType = shipCharge.includeGeoId!""/>
     </#if>
@@ -31,13 +45,15 @@
   <#else>
   		<#assign selectedIncCountryType = parameters.includeGeoId!""/>
   		<#assign selectedExcCountryType = parameters.excludeGeoId!""/>
+  		<#assign selectedIncFeatureGrp = parameters.includeFeatureGroupId!"" />
+        <#assign selectedExcFeatureGrp = parameters.excludeFeatureGroupId!"" />
     	<#assign selectedParty = parameters.partyId!""/>
     	<#assign selectedShipmentMethodType = parameters.shipmentMethodTypeId!""/>
         <#assign selectedShipmentGatewayConfig = parameters.shipmentGatewayConfigId!""/> 
+        <#assign selectedShipmentCustomMethodId = parameters.shipmentCustomMethodId!"" />
   </#if>
-  
   <#if shipCostEst?has_content>
-    <#assign flatRate = shipCostEst.orderFlatPrice!"" />
+    <#assign orderFlatPrice = shipCostEst.orderFlatPrice!"" />
     <#assign shipmentCostEstimateId = shipCostEst.shipmentCostEstimateId!"" />
   </#if>
 
@@ -103,7 +119,7 @@
           		<select name="shipmentMethodTypeId" id="shipmentMethodTypeId" class="small">
 	          		<#if shipmentMethodTypes?has_content>
 			            <#list shipmentMethodTypes as shipmentMethodType>
-			              <option value='${shipmentMethodType.shipmentMethodTypeId!}' <#if selectedShipmentMethodType == shipmentMethodType.shipmentMethodTypeId >selected=selected</#if>>${shipmentMethodType.shipmentMethodTypeId?default(parameters.shipmentMethodTypeId!shipmentMethodType.shipmentMethodTypeId!)}</option>
+			              <option value='${shipmentMethodType.shipmentMethodTypeId!}' <#if selectedShipmentMethodType == shipmentMethodType.shipmentMethodTypeId!"" >selected=selected</#if>>${shipmentMethodType.shipmentMethodTypeId?default(parameters.shipmentMethodTypeId!shipmentMethodType.shipmentMethodTypeId!)}</option>
 			            </#list>
 	          		</#if>
           		</select>
@@ -126,7 +142,7 @@
           		  <option value="">${uiLabelMap.SelectOneLabel}</option>
 		          <#if shipmentGatewayConfig?has_content>		          
 		            <#list shipmentGatewayConfig as config>		              
-		              <option value='${config.shipmentGatewayConfigId!}' <#if selectedShipmentGatewayConfig == config.shipmentGatewayConfigId >selected=selected</#if>>${config.description}</option>
+		              <option value='${config.shipmentGatewayConfigId!}' <#if selectedShipmentGatewayConfig == config.shipmentGatewayConfigId >selected=selected</#if>>${config.description!}</option>
 		            </#list>
 		          </#if>
 		        </select>
@@ -134,6 +150,29 @@
       </div>
     </div>
   </div>
+  
+  
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.ShipmentCustomMethodCaption}</label>
+      </div>
+      <div class="infoValue">    
+          <#if (mode?has_content) >
+          		<select name="shipmentCustomMethodId" id="shipmentCustomMethodId" class="small">
+          		  <option value="">${uiLabelMap.SelectOneLabel}</option>
+		          <#if shipmentCustomMethods?has_content>		          
+		            <#list shipmentCustomMethods as customMethod >		              
+		              <option value='${customMethod.customMethodId!}' <#if selectedShipmentCustomMethodId == customMethod.customMethodId >selected=selected</#if>>${customMethod.customMethodId!}</option>
+		            </#list>
+		          </#if>
+		        </select>
+          </#if>
+      </div>
+    </div>
+  </div>
+  
+  
   <#if mode="edit">
   		<!-- get the CarrierShipmentMethod Info -->
 	    <#assign carrierShipmentMethod = delegator.findByPrimaryKey("CarrierShipmentMethod", Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentMethodTypeId", shipCharge.shipmentMethodTypeId!, "partyId", shipCharge.partyId!, "roleTypeId", "CARRIER"))/> 
@@ -177,11 +216,7 @@
         <label>${uiLabelMap.MinTotalCaption}</label>
       </div>
       <div class="infoValue">
-        <#if mode="add">
-        	<input name="minTotal" type="text" id="minTotal" maxlength="20" value="${parameters.minTotal!minTotal!""}"/>
-        <#else>
-          	<input name="minTotal" type="text" id="minTotal" maxlength="20" value="${shipCharge.minTotal!minTotal!""}"/>
-        </#if>
+        <input name="minTotal" type="text" id="minTotal" maxlength="20" value="${parameters.minTotal!minTotal!""}"/>
       </div>
     </div>
   </div>
@@ -192,11 +227,35 @@
         <label>${uiLabelMap.MaxTotalCaption}</label>
       </div>
       <div class="infoValue">
-        <#if mode="add">
         	<input name="maxTotal" type="text" id="maxTotal" maxlength="20" value="${parameters.maxTotal!maxTotal!""}"/>
-        <#else>
-          	<input name="maxTotal" type="text" id="maxTotal" maxlength="20" value="${shipCharge.maxTotal!maxTotal!""}"/>
-        </#if>
+      </div>
+    </div>
+  </div>
+  
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.MinWeightCaption}</label>
+      </div>
+      <div class="infoValue">
+        	<input name="minWeight" type="text" id="minWeight" maxlength="20" value="${parameters.minWeight!minWeight!""}"/>
+      </div>
+      <div class="infoIcon">
+              <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.MinWeightInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.MaxWeightCaption}</label>
+      </div>
+      <div class="infoValue">
+        	<input name="maxWeight" type="text" id="maxWeight" maxlength="20" value="${parameters.maxWeight!maxWeight!""}"/>
+      </div>
+      <div class="infoIcon">
+              <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.MaxWeightInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
       </div>
     </div>
   </div>
@@ -207,11 +266,7 @@
         <label>${uiLabelMap.SeqNumCaption}</label>
       </div>
       <div class="infoValue">
-        <#if mode="add">
         	<input name="sequenceNum" type="text" id="sequenceNum" maxlength="20" value="${parameters.sequenceNum!sequenceNum!"1"}"/>
-        <#else>
-          	<input name="sequenceNum" type="text" id="sequenceNum" maxlength="20" value="${shipCharge.sequenceNum!sequenceNum!"1"}"/>
-        </#if>
       </div>
     </div>
   </div>
@@ -225,7 +280,7 @@
         <#if mode="add">
         	<input name="orderFlatPrice" type="text" id="orderFlatPrice" maxlength="20" value="${parameters.orderFlatPrice!orderFlatPrice!""}"/>
         <#else>
-          	<input name="orderFlatPrice" type="text" id="orderFlatPrice" maxlength="20" value="${parameters.orderFlatPrice!orderFlatPrice!shipCostEst.orderFlatPrice!orderFlatPrice!""}"/>
+          	<input name="orderFlatPrice" type="text" id="orderFlatPrice" maxlength="20" value="${parameters.orderFlatPrice!shipCostEst.orderFlatPrice!orderFlatPrice!""}"/>
         </#if>
       </div>
     </div>
@@ -252,32 +307,14 @@
        </div>
        <div class="infoValue">    
           <#if (mode?has_content) >
-          		<select name="includeGeoId" id="includeGeoId" class="small">
+          		<select name="includeGeoId" id="includeGeoId" class="small">          		
           		  <option value="">${uiLabelMap.SelectOneLabel}</option>
-		          <#assign countryDropdown = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"COUNTRY_DROPDOWN")!"" />
-	                 <#if countryDropdown?has_content>
-	                    <#assign countryList = Static["org.ofbiz.base.util.StringUtil"].split(countryDropdown, ",")/>
+		             <#assign countryList = Static["com.osafe.util.OsafeAdminUtil"].getCountryList(request)/>		           
 	                    <#if countryList?has_content>
-						   <#list countryList as country>
-						   <#if country.toUpperCase()=="ALL">
-						     <#if geoType?has_content>          
-		                       <#list geoType as type>              
-		                         <option value='${type.geoId!}' <#if selectedIncCountryType == type.geoId >selected=selected</#if>>${type.geoName}</option>
-		                       </#list>
-		                     </#if>	     
-						   <#else>
-						     <#assign geo = delegator.findOne("Geo",{"geoId" : country.trim()}, false)?if_exists/>						   		   
-						     <option value='${country!}' <#if selectedIncCountryType == country >selected=selected</#if>>${geo.geoName}</option>
-						   </#if>
-	                       </#list>             
-	                    </#if>
-	                 <#else>
-	                   <#if geoType?has_content>          
-		                  <#list geoType as type>              
-		                    <option value='${type.geoId!}' <#if selectedIncCountryType == type.geoId >selected=selected</#if>>${type.geoName}</option>
-		                  </#list>
-		               </#if>	
-	                 </#if>
+                            <#list countryList as country>
+                            <option value='${country.geoId}' <#if selectedIncCountryType = country.geoId >selected=selected</#if>>${country.get("geoName")}</option>
+                            </#list>
+                        </#if>	                   
 		        </select>
           </#if>
        </div>
@@ -293,36 +330,58 @@
           <#if (mode?has_content) >
           		<select name="excludeGeoId" id="excludeGeoId" class="small">
           		  <option value="">${uiLabelMap.SelectOneLabel}</option>
-          		  <#assign countryDropdown = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"COUNTRY_DROPDOWN")!"" />
-	                 <#if countryDropdown?has_content>
-	                    <#assign countryList = Static["org.ofbiz.base.util.StringUtil"].split(countryDropdown, ",")/>
+          		  <#assign countryList = Static["com.osafe.util.OsafeAdminUtil"].getCountryList(request)/>		           
 	                    <#if countryList?has_content>
-						   <#list countryList as country>
-						   <#if country.toUpperCase()=="ALL">
-						     <#if geoType?has_content>          
-		                       <#list geoType as type>              
-		                       <option value='${type.geoId!}' <#if selectedExcCountryType == type.geoId >selected=selected</#if>>${type.geoName}</option>
-		                       </#list>
-		                     </#if>	     
-						   <#else>
-						     <#assign geo = delegator.findOne("Geo",{"geoId" : country.trim()}, false)?if_exists/>						   		   
-						     <option value='${country!}' <#if selectedExcCountryType == country >selected=selected</#if>>${geo.geoName}</option>
-						   </#if>
-	                       </#list>	               
-	                    </#if>
-	                 <#else> 
-	                   <#if geoType?has_content>          
-		                  <#list geoType as type>             
-		                    <option value='${type.geoId!}' <#if selectedExcCountryType == type.geoId >selected=selected</#if>>${type.geoName}</option>
-		                  </#list>
-		               </#if>   
-	                 </#if>
+                            <#list countryList as country>
+                            <option value='${country.geoId}' <#if selectedExcCountryType = country.geoId >selected=selected</#if>>${country.get("geoName")}</option>
+                            </#list>
+                        </#if>
 		        </select>
          </#if>
        </div>
      </div>
    </div>
- </#if>
+</#if>   
+   <div class="infoRow">
+     <div class="infoEntry">
+       <div class="infoCaption">
+         <label>${uiLabelMap.IncludeFeatureCaption}</label>
+       </div>
+       <div class="infoValue">    
+          <#if (mode?has_content) >
+                <select name="includeFeatureGroupId" id="includeFeatureGroupId" class="small">
+                  <option value="">${uiLabelMap.SelectOneLabel}</option>
+                        <#if productFeatureGroup?has_content>
+                            <#list productFeatureGroup as feature>
+                                <option value='${feature.productFeatureGroupId}' <#if selectedIncFeatureGrp = feature.productFeatureGroupId >selected=selected</#if>>${feature.description}</option>
+                            </#list>
+                        </#if>
+                </select>
+         </#if>
+       </div>
+     </div>
+   </div>
+   
+   <div class="infoRow">
+     <div class="infoEntry">
+       <div class="infoCaption">
+         <label>${uiLabelMap.ExcludeFeatureCaption}</label>
+       </div>
+       <div class="infoValue">    
+          <#if (mode?has_content) >
+                <select name="excludeFeatureGroupId" id="excludeFeatureGroupId" class="small">
+                  <option value="">${uiLabelMap.SelectOneLabel}</option>
+                        <#if productFeatureGroup?has_content>
+                            <#list productFeatureGroup as feature>
+                            <option value='${feature.productFeatureGroupId}' <#if selectedExcFeatureGrp = feature.productFeatureGroupId >selected=selected</#if>>${feature.description}</option>
+                            </#list>
+                        </#if>
+                </select>
+         </#if>
+       </div>
+     </div>
+   </div>
+   
 <#else>
-    ${uiLabelMap.NoDataAvailableInfo}
+     ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

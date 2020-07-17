@@ -7,6 +7,14 @@ import org.ofbiz.base.util.UtilMisc;
 //ADMIN TOOLS
 adminToolsList = FastList.newInstance();
 
+//BigFish Parameters
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.BigfishParameterLabel);
+adminTool.put("toolDesc", uiLabelMap.BigfishParameterInfo);
+adminTool.put("toolDetail", "manageBigfishParameter");
+adminTool.put("toolTypeUpperCase", (uiLabelMap.BigfishParameterLabel).toUpperCase());
+adminToolsList.add(adminTool);
+
 //bigfish xml export
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.BFXmlExportLabel);
@@ -31,6 +39,14 @@ adminTool.put("toolDetail", "manageCssDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.CSSManagementToolLabel).toUpperCase());
 adminToolsList.add(adminTool);
 
+//manage Custom Party Attribute
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.manageCustomPartyAttributesLabel);
+adminTool.put("toolDesc", uiLabelMap.manageCustomPartyAttributesInfo);
+adminTool.put("toolDetail", "manageCustomPartyAttributesDetail");
+adminTool.put("toolTypeUpperCase", (uiLabelMap.manageCustomPartyAttributesLabel).toUpperCase());
+adminToolsList.add(adminTool);
+
 //manage <DIV> sequence
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.manageDivSequenceLabel);
@@ -45,6 +61,14 @@ adminTool.put("toolType", uiLabelMap.SolrReIndxLabel);
 adminTool.put("toolDesc", uiLabelMap.SolrReIndxInfo);
 adminTool.put("toolDetail", "solrReIndexDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.SolrReIndxLabel).toUpperCase());
+adminToolsList.add(adminTool);
+
+//Product Delete Tool
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.ProductDeleteToolLabel);
+adminTool.put("toolDesc", uiLabelMap.ProductDeleteToolInfo);
+adminTool.put("toolDetail", "productDeleteToolDetail");
+adminTool.put("toolTypeUpperCase", (uiLabelMap.ProductDeleteToolLabel).toUpperCase());
 adminToolsList.add(adminTool);
 
 //entity Sync 

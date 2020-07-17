@@ -3,9 +3,10 @@ import org.ofbiz.base.util.StringUtil;
 import com.osafe.util.OsafeAdminUtil;
 import org.ofbiz.common.CommonWorkers;
 import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.Debug
 
-defaultCountry = globalContext.COUNTRY_DEFAULT;
-countryDropDown = globalContext.COUNTRY_DROPDOWN;
+defaultCountry = OsafeAdminUtil.getProductStoreParm(request,"COUNTRY_DEFAULT");
+countryDropDown = OsafeAdminUtil.getProductStoreParm(request,"COUNTRY_DROPDOWN");
 defaultCountryGeoMap = [:];
 List countryList = FastList.newInstance();
 
@@ -18,12 +19,12 @@ if (UtilValidate.isNotEmpty(defaultCountry))
    }
  }
 
-if (OsafeAdminUtil.isProductStoreParmTrue(globalContext.COUNTRY_MULTI)) 
- {
-    if(countryDropDown.equals("All")) 
-      {
-          countryList = CommonWorkers.getCountryList(delegator);
-      }
+if(OsafeAdminUtil.isProductStoreParmTrue(request,"COUNTRY_MULTI")) 
+{
+    if(("ALL").equalsIgnoreCase(countryDropDown)) 
+    {
+		countryList = CommonWorkers.getCountryList(delegator);
+    }
     else
     {
 	  countryGeoCodeList = StringUtil.split(countryDropDown,",")
@@ -37,7 +38,7 @@ if (OsafeAdminUtil.isProductStoreParmTrue(globalContext.COUNTRY_MULTI))
           }
 	   }
      }
- }
+}
 
 if (UtilValidate.isEmpty(countryList))
  {

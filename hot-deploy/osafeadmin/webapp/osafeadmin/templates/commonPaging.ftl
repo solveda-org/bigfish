@@ -11,7 +11,7 @@
         <div class="pagingLinksBox">
           <ul class="pagingLinksBody">
                         <#if (viewIndex > 1)>
-                          <li class="pagingLinks"><a href="${request.getRequestURI()!""}<#if previousParams?has_content>?${previousParams}&<#else>?</#if>viewSize=${viewSize}&viewIndex=${viewIndex-1}">${uiLabelMap.PreviousPageLabel}</a></li>
+                          <li class="pagingLinks"><a href="<#if searchRequest?has_content><@ofbizUrl>${searchRequest!""}</@ofbizUrl><#else>${request.getRequestURI()!""}</#if><#if previousParams?has_content>?${previousParams}&<#else>?</#if>viewSize=${viewSize}&viewIndex=${viewIndex-1}">${uiLabelMap.PreviousPageLabel}</a></li>
                         </#if>
                         <#if (pagingListSize > viewSize)>
                             <li class="pagingLinksText <#if (pagingListSize > highIndex) && !(viewIndex > 1)>showpagesnext<#else>showpages</#if>">${uiLabelMap.ShowingRowsLabel} ${lowIndex} - ${highIndex} of ${pagingListSize}</li>
@@ -22,7 +22,7 @@
                         <#if !detailRequest?exists>
                         <#if ((pagingListSize &gt; viewSize) && (viewSizeMax?has_content))>
                           <#if (pagingListSize &lt; viewSizeMax)>
-                            <li class="pagingLinks"><a href="${request.getRequestURI()!""}<#if previousParams?has_content>?${previousParams}&<#else>?</#if>viewSize=${pagingListSize!}&viewIndex=${showAll!}&showPagesLink=Y"> ${uiLabelMap.ShowAllLinkLabel}</a></li>
+                            <li class="pagingLinks"><a href="<#if searchRequest?has_content><@ofbizUrl>${searchRequest!""}</@ofbizUrl><#else>${request.getRequestURI()!""}</#if><#if previousParams?has_content>?${previousParams}&<#else>?</#if>viewSize=${pagingListSize!}&viewIndex=${showAll!}&showPagesLink=Y"> ${uiLabelMap.ShowAllLinkLabel}</a></li>
                           <#else>
                             <form action="<@ofbizUrl>${confirmAction!""}</@ofbizUrl>" method="post" name="showAllForm">
                               <input type="hidden" name="showPagesLink" value="Y" />
@@ -39,7 +39,7 @@
                         </#if>
                         </#if>
                         <#if (pagingListSize > highIndex)>
-                            <li class="pagingLinks nextLink"><a href="${request.getRequestURI()!""}<#if previousParams?has_content>?${previousParams}&<#else>?</#if>viewSize=${viewSize}&viewIndex=${viewIndex+1}">${uiLabelMap.NextPageLabel}</a></li>
+                            <li class="pagingLinks nextLink"><a href="<#if searchRequest?has_content><@ofbizUrl>${searchRequest!""}</@ofbizUrl><#else>${request.getRequestURI()!""}</#if><#if previousParams?has_content>?${previousParams}&<#else>?</#if>viewSize=${viewSize}&viewIndex=${viewIndex+1}">${uiLabelMap.NextPageLabel}</a></li>
                         </#if>
           </ul>
         </div>

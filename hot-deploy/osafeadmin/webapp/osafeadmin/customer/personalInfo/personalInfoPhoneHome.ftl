@@ -18,12 +18,13 @@
     </#if>
 </#if>
 
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <#-- Displays the home phone entry -->
-<div class ="personalInfoPhoneHome">
+<div class="${request.getAttribute("attributeClass")!}">
     <div class="infoRow">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label>${uiLabelMap.HomePhoneCaption}</label>
+                <label><#if mandatory == "Y"><span class="required">*</span></#if>${uiLabelMap.HomePhoneCaption}</label>
             </div>
             <div class="infoValue">
                 <input type="hidden" name="homePhoneContactMechId" value="${telecomHomeNoContactMechId!}" />
@@ -36,6 +37,7 @@
                 <span style="display:none" class="USER_OTHER">
                     <input type="text" class="address" id="phoneHomeContactOther" name="phoneHomeContactOther" value="${parameters.phoneHomeContactOther!contactNumberHome!""}" />
                 </span>
+                <input type="hidden" id="phoneHome_mandatory" name="phoneHome_mandatory" value="${mandatory}"/>
             </div>
         </div>
     </div>

@@ -10,7 +10,7 @@
                  <#if styleFileName?has_content>
                      <div class="statusButtons">
                      <#if !styleFileName.equalsIgnoreCase(styleFile.getName())>
-                         <a href="javascript:setStyleName('${styleFile.getName()}','${cssPurpose}');" class="standardBtn secondary">${uiLabelMap.StyleMakeActiveBtn}</a>
+                         <a href="javascript:setStyleName('${styleFile.getName()}','${cssPurpose}', '${detailFormName!}');" class="standardBtn secondary">${uiLabelMap.StyleMakeActiveBtn}</a>
                      <#elseif styleFileList.size() gt 1>
                          <span class="spacer"></span>
                      </#if>

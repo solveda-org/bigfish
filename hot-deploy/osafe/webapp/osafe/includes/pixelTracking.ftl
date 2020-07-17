@@ -14,6 +14,21 @@
           <@renderContentAsText contentId="${trackingListItem.contentId}" ignoreTemplate="true"/>
         </#if>
       </#if>
+	  <#if showCartPageTagging?has_content && showCartPageTagging == "Y">
+	    <#if pixelScope == "SHOW_CART">
+	      <@renderContentAsText contentId="${trackingListItem.contentId}" ignoreTemplate="true"/>
+	    </#if>
+	  </#if>
+	  <#if (newAccountCreated?has_content && newAccountCreated =="Y") && (createAccountPageTagging?has_content && createAccountPageTagging == "Y")>
+	    <#if pixelScope == "CREATE_ACCOUNT_SUCCESS">
+	      <@renderContentAsText contentId="${trackingListItem.contentId}" ignoreTemplate="true"/>
+	    </#if>
+	  </#if>
+	  <#if emailSubscriberPageTagging?has_content && emailSubscriberPageTagging == "Y">
+	    <#if pixelScope == "SUBSCRIBE_NEWSLETTER_SUCCESS">
+	      <@renderContentAsText contentId="${trackingListItem.contentId}" ignoreTemplate="true"/>
+	    </#if>
+	  </#if>
       <#if pixelScope =="ALL">
         <@renderContentAsText contentId="${trackingListItem.contentId}" ignoreTemplate="true"/>
       </#if>
@@ -21,3 +36,4 @@
   </#list>
 </#if>
 <!-- Pixel Tracking -->
+

@@ -6,7 +6,9 @@
        <td class="idCol firstCol">${primaryProductCategory.categoryName!""}</td>
        <td class="nameCol">${productCategory.categoryName!""}</td>
        <td class="actionCol">
-           <a href="javascript:setRowNo('');javascript:deleteCategoryMemberRow('${productCategory.categoryName!""}', '${primaryProductCategory.categoryName!""}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteCategoryMemberTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
+           <#assign productCategoryName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${productCategory.categoryName!}') />
+           <#assign primaryProductCategoryName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${primaryProductCategory.categoryName!}') />
+           <a href="javascript:setRowNo('');javascript:deleteCategoryMemberRow('${productCategoryName!""}', '${primaryProductCategoryName!""}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteCategoryMemberTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
            <a href="javascript:setRowNo('');javascript:openLookup(document.${detailFormName!}.productCategoryId,document.${detailFormName!}.productCategoryName,'lookupCategory','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertCategoryBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
            <a href="javascript:setRowNo('');javascript:openLookup(document.${detailFormName!}.productCategoryId,document.${detailFormName!}.productCategoryName,'lookupCategory','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertCategoryAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>	          
            <div class="actionIconMenu">

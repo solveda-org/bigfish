@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.List;
 import java.util.Set;
 
-XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-UiLabel-xml-file"), context);
 
 String searchString = StringUtils.trimToEmpty(parameters.searchString);
 String searchByName = StringUtils.trimToEmpty(parameters.srchByName);

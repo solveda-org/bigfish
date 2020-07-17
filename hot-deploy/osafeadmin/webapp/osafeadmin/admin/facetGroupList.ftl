@@ -1,6 +1,5 @@
 
 <#-- variable setup and worker calls -->
-<#if resultList?exists && resultList?has_content><#assign topLevelList = resultList></#if>
 
 <#-- looping macro -->
 <#macro categories parentCategory category levelUrl levelValue listIndex listSize rowClass>
@@ -86,11 +85,11 @@
     <th class="dateCol">${uiLabelMap.ActiveToLabel}</th>
     <th class="actionCol">${uiLabelMap.FacetsLabel}</th>
   </tr>
-  <#if topLevelList?has_content>
+  <#if resultList?has_content>
     <#assign rowClass = "1">
     <#assign parentIdx=1/>
-    <#assign listSize=topLevelList.size()/>
-    <#list topLevelList as category>
+    <#assign listSize=resultList.size()/>
+    <#list resultList as category>
       <@categories parentCategory="" category=category levelUrl="categoryDetail" levelValue="1" listIndex=parentIdx listSize=listSize rowClass=rowClass/>
       <#assign parentIdx= parentIdx + 1/>
       <#-- toggle the row color -->
@@ -101,5 +100,5 @@
       </#if>
     </#list>
   <#else>
-   <tr><td class="boxNumber" colspan="5">${uiLabelMap.NoMatchingDataInfo}</td></tr>
+     ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoResult")}
   </#if>

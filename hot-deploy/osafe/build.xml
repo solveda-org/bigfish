@@ -68,6 +68,64 @@
         </java>
        </sequential>
      </macrodef>
+
+    <path id="runtime.class.path">
+        <fileset dir="${build.dir}/lib" includes="*.jar"/>
+    </path>
+
+    <macrodef name="mergeFile" description="add/remove the nodes from second file with comare of first file">
+      <attribute name="fromFilePath"/>
+      <attribute name="toFilePath"/>
+      <attribute name="keyValues"/>
+      <attribute name="fileType"/>
+      <attribute name="preserveExtra"/>
+      <sequential>
+            <echo message="mergeFiles @{fromFilePath}  @{toFilePath}"/>
+          <java classname="com.osafe.services.OsafeManageMerge" fork="true">
+            <arg value="@{fromFilePath}"/>
+            <arg value="@{toFilePath}"/>
+            <arg value="@{keyValues}"/>
+            <arg value="@{fileType}"/>
+          	<arg value="@{preserveExtra}"/>
+            <classpath>
+                <path refid="runtime.class.path"/>
+                <path refid="local.class.path"/>
+            </classpath> 
+          </java>
+       </sequential>
+     </macrodef>
+
+    <target name="run-bigfish-merge">
+        <property name="osafe.deployemt.home" value="../../osafe_deployment"></property>
+        <property name="osafe.home" value="../../hot-deploy/osafe"></property>
+
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeUiLabels.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiLabels.xml" keyValues="key" fileType="XML" preserveExtra="false"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeUiSequence.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiSequence.xml" keyValues="key" fileType="XML" preserveExtra="false"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_recurrence.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_recurrence.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_clickatell.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_clickatell.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_pinnacle.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_pinnacle.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_email_styles.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_email_styles.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeProperties.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template" keyValues="key" fileType="XML" preserveExtra="false"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_clientDeployment.properties" toFilePath="${osafe.deployemt.home}/client-deployment.properties" keyValues="key" fileType="PROPERTIES" preserveExtra="false"/>
+
+        <antcall target="osafe-deployment" inheritall="true"/>
+    </target>
+
+    <macrodef name="createToFile">
+        <attribute name="file"/>
+        <attribute name="toFile"/>
+        <sequential>
+            <java classname="com.osafe.services.OsafeManageMerge" fork="true">
+              <arg value="@{file}"/>
+              <arg value="@{toFile}"/>
+              <classpath>
+                  <path refid="runtime.class.path"/>
+                  <path refid="local.class.path"/>
+              </classpath> 
+            </java>
+         </sequential>
+    </macrodef>
+
     <!-- ================================================================= -->
     <!-- Osafe Clean                                                       -->
     <!-- ================================================================= -->
@@ -90,10 +148,34 @@
         <echo message="[osafe-deployment] ========== Start Deploying OSafe Files (Deploy) =========="/>
 
         <property name="osafe.deployemt.home" value="../../osafe_deployment"></property>
+        <property name="osafe.home" value="../../hot-deploy/osafe"></property>
+        <property name="osafe.theme.home" value="../../themes/osafe_theme"></property>
+
+        <antcall target="jar"></antcall>
+
+        <!-- Create osafe ui label if not exist -->
+        <createToFile file="${osafe.home}/data/version/version_OsafeUiLabels.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeUiLabels.xml"/>
+        <!-- Create osafe ui sequence if not exist -->
+        <createToFile file="${osafe.home}/data/version/version_OsafeUiSequence.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeUiSequence.xml"/>
+        <!-- Create Parameters Recurrence if not exist -->
+        <createToFile file="${osafe.home}/data/version/version_parameters_recurrence.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_recurrence.xml"/>
+        <!-- Create Parameters Clickatell if not exist -->
+        <createToFile file="${osafe.home}/data/version/version_parameters_clickatell.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_clickatell.xml"/>
+        <!-- Create Parameters Pinnacle if not exist -->
+        <createToFile file="${osafe.home}/data/version/version_parameters_pinnacle.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_pinnacle.xml"/>
+        <!-- Create Parameters email if not exist -->
+        <createToFile file="${osafe.home}/data/version/version_parameters_email_styles.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_email_styles.xml"/>
+        <!-- Create osafe properties if not exist -->
+        <createToFile file="${osafe.home}/data/version/version_OsafeProperties.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template"/>
+        <!-- Create client Deployment properties if not exist -->
+        <createToFile file="${osafe.home}/data/version/version_clientDeployment.properties" tofile="${osafe.deployemt.home}/client-deployment.properties"/>
 
         <!-- Load client specific property values -->
         <property file="${osafe.deployemt.home}/client-deployment.properties"></property>
         <copy file="${osafe.deployemt.home}/client-deployment.properties" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/client-deployment.properties"/>
+
+        <!-- copy the version paypal service to deployment-->
+        <copy file="../../hot-deploy/osafe/data/version/version_PayPalServices.java" tofile="${osafe.deployemt.home}/ofbiz/applications/accounting/src/org/ofbiz/accounting/thirdparty/paypal/PayPalServices.java" overwrite="true"/>
 
     	<!-- paypal jar -->
         <!-- Copy any client specific osafe files over existing files -->
@@ -104,6 +186,9 @@
             </fileset>
         </copy>
       <!-- Startup batch-->
+
+            	
+        <copy file="../../hot-deploy/osafe/data/version/version_startofbiz.bat" tofile="${osafe.deployemt.home}/ofbiz/startofbiz.bat.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/startofbiz.bat.template" tofile="${osafe.deployemt.home}/ofbiz/startofbiz.bat">
             <filterset>
               <filter token="ofbiz.home" value="${ofbiz.home.dir}"/>
@@ -114,12 +199,15 @@
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/startofbiz.bat" todir="../../" overwrite="true" failonerror="false"/>
+
         <!-- eecas.xml template-->
-          <copy file="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml.template" tofile="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml">
-          </copy>
-          <move file="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml" todir="../../applications/product/entitydef" overwrite="true" failonerror="false"/>
+        <copy file="../../hot-deploy/osafe/data/version/version_eecas.xml" tofile="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml.template"></copy>
+        <copy file="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml.template" tofile="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml">
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml" todir="../../applications/product/entitydef" overwrite="true" failonerror="false"/>
 
         <!-- Startup sh -->
+        <copy file="../../hot-deploy/osafe/data/version/version_startofbiz.sh" tofile="${osafe.deployemt.home}/ofbiz/startofbizsh.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/startofbizsh.template" tofile="${osafe.deployemt.home}/ofbiz/startofbiz.sh">
             <filterset>
               <filter token="ofbiz.home" value="${ofbiz.home.dir}"/>
@@ -132,6 +220,7 @@
         <move file="${osafe.deployemt.home}/ofbiz/startofbiz.sh" todir="../../" overwrite="true" failonerror="false"/>
 
         <!-- Server Ports  -->
+        <copy file="../../hot-deploy/osafe/data/version/version_ofbiz-containers.xml" tofile="${osafe.deployemt.home}/ofbiz/framework/base/config/ofbiz-containers.xml.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/framework/base/config/ofbiz-containers.xml.template" tofile="${osafe.deployemt.home}/ofbiz/framework/base/config/ofbiz-containers.xml">
             <filterset >
               <filter token="port.jndi" value="${port.jndi}"/>
@@ -144,10 +233,12 @@
         <move file="${osafe.deployemt.home}/ofbiz/framework/base/config/ofbiz-containers.xml" todir="../../framework/base/config" overwrite="true" failonerror="false"/>
 
         <!-- component-load.xml template-->
-          <copy file="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml.template" tofile="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml">
-          </copy>
-          <move file="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml" todir="../../framework/base/config" overwrite="true" failonerror="false"/>
+        <copy file="../../hot-deploy/osafe/data/version/version_component-load.xml" tofile="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml.template"></copy>
+        <copy file="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml.template" tofile="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml">
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml" todir="../../framework/base/config" overwrite="true" failonerror="false"/>
 
+        <copy file="../../hot-deploy/osafe/data/version/version_url.properties" tofile="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties.template" tofile="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties">
             <filterset >
               <filter token="url.port.https" value="${url.port.https}"/>
@@ -159,6 +250,7 @@
         <move file="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties" todir="../../framework/webapp/config" overwrite="true" failonerror="false"/>
 
         <!-- Osafe Seed Data -->
+        <copy file="../../hot-deploy/osafe/data/version/version_clientStoreSeedData.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/clientStoreSeedData.xml.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/clientStoreSeedData.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/clientStoreSeedData.xml">
             <filterset >
               <filter token="store.storePrefix" value="${store.storePrefix}"/>
@@ -175,7 +267,26 @@
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/clientStoreSeedData.xml" todir="../../hot-deploy/osafe/data/seed" overwrite="true" failonerror="false"/>
 
+        <!-- Gift Card Payment Settings -->
+        <copy file="../../hot-deploy/osafe/data/version/version_giftCardPaymentSettings.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/ecommerceGiftCardPaymentSettings.xml.template"></copy>
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/ecommerceGiftCardPaymentSettings.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/ecommerceGiftCardPaymentSettings.xml">
+            <filterset >
+              <filter token="store.storePrefix" value="${store.storePrefix}"/>
+              <filter token="store.webSiteId" value="${store.webSiteId}"/>
+              <filter token="store.productStoreId" value="${store.productStoreId}"/>
+              <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
+              <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
+              <filter token="ofbiz.locale.default" value="${ofbiz.locale.default}"/>
+              <filter token="url.port.https" value="${url.port.https}"/>
+              <filter token="url.port.http" value="${url.port.http}"/>
+              <filter token="url.https.host" value="${url.https.host}"/>
+              <filter token="url.http.host" value="${url.http.host}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/ecommerceGiftCardPaymentSettings.xml" todir="../../hot-deploy/osafe/data/seed" overwrite="true" failonerror="false"/>
+
         <!-- BIGFISH Parameters -->
+        <copy file="../../hot-deploy/osafe/data/version/version_bigFishParameters.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml">
             <filterset >
               <filter token="store.storePrefix" value="${store.storePrefix}"/>
@@ -188,6 +299,7 @@
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml" todir="../../hot-deploy/osafe/data" overwrite="true" failonerror="false"/>
     	
     	<!-- BIGFISH Content Menu -->
+        <copy file="../../hot-deploy/osafe/data/version/version_bigFishContentMenu.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishContentMenu.xml.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishContentMenu.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishContentMenu.xml">
             <filterset >
               <filter token="store.storePrefix" value="${store.storePrefix}"/>
@@ -200,6 +312,7 @@
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishContentMenu.xml" todir="../../hot-deploy/osafe/data/seed/" overwrite="true" failonerror="false"/>
     	
     	<!-- BIGFISH Extended Store -->
+        <copy file="../../hot-deploy/osafe/data/version/version_bigFishExtendedStore.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishExtendedStore.xml.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishExtendedStore.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishExtendedStore.xml">
             <filterset >
               <filter token="store.storePrefix" value="${store.storePrefix}"/>
@@ -217,7 +330,17 @@
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishExtendedStore.xml" todir="../../hot-deploy/osafe/data" overwrite="true" failonerror="false"/>
 
+    	<!-- Osafe Seed Shipping Method -->
+    	<copy file="../../hot-deploy/osafe/data/version/version_ecommerceSeedShippingMethods.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/ecommerceSeedShippingMethods.xml.template"></copy>
+    	<copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/ecommerceSeedShippingMethods.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/ecommerceSeedShippingMethods.xml">
+            <filterset >
+              <filter token="store.productStoreId" value="${store.productStoreId}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/ecommerceSeedShippingMethods.xml" todir="../../hot-deploy/osafe/data/seed" overwrite="true" failonerror="false"/>
+
     	<!-- BIGFISH Schedulers -->
+        <copy file="../../hot-deploy/osafe/data/version/version_bigFishScheduledJobs.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/eCommerceBigfishScheduledJobs.xml.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/eCommerceBigfishScheduledJobs.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/eCommerceBigfishScheduledJobs.xml">
             <filterset >
               <filter token="store.productStoreId" value="${store.productStoreId}"/>
@@ -227,24 +350,29 @@
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/eCommerceBigfishScheduledJobs.xml" todir="../../hot-deploy/osafe/data" overwrite="true" failonerror="false"/>
 
     	<!-- Osafe Properties -->
-        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/osafe.properties.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/osafe.properties">
+    	<copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml">
             <filterset >
               <filter token="solr.search.server" value="${solr.search.server}"/>
               <filter token="solr.search.port" value="${solr.search.port}"/>
               <filter token="solr.index.server" value="${solr.index.server}"/>
               <filter token="solr.index.port" value="${solr.index.port}"/>
               <filter token="localDispatcherName" value="${localDispatcherName}"/>
-			  <filter token="product.images.path" value="${product.images.path}"/>
+              <filter token="product.images.path" value="${product.images.path}"/>
               <filter token="productCategory.images.path" value="${productCategory.images.path}"/>
               <filter token="productFeature.images.path" value="${productFeature.images.path}"/>
-  			  <filter token="manufacturer.images.path" value="${manufacturer.images.path}"/>
-    		  <filter token="url.catalog.prefix" value="${url.catalog.prefix}"/>
+              <filter token="manufacturer.images.path" value="${manufacturer.images.path}"/>
+              <filter token="url.catalog.prefix" value="${url.catalog.prefix}"/>
               <filter token="goodIdentificationTypes" value="${goodIdentificationTypes}"/>
+              <filter token="store.storePrefix" value="${store.storePrefix}"/>
+              <filter token="store.webSiteId" value="${store.webSiteId}"/>
+              <filter token="store.productStoreId" value="${store.productStoreId}"/>
+              <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
             </filterset>
         </copy>
-        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/osafe.properties" todir="../../hot-deploy/osafe/config" overwrite="true" failonerror="false"/>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml" todir="../../hot-deploy/osafe/config" overwrite="true" failonerror="false"/>
 
         <!-- Osafe web.xml -->
+        <copy file="../../hot-deploy/osafe/data/version/version_web.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml">
             <filterset >
               <filter token="store.webSiteId" value="${store.webSiteId}"/>
@@ -265,6 +393,7 @@
 
 
         <!-- Entity Engine -->
+        <copy file="../../hot-deploy/osafe/data/version/version_entityEngine.xml" tofile="${osafe.deployemt.home}/ofbiz/framework/entity/config/entityengine.xml.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/framework/entity/config/entityengine.xml.template"
               tofile="${osafe.deployemt.home}/ofbiz/framework/entity/config/entityengine.xml">
             <filterset>
@@ -280,6 +409,7 @@
         <move file="${osafe.deployemt.home}/ofbiz/framework/entity/config/entityengine.xml" todir="../../framework/entity/config" overwrite="true" failonerror="false"/>
 
         <!-- General Properties -->
+        <copy file="../../hot-deploy/osafe/data/version/version_general.properties" tofile="${osafe.deployemt.home}/ofbiz/framework/common/config/general.properties.template"></copy>
          <copy file="${osafe.deployemt.home}/ofbiz/framework/common/config/general.properties.template"
                tofile="${osafe.deployemt.home}/ofbiz/framework/common/config/general.properties">
              <filterset>
@@ -296,17 +426,20 @@
          <move file="${osafe.deployemt.home}/ofbiz/framework/common/config/general.properties" todir="../../framework/common/config" overwrite="true" failonerror="false"/>
 
         <!-- Security Properties -->
+        <copy file="../../hot-deploy/osafe/data/version/version_security.properties" tofile="${osafe.deployemt.home}/ofbiz/framework/security/config/security.properties.template"></copy>
          <copy file="${osafe.deployemt.home}/ofbiz/framework/security/config/security.properties.template"
                tofile="${osafe.deployemt.home}/ofbiz/framework/security/config/security.properties">
              <filterset>
-               <filter token="username.lowercase" value="${username.lowercase}"/>
-               <filter token="password.lowercase" value="${password.lowercase}"/>
-               <filter token="password.encrypt" value="${password.encrypt}"/>
+             	<filter token="password.length.min" value="${password.length.min}"/>
+             	<filter token="username.lowercase" value="${username.lowercase}"/>
+            	<filter token="password.lowercase" value="${password.lowercase}"/>
+             	<filter token="password.encrypt" value="${password.encrypt}"/>
              </filterset>
          </copy>
          <move file="${osafe.deployemt.home}/ofbiz/framework/security/config/security.properties" todir="../../framework/security/config" overwrite="true" failonerror="false"/>
     	
          <!-- widget Properties -->
+        <copy file="../../hot-deploy/osafe/data/version/version_widget.properties" tofile="${osafe.deployemt.home}/ofbiz/framework/widget/config/widget.properties.template"></copy>
          <copy file="${osafe.deployemt.home}/ofbiz/framework/widget/config/widget.properties.template"
                 tofile="${osafe.deployemt.home}/ofbiz/framework/widget/config/widget.properties">
              <filterset>
@@ -319,6 +452,7 @@
          <copy file="${osafe.deployemt.home}/ofbiz/applications/accounting/ofbiz-component.xml" todir="../../applications/accounting" overwrite="true" failonerror="false"/>
     	
         <!-- Shipment Properties -->
+        <copy file="../../hot-deploy/osafe/data/version/version_shipment.properties" tofile="${osafe.deployemt.home}/ofbiz/applications/product/config/shipment.properties.template"></copy>
          <copy file="${osafe.deployemt.home}/ofbiz/applications/product/config/shipment.properties.template"
                tofile="${osafe.deployemt.home}/ofbiz/applications/product/config/shipment.properties">
              <filterset>
@@ -328,6 +462,7 @@
          <move file="${osafe.deployemt.home}/ofbiz/applications/product/config/shipment.properties" todir="../../applications/product/config" overwrite="true" failonerror="false"/>
 
 		<!-- ProdSearch Properties -->
+        <copy file="../../hot-deploy/osafe/data/version/version_prodsearch.properties" tofile="${osafe.deployemt.home}/ofbiz/applications/product/config/prodsearch.properties.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/applications/product/config/prodsearch.properties.template"
             tofile="${osafe.deployemt.home}/ofbiz/applications/product/config/prodsearch.properties">
             <filterset>
@@ -337,6 +472,7 @@
         <move file="${osafe.deployemt.home}/ofbiz/applications/product/config/prodsearch.properties" todir="../../applications/product/config" overwrite="true" failonerror="false"/>
     		 
         <!-- Windows Install Service -->
+        <copy file="../../hot-deploy/osafe/data/version/version_installOsafeService.bat" tofile="${osafe.deployemt.home}/ofbiz/JavaService/Install_Osafe_Service.bat.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/JavaService/Install_Osafe_Service.bat.template"
               tofile="${osafe.deployemt.home}/ofbiz/JavaService/Install_Osafe_Service.bat">
             <filterset>
@@ -349,6 +485,7 @@
         <move file="${osafe.deployemt.home}/ofbiz/JavaService/Install_Osafe_Service.bat" todir="../../JavaService" overwrite="true" failonerror="false"/>
 
         <!-- Windows Uninstall Service -->
+        <copy file="../../hot-deploy/osafe/data/version/version_uninstallOsafeService.bat" tofile="${osafe.deployemt.home}/ofbiz/JavaService/Uninstall_Osafe_Service.bat.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/JavaService/Uninstall_Osafe_Service.bat.template"
               tofile="${osafe.deployemt.home}/ofbiz/JavaService/Uninstall_Osafe_Service.bat">
             <filterset>
@@ -356,7 +493,12 @@
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/JavaService/Uninstall_Osafe_Service.bat" todir="../../JavaService" overwrite="true" failonerror="false"/>
-
+    	
+    	<!-- fop config -->
+    	<copy file="../../hot-deploy/osafe/data/version/version_fop.xconf" tofile="${osafe.deployemt.home}/ofbiz/framework/webapp/config/fop.xconf.template"></copy>
+    	<copy file="${osafe.deployemt.home}/ofbiz/framework/webapp/config/fop.xconf.template" tofile="${osafe.deployemt.home}/ofbiz/framework/webapp/config/fop.xconf"></copy>
+    	<move file="${osafe.deployemt.home}/ofbiz/framework/webapp/config/fop.xconf" todir="../../framework/webapp/config" overwrite="true" failonerror="false"/>
+    	
         <!-- Copy client JDBC Jars -->
         <copy todir="../../framework/entity/lib/jdbc" failonerror="true" overwrite="true">
             <fileset dir="${osafe.deployemt.home}/ofbiz/framework/entity/lib/jdbc" >
@@ -384,6 +526,7 @@
         </copy>
         
 		<!-- Osafe OsafeThemeData.xml -->
+        <copy file="../../hot-deploy/osafe/data/version/version_OsafeThemeData.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/OsafeThemeData.xml.template"></copy>
 		<copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/OsafeThemeData.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/OsafeThemeData.xml">
             <filterset >
                 <filter token="fav-icon" value="${fav-icon}"/>
@@ -391,6 +534,7 @@
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/OsafeThemeData.xml" todir="../../themes/osafe_theme/data" overwrite="true" failonerror="false"/>
         <!-- Start properties-->
+        <copy file="../../hot-deploy/osafe/data/version/version_start.properties" tofile="${osafe.deployemt.home}/ofbiz/framework/start/src/org/ofbiz/base/start/start.properties.template"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/framework/start/src/org/ofbiz/base/start/start.properties.template" tofile="${osafe.deployemt.home}/ofbiz/framework/start/src/org/ofbiz/base/start/start.properties">
             <filterset>
             	<filter token="ofbiz.locale.default" value="${ofbiz.locale.default}"/>
@@ -399,7 +543,15 @@
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/framework/start/src/org/ofbiz/base/start/start.properties" todir="../../framework/start/src/org/ofbiz/base/start/" overwrite="true" failonerror="false"/>
-  
+
+        <!-- Osafe bigFishClientSkin.css -->
+        <copy file="${osafe.home}/data/version/version_bigFishClientSkin_SEED.css" tofile="${osafe.deployemt.home}/ofbiz/themes/osafe_theme/webapp/osafe_theme/css/bigFishClientSkin_SEED.css"></copy>
+        <move file="${osafe.deployemt.home}/ofbiz/themes/osafe_theme/webapp/osafe_theme/css/bigFishClientSkin_SEED.css" todir="${osafe.theme.home}/webapp/osafe_theme/css" overwrite="true" failonerror="false"/>
+
+        <!-- Osafe bigFishRwdAdjustments.css -->
+        <copy file="${osafe.home}/data/version/version_bigFishRwdAdjustments_SEED.css" tofile="${osafe.deployemt.home}/ofbiz/themes/osafe_theme/webapp/osafe_theme/css/bigFishRwdAdjustments_SEED.css"></copy>
+        <move file="${osafe.deployemt.home}/ofbiz/themes/osafe_theme/webapp/osafe_theme/css/bigFishRwdAdjustments_SEED.css" todir="${osafe.theme.home}/webapp/osafe_theme/css" overwrite="true" failonerror="false"/>
+
         <!-- Call original default target -->
         <antcall target="jar"></antcall>
 

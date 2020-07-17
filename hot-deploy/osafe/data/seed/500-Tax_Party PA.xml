@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <Party partyId="PA_DTF" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="PA_DTF" groupName="Pennsylvania Department of Taxation and Finance"/>
+    <ContactMech contactMechId="PA_DTF" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="PA_DTF" toName="PA Sales Tax Processing" address1="1 Billing Street" address2="" city="Mainsville" stateProvinceGeoId="PA" postalCode="17257" countryGeoId="USA"/>
+    <PartyContactMech partyId="PA_DTF" contactMechId="PA_DTF" fromDate="2000-01-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="PA_DTF" contactMechId="PA_DTF" contactMechPurposeTypeId="PAYMENT_LOCATION" fromDate="2000-01-01 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="PA_DTF" contactMechId="PA_DTF" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2000-01-01 00:00:00.000"/>
+    <PartyRole partyId="PA_DTF" roleTypeId="TAX_AUTHORITY"/>
+
+    <Party partyId="PHILADELPHIA_DTF" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="PHILADELPHIA_DTF" groupName="Philadelphia Department of Taxation and Finance"/>
+    <ContactMech contactMechId="PHILADELPHIA_DTF" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="PHILADELPHIA_DTF" toName="Philadelphia Sales Tax Processing" address1="1 Billing Street" address2="" city="Mainsville" stateProvinceGeoId="PA" postalCode="17257" countryGeoId="USA"/>
+    <PartyContactMech partyId="PHILADELPHIA_DTF" contactMechId="PHILADELPHIA_DTF" fromDate="2000-01-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="PHILADELPHIA_DTF" contactMechId="PHILADELPHIA_DTF" contactMechPurposeTypeId="PAYMENT_LOCATION" fromDate="2000-01-01 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="PHILADELPHIA_DTF" contactMechId="PHILADELPHIA_DTF" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2000-01-01 00:00:00.000"/>
+    <PartyRole partyId="PHILADELPHIA_DTF" roleTypeId="TAX_AUTHORITY"/>
+
+
+
+</entity-engine-xml>
+    

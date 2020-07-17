@@ -20,6 +20,7 @@
 package com.osafe.services;
 
 import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +42,7 @@ import org.ofbiz.service.ServiceUtil;
 import com.osafe.util.OsafeAdminUtil;
 import java.math.BigDecimal;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.MessageString;
 
 public class OsafeAdminPricingServices {
     public static final String module = OsafeAdminUtil.class.getName();
@@ -119,7 +121,7 @@ public class OsafeAdminPricingServices {
                 boolean isValidFromQty, isValidToQty, isValidPrice, isValidToQtyValue;
                 isValidFromQty = isValidToQty = isValidPrice = isValidToQtyValue= true;
                 int lastRowKey = keyList.size();
-                List<String> error_list = new ArrayList<String>();
+                List<MessageString> error_list = new ArrayList<MessageString>();
                 
                 //This will validate each row of the volume price structure 
                 for (String rowKey: keyList) {
@@ -174,29 +176,49 @@ public class OsafeAdminPricingServices {
                         }
                     }
                 }
+                
+                MessageString tmp = null;
+                
                 if(isBlankFromQty == true){
-                    error_list.add(UtilProperties.getMessage(resource, "BlankFromQtyError", locale));
+                	
+                    //error_list.add(UtilProperties.getMessage(resource, "BlankFromQtyError", locale));
+                	tmp = new MessageString(UtilProperties.getMessage(resource, "BlankFromQtyError", locale),"fromQty",true);
+                	error_list.add(tmp);
                 }
                 if(isValidFromQty == false) {
-                    error_list.add(UtilProperties.getMessage(resource, "ValidFromQtyError", locale));
+                  //  error_list.add(UtilProperties.getMessage(resource, "ValidFromQtyError", locale));
+                	tmp = new MessageString(UtilProperties.getMessage(resource, "ValidFromQtyError", locale),"fromQty",true);
+                	error_list.add(tmp);
                 }
                 if(isBlankToQty == true){
-                    error_list.add(UtilProperties.getMessage(resource, "BlankToQtyError", locale));
+                    //error_list.add(UtilProperties.getMessage(resource, "BlankToQtyError", locale));
+                	tmp = new MessageString(UtilProperties.getMessage(resource, "BlankToQtyError", locale),"toQty",true);
+                	error_list.add(tmp);
                 }
                 if(isValidToQty == false) {
-                    error_list.add(UtilProperties.getMessage(resource, "ValidToQtyError", locale));
+                    //error_list.add(UtilProperties.getMessage(resource, "ValidToQtyError", locale));
+                	tmp = new MessageString(UtilProperties.getMessage(resource, "ValidToQtyError", locale),"toQty",true);
+                	error_list.add(tmp);
                 }
                 if(isBlankPrice == true){
-                    error_list.add(UtilProperties.getMessage(resource, "BlankPriceError", locale));
+                    //error_list.add(UtilProperties.getMessage(resource, "BlankPriceError", locale));
+                	tmp = new MessageString(UtilProperties.getMessage(resource, "BlankPriceError", locale),"price",true);
+                	error_list.add(tmp);
                 }
                 if(isValidPrice == false) {
-                    error_list.add(UtilProperties.getMessage(resource, "ValidPriceError", locale));
+                    //error_list.add(UtilProperties.getMessage(resource, "ValidPriceError", locale));
+                	tmp = new MessageString(UtilProperties.getMessage(resource, "ValidPriceError", locale),"price",true);
+                	error_list.add(tmp);
                 }
                 if(isValidToQtyValue == false){
-                    error_list.add(UtilProperties.getMessage(resource, "ValidToQtyValueError", locale));
+                    //error_list.add(UtilProperties.getMessage(resource, "ValidToQtyValueError", locale));
+                	tmp = new MessageString(UtilProperties.getMessage(resource, "ValidToQtyValueError", locale),"toQty",true);
+                	error_list.add(tmp);
                 }
                 if(isGap == true){
-                    error_list.add(UtilProperties.getMessage(resource, "VolumePricingGapError", locale));
+                    //error_list.add(UtilProperties.getMessage(resource, "VolumePricingGapError", locale));
+                	tmp = new MessageString(UtilProperties.getMessage(resource, "VolumePricingGapError", locale),"fromQty",true);
+                	error_list.add(tmp);
                 }
                 if(error_list.size() > 0) {
                     return ServiceUtil.returnError(error_list);

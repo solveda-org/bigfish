@@ -11,7 +11,7 @@
     <th class="tooltipCol lastCol"></th>
   </tr>
 </thead>
-  <#if resultList?exists && resultList?has_content>
+<#if resultList?exists && resultList?has_content>
     <#assign rowClass = "1"/>
     <#list resultList as partyRow>
       <#assign partyGroup = delegator.findOne("PartyGroup", {"partyId": partyRow.partyId}, false)/>
@@ -29,30 +29,39 @@
             ${uiLabelMap.StoreLocationClosedInfo}
           </#if>
         </td>
-        <#assign partyCity=""/>
-        <#assign partyState=""/>
-        <#assign partyZip=""/>
+        <#assign postalAddress=""/>
         <#assign partyContactMechValueMaps = Static["org.ofbiz.party.contact.ContactMechWorker"].getPartyContactMechValueMaps(delegator, partyRow.partyId, false)!""/>
         <#if partyContactMechValueMaps?has_content>
           <#list partyContactMechValueMaps as partyContactMechValueMap>
             <#assign contactMechPurposes = partyContactMechValueMap.partyContactMechPurposes/>
             <#list contactMechPurposes as contactMechPurpose>
               <#if contactMechPurpose.contactMechPurposeTypeId=="GENERAL_LOCATION">
-                <#assign partyPostalAddressContactMech = partyContactMechValueMap.postalAddress/>
-                <#assign partyCity=partyPostalAddressContactMech.city!""/>
-                <#assign partyState=partyPostalAddressContactMech.stateProvinceGeoId!""/>
-                <#assign partyAddress3=partyPostalAddressContactMech.address3!""/>
-                <#if !partyState?has_content>
-                    <#assign partyState=partyAddress3!""/>
-                </#if>
-                <#assign partyZip=partyPostalAddressContactMech.postalCode!""/>
+                <#assign postalAddress = partyContactMechValueMap.postalAddress/>
               </#if>
             </#list>
           </#list>
         </#if>
-        <td class="cityCol <#if !partyRow_has_next>lastRow</#if>">${partyCity!""}</td>
-        <td class="stateCol <#if !partyRow_has_next>lastRow</#if>">${partyState!""}</td>
-        <td class="zipCol <#if !partyRow_has_next>lastRow</#if>">${partyZip!""}</td>
+        <td class="cityCol <#if !partyRow_has_next>lastRow</#if>">
+          <#if postalAddress?has_content>
+              ${setRequestAttribute("PostalAddress",postalAddress)}
+              ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_CITY")}
+              ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddress")}
+          </#if>
+        </td>
+        <td class="stateCol <#if !partyRow_has_next>lastRow</#if>">
+          <#if postalAddress?has_content>
+              ${setRequestAttribute("PostalAddress",postalAddress)}
+              ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_STATE")}
+              ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddress")}
+          </#if>
+        </td>
+        <td class="zipCol <#if !partyRow_has_next>lastRow</#if>">
+          <#if postalAddress?has_content>
+              ${setRequestAttribute("PostalAddress",postalAddress)}
+              ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_ZIP")}
+              ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddress")}
+          </#if>
+        </td>
         <td class="geoCol <#if !partyRow_has_next>lastRow</#if>">
           <#assign partyGeoPointList = delegator.findByAnd("PartyGeoPoint", {"partyId": partyRow.partyId}) />
           <#if partyGeoPointList?has_content>
@@ -107,5 +116,5 @@
         <#assign rowClass = "2"/>
       </#if>
     </#list>
-  </#if>
+</#if>
 <!-- end listBox -->

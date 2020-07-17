@@ -8,15 +8,16 @@
       <#assign USER_GENDER = partyAttribute.attrValue!"">
     </#if>
 </#if>
-
-<div class ="personalInfoGender">
-     <div class="entry">
-      <label for="USER_GENDER"><@required/>${uiLabelMap.GenderCaption}</label>
-      <select name="USER_GENDER" id="USER_GENDER">
-        <option value="">${uiLabelMap.SelectOneLabel}</option>
-        <option value="M" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "M") || (USER_GENDER?exists && USER_GENDER == "M"))>selected</#if>>${uiLabelMap.GenderMale}</option>
-        <option value="F" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "F") || (USER_GENDER?exists && USER_GENDER == "F"))>selected</#if>>${uiLabelMap.GenderFemale}</option>
-      </select>
-      <@fieldErrors fieldName="USER_GENDER"/>
-    </div>
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
+      <label for="USER_GENDER"><#if mandatory == "Y"><@required/></#if>${uiLabelMap.GenderCaption}</label>
+      <div class="entryField">
+	      <select name="USER_GENDER" id="USER_GENDER">
+	        <option value="">${uiLabelMap.SelectOneLabel}</option>
+	        <option value="M" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "M") || (USER_GENDER?exists && USER_GENDER == "M"))>selected</#if>>${uiLabelMap.GenderMale}</option>
+	        <option value="F" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "F") || (USER_GENDER?exists && USER_GENDER == "F"))>selected</#if>>${uiLabelMap.GenderFemale}</option>
+	      </select>
+	      <input type="hidden" name="USER_GENDER_MANDATORY" value="${mandatory}"/>
+	      <@fieldErrors fieldName="USER_GENDER"/>
+      </div>
 </div>

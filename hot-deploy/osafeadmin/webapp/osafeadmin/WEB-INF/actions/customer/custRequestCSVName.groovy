@@ -34,6 +34,6 @@ else
 }
 if (UtilValidate.isNotEmpty(custRequestName)) 
 {
-	custRequestName = custRequestName+(OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(), "yyyy-MM-dd-HH:mm"));
-    response.setHeader("Content-Disposition","attachment; filename=\"" + UtilValidate.stripWhitespace(custRequestName) + ".csv" + "\";");
+	custRequestName = custRequestName+(OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(), "yyyy-MM-dd HH:mm:ss"));
+    response.setHeader("Content-Disposition","attachment; filename=\"" + custRequestName + ".csv" + "\";");
 }

@@ -14,13 +14,25 @@ import com.osafe.util.Util;
 import com.osafe.geo.OsafeGeo;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.base.util.Debug;
 
-address = StringUtils.trimToEmpty(parameters.address);
-latitude = StringUtils.trimToEmpty(parameters.latitude);
-longitude = StringUtils.trimToEmpty(parameters.longitude);
-showMap = StringUtils.trimToEmpty(parameters.showMap);
+address = parameters.address;
+latitude = parameters.latitude;
+longitude = parameters.longitude;
+parameters.latitude = "";
+parameters.longitude = "";
+showMap = parameters.showMap;
 searchOsafeGeo = "";
 context.searchedAddress = address;
+
+notFoundAddress = Util.getProductStoreParm(request,"GMAP_NOT_FOUND_ADDRESS");
+isStoreNotFoundAddress = parameters.isStoreNotFoundAddress;
+
+if (UtilValidate.isNotEmpty(isStoreNotFoundAddress) && "Y".equals(isStoreNotFoundAddress))
+{
+	address = notFoundAddress;
+}
+
 storePartyList = FastList.newInstance();
 session = context.session;
 
@@ -68,9 +80,9 @@ else
 {
 	if(UtilValidate.isNotEmpty(showMap) && "Y".equals(showMap)) 
 	{
-		storeList = delegator.findList("ProductStoreRole", EntityCondition.makeCondition([roleTypeId : "STORE_LOCATION"]), null, null, null, false);
+		storeList = delegator.findList("ProductStoreRole", EntityCondition.makeCondition([roleTypeId : "STORE_LOCATION"]), null, null, null, true);
 		storeListIds = EntityUtil.getFieldListFromEntityList(storeList, "partyId", true);
-		storePartyList = delegator.findList("PartyRoleAndPartyDetail", EntityCondition.makeCondition("partyId", EntityOperator.IN, storeListIds), null, null, null, false);
+		storePartyList = delegator.findList("PartyRoleAndPartyDetail", EntityCondition.makeCondition("partyId", EntityOperator.IN, storeListIds), null, null, null, true);
 	    storePartyList = EntityUtil.filterByAnd(storePartyList, UtilMisc.toMap("statusId","PARTY_ENABLED"));
 	 	searchOsafeGeo = new OsafeGeo(latitude, longitude);
 	}
@@ -233,7 +245,6 @@ if(UtilValidate.isNotEmpty(storePartyList))
                     	storeTelephoneLocation = EntityUtil.getFirst(storeTelephoneLocations);
                     	storePhone = storeTelephoneLocation.getRelatedOneCache("TelecomNumber");
                         context.storePhone =storePhone;
-                        partyTelecomNumberContactMech = storePhone.telecomNumber;
                         areaCode = storePhone.areaCode;
                         contactNumber = storePhone.contactNumber;
                         if (contactNumber.length() >= 7) 
@@ -314,13 +325,13 @@ if(UtilValidate.isNotEmpty(storePartyList))
                         distance = distance+" "+uom;
                     }
 
-                    partyDetailMap = UtilMisc.toMap("partyId", partyId, "storeCode", groupNameLocal, "storeName", groupName, "address1", address1,
-                            "address2", address2,  "address3", address3, "city", city, "stateProvinceGeoId", stateProvinceGeoId,
+                    partyDetailMap = UtilMisc.toMap("partyId", partyId, "storeCode", groupNameLocal, "storeName", groupName, "storeAddress", storeAddress,
+						    "address1", address1, "address2", address2,  "address3", address3, "city", city, "stateProvinceGeoId", stateProvinceGeoId,
                             "postalCode", postalCode,"countryGeoId", countryGeoId,"countryName", countryName, "areaCode", areaCode, "contactNumber", contactNumber,
                             "contactNumber3", contactNumber3, "contactNumber4", contactNumber4, "openingHoursContentId", openingHoursContentId, "storeNoticeContentId", storeNoticeContentId, "storeContentSpotContentId", storeContentSpotContentId, "distance", distance, "distanceValue", distanceValue,
                             "latitude", latestGeoPoint.latitude, "longitude", latestGeoPoint.longitude, "searchAddress", address, "searchlatitude", latitude, "searchlongitude", longitude);
                     
-                    geoPoints.add(UtilMisc.toMap("lat", latestGeoPoint.latitude, "lon", latestGeoPoint.longitude, "userLocation", "N", "closures", UtilMisc.toMap("data", data, "storeDetail", partyDetailMap)));
+                    geoPoints.add(UtilMisc.toMap("lat", latestGeoPoint.latitude, "lon", latestGeoPoint.longitude, "userLocation", "N", "closures", UtilMisc.toMap("data", data, "storeDetail", partyDetailMap), "distanceValue", distanceValue));
                     partyDetailList.add(partyDetailMap);
                 }
             }
@@ -330,11 +341,28 @@ if(UtilValidate.isNotEmpty(storePartyList))
 }
 if (UtilValidate.isNotEmpty(searchOsafeGeo) && searchOsafeGeo.isNotEmpty()) 
 {
-    geoPoints.add(UtilMisc.toMap("lat", Double.valueOf(searchOsafeGeo.latitude()), "lon", Double.valueOf(searchOsafeGeo.longitude()), "userLocation", "Y", "closures", UtilMisc.toMap("data", address)));
+    geoPoints.add(UtilMisc.toMap("lat", Double.valueOf(searchOsafeGeo.latitude()), "lon", Double.valueOf(searchOsafeGeo.longitude()), "userLocation", "Y", "closures", UtilMisc.toMap("data", address), "distanceValue", new BigDecimal(0)));
     context.userLocation = "Y";
 }
+
+geoPoints = UtilMisc.sortMaps(geoPoints, UtilMisc.toList("distanceValue"));
+partyDetailList = UtilMisc.sortMaps(partyDetailList, UtilMisc.toList("distanceValue"));
+if (UtilValidate.isNotEmpty(geoPoints) && (geoPoints.size() > (numDiplay+1)))
+{
+    // clone the list for concurrent modification
+    cloneGeoPoints = UtilMisc.makeListWritable(geoPoints);
+    geoPoints = geoPoints.subList(0, numDiplay+1);
+}
+if (UtilValidate.isNotEmpty(partyDetailList) && (partyDetailList.size() > numDiplay))
+{
+    // clone the list for concurrent modification
+    clonePartyDetailList = UtilMisc.makeListWritable(partyDetailList);
+    partyDetailList = partyDetailList.subList(0, numDiplay);
+}
+
 Map geoChart = UtilMisc.toMap("GeoMapRequestUrl", gmapUrl, "width", width, "height", height, "zoom", zoom, "controlUI" , "small", "dataSourceId", dataSourceId, "uom", uom, "points", geoPoints);
 context.geoChart = geoChart;
-partyDetailList = UtilMisc.sortMaps(partyDetailList, UtilMisc.toList("distanceValue"));
 context.storeDetailList = partyDetailList;
 context.gmapNumDisplay = numDiplay;
+
+context.notFoundAddress = notFoundAddress;

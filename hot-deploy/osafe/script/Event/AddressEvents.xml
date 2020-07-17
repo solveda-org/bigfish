@@ -7,13 +7,25 @@
 
 
 <!--  No validation is done we just need to transfer the values to the map -->
+		<set field="parameters.fullName" value=""/>
+		<if-not-empty field="parameters.CUSTOMER_FULL_NAME">
+    		<set field="parameters.fullName" from-field="parameters.CUSTOMER_FULL_NAME"/>
+    		<else>
+    			<if-not-empty field="parameters.CUSTOMER_FIRST_NAME">
+    				<set field="parameters.fullName" value="${parameters.CUSTOMER_FIRST_NAME}"/>
+    				<if-not-empty field="parameters.CUSTOMER_LAST_NAME">
+    					<set field="parameters.fullName" value="${parameters.CUSTOMER_FIRST_NAME} ${parameters.CUSTOMER_LAST_NAME}"/>
+    				</if-not-empty>
+    			<else>
+    				<if-not-empty field="parameters.CUSTOMER_LAST_NAME">
+    					<set field="parameters.fullName" value="${parameters.CUSTOMER_LAST_NAME}"/>
+    				</if-not-empty>
+    			</else>
+    			</if-not-empty>
+    		</else>
+    	</if-not-empty>
          <call-map-processor in-map-name="parameters" out-map-name="shippingAddressContext">
              <simple-map-processor name="address">
-                <make-in-string field="fullName">
-                     <in-field field="CUSTOMER_FIRST_NAME"/><constant> </constant>
-                     <in-field field="CUSTOMER_LAST_NAME"/>
-                </make-in-string>
-
                  <process field="fullName"><copy to-field="toName"/></process>
                  <process field="CUSTOMER_ATTN_NAME">
                      <copy to-field="attnName"/>
@@ -22,6 +34,7 @@
                      <copy to-field="address1"/>
                  </process>
                  <process field="CUSTOMER_ADDRESS2"><copy to-field="address2"/></process>
+                 <process field="CUSTOMER_ADDRESS3"><copy to-field="address3"/></process>
                  <process field="CUSTOMER_CITY">
                      <copy to-field="city"/>
                  </process>
@@ -53,11 +66,6 @@
                     </if-empty>
                 </else>
         </if>
-         
-         <!-- Check for a address3 -->
-         <if-empty field="parameters.CUSTOMER_STATE">
-            <set field="shippingAddressContext.address3" from-field="parameters.CUSTOMER_ADDRESS3"/>
-         </if-empty>
          
         <set field="shippingAddressContext.contactMechId" from-field="parameters.contactMechId" />
         <set field="shippingAddressContext.contactMechTypeId" value="POSTAL_ADDRESS" />
@@ -121,5 +129,17 @@
             </call-service>
          </if-not-empty>
 
+    </simple-method>
+    <simple-method method-name="updateDefaultShipAddr" short-description="update Default Ship Addr">
+       <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+           <field field="request" type="javax.servlet.ServletRequest"/>
+       </call-class-method>
+       <if-not-empty field="parameters.contactMechId">
+           <set-service-fields service-name="setPartyProfileDefaults" map="parameters" to-map="partyProfileDefaultsCtx"/>
+           <set field="partyProfileDefaultsCtx.defaultShipAddr" from-field="parameters.contactMechId"/>
+           <set field="partyProfileDefaultsCtx.partyId" from-field="userLogin.partyId"/>
+           <set field="partyProfileDefaultsCtx.productStoreId" from-field="productStoreId"/>
+           <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
+       </if-not-empty>
     </simple-method>
 </simple-methods>

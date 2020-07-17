@@ -32,10 +32,12 @@ import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.order.order.OrderReadHelper;
 import com.osafe.events.WishListEvents;
+import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 
 
 wishListItem = request.getAttribute("wishListItem");
 rowNo = request.getAttribute("rowNo");
+cartLineIndex = rowNo;
 
 
 
@@ -126,6 +128,18 @@ if(UtilValidate.isNotEmpty(productImageUrl) && "null".equals(productImageUrl))
 	productImageUrl = "";
 }
 
+//Product Alt Image URL
+productImageAltUrl = ProductContentWrapper.getProductContentAsText(product, "SMALL_IMAGE_ALT_URL", locale, dispatcher);
+if(UtilValidate.isEmpty(productImageAltUrl) && UtilValidate.isNotEmpty(virtualProduct))
+{
+	productImageAltUrl = ProductContentWrapper.getProductContentAsText(virtualProduct, "SMALL_IMAGE_ALT_URL", locale, dispatcher);
+}
+//If the string is a literal "null" make it an "" empty string then all normal logic can stay the same
+if(UtilValidate.isNotEmpty(productImageAltUrl) && "null".equals(productImageAltUrl))
+{
+	productImageAltUrl = "";
+}
+
 //Product Name
 productName = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher);
 if(UtilValidate.isEmpty(productName) && UtilValidate.isNotEmpty(virtualProduct))
@@ -210,8 +224,8 @@ if(UtilValidate.isNotEmpty(productFeatureTypesList))
 	
 }
 
-//product features
-productFeatureAndAppls = product.getRelatedCache("ProductFeatureAndAppl");
+//product features : STANDARD FEATURES 
+productFeatureAndAppls = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "STANDARD_FEATURE"), UtilMisc.toList("sequenceNum"));
 productFeatureAndAppls = EntityUtil.filterByDate(productFeatureAndAppls,true);
 productFeatureAndAppls = EntityUtil.orderBy(productFeatureAndAppls,UtilMisc.toList('sequenceNum'));
 
@@ -220,37 +234,43 @@ productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerce
 IMG_SIZE_WISHLIST_H = Util.getProductStoreParm(request,"IMG_SIZE_WISHLIST_H");
 IMG_SIZE_WISHLIST_W = Util.getProductStoreParm(request,"IMG_SIZE_WISHLIST_W");
 
-//stock
-stockInfo = "";
-inStock = true;
-inventoryLevelMap = InventoryServices.getProductInventoryLevel(urlProductId, request);
-inventoryLevel = inventoryLevelMap.get("inventoryLevel");
-inventoryInStockFrom = inventoryLevelMap.get("inventoryLevelInStockFrom");
-inventoryOutOfStockTo = inventoryLevelMap.get("inventoryLevelOutOfStockTo");
-if (inventoryLevel <= inventoryOutOfStockTo)
+pdpQtyMinAttributeValue = "";
+pdpQtyMaxAttributeValue = "";
+if(UtilValidate.isNotEmpty(product))
 {
-	stockInfo = uiLabelMap.OutOfStockLabel;
-	inStock = false;
-}
-else
-{
-	if (inventoryLevel >= inventoryInStockFrom)
+	productAttrPdpQtyMin = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",productId,"attrName","PDP_QTY_MIN"), true);
+	productAttrPdpQtyMax = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",productId,"attrName","PDP_QTY_MAX"), true);
+	if(UtilValidate.isNotEmpty(productAttrPdpQtyMin) && UtilValidate.isNotEmpty(productAttrPdpQtyMax))
 	{
-		stockInfo = uiLabelMap.InStockLabel;
+		pdpQtyMinAttributeValue = productAttrPdpQtyMin.attrValue;
+		pdpQtyMaxAttributeValue = productAttrPdpQtyMax.attrValue;
 	}
-	else
+}
+
+qtyInCart = 0;
+shoppingCart = ShoppingCartEvents.getCartObject(request);
+if(UtilValidate.isNotEmpty(shoppingCart))
+{
+	shoppingCartItems = shoppingCart.items();
+	if(UtilValidate.isNotEmpty(shoppingCartItems))
 	{
-		stockInfo = uiLabelMap.LowStockLabel;
+		for (ShoppingCartItem shoppingCartItem : shoppingCartItems)
+		{
+			qtyInCart = shoppingCartItem.getQuantity();
+		}
 	}
 }
 
 //image 
 context.productImageUrl = productImageUrl;
+context.productImageAltUrl = productImageAltUrl;
 context.IMG_SIZE_WISHLIST_H = IMG_SIZE_WISHLIST_H;
 context.IMG_SIZE_WISHLIST_W = IMG_SIZE_WISHLIST_W;
 //friendlyURL
 context.productFriendlyUrl = productFriendlyUrl;
 context.urlProductId = urlProductId;
+context.productId = productId;
+context.productCategoryId = productCategoryId;
 //product Name
 context.productName = productName;
 if(UtilValidate.isNotEmpty(productName))
@@ -264,6 +284,7 @@ context.displayPrice = productPrice.basePrice;
 context.currencyUom = currencyUom;
 //quantity
 context.quantity = quantity;
+context.qtyInCart = qtyInCart;
 //item subtotal
 context.itemSubTotal = totalPrice;
 context.wishListSeqId= wishListItem.shoppingListItemSeqId;
@@ -271,8 +292,12 @@ context.rowNo = rowNo;
 context.inStock = inStock;
 context.wishListItem = wishListItem;
 context.wishListSize = wishListSize;
+context.cartLineIndex = cartLineIndex;
+context.lineIndex = context.cartLineIndex;
 
 //inventory
 context.stockInfo = stockInfo;
 context.inStock = inStock;
+context.pdpQtyMinAttributeValue = pdpQtyMinAttributeValue;
+context.pdpQtyMaxAttributeValue = pdpQtyMaxAttributeValue;
 

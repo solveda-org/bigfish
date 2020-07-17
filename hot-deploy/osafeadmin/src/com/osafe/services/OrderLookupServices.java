@@ -489,14 +489,18 @@ public class OrderLookupServices {
                 }
                 if (product != null) {
                     String isVirtual = product.getString("isVirtual");
-                    if (isVirtual != null && "Y".equals(isVirtual)) {
+                    if (isVirtual != null && "Y".equals(isVirtual)) 
+                    {
                         List orExprs = FastList.newInstance();
                         orExprs.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
 
                         Map varLookup = null;
-                        try {
+                        try 
+                        {
                             varLookup = dispatcher.runSync("getAllProductVariants", UtilMisc.toMap("productId", productId));
-                        } catch (GenericServiceException e) {
+                        } 
+                        catch (GenericServiceException e) 
+                        {
                             Debug.logWarning(e.getMessage(), module);
                         }
                         List variants = (List) varLookup.get("assocProducts");
@@ -508,9 +512,15 @@ public class OrderLookupServices {
                             }
                         }
                         conditions.add(EntityCondition.makeCondition(orExprs, EntityOperator.OR));
-                    } else {
+                    } 
+                    else 
+                    {
                         conditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
                     }
+                }
+                else
+                {
+                	conditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
                 }
             }
         }

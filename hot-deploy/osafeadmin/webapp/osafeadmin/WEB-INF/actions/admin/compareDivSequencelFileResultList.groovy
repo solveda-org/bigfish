@@ -13,10 +13,22 @@ String searchKeysNotInUploadedFile = StringUtils.trimToEmpty(parameters.searchKe
 String searchKeysNotInYourLabelFile = StringUtils.trimToEmpty(parameters.searchKeysNotInYourLabelFile);
 String searchKeysInBothFile = StringUtils.trimToEmpty(parameters.searchKeysInBothFile);
 boolean initial = false;
-if (searchKeysNotInUploadedFile.equals("") && searchKeysNotInYourLabelFile.equals("") && searchKeysInBothFile.equals("")) {
+if (searchKeysNotInUploadedFile.equals("") && searchKeysNotInYourLabelFile.equals("") && searchKeysInBothFile.equals("")) 
+{
     initial = true;
 }
-
+if(UtilValidate.isNotEmpty(searchKeysInBothFile))
+{
+    context.searchKeysInBothFile = searchKeysInBothFile;
+}
+if(UtilValidate.isNotEmpty(searchKeysNotInUploadedFile))
+{
+    context.searchKeysNotInUploadedFile = searchKeysNotInUploadedFile;
+}
+if(UtilValidate.isNotEmpty(searchKeysNotInYourLabelFile))
+{
+    context.searchKeysNotInYourLabelFile = searchKeysNotInYourLabelFile;
+}
 
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);

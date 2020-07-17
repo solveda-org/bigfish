@@ -1,8 +1,9 @@
-<#if categorySupportingText?string?has_content>
- <div class="clpLongDescription">
-    <div class="categorySupportingText"><span>${categorySupportingText}</span>
-    </div>
- </div>
-</#if>
+<li class="${request.getAttribute("attributeClass")!}">
+ <#if categorySupportingText?string?has_content>
+		<div>
+		  <span>${categorySupportingText}</span>
+		</div>
+ </#if>
+</li>   
  
  

@@ -1,5 +1,5 @@
 <#if partyId?exists && partyId?has_content>
-    <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyId, "attrName" : "DOB_MMDD"}, true)?if_exists />
+    <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyId, "attrName" : "DOB_MMDD"}, false)?if_exists />
     <#if partyAttribute?has_content>
           <#assign DOB_MMDD = partyAttribute.attrValue!"">
       <#if DOB_MMDD?has_content && DOB_MMDD?length gt 4>
@@ -8,12 +8,12 @@
       </#if>
     </#if>
 </#if>
-
-<div class = "personalInfoDateOfBirthMMDD">
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
     <div class="infoRow">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label for="dobShortMonthUs"><span class="required">*</span>${uiLabelMap.DOB_Caption}</label>
+                <label for="dobShortMonthUs"><#if mandatory == "Y"><span class="required">*</span></#if>${uiLabelMap.DOB_Caption}</label>
             </div>
             <div class="infoValue">
               <select id="dobShortMonthUs" name="dobShortMonthUs" class="dobMonth">
@@ -32,6 +32,7 @@
                   <option value="">${uiLabelMap.DOB_Day}</option>
                   ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ddDays")}
               </select>
+              <input type="hidden" name="DOB_MMDD_MANDATORY" value="${mandatory}"/>
             </div>
         </div>
     </div>

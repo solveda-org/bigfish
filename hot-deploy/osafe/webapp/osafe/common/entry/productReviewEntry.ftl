@@ -18,8 +18,6 @@ under the License.
 
 -->
 
-
-    <input type="hidden" name="productStoreId" value="${productStore.productStoreId}">
     <input type="hidden" name="productId" value="${productId}">
     <input type="hidden" name="productDescription" value="${title!}">
 	<input type="hidden" name="CLIENT" value="${EMAIL_CLNT_NAME!}">

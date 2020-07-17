@@ -8,5 +8,5 @@
 </#if>
 
 <div class="pdpSeeItemDetails">
-  <a class="seeItemDetail pdpUrl" title="${productName!""}" href="${pdpProductFriendlyUrl!""}"><span>${uiLabelMap.SeeItemDetailsLabel}</span></a>
+  <a class="js_seeItemDetail pdpUrl" title="${productName!""}" href="${pdpProductFriendlyUrl!""}"><span>${uiLabelMap.SeeItemDetailsLabel}</span></a>
 </div>

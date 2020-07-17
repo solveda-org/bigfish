@@ -6,6 +6,7 @@
         <tr class="heading">
           <th class="idCol firstCol">${uiLabelMap.FacetGroupIdLabel}</th>
           <th class="idCol">${uiLabelMap.FacetDescriptionLabel}</th>
+          <th class="actionCol"></th>
           <th class="radioCol">${uiLabelMap.HideShowLabel}</th>
           <th class="seqCol">${uiLabelMap.SeqNumberLabel}</th>
           <th class="valueCol">${uiLabelMap.MinDisplayLabel}</th>
@@ -18,7 +19,7 @@
         <#list productFeatureCatGrpApplList as productFeatureCatGrpAppl>
           <tr id="row_${productFeatureCatGrpAppl.productFeatureGroupId!}" <#if alt_row> class="alternate-row"</#if>>
             <td class="idCol firstCol">
-              ${productFeatureCatGrpAppl.productFeatureGroupId!}
+              <a href="<@ofbizUrl>editFacetGroupDetail?productCategoryId=${parameters.productCategoryId!}&facetGroupId=${productFeatureCatGrpAppl.productFeatureGroupId!}</@ofbizUrl>">${productFeatureCatGrpAppl.productFeatureGroupId!}</a>
             </td>
             <td class="idCol">
               <input type="hidden" name="productCategoryId_${productFeatureCatGrpAppl_index}" value="${productFeatureCatGrpAppl.productCategoryId!}"/>
@@ -28,6 +29,12 @@
               <#assign description = request.getParameter("description_${productFeatureCatGrpAppl_index}")!productFeatureGroup.description!''/>
               <input type="text" name="description_${productFeatureCatGrpAppl_index}" value="${description!}"/>
             </td>
+            <td class="actionCol">
+	        	<#if productFeatureCatGrpAppl.facetTooltip?has_content>
+	        	    <#assign facetTooltipText = Static["com.osafe.util.OsafeAdminUtil"].formatToolTipText(productFeatureCatGrpAppl.facetTooltip, ADM_TOOLTIP_MAX_CHAR!)/>
+	        	    <p onMouseover="showTooltip(event,'${facetTooltipText!""}');" onMouseout="hideTooltip()"><span class="descIcon"></span></p>
+	        	</#if>
+	        </td> 
             <td  class="radioCol">
               <#assign yesterday=Static["org.ofbiz.base.util.UtilDateTime"].getDayStart(nowTimestamp, -1)/>
               <span class="radiobutton">

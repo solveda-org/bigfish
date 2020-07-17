@@ -2,7 +2,9 @@
     <#assign shipGroup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(shipGroups)/> 
     <#assign shipGroupSeqId = shipGroup.shipGroupSeqId!""/>
     <#assign trackingNumber = shipGroup.trackingNumber!""/>
-    <#assign orderShippingMethod = shipGroup.shipmentMethodTypeId + "@" + shipGroup.carrierPartyId>
+    <#if shipGroup.shipmentMethodTypeId?has_content && shipGroup.carrierPartyId?has_content>
+        <#assign orderShippingMethod = shipGroup.shipmentMethodTypeId + "@" + shipGroup.carrierPartyId />
+    </#if>
     <#if currentStatus?has_content && currentStatus.statusId == "ORDER_COMPLETED">
         <#assign shipDate = shipGroup.estimatedShipDate!""/>
         <#if shipDate?has_content>
@@ -35,86 +37,57 @@
 <div class="infoRow row">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>&nbsp;</label>
+            <label>${uiLabelMap.ActionCaption}</label>
         </div>
-        <div class="entryInput checkbox medium">
-            <input class="checkBoxEntry" type="radio" id="actionId" name="actionId"  value="cancelOrder" checked="checked" />${uiLabelMap.CancelAnOrderLabel}
+        <div class="infoValue">
+          <div class="entry checkbox medium">
+            <input class="checkBoxEntry" type="radio" <#if orderHeader.statusId == "ORDER_COMPLETED">disabled="disabled"</#if> id="actionIdCancel" name="actionId"  value="cancelOrder" checked="checked" />${uiLabelMap.CancelAnOrderLabel}<br/>
+            <input class="checkBoxEntry" type="radio" disabled="disabled" id="actionIdChaneQty" name="actionId" value="changeOrderQty" <#if (parameters.actionId?exists && parameters.actionId?string == "changeOrderQty")>checked="checked"</#if> />${uiLabelMap.ChangeOrderQtyLabel}<br/>
+            <input class="checkBoxEntry" type="radio" <#if orderHeader.statusId == "ORDER_COMPLETED">disabled="disabled"</#if> id="actionIdComplete" name="actionId" value="completeOrder" <#if (parameters.actionId?exists && parameters.actionId?string == "completeOrder")>checked="checked"</#if> />${uiLabelMap.CompleteAnOrderLabel}<br/>
+            <input class="checkBoxEntry" type="radio" id="actionIdReturn" name="actionId" value="productReturn" <#if (parameters.actionId?exists && parameters.actionId?string == "productReturn")>checked="checked"</#if> />${uiLabelMap.ProductReturnsLabel}
+          </div>
         </div>
+        <#if orderHeader.statusId == "ORDER_APPROVED" && allItemsApproved == true>
+            <div class="infoIcon"> 
+                <a href="javascript:quickShipOrder('${detailFormName!""}');" class="buttontext standardBtn action">${uiLabelMap.QuickShipBtn}</a>
+            </div>
+            <div class="infoIcon"> 
+                <a href="javascript:quickCancelOrder('${detailFormName!""}');" class="buttontext standardBtn action">${uiLabelMap.QuickCancelBtn}</a>
+            </div>
+        </#if>
+        <#if orderHeader.statusId == "ORDER_COMPLETED" && allItemsCompleted == true>
+            <div class="infoIcon"> 
+                <a href="javascript:quickReturnOrder('${detailFormName!""}');" class="buttontext standardBtn action">${uiLabelMap.QuickReturnBtn}</a>
+            </div>
+        </#if>
     </div>
 </div>
 
-<div class="infoRow row">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-            <label>&nbsp;</label>
-        </div>
-        <div class="entryInput checkbox medium">
-            <input class="checkBoxEntry" type="radio" id="actionId" name="actionId" value="changeOrderQty" <#if (parameters.actionId?exists && parameters.actionId?string == "changeOrderQty")>checked="checked"</#if> />${uiLabelMap.ChangeOrderQtyLabel}
-        </div>
-    </div>
-</div>
 
-<div class="infoRow row">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-            <label>&nbsp;</label>
-        </div>
-        <div class="entryInput checkbox medium">
-            <input class="checkBoxEntry" type="radio" id="actionId" name="actionId" value="completeOrder" <#if (parameters.actionId?exists && parameters.actionId?string == "completeOrder")>checked="checked"</#if> />${uiLabelMap.CompleteAnOrderLabel}
-        </div>
-    </div>
-</div>
-
-<div class="infoRow row">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-            <label>&nbsp;</label>
-        </div>
-        <div class="entryInput checkbox medium">
-            <input class="checkBoxEntry" type="radio" id="actionId" name="actionId" value="productReturn" <#if (parameters.actionId?exists && parameters.actionId?string == "productReturn")>checked="checked"</#if> />${uiLabelMap.ProductReturnsLabel}
-        </div>
-    </div>
-</div>
 <input type="hidden" name="orderId" value="${parameters.orderId!orderHeader.orderId!}" />
 <input type="hidden" name="internalNote" value="Y"/>
 <input type="hidden" name="shipGroupSeqId" value="${shipGroupSeqId!}"/>
 
-<#-- <div class="infoRow row">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-            <label>${uiLabelMap.OrderNewStatusCaption}</label>
-        </div>
-        <div class="infoValue">
-            <#assign selectedStatusId = parameters.statusId!""/>
-            <select name="statusId" id="statusId" class="small">
-                <#if statusItems?has_content>
-                    <#list statusItems as statusItem>
-                        <option value='${statusItem.statusId!}' <#if selectedStatusId == statusItem.statusId>selected=selected</#if>>${statusItem.description?default(statusItem.statusId!)!}</option>
-                    </#list>
-                </#if>
-            </select>
-        </div>
-    </div>
-</div> -->
-
-<div class="infoRow row COMPLETED">
+<div class="infoRow column COMPLETED">
     <div class="infoEntry long">
         <div class="infoCaption">
             <label>${uiLabelMap.OrderCarrierCaption}</label>
         </div>
         <div class="infoValue">
-        	<#if isStorePickup?has_content && isStorePickup == "Y">
-        		<input class="medium" disabled="disabled" type="text"  maxlength="20" value=""/>
+        	<#if (isStorePickup?has_content && isStorePickup == "Y") || (!shippingApplies)>
+        		<input disabled="disabled" type="text"  maxlength="20" value=""/>
         		<input name="shipmentMethod" type="hidden" id="shipmentMethod" maxlength="20" value="NO_SHIPPING@_NA_"/>
         	<#else>
         		<#assign productStoreId = Static["org.ofbiz.product.store.ProductStoreWorker"].getProductStoreId(request) />
 	            <#assign carrierShipmentMethodList = delegator.findByAnd('ProductStoreShipmentMethView', {"productStoreId" : productStoreId})!"" />
-	            <#assign selectedShippingMethod = parameters.shippingMethod!orderShippingMethod!""/>
+	            <#assign selectedShippingMethod = parameters.shipmentMethod!orderShippingMethod!""/>
 	            <select name="shipmentMethod" id="shipmentMethod" class="small">
 	                <#if carrierShipmentMethodList?has_content>
 	                    <#list carrierShipmentMethodList as carrierMethod>
-	                        <#assign shippingMethod = carrierMethod.shipmentMethodTypeId + "@" + carrierMethod.partyId>
-	                        <#assign findCarrierShipmentMethodMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentMethodTypeId", carrierMethod.shipmentMethodTypeId, "partyId", carrierMethod.partyId,"roleTypeId" ,"CARRIER")>
+	                        <#if carrierMethod.shipmentMethodTypeId?has_content && carrierMethod.partyId?has_content>
+	                            <#assign shippingMethod = carrierMethod.shipmentMethodTypeId + "@" + carrierMethod.partyId/>
+	                        </#if>
+	                        <#assign findCarrierShipmentMethodMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentMethodTypeId", carrierMethod.shipmentMethodTypeId!"", "partyId", carrierMethod.partyId!"","roleTypeId" ,"CARRIER")>
 	                        <#assign carrierShipmentMethod = delegator.findByPrimaryKeyCache("CarrierShipmentMethod", findCarrierShipmentMethodMap)>
 	                        <#assign carrierPartyGroupName = ""/>
 	                        <#if carrierMethod.partyId != "_NA_">
@@ -122,7 +95,7 @@
 	                            <#assign carrierPartyGroup = carrierParty.getRelatedOne("PartyGroup")/>
 	                            <#assign carrierPartyGroupName = carrierPartyGroup.groupName/>
 	                        </#if>
-	                        <option value='${shippingMethod}' <#if selectedShippingMethod == shippingMethod>selected=selected</#if>><#if carrierPartyGroupName?has_content>${carrierPartyGroupName!}, </#if>${carrierMethod.description!}</option>
+	                        <option value="${shippingMethod!}" <#if (shippingMethod?has_content) && (selectedShippingMethod == shippingMethod)>selected</#if>><#if carrierPartyGroupName?has_content>${carrierPartyGroupName!}, </#if>${carrierMethod.description!}</option>
 	                    </#list>
 	                </#if>
 	            </select>
@@ -132,24 +105,62 @@
     </div>
 </div>
 
-<div class="infoRow row COMPLETED">
+<div class="infoRow column COMPLETED">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>${uiLabelMap.PackageWeightCaption}</label>
+        </div>
+        <div class="infoValue">
+        	<input type="text" class="small" name="packageWeight" value="${parameters.packageWeight!packageWeight!""}" />
+        	<#assign weightUomId = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request, "WEIGHT_UOM_DEFAULT")!"" />
+        	<#if weightUomId?has_content>
+        	  <#assign weightUomId = "WT_"+weightUomId?lower_case />
+        	  <#assign weightUom = delegator.findByPrimaryKey('Uom', {"uomId" : weightUomId})!"" />
+        	</#if>
+        	<input type="hidden" name="weightUomId" value="${parameters.weightUomId!weightUomId!""}" />
+        	<#if weightUom?has_content>
+        	  ${weightUom.abbreviation!}
+        	</#if>
+        </div>
+    </div>
+</div>
+
+<div class="infoRow column COMPLETED">
     <div class="infoEntry long">
         <div class="infoCaption">
             <label>${uiLabelMap.OrderTrackingCaption}</label>
         </div>
         <div class="infoValue">
-        	<#if isStorePickup?has_content && isStorePickup == "Y">
-        		<input class="medium" disabled="disabled" type="text"  maxlength="20" value="${parameters.trackingNumber!""}"/>
+        	<#if (isStorePickup?has_content && isStorePickup == "Y") || (!shippingApplies)>
+        		<input disabled="disabled" type="text"  maxlength="20" value="${parameters.trackingNumber!""}"/>
         		<input name="trackingNumber" type="hidden" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
         	<#else>
-        		<input class="medium" name="trackingNumber" type="text" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
+        		<input name="trackingNumber" type="text" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
         	</#if>
-            
         </div>
     </div>
 </div>
 
-<div class="infoRow row COMPLETED">
+<#assign lengthUomId = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request, "LENGTH_UOM_DEFAULT")!"" />
+<#if lengthUomId?has_content>
+  <#assign lengthUomId = "LEN_"+lengthUomId?lower_case />
+  <#assign lengthUom = delegator.findByPrimaryKey('Uom', {"uomId" : lengthUomId})!"" />
+</#if>
+<input type="hidden" name="lengthUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
+        	
+<div class="infoRow column COMPLETED">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>${uiLabelMap.PackageHeightCaption}</label>
+        </div>
+        <div class="infoValue">
+        	<input type="text" class="small" name="packageHeight" value="${parameters.packageHeight!packageHeight!""}" />
+        	<#if lengthUom?has_content>${lengthUom.abbreviation!}</#if>
+        </div>
+    </div>
+</div>
+
+<div class="infoRow column COMPLETED">
     <div class="infoEntry long">
         <div class="infoCaption">
         	<#if isStorePickup?has_content && isStorePickup == "Y">
@@ -165,6 +176,41 @@
     </div>
 </div>
 
+<div class="infoRow column COMPLETED">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>${uiLabelMap.PackageWidthCaption}</label>
+        </div>
+        <div class="infoValue">
+        	<input type="text" class="small" name="packageWidth" value="${parameters.packageWidth!packageWidth!""}" />
+        	<#if lengthUom?has_content>${lengthUom.abbreviation!}</#if>
+        </div>
+    </div>
+</div>
+
+<div class="infoRow column COMPLETED">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>${uiLabelMap.GenerateShipLabelCaption}</label>
+        </div>
+        <div class="entry checkbox short">
+        	<input class="checkBoxEntry" type="radio" name="generateShippingLabel" value="Y" <#if parameters.generateShippingLabel?exists && (parameters.generateShippingLabel=="Y") >checked="checked"<#elseif !(parameters.generateShippingLabel?exists)>checked="checked"</#if>/>${uiLabelMap.YesLabel}
+            <input class="checkBoxEntry" type="radio" name="generateShippingLabel" value="N" <#if parameters.generateShippingLabel?exists && (parameters.generateShippingLabel=="N") >checked="checked"</#if>/>${uiLabelMap.NoLabel}
+        </div>
+    </div>
+</div>
+
+<div class="infoRow column COMPLETED">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>${uiLabelMap.PackageDepthCaption}</label>
+        </div>
+        <div class="infoValue">
+        	<input type="text" class="small" name="packageDepth" value="${parameters.packageDepth!packageDepth!""}" />
+        	<#if lengthUom?has_content>${lengthUom.abbreviation!}</#if>
+        </div>
+    </div>
+</div>
 <div class="infoRow row">
     <div class="infoEntry long">
         <div class="infoCaption">

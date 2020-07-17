@@ -1,5 +1,22 @@
 ${sections.render('commonFormJS')?if_exists}
 ${sections.render('tooltipBody')?if_exists}
+
+<#if errorMessageList?has_content>
+    <#if errorMessageList?has_content>
+      <div class="content-messages eCommerceErrorMessage">
+        <span class="errorImageIcon errorImage"></span>
+        <p class="errorMessage">${uiLabelMap.FollowingErrorsOccurredError}</p>
+        <#if errorMessageList?has_content>
+          <#list errorMessageList as errorMsg>
+		    <#if errorMsg?exists && errorMsg != null>
+            <p class="errorMessage">${StringUtil.wrapString(errorMsg)}</p>
+			</#if>
+          </#list>
+        </#if>
+      </div>
+    </#if>
+</#if>
+
 <#if prodCatErrorList?has_content || prodCatWarningList?has_content>
 <div id="productCatError" class="content-messages eCommerceErrorMessage commonDivHide" style="display:none">
   <span class="errorImageIcon errorImage"></span>
@@ -77,11 +94,15 @@ ${sections.render('tooltipBody')?if_exists}
 
 <form method="post" name="${detailFormName!""}" <#if detailFormId?exists>id="${detailFormId!}"</#if>>
 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHiddenFields")}
-  <#if (prodCatErrorList?exists && prodCatErrorList?has_content) || (productErrorList?exists && productErrorList?has_content) || (productAssocErrorList?exists && productAssocErrorList?has_content) || (productManufacturerErrorList?exists && productManufacturerErrorList?has_content)>
+  <#if (prodCatErrorList?exists && prodCatErrorList?has_content) || (productErrorList?exists && productErrorList?has_content) || (productAssocErrorList?exists && productAssocErrorList?has_content) || (productManufacturerErrorList?exists && productManufacturerErrorList?has_content) || (errorMessageList?exists && errorMessageList?has_content)>
       <input type="hidden" name="errorExists" value="${parameters.errorExists!"yes"}"/> 
   <#else>
       <input type="hidden" name="errorExists" value="${parameters.errorExists!"no"}"/>
   </#if>
+  <input type="hidden" name="xlsFileName" value="${xlsFileName!parameters.xlsFileName!}"/>
+  <input type="hidden" name="xlsFilePath" value="${xlsFilePath!parameters.xlsFilePath!}"/>
+  <input type="hidden" name="productLoadImagesDir" value="${productLoadImagesDir!parameters.productLoadImagesDir!}"/>
+  <input type="hidden" name="imageUrl" value="${imageUrl!parameters.imageUrl!}"/>
   <div class="displayBox detailInfo productLoaderData">
     <div class="header" id="productLoaderHeader"><h2>${detailInfoBoxHeading!}: ${uiLabelMap.ProcessingOptionsHeading}</h2></div>
       ${sections.render('productLoaderTabBoxBody')?if_exists}

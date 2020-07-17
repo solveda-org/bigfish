@@ -1,3 +1,14 @@
+<#-- These hidden inputs are used when using addToCart and addToWishlist -->
+<form method="post" name="${formName!'productListForm'}" id="productListForm">
+  <input type="hidden" name="plp_qty" id="plp_qty" value=""/>
+  <input type="hidden" name="plp_add_product_id" id="plp_add_product_id" value=""/>
+  <input type="hidden" name="plp_add_category_id" id="plp_add_category_id" value=""/> 
+  <input type="hidden" name="manufacturer_party_id" id="last_viewed_manufacturer_party_id" value="${manufacturerPartyId!""}"/> 
+  <input type="hidden" name="productListFormSearchText" id="productListFormSearchText" value="${productListFormSearchText!""}"/> 
+  <#-- flag to display success message -->
+  <input type="hidden" name="showSuccess" id="showSuccess" value="Y"/> 
+</form>
+
 <#-- variable setup and worker calls -->
 <#if (requestAttributes.pageSize)?exists><#assign pageSize = requestAttributes.pageSize!10></#if>
 <#if (requestAttributes.numFound)?exists><#assign numFound = requestAttributes.numFound!></#if>
@@ -49,7 +60,6 @@
       </div>
   </#if>
 
-<div class="resultListContainer">
   <!-- List of products  -->
    <#if manufacturerProductList?has_content>
        <#assign plpFacetGroupVariantSwatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_SWATCH_IMG")!""/>
@@ -98,4 +108,3 @@
   			${screens.render("component://osafe/widget/EcommerceDivScreens.xml#manufacturerDivSequence")}
 	   </div>  	   
    </#if>
-</div>

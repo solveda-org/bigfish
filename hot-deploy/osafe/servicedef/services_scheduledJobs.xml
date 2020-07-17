@@ -59,14 +59,14 @@
             <invoke name="genSeoFriendlyUrl" result-to-context="true"/>
         </group>
     </service>
-    <!-- Party Geo services -->
-    <service name="genPartyGeoPoint" engine="java" transaction-timeout="300" auth="true"
-            location="com.osafe.services.GeoServices" invoke="genPartyGeoPoint">
-        <description>Create geo point and validate existing for party .if roleTypeId is null, consider STORE_LOCATION roletype as default.</description>
-        <attribute name="partyId" type="String" mode="IN" optional="true"/>
-        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
-        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+    <!-- Store Geo services -->
+    <service name="genStoreGeoPoint" engine="group" transaction-timeout="7200" auth="false">
+        <description>Create geo point for store.</description>
+        <group>
+            <invoke name="genPartyGeoPoint"/>
+        </group>
     </service>
+
     <!-- REMOVE THE TEST JOB -->
     <service name="testJob" engine="java" location="com.osafe.services.SolrServices" invoke="testJob" auth="false" transaction-timeout="7200">
         <description>Test Job</description>

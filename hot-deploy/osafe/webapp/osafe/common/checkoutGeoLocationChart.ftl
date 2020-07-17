@@ -68,18 +68,28 @@
           directionsDisplay.setMap(map);
           directionsDisplay.setPanel(document.getElementById("routeDirection"));
 
+          geocoder = new google.maps.Geocoder();  
+          jQuery('#address').keyup(function() { 
+              geocoder.geocode( { 'address': jQuery('#address').val()}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK)
+                {
+                    jQuery('#latitude').val(results[0].geometry.location.lat());
+                    jQuery('#longitude').val(results[0].geometry.location.lng());
+                }
+                else
+                {
+                    jQuery('#latitude').val("");
+                    jQuery('#longitude').val("");
+                }
+              });
+          });
+
           <#if geoChart.points?has_content>
-            var latlng = [
             <#list geoChart.points as point>
-              new google.maps.LatLng(${point.lat?c}, ${point.lon?c})<#if point_has_next>,</#if>
+              <#if point.userLocation?has_content && point.userLocation == "Y">
+                  map.setCenter(new google.maps.LatLng(${point.lat?c}, ${point.lon?c}));
+              </#if>
             </#list>
-            ];
-            var latlngbounds = new google.maps.LatLngBounds();
-            for (var i = 0; i < latlng.length; i++) {
-              latlngbounds.extend(latlng[i]);
-            }
-            map.setCenter(latlngbounds.getCenter());
-            map.fitBounds(latlngbounds);
           <#else>
             map.setCenter(new google.maps.LatLng(0, 0));
           </#if>
@@ -163,6 +173,7 @@
                             noDirection();
                           }
                         });
+                        infoWindow.close();
           }
       </script>
       </#if>

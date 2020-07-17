@@ -18,7 +18,18 @@ if (searchParamKeysNotInUploadedFile.equals("") && searchParamKeysNotInYourDatab
 {
     initial = true;
 }
-
+if(UtilValidate.isNotEmpty(searchParamKeysNotInUploadedFile))
+{
+    context.searchParamKeysNotInUploadedFile = searchParamKeysNotInUploadedFile;
+}
+if(UtilValidate.isNotEmpty(searchParamKeysNotInYourDatabase))
+{
+    context.searchParamKeysNotInYourDatabase = searchParamKeysNotInYourDatabase;
+}
+if(UtilValidate.isNotEmpty(searchParamKeysInBoth))
+{
+    context.searchParamKeysInBoth = searchParamKeysInBoth;
+}
 
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);

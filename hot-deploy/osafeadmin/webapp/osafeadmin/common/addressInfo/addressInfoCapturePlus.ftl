@@ -1,4 +1,4 @@
-<div class="addressInfoCustomObject">
+<div class="${request.getAttribute("attributeClass")!}">
     <#if requestAttributes.osafeCapturePlus?exists>
         <#assign osafeCapturePlus = requestAttributes.osafeCapturePlus/>
         <#if osafeCapturePlus.isNotEmpty()>

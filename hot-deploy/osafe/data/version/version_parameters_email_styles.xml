@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+    Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+-->
+
+<resource xmlns:xsi="http://www.w3.org/01/XMLSchema-instance">
+
+	<property key="DEFAULT_TABLE_CONTAINER">
+	        <value xml:lang="en">font-family:'Arial';font-size:12px;</value>
+	        <description>Styling for outer container background.</description>
+	</property>
+	<property key="ECOMMERCENAVBAR">
+	        <value xml:lang="en">background: none repeat scroll 0 0 #CECECE;width:100%;font-weight:700;#2b2b2b;</value>
+	        <description>Styling for the navigation.</description>
+	</property>
+	<property key="NAV">
+	        <value xml:lang="en">text-decoration: none;color:#2b2b2b;</value>
+	        <description>Styling for links that appear in the navigation (ECOMMERCENAVBAR).</description>
+	</property>
+	<property key="THANKYOU_CONTENT">
+	        <value xml:lang="en">padding-bottom:10px;font-size:13px;</value>
+	        <description>Styles for the closing section of Main Content</description>
+	</property>
+	<property key="DISCLAIMER">
+	        <value xml:lang="en">padding-top:10px;border-top: 1px solid #cecece;font-size:11px;margin-top:10px;</value>
+	        <description>Styles for the Disclaimer Section</description>
+	</property>
+	<property key="CUSTOMER_INFO">
+	        <value xml:lang="en">font-weight: 700;</value>
+	        <description>Styles for Customer Info</description>
+	</property>
+	<property key="promoCode">
+	        <value xml:lang="en">TENOFF</value>
+	        <description>Styles for promotional code.  Used in Abandon Cart email.  Used with discountPercent.</description>
+	</property>
+	<property key="discountPercent">
+	        <value xml:lang="en">10%</value>
+	        <description>Percentage of Discount.  Used in Abandon Cart email.  Used with promoCode</description>
+	</property>
+	<property key="REVIEW_ITEMS">
+	        <value xml:lang="en">margin-bottom: 10px;width:100%;font-size:13px;</value>
+	        <description>Styles for the review items section</description>
+	</property>
+	<property key="QUANTITY">
+	        <value xml:lang="en">text-align:center;</value>
+	        <description>Styles for Quantity fields.  Used for alignment.</description>
+	    </property>
+	<property key="PRICE">
+	        <value xml:lang="en">text-align:right;</value>
+	        <description>Styles used for Price/Currency fields.  Used for Alignment.</description>
+	</property>
+	<property key="H3">
+	        <value xml:lang="en">color:#2b2b2b;margin:20px 0 0 0;font-size:18px;</value>
+	        <description>Styles for H3 tags</description>
+	</property>
+	<property key="TABULAR_DATA">
+	        <value xml:lang="en">background-color:#fff;</value>
+	        <description>Styles for Tabular Data.  Used in cart items.</description>
+	</property>
+	<property key="ORDER_COMPONENT">
+	        <value xml:lang="en">font-size:13px;</value>
+	        <description>Styles for Order Components.  Used in Cart Items.</description>
+	</property>
+	<property key="LOGO_STYLE">
+	        <value xml:lang="en">display:block;padding:10px;border:none;</value>
+	        <description>Logo Style</description>
+	</property>
+	<property key="DEFAULT_TABLE_INNER_CONTAINER">
+	        <value xml:lang="en">color:#000000;width:650px;background-color:#ffffff;</value>
+	        <description>DEFAULT_TABLE_INNER_CONTAINER</description>
+	</property>
+	<property key="E_LINK">
+	        <value xml:lang="en">text-decoration: none;color:#2b2b2b;</value>
+	        <description>Links Styles</description>
+	</property>
+	<property key="E_MAIN_CONTENT">
+	        <value xml:lang="en">padding:10px;font-size:13px;</value>
+	        <description>Styles for main content area.</description>
+	</property>
+	<property key="E_LABEL">
+	        <value xml:lang="en">color:#666666;font-weight: 700;</value>
+	        <description>Styles for Labels</description>
+	</property>
+	<property key="E_BODY_STYLE">
+	        <value xml:lang="en">background-color:#dedede;padding:0;margin:0;</value>
+	        <description>Style for body tag</description>
+	</property>
+	<property key="E_IMAGE">
+	        <value xml:lang="en">border:none;</value>
+	        <description>Image Style (used to remove borders)</description>
+	</property>
+</resource>

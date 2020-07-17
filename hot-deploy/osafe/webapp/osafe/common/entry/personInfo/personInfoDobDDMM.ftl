@@ -12,26 +12,28 @@
       </#if>
     </#if>
 </#if>
-<div class = "personalInfoDateOfBirthDDMM">
- <div class="entry">
-      <label for="DOB_DDMM"><@required/>${uiLabelMap.DOB_Caption}</label>
-      <select id="dobShortDayUk" name="dobShortDayUk" class="dobDay">
-      <#assign dobDay = requestParameters.dobShortDayUk!dobDay!"">
-      <#if dobDay?has_content && (dobDay?length gt 1)>
-          <option value="${dobDay?if_exists}">${dobDay?if_exists}</option>
-      </#if>
-        <option value="">${uiLabelMap.DOB_Day}</option>
-        ${screens.render("component://osafe/widget/CommonScreens.xml#ddDays")}
-      </select>
-      <select id="dobShortMonthUk" name="dobShortMonthUk" class="dobMonth">
-      <#assign dobMonth = requestParameters.dobShortMonthUk!dobMonth!"">
-      <#if dobMonth?has_content && (dobMonth?length gt 1)>
-          <option value="${dobMonth?if_exists}">${dobMonth?if_exists}</option>
-      </#if>
-        <option value="">${uiLabelMap.DOB_Month}</option>
-        ${screens.render("component://osafe/widget/CommonScreens.xml#ddMonths")}
-      </select>
-      <@fieldErrors fieldName="DOB_DDMM"/>
-  </div>
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class = "${request.getAttribute("attributeClass")!}">
+      <label for="DOB_DDMM"><#if mandatory == "Y"><@required/></#if>${uiLabelMap.DOB_Caption}</label>
+      <div class="entryField">
+	      <select id="dobShortDayUk" name="dobShortDayUk" class="dobDay">
+	      <#assign dobDay = requestParameters.dobShortDayUk!dobDay!"">
+	      <#if dobDay?has_content && (dobDay?length gt 1)>
+	          <option value="${dobDay?if_exists}">${dobDay?if_exists}</option>
+	      </#if>
+	        <option value="">${uiLabelMap.DOB_Day}</option>
+	        ${screens.render("component://osafe/widget/CommonScreens.xml#ddDays")}
+	      </select>
+	      <select id="dobShortMonthUk" name="dobShortMonthUk" class="dobMonth">
+	      <#assign dobMonth = requestParameters.dobShortMonthUk!dobMonth!"">
+	      <#if dobMonth?has_content && (dobMonth?length gt 1)>
+	          <option value="${dobMonth?if_exists}">${dobMonth?if_exists}</option>
+	      </#if>
+	        <option value="">${uiLabelMap.DOB_Month}</option>
+	        ${screens.render("component://osafe/widget/CommonScreens.xml#ddMonths")}
+	      </select>
+	      <input type="hidden" name="DOB_DDMM_MANDATORY" value="${mandatory}"/>
+	      <@fieldErrors fieldName="DOB_DDMM"/>
+      </div>
 </div>
 

@@ -91,7 +91,11 @@
             <td class="idCol <#if !hasNext?if_exists>lastRow</#if> firstCol" ><a href="<@ofbizUrl>finishedProductDetail?productId=${product.productId?if_exists}</@ofbizUrl>">${product.productId?if_exists}</a></td>
           </#if>
           <td class="descCol <#if !hasNext?if_exists>lastRow</#if>">${product.internalName?if_exists}</td>
-          <td class="descCol <#if !hasNext?if_exists>lastRow</#if>"><#if virtualProductContentWrapper?has_content>${virtualProductContentWrapper.get("PRODUCT_NAME")!""}<#else>${productContentWrapper.get("PRODUCT_NAME")!""}</#if></td>
+          <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher)!""/>
+          <#if !productName?has_content && virtualProductContentWrapper?has_content>
+            <#assign productName = virtualProductContentWrapper.get("PRODUCT_NAME")!""/>
+          </#if> 
+          <td class="descCol lastRow"><#if productName?has_content>${productName!}</#if></td>
           <td class="actionCol <#if !hasNext?if_exists>lastRow</#if>">
             <#assign productLongDescription = productContentWrapper.get("LONG_DESCRIPTION")!""/>
             <#if productLongDescription?has_content && productLongDescription !="">
@@ -102,11 +106,20 @@
             <a href="javascript:void(0);" onMouseover="<#if productLargeImageUrl?has_content>showTooltipImage(event,'','${productLargeImageUrl}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
           </td>
           <td class="qtyCol <#if !hasNext>lastRow</#if>">
-              <input type="text" class="infoValue small" name="update_${cartLineIndex}" id="update_${cartLineIndex}" value="${cartLine.getQuantity()?string.number}" <#if cartLine.getIsPromo()> readonly</#if>/>
+             <#if cartSection=="TOP">
+              <input type="text" class="infoValue small qtyInCart_${cartLine.getProductId()}" name="update_${cartLineIndex}" id="update_${cartLineIndex}" value="${cartLine.getQuantity()?string.number}" <#if cartLine.getIsPromo()> readonly</#if>/>
+             <#else>
+              <input type="text" class="infoValue small BOTTOM_CART_ITEM" name="bottomCart_${cartLineIndex}" id="update_${cartLineIndex}" value="${cartLine.getQuantity()?string.number}" <#if cartLine.getIsPromo()> readonly</#if>/>
+             </#if>
           </td>
           <td class="actionCol <#if !hasNext?if_exists>lastRow</#if>">
             <#if !cartLine.getIsPromo()>
+              <#if cartSection=="TOP">
+                <input type="hidden" name="qtyInCart_${cartLine.getProductId()}" id="qtyInCart_${cartLineIndex}"/>
             	<a href="javascript:submitDetailForm(document.adminCheckoutFORM, 'UC');"><span class="refreshIcon"></span></a>
+              <#else>
+            	<a href="javascript:refreshFromBottomCart();"><span class="refreshIcon"></span></a>
+              </#if>
             </#if>
           </td>
           <td class="dollarCol <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=displayPrice rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
@@ -118,14 +131,34 @@
            </td>
           </#if>
           <td class="dollarCol total <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=cartLine.getDisplayItemSubTotal() rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
+          <#-- display gift message option? -->
+          <#assign showGiftMessageLink = false/>
+          <#assign checkoutGiftMessage = Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(request, "CHECKOUT_GIFT_MESSAGE")!"" />  
+          <#assign pdpGiftMessageAttributeValue = ""/>
+          <#if product?has_content>
+            <#assign pdpGiftMessageAttribute = delegator.findOne("ProductAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId", product.productId,"attrName","CHECKOUT_GIFT_MESSAGE"), false)!/>
+            <#if pdpGiftMessageAttribute?has_content>
+              <#assign pdpGiftMessageAttributeValue = pdpGiftMessageAttribute.attrValue!""/>
+            </#if>  
+          </#if>
+          <#-- if sys param is false then do not show gift message link -->
+          <#if checkoutGiftMessage?has_content && checkoutGiftMessage && pdpGiftMessageAttributeValue?has_content && pdpGiftMessageAttributeValue!= "FALSE">
+            <#assign showGiftMessageLink = true/>
+          <#elseif checkoutGiftMessage?has_content && checkoutGiftMessage && !pdpGiftMessageAttributeValue?has_content>
+            <#assign showGiftMessageLink = true/>
+          <#elseif pdpGiftMessageAttributeValue?has_content && pdpGiftMessageAttributeValue == "TRUE">
+            <#assign showGiftMessageLink = true/>
+          </#if>
           <td class="actionColSmall <#if !hasNext?if_exists>lastRow</#if>">
             <#if !cartLine.getIsPromo()>
             	<#assign productIdStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("PRODUCT_NO", product.productId!)>
             	<#assign removeCartItemToolTipText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","RemoveShoppingCartItemConfirmText",productIdStringMap, locale ) />
 				<a href="javascript:setConfirmDialogContent('','${removeCartItemToolTipText}','deleteProductFromCart?delete_${cartLineIndex}=${cartLineIndex}');javascript:submitDetailForm(document.adminCheckoutFORM, 'CF');"  ><span class="crossIcon"></span></a>      
-				</#if>
+			</#if>
+			<#if showGiftMessageLink>
+              <a href="<@ofbizUrl>adminGiftMessageDetail?cartLineIndex=${cartLineIndex}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.EnterGiftMessageToolTip!}');" onMouseout="hideTooltip()"><span class="giftMessageIcon"></span></a>
+            </#if>
           </td> 
-          
          </tr>
 	      <#if rowClass == "2">
 	        <#assign rowClass = "1">
@@ -191,20 +224,57 @@
                              </#list>
                          </#if>
                       </#if>
+                      <tr>
+	                    <td class="totalCaption"><label><#if promoText?has_content>${promoText!""} <#if promoCodeText?has_content><a href="<@ofbizUrl>promotionCodeDetail?productPromoCodeId=${promoCodeText}</@ofbizUrl>">(${promoCodeText!})</a></#if><#elseif adjustmentType?has_content>${adjustmentType.get("description",locale)?if_exists}</#if>:</label></td>
+	                    <td class="totalValue"><@ofbizCurrency amount=Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustment(cartAdjustment, shoppingCart.getSubTotal()) rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
+	                  </tr>
                     </#if>
-                     <tr>
-	                   <td class="totalCaption"><label><#if promoText?has_content>${promoText!""} <#if promoCodeText?has_content><a href="<@ofbizUrl>promotionCodeDetail?productPromoCodeId=${promoCodeText}</@ofbizUrl>">(${promoCodeText!})</a></#if><#elseif adjustmentType?has_content>${adjustmentType.get("description",locale)?if_exists}</#if>:</label></td>
-	                   <td class="totalValue"><@ofbizCurrency amount=Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustment(cartAdjustment, shoppingCart.getSubTotal()) rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
-	                 </tr>
+                  </#list>
+                </#if>
+                <#if shoppingCart.getAdjustments()?has_content>
+                  <#list shoppingCart.getAdjustments() as cartAdjustment>
+                    <#assign adjustmentType = cartAdjustment.getRelatedOne("OrderAdjustmentType")>
+                    <#assign loyaltyCartAdjustmentTypeId = adjustmentType.orderAdjustmentTypeId/>
+                    <#if loyaltyCartAdjustmentTypeId == "LOYALTY_POINTS">
+                      <#if adjustmentType.description?has_content>
+                        <tr>
+                          <#assign cartAdjTotal = Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustment(cartAdjustment, shoppingCart.getSubTotal())!0/>
+	                      <td class="totalCaption"><label>${adjustmentType.get("description",locale)?if_exists}:</label></td>
+	                      <td class="totalValue"><@ofbizCurrency amount=cartAdjTotal rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
+	                    </tr>
+	                  </#if>
+                    </#if>
                   </#list>
                 </#if>
                 <#assign taxAmount = shoppingCart.getTotalSalesTax()/>
-                <#if (!Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO")) || (taxAmount?has_content && (taxAmount &gt; 0))>
-                    <tr>
-                      <td class="totalCaption"><label><#if (taxAmount?default(0)> 0)>${uiLabelMap.TaxTotalCaption}<#else>${uiLabelMap.SalesTaxCaption}</#if></label></td>
+                <#if (!Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO") || (orderTaxTotal?has_content && (orderTaxTotal &gt; 0)))>
+				  <#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_SHOW_SALES_TAX_MULTI")>
+				    <tr>
+				      <#assign taxInfoStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("taxPercent", totalTaxPercent)>
+				      <#assign salesTaxCaption = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SummarySalesTaxCaption",taxInfoStringMap, locale ) />
+                      <td class="totalCaption"><label>${salesTaxCaption!}</label></td>
                       <td class="totalValue"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                     </tr>
-                </#if>
+				  <#else>
+				    <#if appliedTaxList?exists && appliedTaxList?has_content>
+				      <#list appliedTaxList as appliedTax >   
+				        <tr>
+					      <#assign taxInfoStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("taxPercent", appliedTax.sourcePercentage, "description", appliedTax.description)>
+				          <#assign salesTaxCaption = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SummarySalesTaxMultiCaption",taxInfoStringMap, locale ) />
+	                      <td class="totalCaption"><label>${salesTaxCaption!}</label></td>
+	                      <td class="totalValue"><@ofbizCurrency amount=appliedTax.amount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
+	                    </tr>
+				      </#list>
+				    <#else>
+				      <tr>
+				        <#assign taxInfoStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("taxPercent", totalTaxPercent)>
+				          <#assign salesTaxCaption = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SummarySalesTaxCaption",taxInfoStringMap, locale ) />
+                        <td class="totalCaption"><label>${salesTaxCaption!}</label></td>
+                        <td class="totalValue"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
+                      </tr>
+				    </#if>
+				  </#if>
+				</#if>
                 <tr>
                   <td class="totalCaption total"><label>${uiLabelMap.OrderTotalCaption}</label></td>
                   <td class="totalValue total">
@@ -234,9 +304,7 @@
             </tr>
         </thead>
             <tbody>
-                <tr>
-                    <td colspan="9" class="boxNumber">${uiLabelMap.NoDataAvailableInfo}</td>
-                </tr>
+                 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
             </tbody>
     </table>
  </#if>

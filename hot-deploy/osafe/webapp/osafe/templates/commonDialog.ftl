@@ -7,6 +7,6 @@
     <#assign dialogBoxSection = "${dialogPurpose!}DialogBox" />
     ${sections.render(dialogBoxSection!)}
   <#elseif largeImageUrl?exists && largeImageUrl?has_content>
-    <img src="<@ofbizContentUrl>${largeImageUrl!}</@ofbizContentUrl>" id="mainImage" name="mainImage" class="productLargeImage" <#if IMG_SIZE_PDP_REG_H?has_content> height="${IMG_SIZE_PDP_REG_H!""}"</#if> <#if IMG_SIZE_PDP_REG_W?has_content> width="${IMG_SIZE_PDP_REG_W!""}"</#if>/>
+    <img src="<@ofbizContentUrl>${largeImageUrl!}</@ofbizContentUrl>" id="js_mainImage" name="mainImage" class="js_productLargeImage" <#if IMG_SIZE_PDP_REG_H?has_content> height="${IMG_SIZE_PDP_REG_H!""}"</#if> <#if IMG_SIZE_PDP_REG_W?has_content> width="${IMG_SIZE_PDP_REG_W!""}"</#if>/>
   </#if>
 </div>

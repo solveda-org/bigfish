@@ -1,1 +1,0 @@
-This is a where clients should put additional JDBC jars.

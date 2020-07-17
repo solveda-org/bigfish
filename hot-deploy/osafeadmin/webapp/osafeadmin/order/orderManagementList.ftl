@@ -5,7 +5,7 @@
             <tr class="heading">
                 <th class="idCol firstCol">${uiLabelMap.OrderNoLabel}</th>
                 <th class="dateCol">${uiLabelMap.OrderDateLabel}</th>
-                <th class="idCol">${uiLabelMap.CustomerNoLabel}</th>
+                <th class="idCol">${uiLabelMap.CustNoLabel}</th>
                 <th class="nameCol">${uiLabelMap.CustomerNameLabel}</th>
                 <th class="nameCol">${uiLabelMap.EmailAddressLabel}</th>
                 <th class="statusCol">${uiLabelMap.OrderStatusLabel}</th>
@@ -44,13 +44,16 @@
                 <#assign orderSubTotal = orh.getOrderItemsSubTotal()>
                 <#assign totalItemAmount = totalItemAmount + orderSubTotal />
                 <#assign currencyUomId = orh.getCurrency()>
-                <#assign otherAdjAmount = orh.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, true, false, false)>
+                <#assign otherAdjAmount = orh.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, true, false, false)> 
                 <#assign shippingAmount = orh.getAllOrderItemsAdjustmentsTotal(orh.getValidOrderItems(), orderAdjustments, false, false, true)>
                 <#assign shippingAmount = shippingAmount.add(orh.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true))>
                 <#assign totalShipAmount = totalShipAmount + shippingAmount />
                 <#assign taxAmount = orh.getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal!"0.00">
                 <#assign totalTaxAmount = totalTaxAmount + taxAmount />
                 <#assign grandTotal = orh.getOrderGrandTotal(orh.getValidOrderItems(), orderAdjustments)>
+                <#assign orderAdjustmentAmount = Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustments(orderAdjustments, orderSubTotal, true, false, false)/>
+                <#assign totalAdjAmount = totalAdjAmount + orderAdjustmentAmount />
+                <#assign orderItemAmount = orderSubTotal - orderAdjustmentAmount + otherAdjAmount/>
                 
                 <#assign orderEmail=""/>
 				<#if orderSearchEmail?exists && orderSearchEmail?has_content>
@@ -100,13 +103,9 @@
                         ${uiLabelMap.DownloadNewInfo}
                       </#if>
                     </td>
-                    <td class="dollarCol"><@ofbizCurrency amount=orderSubTotal isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
-                    <#assign adjAmount = 0/>
-                    <#list headerAdjustmentsToShow as orderHeaderAdjustment>
-                      <#assign adjAmount = adjAmount + orh.getOrderAdjustmentTotal(orderHeaderAdjustment)/>
-                    </#list>
-                    <#assign totalAdjAmount = totalAdjAmount + adjAmount />
-                    <td class="dollarCol"><#if (adjAmount < 0)><@ofbizCurrency amount=adjAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></#if></td>
+                    <td class="dollarCol"><@ofbizCurrency amount=orderItemAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
+                    <#assign orderItems = orh.getOrderItems()/>
+                    <td class="dollarCol"><#if (orderAdjustmentAmount < 0)><@ofbizCurrency amount=orderAdjustmentAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></#if></td>
                     <td class="dollarCol"><@ofbizCurrency amount=shippingAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                     <td class="dollarCol"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                     <#assign grdTotal = orderHeader.grandTotal!""/>
@@ -144,13 +143,14 @@
                         <@ofbizCurrency amount=totalShipAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/>
                       </td>
                     </tr>
-                    <tr>
-                      <td class="totalCaption total"><label>${uiLabelMap.TaxTotalDollarCaption}</label></td>
-                      <td class="totalValue total">
-                        <@ofbizCurrency amount=totalTaxAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/>
-                      </td>
-                    </tr>
-
+                    <#if (!Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO")) || (totalTaxAmount?has_content && (totalTaxAmount &gt; 0))>
+                      <tr>
+                        <td class="totalCaption total"><label>${uiLabelMap.TaxTotalDollarCaption}</label></td>
+                        <td class="totalValue total">
+                          <@ofbizCurrency amount=totalTaxAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/>
+                        </td>
+                      </tr>
+                    </#if>
                     <tr>
                       <td class="totalCaption total"><label>${uiLabelMap.ListTotalCaption}</label></td>
                       <td class="totalValue total">

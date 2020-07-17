@@ -1,28 +1,64 @@
+<#if mode == 'edit'>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.FullNameCaption}</label>
+      </div>
+      <div class="infoValue">
+        <#if fileAttrMap?exists && fileAttrMap?has_content>
+          ${fileAttrMap.imagePath}
+        </#if>
+      </div>
+    </div>
+  </div>
+</#if>
+
 <div class="infoRow row">
   <div class="infoEntry long">
     <div class="infoCaption">
-      <label>${uiLabelMap.TypeCaption}</label>
+      <label>${uiLabelMap.MediaFolderCaption}</label>
     </div>
-    <div class="entryInput checkbox medium">
-    <#if mode == 'edit'>
-      <input class="checkBoxEntry" type="radio" id="images" name="mediaType"  value="images" <#if parameters.mediaType?exists && parameters.mediaType?string == "images">checked="checked"</#if>/>${uiLabelMap.ImageLabel}
-      <input class="checkBoxEntry" type="radio" id="flash" name="mediaType" value="flash" <#if parameters.mediaType?exists && parameters.mediaType?string == "flash">checked="checked"</#if>/>${uiLabelMap.FlashLabel}
-      <input class="checkBoxEntry" type="radio" id="document" name="mediaType" value="document" <#if parameters.mediaType?exists && parameters.mediaType?string == "document">checked="checked"</#if>/>${uiLabelMap.DocumentLabel}
-    <#else>
-      <input class="checkBoxEntry" type="radio" id="images" name="mediaType"  value="images" checked="checked" onClick="javascript:setUploadUrl('images')" />${uiLabelMap.ImageLabel}
-      <input class="checkBoxEntry" type="radio" id="flash" name="mediaType" value="flash" <#if parameters.mediaType?exists && parameters.mediaType?string == "flash">checked="checked"</#if> onClick="javascript:setUploadUrl('flash')" />${uiLabelMap.FlashLabel}
-      <input class="checkBoxEntry" type="radio" id="document" name="mediaType" value="document" <#if parameters.mediaType?exists && parameters.mediaType?string == "document">checked="checked"</#if> onClick="javascript:setUploadUrl('document')" />${uiLabelMap.DocumentLabel}
-    </#if>
+    <div class="infoValue">
+      <div class="entry checkbox medium">
+      <#if mode == 'edit'>
+        <input class="checkBoxEntry" type="radio" id="newFolder" name="mediaType"  value="newFolder" <#if parameters.mediaType?exists && parameters.mediaType?string == "newFolder">checked="checked"</#if> disabled/>${uiLabelMap.NewFolderLabel}
+        <#list directoryNameList as directoryName>
+          <input class="checkBoxEntry" type="radio" id="${directoryName}" name="mediaType"  value="${directoryName}" <#if parameters.mediaType?exists && parameters.mediaType?string == "${directoryName}">checked="checked"</#if> disabled/>${directoryName}
+        </#list>
+        <input name="mediaType" type="hidden" id="mediaType" value="${parameters.mediaType!""}" />
+      <#else>
+        <input class="checkBoxEntry" type="radio" id="newFolder" name="mediaType"  value="newFolder" checked="checked" onClick="javascript:setUploadUrl('newFolder'); disableNewFolderName('newFolder');" />${uiLabelMap.NewFolderLabel}
+        <#list directoryNameList as directoryName>
+          <input class="checkBoxEntry" type="radio" id="${directoryName}" name="mediaType" value="${directoryName}" <#if parameters.mediaType?exists && parameters.mediaType?string == "${directoryName}">checked="checked"</#if> onClick="javascript:setUploadUrl('${directoryName}'); disableNewFolderName('${directoryName}');" />${directoryName}
+        </#list>
+      </#if>
+      </div>
     </div>
   </div>
 </div>
+
+<div class="infoRow">
+  <div class="infoEntry">
+    <div class="infoCaption">
+      <label>${uiLabelMap.FolderNameCaption}</label>
+    </div>
+    <div class="infoValue">
+      <#if mode="add">
+        <input name="newFolderName" type="text" id="newFolderName" value="${parameters.folderName!""}" />
+      <#else>
+        <input name="newFolderName" type="text" id="newFolderName" value="${parameters.folderName!""}" disabled/>
+      </#if>
+    </div>
+  </div>
+</div>
+
 <input type="hidden" name="currentMediaType" id="currentMediaType" value="${currentMediaType!}"/>
 <input type="hidden" name="createAction" id="createAction" value=""/>
 <#if mode == 'add'>
 <div class="infoRow row">
   <div class="infoEntry long">
     <div class="infoCaption">
-      <label>${uiLabelMap.LoadMediaCaption}</label>
+      <label>${uiLabelMap.LoadFileLabel}</label>
     </div>
     <div class="infoValue">
         <input type="file" name="mediaName" size="40" value=""/>
@@ -54,7 +90,7 @@
 <div class="infoRow row">
   <div class="infoEntry long">
     <div class="infoCaption">
-      <label>${uiLabelMap.ChangeMediaCaption}</label>
+      <label>${uiLabelMap.ChangeFileCaption}</label>
     </div>
     <div class="infoValue">
       <input type="file" name="uploadedMediaFile" size="40" value=""/>
@@ -75,10 +111,10 @@
 <div class="infoRow row">
   <div class="infoEntry long">
     <div class="infoCaption">
-      <label>${uiLabelMap.WidthCaption}</label>
+      <label>${uiLabelMap.HeightCaption}</label>
     </div>
     <div class="infoValue">
-      ${fileAttrMap.originalWidth!}px 
+      ${fileAttrMap.height!}px 
     </div>
   </div>
 </div>
@@ -86,10 +122,10 @@
 <div class="infoRow row">
   <div class="infoEntry long">
     <div class="infoCaption">
-      <label>${uiLabelMap.HeightCaption}</label>
+      <label>${uiLabelMap.WidthCaption}</label>
     </div>
     <div class="infoValue">
-      ${fileAttrMap.height!}px 
+      ${fileAttrMap.width!}px 
     </div>
   </div>
 </div>

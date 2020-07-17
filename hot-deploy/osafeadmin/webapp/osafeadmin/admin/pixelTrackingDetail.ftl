@@ -46,9 +46,12 @@
               <div class="infoValue">
                 <select name="pixelScope" id="pixelScope">
                   <option value=""<#if !pixelScope?has_content> selected=selected</#if>>${uiLabelMap.SelectOneLabel}</option>
-                  <option value="ALL"<#if parameters.pixelScope?default(pixelScope!"") == "ALL"> selected=selected</#if>>${uiLabelMap.AllLabel}</option>
-                  <option value="ALL_EXCEPT_ORDER_CONFIRM"<#if parameters.pixelScope?default(pixelScope!"") == "ALL_EXCEPT_ORDER_CONFIRM"> selected=selected</#if>>${uiLabelMap.AllExceptOrderConfirmLabel}</option>
-                  <option value="ORDER_CONFIRM"<#if parameters.pixelScope?default(pixelScope!"") == "ORDER_CONFIRM"> selected=selected</#if>>${uiLabelMap.OrderConfirmLabel}</option>
+                  <option value="ALL"<#if parameters.pixelScope?default(pixelScope!"") == "ALL"> selected=selected</#if>>${uiLabelMap.AllPageTaggingLabel}</option>
+                  <option value="ALL_EXCEPT_ORDER_CONFIRM"<#if parameters.pixelScope?default(pixelScope!"") == "ALL_EXCEPT_ORDER_CONFIRM"> selected=selected</#if>>${uiLabelMap.AllExceptOrderConfirmPageTaggingLabel}</option>
+                  <option value="ORDER_CONFIRM"<#if parameters.pixelScope?default(pixelScope!"") == "ORDER_CONFIRM"> selected=selected</#if>>${uiLabelMap.OrderConfirmPageTaggingLabel}</option>
+                  <option value="SHOW_CART"<#if parameters.pixelScope?default(pixelScope!"") == "SHOW_CART"> selected=selected</#if>>${uiLabelMap.ShowCartPageTaggingLabel}</option>
+                  <option value="CREATE_ACCOUNT_SUCCESS"<#if parameters.pixelScope?default(pixelScope!"") == "CREATE_ACCOUNT_SUCCESS"> selected=selected</#if>>${uiLabelMap.CreateAccountPageTaggingLabel}</option>
+                  <option value="SUBSCRIBE_NEWSLETTER_SUCCESS"<#if parameters.pixelScope?default(pixelScope!"") == "SUBSCRIBE_NEWSLETTER_SUCCESS"> selected=selected</#if>>${uiLabelMap.EmailSubscriberTaggingLabel}</option>
                 </select>
               </div>
             </div>
@@ -140,5 +143,5 @@
         </div>
     
 <#else>
-    ${uiLabelMap.NoDataAvailableInfo}
+    ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

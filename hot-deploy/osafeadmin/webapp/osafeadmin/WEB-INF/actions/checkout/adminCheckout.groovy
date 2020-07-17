@@ -11,7 +11,18 @@ import org.ofbiz.party.party.PartyHelper;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
-
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.order.shoppingcart.ShoppingCart.CartShipInfo;
+import org.ofbiz.order.shoppingcart.ShoppingCart.CartShipInfo.CartShipItemInfo;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.Debug;
+import javolution.util.FastList;
+import com.osafe.util.OsafeAdminUtil;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+import java.math.BigDecimal;
+import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
 
 adminContext = session.getAttribute("ADMIN_CONTEXT");
 
@@ -22,7 +33,7 @@ if (UtilValidate.isNotEmpty(adminContext))
 	{
 		if (UtilValidate.isNotEmpty(partyId))
 		{
-			context.CustomerInformationHeading = UtilProperties.getMessage("OSafeAdminUiLabels","CustomerDetailInfoHeading",["partyId" : partyId], locale )
+			context.customerInformationHeading = UtilProperties.getMessage("OSafeAdminUiLabels","CustomerDetailInfoHeading",["partyId" : partyId], locale )
 		}
 		party = delegator.findByPrimaryKey("Party", [partyId : partyId]);
 		if(UtilValidate.isNotEmpty(party))
@@ -61,6 +72,7 @@ if (UtilValidate.isNotEmpty(adminContext))
 	        partyContactMechPurpose = party.getRelated("PartyContactMechPurpose");
 	        partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
 
+	        partyBillingLocation = "";
 	        partyBillingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "BILLING_LOCATION"));
 	        partyBillingLocations = EntityUtil.getRelated("PartyContactMech", partyBillingLocations);
 	        partyBillingLocations = EntityUtil.filterByDate(partyBillingLocations,true);
@@ -76,6 +88,10 @@ if (UtilValidate.isNotEmpty(adminContext))
 	        partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
 	        partyShippingLocations = EntityUtil.getRelated("PartyContactMech", partyShippingLocations);
 	        partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,true);
+			if (UtilValidate.isNotEmpty(partyBillingLocation))
+			{
+				partyShippingLocations.add(partyBillingLocation);
+			}
 	        partyShippingLocations = EntityUtil.orderBy(partyShippingLocations, UtilMisc.toList("fromDate DESC"));
 	        if (UtilValidate.isNotEmpty(partyShippingLocations)) 
 	        {
@@ -233,6 +249,74 @@ if (UtilValidate.isNotEmpty(adminContext))
 			shippingEstWpr = new ShippingEstimateWrapper(dispatcher, shopCart, 0);
 			context.shippingEstWpr = shippingEstWpr;
 			carrierShipmentMethodList = shippingEstWpr.getShippingMethods();
+			
+			//CHECK IF SHIPPING ADDRESS IS A PO BOX
+    		gvCartShippingAddress = shopCart.getShippingAddress();
+			gvCartTotalWeight = shopCart.getTotalWeight();
+			if (UtilValidate.isNotEmpty(gvCartShippingAddress))
+	        {
+	        	if(UtilValidate.isNotEmpty(carrierShipmentMethodList))
+				{
+					// clone the list for concurrent modification
+	        		returnShippingMethods = UtilMisc.makeListWritable(carrierShipmentMethodList);
+	        		for (GenericValue method: carrierShipmentMethodList)
+					{
+						psShipmentMeth = delegator.findByPrimaryKeyCache("ProductStoreShipmentMeth", [productStoreShipMethId : method.productStoreShipMethId]);
+						allowPoBoxAddr = psShipmentMeth.getString("allowPoBoxAddr");
+						minWeight = psShipmentMeth.getBigDecimal("minWeight");
+				        maxWeight = psShipmentMeth.getBigDecimal("maxWeight");
+				        isPoBoxAddr = false;
+				        if (!UtilValidate.isNotPoBox(gvCartShippingAddress.get("address1")) || !UtilValidate.isNotPoBox(gvCartShippingAddress.get("address2")) || !UtilValidate.isNotPoBox(gvCartShippingAddress.get("address3")) )
+						{
+							isPoBoxAddr = true;
+						}
+				        if ((UtilValidate.isNotEmpty(allowPoBoxAddr) && "N".equals(allowPoBoxAddr) && isPoBoxAddr)||(gvCartTotalWeight != 0 && ((UtilValidate.isNotEmpty(maxWeight)&& maxWeight < gvCartTotalWeight) || (UtilValidate.isNotEmpty(minWeight) && gvCartTotalWeight < minWeight ))))
+				        {
+	                        returnShippingMethods.remove(method);
+	                        continue;
+	                    }
+	                    //Check shipment CUSTOM METHOD
+						if(UtilValidate.isNotEmpty(psShipmentMeth))
+						{
+							shipmentCustomMethodId = psShipmentMeth.getString("shipmentCustomMethodId");
+							if(UtilValidate.isNotEmpty(shipmentCustomMethodId))
+							{
+								//get the shipment CUSTOM METHOD
+								shipmentCustomMeth = delegator.findByPrimaryKeyCache("CustomMethod", [customMethodId : shipmentCustomMethodId]);
+								if(UtilValidate.isNotEmpty(shipmentCustomMeth))
+								{
+									customMethodName = shipmentCustomMeth.customMethodName;
+									if(UtilValidate.isNotEmpty(customMethodName))
+									{
+										//run the custom method
+										processorResult = null;
+										try 
+										{
+											processorResult = dispatcher.runSync(customMethodName, customMethodContext);
+										} 
+										catch (GenericServiceException e)
+										{
+											//Debug.logError(e, module);
+										}
+										isAvailable = "N";
+										if(UtilValidate.isNotEmpty(processorResult))
+										{
+											isAvailable = processorResult.get("isAvailable");
+										}
+								
+										//if shipping option is not available for this customer then remove from the displayed list
+										if("N".equals(isAvailable))
+										{
+											returnShippingMethods.remove(method);
+										}
+									}
+								}
+							}
+						}
+	        		}
+	        		carrierShipmentMethodList = returnShippingMethods;
+	        	}
+	        }
 			if (UtilValidate.isNotEmpty(carrierShipmentMethodList))
 			{
 			    context.carrierShipmentMethodList = carrierShipmentMethodList;
@@ -251,6 +335,161 @@ if (UtilValidate.isNotEmpty(adminContext))
 			context.orderShippingTotal = shopCart.getTotalShipping();
 			context.orderTaxTotal = shopCart.getTotalSalesTax();
 			context.orderGrandTotal = shopCart.getGrandTotal();
+			
+			appliedTaxList = FastList.newInstance();
+			CartShipInfo cartShipInfo = shopCart.getShipInfo(0);
+			List cartShipTaxAdjustments = FastList.newInstance();
+			BigDecimal totalTaxPercent = BigDecimal.ZERO;
+			if(UtilValidate.isNotEmpty(cartShipInfo))
+			{
+				if(UtilValidate.isNotEmpty(cartShipInfo.shipTaxAdj))
+				{
+					cartShipTaxAdjustments.addAll(cartShipInfo.shipTaxAdj);
+				}
+				
+				if(UtilValidate.isNotEmpty(cartShipInfo.shipItemInfo) && UtilValidate.isNotEmpty(cartShipInfo.shipItemInfo.values()))
+				{
+					for (CartShipInfo.CartShipItemInfo info : cartShipInfo.shipItemInfo.values())
+					{
+						List infoItemTaxAdj = info.itemTaxAdj;
+						for (GenericValue gvInfo : infoItemTaxAdj)
+						{
+							cartShipTaxAdjustments.add(gvInfo);
+						}
+					}
+				}
+				for (GenericValue cartTaxAdjustment : cartShipTaxAdjustments)
+				{
+					amount = 0;
+					taxAuthorityRateSeqId = cartTaxAdjustment.taxAuthorityRateSeqId;
+					if(UtilValidate.isNotEmpty(taxAuthorityRateSeqId))
+					{
+						//check if this taxAuthorityRateSeqId is already in the list
+						alreadyInList = "N";
+						for(Map taxInfoMap : appliedTaxList)
+						{
+							taxAuthorityRateSeqIdInMap = taxInfoMap.get("taxAuthorityRateSeqId");
+							if(UtilValidate.isNotEmpty(taxAuthorityRateSeqIdInMap) && taxAuthorityRateSeqIdInMap.equals(taxAuthorityRateSeqId))
+							{
+								amount = taxInfoMap.get("amount") + cartTaxAdjustment.amount;
+								taxInfoMap.put("amount", amount);
+								alreadyInList = "Y";
+								break;
+							}
+						}
+						if(("N").equals(alreadyInList))
+						{
+							taxInfo = FastMap.newInstance();
+							taxInfo.put("taxAuthorityRateSeqId", taxAuthorityRateSeqId);
+							taxInfo.put("amount", cartTaxAdjustment.amount);
+							taxAdjSourceBD = new BigDecimal(cartTaxAdjustment.sourcePercentage);
+							taxAdjSourceStr = taxAdjSourceBD.setScale(2).toString();
+							taxInfo.put("sourcePercentage", taxAdjSourceStr);
+							taxInfo.put("description", cartTaxAdjustment.comments);
+							appliedTaxList.add(taxInfo);
+							totalTaxPercent = totalTaxPercent.add(taxAdjSourceBD);
+						}
+					}
+				}
+			}
+			context.appliedTaxList = appliedTaxList;
+			context.totalTaxPercent = totalTaxPercent.setScale(2).toString();
+			currencyRounding=2;
+			roundCurrency = globalContext.CURRENCY_UOM_ROUNDING;
+			if (UtilValidate.isNotEmpty(roundCurrency) && OsafeAdminUtil.isNumber(roundCurrency))
+			{
+				currencyRounding = Integer.parseInt(roundCurrency);
+			}
+			globalContext.currencyRounding =currencyRounding;
+			
+			orderAdjustmentTypeList = delegator.findList("OrderAdjustmentType", EntityCondition.makeCondition("orderAdjustmentTypeId", EntityOperator.IN, ["DISCOUNT_ADJUSTMENT", "MISCELLANEOUS_CHARGE","SURCHARGE_ADJUSTMENT"]), null, ["description"], null, false);
+			context.orderAdjustmentTypeList = orderAdjustmentTypeList;
+			
+			
+			// Selected Shipping Method
+			chosenShippingMethod = "";
+			chosenShippingMethodDescription = "";
+			if (UtilValidate.isNotEmpty(shopCart.getShipmentMethodTypeId()) && UtilValidate.isNotEmpty(shopCart.getCarrierPartyId()))
+			{
+				chosenShippingMethod = shopCart.getShipmentMethodTypeId() + '@' + shopCart.getCarrierPartyId();
+				if (chosenShippingMethod.equals("NO_SHIPPING@_NA_"))
+				{
+					chosenShippingMethodDescription = uiLabelMap.StorePickupLabel;
+				}
+				else
+				{
+					carrier =  delegator.findByPrimaryKeyCache("PartyGroup", UtilMisc.toMap("partyId", shopCart.getCarrierPartyId()));
+					if(UtilValidate.isNotEmpty(carrier))
+					{
+						if(UtilValidate.isNotEmpty(carrier.groupName))
+						{
+							chosenShippingMethodDescription = carrier.groupName + " " + shopCart.getShipmentMethodType(0).description;
+						}
+						else
+						{
+							chosenShippingMethodDescription = shopCart.getCarrierPartyId() + " " + shopCart.getShipmentMethodType(0).description;
+						}
+					}
+				}
+			}
+			shippingInstructions = "";
+			shippingInstructions = shopCart.getShippingInstructions();
+			//Set Cart Totals
+			//Adjustments are pulled in the FTL
+			try
+			{
+				ShippingEvents.getShipEstimate(request, response);
+				//check if it is store pickup
+				if (chosenShippingMethod.equals("NO_SHIPPING@_NA_"))
+				{
+					if(UtilValidate.isNotEmpty(shopCart))
+					{
+						taxedStoreId = shopCart.getOrderAttribute("STORE_LOCATION");
+						if(UtilValidate.isNotEmpty(taxedStoreId))
+						{
+							taxedParty = delegator.findOne("Party", [partyId : taxedStoreId], true);
+							if (UtilValidate.isNotEmpty(taxedParty))
+							{
+								taxedPartyContactMechPurpose = taxedParty.getRelatedCache("PartyContactMechPurpose");
+								taxedPartyContactMechPurpose = EntityUtil.filterByDate(taxedPartyContactMechPurpose,true);
+						
+								taxedPartyGeneralLocations = EntityUtil.filterByAnd(taxedPartyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "GENERAL_LOCATION"));
+								taxedPartyGeneralLocations = EntityUtil.getRelatedCache("PartyContactMech", taxedPartyGeneralLocations);
+								taxedPartyGeneralLocations = EntityUtil.filterByDate(taxedPartyGeneralLocations,true);
+								taxedPartyGeneralLocations = EntityUtil.orderBy(taxedPartyGeneralLocations, UtilMisc.toList("fromDate DESC"));
+								if(UtilValidate.isNotEmpty(taxedPartyGeneralLocations))
+								{
+									taxedPartyGeneralLocation = EntityUtil.getFirst(taxedPartyGeneralLocations);
+									//this DB call cannot use cache
+									storeAddress = taxedPartyGeneralLocation.getRelatedOne("PostalAddress");
+									checkOutHelper = new CheckOutHelper(dispatcher, delegator, shopCart);
+									checkOutHelper.calcAndAddTax(storeAddress);
+									request.setAttribute("isTaxedOnStore", "Y");
+									request.setAttribute("taxedStoreAddress", storeAddress);
+									com.osafe.events.CheckOutEvents.calcLoyaltyTax(request, response);
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					//get shipping address .. if null .. do not call calcTax
+					shippingAddress = shopCart.getShippingAddress();
+					if (UtilValidate.isNotEmpty(shippingAddress) && (UtilValidate.isNotEmpty(shippingAddress.get("countryGeoId")) || UtilValidate.isNotEmpty(shippingAddress.get("stateProvinceGeoId")) || UtilValidate.isNotEmpty(shippingAddress.get("postalCodeGeoId"))))
+					{
+						//request.setAttribute("isTaxedOnStore", "Y");
+						//request.setAttribute("taxedStoreAddress", storeAddress);
+						org.ofbiz.order.shoppingcart.CheckOutEvents.calcTax(request, response);
+						com.osafe.events.CheckOutEvents.calcLoyaltyTax(request, response);
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				Debug.logError(e, e.toString(), "showCartItems.groovy");
+			}
+			
 		}		
 	}
 }

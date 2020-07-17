@@ -51,6 +51,10 @@ exportContentPDPSpot = StringUtils.trimToEmpty(parameters.exportContentPDPSpot);
 exportContentEmail = StringUtils.trimToEmpty(parameters.exportContentEmail);
 exportContentProdCat = StringUtils.trimToEmpty(parameters.exportContentProdCat);
 exportContentTxt = StringUtils.trimToEmpty(parameters.exportContentTxtTemplate);
+exportPageTagging = StringUtils.trimToEmpty(parameters.exportPageTagging);
+exportPaymentGatewaySettings = StringUtils.trimToEmpty(parameters.exportPaymentGatewaySettings);
+exportShippingCharges = StringUtils.trimToEmpty(parameters.exportShippingCharges);
+exportSalesTaxes = StringUtils.trimToEmpty(parameters.exportSalesTaxes);
 
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 
@@ -114,11 +118,35 @@ if(UtilValidate.isNotEmpty(exportContentProdCat))
     context.exportContentProdCat=exportContentProdCat;
 }
 
+if(UtilValidate.isNotEmpty(exportPageTagging)) 
+{
+    context.exportPageTagging = exportPageTagging;
+}
+if(UtilValidate.isNotEmpty(exportPaymentGatewaySettings)) 
+{
+    context.exportPaymentGatewaySettings = exportPaymentGatewaySettings;
+}
+
+if(UtilValidate.isNotEmpty(exportShippingCharges)) 
+{
+    context.exportShippingCharges = exportShippingCharges;
+}
+
+if(UtilValidate.isNotEmpty(exportSalesTaxes)) 
+{
+    context.exportSalesTaxes = exportSalesTaxes;
+}
+
 context.passedContentTypeIds = passedContentTypeIds;
 context.passedProdCatContentTypeIds = passedProdCatContentTypeIds;
 
 numberOfContentTypeIds = passedContentTypeIds?.size() ?: 0;
 context.numberOfContentTypeIds = numberOfContentTypeIds;
+
+partyContactMechPurposeTypeExpr = FastList.newInstance();
+partyContactMechPurposeTypeExpr.add(EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.EQUALS, "BILLING_LOCATION"));
+partyContactMechPurposeTypeExpr.add(EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.EQUALS, "PAYMENT_LOCATION"));
+partyContactMechPurposeTypeCond = EntityCondition.makeCondition(partyContactMechPurposeTypeExpr, EntityOperator.OR);
 
 numberWritten = 0;
 if (UtilValidate.isNotEmpty(exportFile)) 
@@ -242,6 +270,396 @@ if (UtilValidate.isNotEmpty(exportFile))
             TransactionUtil.commit(beganTransaction);
         } 
     }
+    
+    if(UtilValidate.isNotEmpty(exportPageTagging)) 
+    {
+        beganTransaction = TransactionUtil.begin(3600);
+        try 
+        {
+            TransactionUtil.commit(beganTransaction);
+            List<GenericValue> pixelTrackingList = delegator.findByAnd("XPixelTracking", UtilMisc.toMap());
+            for(GenericValue pixelTracking : pixelTrackingList)
+            {
+                content = pixelTracking.getRelatedOne("Content");
+                if (content != null) 
+                {
+                    dataResource = content.getRelatedOne("DataResource");
+                    if (dataResource != null) 
+                    {
+                        dataResource.writeXmlText(writer, "");
+                        numberWritten++;
+                        content.writeXmlText(writer, "");
+                        numberWritten++;
+                        pixelTracking.writeXmlText(writer, "");
+                        numberWritten++;
+                        
+                        electronicText = dataResource.getRelatedOne("ElectronicText");
+                        if (electronicText != null) 
+                        {
+                            electronicText.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                    }
+                    else
+                    {
+                        content.writeXmlText(writer, "");
+                        numberWritten++;
+                        pixelTracking.writeXmlText(writer, "");
+                        numberWritten++;
+                    }
+                }
+            }
+        } catch (Exception exc) {
+            String thisResult = "wrote $numberWritten records";
+            Debug.logError(exc, thisResult, "JSP");
+            TransactionUtil.rollback(beganTransaction, thisResult, exc);
+        }finally {
+            // only commit the transaction if we started one... this will throw an exception if it fails
+            TransactionUtil.commit(beganTransaction);
+        } 
+    }
+    
+    
+    if(UtilValidate.isNotEmpty(exportPaymentGatewaySettings)) 
+    {
+        beganTransaction = TransactionUtil.begin(3600);
+        try {
+            TransactionUtil.commit(beganTransaction);
+            List<GenericValue> paymentGatewayConfigs = delegator.findByAnd("PaymentGatewayConfig", UtilMisc.toMap());
+            for(GenericValue paymentGatewayConfig : paymentGatewayConfigs)
+            {
+                numberWritten++;
+                paymentGatewayConfig.writeXmlText(writer, "");
+                numberWritten++;
+                paymentGatewayAuthorizeNet =  paymentGatewayConfig.getRelatedOne("PaymentGatewayAuthorizeNet");
+                if(UtilValidate.isNotEmpty(paymentGatewayAuthorizeNet))
+                {
+                    paymentGatewayAuthorizeNet.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewayClearCommerce =  paymentGatewayConfig.getRelatedOne("PaymentGatewayClearCommerce");
+                if(UtilValidate.isNotEmpty(paymentGatewayClearCommerce))
+                {
+                    paymentGatewayClearCommerce.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewayCyberSource =  paymentGatewayConfig.getRelatedOne("PaymentGatewayCyberSource");
+                if(UtilValidate.isNotEmpty(paymentGatewayCyberSource))
+                {
+                    paymentGatewayCyberSource.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewayEbs =  paymentGatewayConfig.getRelatedOne("PaymentGatewayEbs");
+                if(UtilValidate.isNotEmpty(paymentGatewayEbs))
+                {
+                    paymentGatewayEbs.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewayOrbital =  paymentGatewayConfig.getRelatedOne("PaymentGatewayOrbital");
+                if(UtilValidate.isNotEmpty(paymentGatewayOrbital))
+                {
+                    paymentGatewayOrbital.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewayPayNetz =  paymentGatewayConfig.getRelatedOne("PaymentGatewayPayNetz");
+                if(UtilValidate.isNotEmpty(paymentGatewayPayNetz))
+                {
+                    paymentGatewayPayNetz.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewayPayPal =  paymentGatewayConfig.getRelatedOne("PaymentGatewayPayPal");
+                if(UtilValidate.isNotEmpty(paymentGatewayPayPal))
+                {
+                    paymentGatewayPayPal.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewayPayflowPro =  paymentGatewayConfig.getRelatedOne("PaymentGatewayPayflowPro");
+                if(UtilValidate.isNotEmpty(paymentGatewayPayflowPro))
+                {
+                    paymentGatewayPayflowPro.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewaySagePay =  paymentGatewayConfig.getRelatedOne("PaymentGatewaySagePay");
+                if(UtilValidate.isNotEmpty(paymentGatewaySagePay))
+                {
+                    paymentGatewaySagePay.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewaySagePayToken =  paymentGatewayConfig.getRelatedOne("PaymentGatewaySagePayToken");
+                if(UtilValidate.isNotEmpty(paymentGatewaySagePayToken))
+                {
+                    paymentGatewaySagePayToken.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewayTenderCard =  paymentGatewayConfig.getRelatedOne("PaymentGatewayTenderCard");
+                if(UtilValidate.isNotEmpty(paymentGatewayTenderCard))
+                {
+                    paymentGatewayTenderCard.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+                paymentGatewayWorldPay =  paymentGatewayConfig.getRelatedOne("PaymentGatewayWorldPay");
+                if(UtilValidate.isNotEmpty(paymentGatewayWorldPay))
+                {
+                    paymentGatewayWorldPay.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+            }
+            List<GenericValue> productStorePaymentSettings = delegator.findByAnd("ProductStorePaymentSetting", UtilMisc.toMap("productStoreId", productStoreId));
+            if(UtilValidate.isNotEmpty(productStorePaymentSettings))
+            {
+                for(GenericValue productStorePaymentSetting : productStorePaymentSettings)
+                {
+                    customMethod = productStorePaymentSetting.getRelatedOne("CustomMethod");
+                    if(UtilValidate.isNotEmpty(customMethod))
+                    {
+                        customMethod.writeXmlText(writer, "");
+                        numberWritten++;
+                    }
+                    productStorePaymentSetting.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+            }
+            
+        } catch (Exception exc) {
+            String thisResult = "wrote $numberWritten records";
+            Debug.logError(exc, thisResult, "JSP");
+            TransactionUtil.rollback(beganTransaction, thisResult, exc);
+        }finally {
+            // only commit the transaction if we started one... this will throw an exception if it fails
+            TransactionUtil.commit(beganTransaction);
+        } 
+    }
+    
+    if(UtilValidate.isNotEmpty(exportShippingCharges)) 
+    {
+        beganTransaction = TransactionUtil.begin(3600);
+        try {
+            TransactionUtil.commit(beganTransaction);
+            List<GenericValue> partyRoles = delegator.findByAnd("PartyRole", UtilMisc.toMap("roleTypeId", "CARRIER"));
+            if(UtilValidate.isNotEmpty(partyRoles))
+            {
+                for(GenericValue partyRole : partyRoles)
+                {
+                    party = partyRole.getRelatedOne("Party");
+                    if(UtilValidate.isNotEmpty(party))
+                    {
+                        party.writeXmlText(writer, "");
+                        numberWritten++;
+                        partyRole.writeXmlText(writer, "");
+                        numberWritten++;
+                        partyGroup = party.getRelatedOne("PartyGroup");
+                        if(UtilValidate.isNotEmpty(partyGroup))
+                        {
+                            partyGroup.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                        
+                    }
+                }  
+            }
+            
+            List<GenericValue> shipmentMethodTypes = delegator.findByAnd("ShipmentMethodType", UtilMisc.toMap());
+            if(UtilValidate.isNotEmpty(shipmentMethodTypes))
+            {
+                for(GenericValue shipmentMethodType : shipmentMethodTypes)
+                {
+                    shipmentMethodType.writeXmlText(writer, "");
+                    numberWritten++;
+                    List<GenericValue> carrierShipmentMethods = shipmentMethodType.getRelated("CarrierShipmentMethod");
+                    if(UtilValidate.isNotEmpty(carrierShipmentMethods))
+                    {
+                        for(GenericValue carrierShipmentMethod : carrierShipmentMethods)
+                        {
+                            carrierShipmentMethod.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                    }
+                }
+            }
+            
+            List<GenericValue> productStoreShipmentMeths = delegator.findByAnd("ProductStoreShipmentMeth", UtilMisc.toMap("productStoreId",productStoreId));
+            if(UtilValidate.isNotEmpty(productStoreShipmentMeths))
+            {
+                for(GenericValue productStoreShipmentMeth : productStoreShipmentMeths)
+                {
+                    shipmentGatewayConfig = productStoreShipmentMeth.getRelatedOne("ShipmentGatewayConfig");
+                    if(UtilValidate.isNotEmpty(shipmentGatewayConfig))
+                    {
+                        shipmentGatewayConfig.writeXmlText(writer, "");
+                        numberWritten++;
+                        
+                        shipmentGatewayBlueDart = shipmentGatewayConfig.getRelatedOne("ShipmentGatewayBlueDart");
+                        if(UtilValidate.isNotEmpty(shipmentGatewayBlueDart))
+                        {
+                            shipmentGatewayBlueDart.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                        shipmentGatewayDhl = shipmentGatewayConfig.getRelatedOne("ShipmentGatewayDhl");
+                        if(UtilValidate.isNotEmpty(shipmentGatewayDhl))
+                        {
+                            shipmentGatewayDhl.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                        shipmentGatewayFedex = shipmentGatewayConfig.getRelatedOne("ShipmentGatewayFedex");
+                        if(UtilValidate.isNotEmpty(shipmentGatewayFedex))
+                        {
+                            shipmentGatewayFedex.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                        shipmentGatewayUps = shipmentGatewayConfig.getRelatedOne("ShipmentGatewayUps");
+                        if(UtilValidate.isNotEmpty(shipmentGatewayUps))
+                        {
+                            shipmentGatewayUps.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                        shipmentGatewayUsps = shipmentGatewayConfig.getRelatedOne("ShipmentGatewayUsps");
+                        if(UtilValidate.isNotEmpty(shipmentGatewayUsps))
+                        {
+                            shipmentGatewayUsps.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                    }
+                    
+                    customMethod = productStoreShipmentMeth.getRelatedOne("CustomMethod");
+                    if(UtilValidate.isNotEmpty(customMethod))
+                    {
+                        customMethod.writeXmlText(writer, "");
+                        numberWritten++;
+                    }
+                    productStoreShipmentMeth.writeXmlText(writer, "");
+                    numberWritten++;
+                }
+            }
+            List<GenericValue> shipmentCostEstimates = delegator.findByAnd("ShipmentCostEstimate", UtilMisc.toMap("productStoreId",productStoreId));
+            if(UtilValidate.isNotEmpty(shipmentCostEstimates))
+            {
+                for(GenericValue shipmentCostEstimate : shipmentCostEstimates)
+                {
+                    shipmentCostEstimate.writeXmlText(writer, "");
+                }
+            }
+        } 
+        catch (Exception exc) 
+        {
+            String thisResult = "wrote $numberWritten records";
+            Debug.logError(exc, thisResult, "JSP");
+            TransactionUtil.rollback(beganTransaction, thisResult, exc);
+        }
+        finally 
+        {
+            // only commit the transaction if we started one... this will throw an exception if it fails
+            TransactionUtil.commit(beganTransaction);
+        } 
+    }
+    
+    if(UtilValidate.isNotEmpty(exportSalesTaxes)) 
+    {
+        beganTransaction = TransactionUtil.begin(3600);
+        try 
+        {
+            TransactionUtil.commit(beganTransaction);
+            List<GenericValue> partyRoles = delegator.findByAnd("PartyRole", UtilMisc.toMap("roleTypeId", "TAX_AUTHORITY"));
+            if(UtilValidate.isNotEmpty(partyRoles))
+            {
+                for(GenericValue partyRole : partyRoles)
+                {
+                    party = partyRole.getRelatedOne("Party");
+                    if(UtilValidate.isNotEmpty(party))
+                    {
+                        party.writeXmlText(writer, "");
+                        numberWritten++;
+                        partyRole.writeXmlText(writer, "");
+                        numberWritten++;
+                        partyGroup = party.getRelatedOne("PartyGroup");
+                        if(UtilValidate.isNotEmpty(partyGroup))
+                        {
+                            partyGroup.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                        partyContactMechs = party.getRelated("PartyContactMech");
+                        if(UtilValidate.isNotEmpty(partyContactMechs))
+                        {
+                            for(GenericValue partyContactMech : partyContactMechs)
+                            {
+                                contactMech = partyContactMech.getRelatedOne("ContactMech");
+                                contactMech.writeXmlText(writer, "");
+                                numberWritten++;
+                                
+                                partyContactMechPurposes = contactMech.getRelated("PartyContactMechPurpose");
+                                partyContactMechPurposes = EntityUtil.filterByCondition(partyContactMechPurposes, partyContactMechPurposeTypeCond);
+                                if(UtilValidate.isNotEmpty(partyContactMechPurposes))
+                                {
+                                    for(GenericValue partyContactMechPurpose : partyContactMechPurposes)
+                                    {
+                                        partyContactMechPurpose.writeXmlText(writer, "");
+                                        numberWritten++;
+                                        
+                                        postalAddress = partyContactMechPurpose.getRelatedOne("PostalAddress");
+                                        if(UtilValidate.isNotEmpty(postalAddress))
+                                        {
+                                            postalAddress.writeXmlText(writer, "");
+                                            numberWritten++;
+                                        } 
+                                    }
+                                }
+                                partyContactMech.writeXmlText(writer, "");
+                                numberWritten++;
+                            }
+                        }
+                        taxAuthorities = party.getRelated("TaxAuthTaxAuthority");
+                        if(UtilValidate.isNotEmpty(taxAuthorities))
+                        {
+                            for(GenericValue taxAuthority : taxAuthorities)
+                            {
+                                taxAuthGeo = taxAuthority.getRelatedOne("TaxAuthGeo");
+                                if(UtilValidate.isNotEmpty(taxAuthGeo))
+                                {
+                                    taxAuthGeo.writeXmlText(writer, "");
+                                    numberWritten++;
+                                }
+                                taxAuthority.writeXmlText(writer, "");
+                                numberWritten++;
+                                
+                                taxAuthorityAssocs = taxAuthority.getRelated("TaxAuthorityAssoc");
+                                if(UtilValidate.isNotEmpty(taxAuthorityAssocs))
+                                {
+                                    for(GenericValue taxAuthorityAssoc : taxAuthorityAssocs)
+                                    {
+                                        taxAuthorityAssoc.writeXmlText(writer, "");
+                                        numberWritten++;
+                                    }
+                                }
+                                taxAuthorityRateProducts = taxAuthority.getRelated("TaxAuthorityRateProduct");
+                                taxAuthorityRateProducts = EntityUtil.filterByAnd(taxAuthorityRateProducts,UtilMisc.toMap("productStoreId",productStoreId));
+                                if(UtilValidate.isNotEmpty(taxAuthorityRateProducts))
+                                {
+                                    for(GenericValue taxAuthorityRateProduct : taxAuthorityRateProducts)
+                                    {
+                                        taxAuthorityRateProduct.writeXmlText(writer, "");
+                                        numberWritten++;
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                }  
+            }
+            
+        } 
+        catch (Exception exc) 
+        {
+            String thisResult = "wrote $numberWritten records";
+            Debug.logError(exc, thisResult, "JSP");
+            TransactionUtil.rollback(beganTransaction, thisResult, exc);
+        }
+        finally 
+        {
+            // only commit the transaction if we started one... this will throw an exception if it fails
+            TransactionUtil.commit(beganTransaction);
+        } 
+    }
+    
     writer.println("</entity-engine-xml>");
     writer.close();
     Debug.log("Total records written from all entities: $numberWritten");

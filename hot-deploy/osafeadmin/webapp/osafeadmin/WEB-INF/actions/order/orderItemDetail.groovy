@@ -1,5 +1,7 @@
 package order;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.order.order.OrderReadHelper;
@@ -12,6 +14,11 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.base.util.string.FlexibleStringExpander;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.entity.condition.EntityFunction;
+import java.math.BigDecimal;
 
 userLogin = session.getAttribute("userLogin");
 orderId = StringUtils.trimToEmpty(parameters.orderId);
@@ -21,8 +28,10 @@ orderHeader = null;
 orderItems = null;
 orderNotes = null;
 partyId = null;
+shipGroup = null;
 
-if (UtilValidate.isNotEmpty(orderId)) 
+orderSubTotal = 0;
+if (UtilValidate.isNotEmpty(orderId))
 {
 	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
 	
@@ -43,7 +52,162 @@ if (UtilValidate.isNotEmpty(orderId))
 	context.orderId=orderId;
 	context.pageTitle = UtilProperties.getMessage("OSafeAdminUiLabels","OrderManagementOrderDetailTitle",messageMap, locale )
 	context.generalInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderDetailInfoHeading",messageMap, locale )
+	
 }
+
+orderHeaderAdjustments = null;
+if (UtilValidate.isNotEmpty(orderHeader))
+{
+	productStore = orderHeader.getRelatedOne("ProductStore");
+	orderReadHelper = new OrderReadHelper(orderHeader);
+	orderItems = orderReadHelper.getOrderItems();
+	canceledPromoOrderItem = [:];
+	orderItems.each { orderItem ->
+		if("Y".equals(orderItem.get("isPromo")) && "ITEM_CANCELLED".equals(orderItem.get("statusId")))
+		{
+			canceledPromoOrderItem = orderItem;
+		}
+		orderItems.remove(canceledPromoOrderItem);
+	}
+	orderSubTotal = orderReadHelper.getOrderItemsSubTotal();
+	orderAdjustments = orderReadHelper.getAdjustments();
+	otherAdjustmentsList = FastList.newInstance();
+	otherAdjustmentsList = EntityUtil.filterByAnd(orderAdjustments, [EntityCondition.makeCondition("orderAdjustmentTypeId", EntityOperator.NOT_EQUAL, "PROMOTION_ADJUSTMENT")]);
+	otherAdjustmentsList = EntityUtil.filterByAnd(otherAdjustmentsList, [EntityCondition.makeCondition("orderAdjustmentTypeId", EntityOperator.NOT_EQUAL, "LOYALTY_POINTS")]);
+	otherAdjustmentsAmount = OrderReadHelper.calcOrderAdjustments(otherAdjustmentsList, orderSubTotal, true, false, false);
+	orderHeaderAdjustments = orderReadHelper.getOrderHeaderAdjustments();
+	headerAdjustmentsToShow = orderReadHelper.filterOrderAdjustments(orderHeaderAdjustments, true, false, false, false, false);
+	shippingAmount = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, false, true);
+	shippingAmount = shippingAmount.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true));
+	orderItemShipGroups = orderReadHelper.getOrderItemShipGroups();
+	//headerAdjustmentsToShow = orderReadHelper.getOrderHeaderAdjustmentsToShow();
+	taxAmount = OrderReadHelper.getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal;
+	
+	grandTotal = orderReadHelper.getOrderGrandTotal();
+	currencyUomId = orderReadHelper.getCurrency();
+	notes = orderHeader.getRelatedOrderBy("OrderHeaderNoteView", ["-noteDateTime"]);
+	context.notesCount = notes.size();
+}
+
+context.shippingAmount = shippingAmount;
+context.taxAmount = taxAmount;
+context.otherAdjustmentsAmount = otherAdjustmentsAmount;
+context.grandTotal = grandTotal;
+context.currencyUomId = currencyUomId;
+context.headerAdjustmentsToShow = headerAdjustmentsToShow;
+
+appliedTaxList = FastList.newInstance();
+List orderShipTaxAdjustments = FastList.newInstance();
+BigDecimal totalTaxPercent = BigDecimal.ZERO;
+if(UtilValidate.isNotEmpty(orderAdjustments) && orderAdjustments.size() > 0)
+{
+	orderShipTaxAdjustments = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SALES_TAX"));
+	
+	for (GenericValue orderTaxAdjustment : orderShipTaxAdjustments)
+	{
+		amount = 0;
+		taxAuthorityRateSeqId = orderTaxAdjustment.taxAuthorityRateSeqId;
+		if(UtilValidate.isNotEmpty(taxAuthorityRateSeqId))
+		{
+			//check if this taxAuthorityRateSeqId is already in the list
+			alreadyInList = "N";
+			for(Map taxInfoMap : appliedTaxList)
+			{
+				taxAuthorityRateSeqIdInMap = taxInfoMap.get("taxAuthorityRateSeqId");
+				if(UtilValidate.isNotEmpty(taxAuthorityRateSeqIdInMap) && taxAuthorityRateSeqIdInMap.equals(taxAuthorityRateSeqId))
+				{
+					amount = taxInfoMap.get("amount") + orderTaxAdjustment.amount;
+					taxInfoMap.put("amount", amount);
+					alreadyInList = "Y";
+					break;
+				}
+			}
+			if(("N").equals(alreadyInList))
+			{
+				taxInfo = FastMap.newInstance();
+				taxInfo.put("taxAuthorityRateSeqId", taxAuthorityRateSeqId);
+				taxInfo.put("amount", orderTaxAdjustment.amount);
+				taxAdjSourceBD = new BigDecimal(orderTaxAdjustment.sourcePercentage);
+				taxAdjSourceStr = taxAdjSourceBD.setScale(2).toString();
+				taxInfo.put("sourcePercentage", taxAdjSourceStr);
+				taxInfo.put("description", orderTaxAdjustment.comments);
+				appliedTaxList.add(taxInfo);
+				totalTaxPercent = totalTaxPercent.add(taxAdjSourceBD);
+			}
+		}
+	}
+}
+context.appliedTaxList = appliedTaxList;
+context.totalTaxPercent = totalTaxPercent.setScale(2).toString();
+
+//get Adjustment Info
+appliedPromoList = FastList.newInstance();
+appliedLoyaltyPointsList = FastList.newInstance();
+if(UtilValidate.isNotEmpty(orderHeaderAdjustments) && orderHeaderAdjustments.size() > 0)
+{
+	adjustments = orderHeaderAdjustments;
+	//iterate through adjustments
+	for (GenericValue cartAdjustment : adjustments)
+	{
+		adjustmentType = cartAdjustment.getRelatedOneCache("OrderAdjustmentType");
+		adjustmentTypeDesc = adjustmentType.get("description",locale);
+		//if loyalty points adjustment then store info
+		if(adjustmentType.orderAdjustmentTypeId.equals("LOYALTY_POINTS"))
+		{
+			loyaltyPointsInfo = FastMap.newInstance();
+			loyaltyPointsInfo.put("cartAdjustment", cartAdjustment);
+			loyaltyPointsInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
+			appliedLoyaltyPointsList.add(loyaltyPointsInfo);
+		}
+		//if promo adjustment then store info
+		promoInfo = FastMap.newInstance();
+		promoInfo.put("cartAdjustment", cartAdjustment);
+		promoCodeText = "";
+		productPromo = cartAdjustment.getRelatedOneCache("ProductPromo");
+		if(UtilValidate.isNotEmpty(productPromo))
+		{
+			promoInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
+			promoText = productPromo.promoText;
+			promoInfo.put("promoText", promoText);
+			productPromoCode = productPromo.getRelatedCache("ProductPromoCode");
+			if(UtilValidate.isNotEmpty(productPromoCode))
+			{
+				promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
+				if(UtilValidate.isNotEmpty(promoCodesEntered))
+				{
+					for (GenericValue promoCodeEntered : promoCodesEntered)
+					{
+						if(UtilValidate.isNotEmpty(promoCodeEntered))
+						{
+							for (GenericValue promoCode : productPromoCode)
+							{
+								promoCodeEnteredId = promoCodeEntered;
+								promoCodeId = promoCode.productPromoCodeId;
+								if(UtilValidate.isNotEmpty(promoCodeEnteredId))
+								{
+									if(promoCodeId == promoCodeEnteredId)
+									{
+										promoCodeText = promoCode.productPromoCodeId;
+										promoInfo.put("promoCodeText", promoCodeText);
+									}
+								}
+							}
+						}
+					}
+					
+				}
+			}
+			appliedPromoList.add(promoInfo);
+		}
+	}
+}
+
+context.appliedPromoList = appliedPromoList;
+context.appliedLoyaltyPointsList = appliedLoyaltyPointsList;
+
+//Sub Total
+context.orderSubTotal = orderSubTotal;
+
 
 if (UtilValidate.isNotEmpty(orderHeader)) 
 {
@@ -64,6 +228,7 @@ if (UtilValidate.isNotEmpty(orderHeader))
 }	
 	
 //FOR EACH INDIVIDUAL ORDER ITEM SCREEN	
+itemCancelledAmmount = 0;
 orderItem = request.getAttribute("orderItem");
 if(UtilValidate.isNotEmpty(orderItem))
 {
@@ -75,7 +240,7 @@ if(UtilValidate.isNotEmpty(orderItem))
 	context.orderId=orderId;
 	context.orderItemBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderItemBoxHeading",messageMap, locale )
 	
-	statusItem = orderItem.getRelatedOneCache("StatusItem");
+	statusItem = orderItem.getRelatedOne("StatusItem");
 	context.statusItem = statusItem;
 	
 	//get Returned Quantity
@@ -91,9 +256,19 @@ if(UtilValidate.isNotEmpty(orderItem))
 		context.returnQuantityMap = orderReadHelper.getOrderItemReturnedQuantities();
 	}
 	
+	//get cancelled quantity
+	if("ITEM_CANCELLED".equals(orderItem.get("statusId")))
+	{
+		itemCancelledAmmount = orderItem.quantity;
+	}
+	
 	//get shipGroup	
 	shipDate = "";
 	carrier = "";
+	orderItemShipGroupAddress = null;
+	orderItemShipDate = null;
+	orderItemCarrier = null;
+	orderItemTrackingNo = null;
 	orderItemShipGroupAssocs = orderItem.getRelated("OrderItemShipGroupAssoc");
 	if(UtilValidate.isNotEmpty(orderItemShipGroupAssocs))
 	{
@@ -114,20 +289,54 @@ if(UtilValidate.isNotEmpty(orderItem))
 			
 		}
 	}
-	context.carrierPartyId = shipGroup.carrierPartyId;
+	// Fetching the carrier tracking URL
+	trackingURL = "";
+	trackingURLPartyContents = null;
+	if(UtilValidate.isNotEmpty(shipGroup))
+	{
+		trackingURLPartyContents = delegator.findByAnd("PartyContent", UtilMisc.toMap("partyId",shipGroup.carrierPartyId,"partyContentTypeId", "TRACKING_URL"));
+	}
+	if(UtilValidate.isNotEmpty(trackingURLPartyContents))
+    {
+        trackingURLPartyContent = EntityUtil.getFirst(trackingURLPartyContents);
+        if(UtilValidate.isNotEmpty(trackingURLPartyContent))
+        {
+            content = trackingURLPartyContent.getRelatedOne("Content");
+            if(UtilValidate.isNotEmpty(content))
+            {
+                dataResource = content.getRelatedOne("DataResource");
+                if(UtilValidate.isNotEmpty(dataResource))
+                {
+                    electronicText = dataResource.getRelatedOne("ElectronicText");
+                    trackingURL = electronicText.textData;
+                    if(UtilValidate.isNotEmpty(trackingURL))
+                    {
+                        trackingURL = FlexibleStringExpander.expandString(trackingURL,  UtilMisc.toMap("TRACKING_NUMBER":orderItemTrackingNo))
+                    }
+                }
+            }
+                
+        }
+        
+    }
+    
+    context.trackingURL = trackingURL;
+	if(UtilValidate.isNotEmpty(shipGroup))
+	{
+		context.carrierPartyId = shipGroup.carrierPartyId;
+	}
 	context.shipGroup = shipGroup;
+	context.orderItemShipGroupAssocs = orderItemShipGroupAssocs;
 	context.orderItemShipGroupAddress = orderItemShipGroupAddress;
 	context.orderItemShipDate = orderItemShipDate;
 	context.orderItemCarrier = orderItemCarrier;
 	context.orderItemTrackingNo = orderItemTrackingNo;
 	
+	context.itemCancelledAmmount =itemCancelledAmmount;
+	
 	//get order adjustments
 	context.orderAdjustments = orderReadHelper.getAdjustments();
-	
-	
-	
-	
-	
+
 	//get planned shipment info 
 	orderShipments = orderItem.getRelated("OrderShipment");
 	GenericValue orderShipment = null;
@@ -158,51 +367,10 @@ if(UtilValidate.isNotEmpty(orderItem))
 		}
 	}
 	context.itemIssuance = itemIssuance;
-	
-	
-	//getting shipping info
-	if(UtilValidate.isNotEmpty(shipGroup))
-	{
-		
-	}
-	/*
-	 * <#if orderItem.orderId?exists && orderItem.orderId?has_content >
-              	<#assign shipGroupAssoc = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(delegator.findByAndCache("OrderItemShipGroupAssoc", {"orderId": orderItem.orderId, "orderItemSeqId": orderItem.orderItemSeqId}))/>
-              	<#if shipGroupAssoc?has_content>
-                  <#assign shipGroup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(delegator.findByAndCache("OrderItemShipGroup", {"orderId": orderItem.orderId, "shipGroupSeqId": shipGroupAssoc.shipGroupSeqId}))/>
-                  <#if shipGroup?has_content>
-                      <#assign shipDate = ""/>
-                      <#assign orderHeader = delegator.findByPrimaryKeyCache("OrderHeader", {"orderId": orderItem.orderId})/>
-                      <#if orderHeader?has_content && (orderHeader.statusId == "ORDER_COMPLETED" || orderItem.statusId == "ITEM_COMPLETED") >
-                          <#assign shipDate = shipGroup.estimatedShipDate!""/>
-                          <#if shipDate?has_content>
-                              <#assign shipDate = shipDate?string(preferredDateFormat)!""/>
-                          </#if>
-                      </#if>
-                      <#assign trackingNumber = shipGroup.trackingNumber!""/>
-                      <#assign findCarrierShipmentMethodMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentMethodTypeId", shipGroup.shipmentMethodTypeId, "partyId", shipGroup.carrierPartyId,"roleTypeId" ,"CARRIER")>
-                      <#assign carrierShipmentMethod = delegator.findByPrimaryKeyCache("CarrierShipmentMethod", findCarrierShipmentMethodMap)>
-                      <#assign shipmentMethodType = carrierShipmentMethod.getRelatedOneCache("ShipmentMethodType")/>
-                      <#assign description = shipmentMethodType.description!""/>
-                      <#assign carrierPartyGroupName = ""/>
-                      <#if shipGroup.carrierPartyId != "_NA_">
-                          <#assign carrierParty = carrierShipmentMethod.getRelatedOneCache("Party")/>
-                          <#assign carrierPartyGroup = carrierParty.getRelatedOneCache("PartyGroup")/>
-                          <#assign carrierPartyGroupName = carrierPartyGroup.groupName/>
-                      </#if>
-                  </#if>
-              	</#if>
-              </#if>
-	 */
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	//get order item attributes 
+	orderItemAttributes = orderItem.getRelated("OrderItemAttribute");
+	context.orderItemAttributes = orderItemAttributes;
 }	
 
 

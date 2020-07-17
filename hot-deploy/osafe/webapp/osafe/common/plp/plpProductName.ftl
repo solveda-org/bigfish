@@ -1,4 +1,6 @@
-<div class="plpProductName">
- <span>${plpProductName!""}</span>
-</div>
+<li class="${request.getAttribute("attributeClass")!}">
+ <div>
+  <span>${plpProductName!""}</span>
+ </div>
+</li>   
            

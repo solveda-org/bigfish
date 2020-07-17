@@ -15,8 +15,7 @@
                 <property-map resource="WorkEffortUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
-
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_admin_theme/js/lib/prototype.js" global="true"/>
+				<set field="layoutSettings.javaScripts[+0]" value="/osafe_admin_theme/js/lib/prototype.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/bigfishFieldLookup.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/calendarDateSelect/calendar_date_select.js" global="true"/>
                 <set field="initialLocale" type="String" value="${groovy:parameters?.userLogin?.lastLocale?.substring(0,2)}" default-value="${groovy:locale?.toString()?.substring(0,2)?:'en'}"/>
@@ -335,6 +334,17 @@
             </widgets>
         </section>
     </screen>
+    <screen name="ListNoDataResult">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonNoDataResult.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
 
     <screen name="commonConfirm">
         <section>
@@ -347,7 +357,7 @@
                 <set field="confirmAction" from-field="confirmAction" global="true"/>
             </actions>
             <widgets>
-                <container id="commonConfirm">
+                <container style="commonConfirm">
                     <platform-specific>
                         <html>
                             <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDialog.ftl">
@@ -438,6 +448,18 @@
                 <platform-specific>
                     <html>
                       <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonFormJS.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="commonLookupJS">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonLookupJS.ftl"/>
                     </html>
                 </platform-specific>
             </widgets>
@@ -722,7 +744,7 @@
     <screen name="ddYears">
         <section>
             <actions>
-                <set field="thisDate" from-field="nowTimestamp"/>
+                <set field="default" from-field="nowTimestamp" />
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/ddYears.ftl"/></html></platform-specific>
@@ -740,10 +762,32 @@
             </widgets>
         </section>
     </screen>
-
-    <screen name="commonAddressEntry">
+	<screen name="giftMessageTypes">
         <section>
             <actions>
+                <set field="enumTypeId" value="GIFT_MESSAGE"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/giftMessageTypes.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="offlinePaymentMethodType">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/offlinePaymentMethodType.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+	<screen name="commonAddressEntry">
+        <section>
+            <actions>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/adminAddressPurpose.groovy" />
             </actions>
             <widgets>
                 <platform-specific>
@@ -751,6 +795,26 @@
                       <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/commonAddressEntry.ftl"/>
                     </html>
                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="displayPostalAddress">
+        <section>
+            <actions>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/displayPostalAddress.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/displayPostalAddress.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="displayPostalAddressPDF">
+        <section>
+            <actions>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/displayPostalAddress.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/displayPostalAddress.fo.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>

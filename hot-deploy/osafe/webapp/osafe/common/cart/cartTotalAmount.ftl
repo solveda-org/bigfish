@@ -1,8 +1,6 @@
-<div class="cartTotalAmount">
-  <div class="labelText">
-    <label>${uiLabelMap.CartTotalLabel}</label>
-  </div>
-  <div class="labelValue">
+<li class="${request.getAttribute("attributeClass")!}">
+  <div>
+    <label>${uiLabelMap.CartTotalCaption}</label>
     <span><@ofbizCurrency amount=orderGrandTotal! isoCode=currencyUom  rounding=globalContext.currencyRounding/></span>
   </div>
-</div>
+</li>

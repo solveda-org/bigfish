@@ -21,6 +21,6 @@ contentList.each{content ->
      }
     contentMap.put(content.contentId, content);
 }
-context.pixelTrackings = pixelTrackings;
+context.resultList = pixelTrackings;
 context.contentMap = contentMap;
 context.contentTextMap = contentTextMap;

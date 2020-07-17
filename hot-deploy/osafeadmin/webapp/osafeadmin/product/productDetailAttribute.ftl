@@ -19,7 +19,31 @@
   <#if currentProduct.salesDiscontinuationDate?has_content>
     <#assign salesDiscontinuationDate = (currentProduct.salesDiscontinuationDate)?string(preferredDateFormat)>
   </#if>
+  
+  <#if currentProduct.productHeight?has_content>
+    <#assign productHeight = currentProduct.productHeight!"" />
+  </#if>
+  <#if currentProduct.productWidth?has_content>
+    <#assign productWidth = currentProduct.productWidth!"" />
+  </#if>
+  <#if currentProduct.productDepth?has_content>
+    <#assign productDepth = currentProduct.productDepth!"" />
+  </#if>  
+  <#if currentProduct.weight?has_content>
+    <#assign weight = currentProduct.weight!"" />
+  </#if>
 </#if>
+<#assign lengthUomId = LENGTH_UOM_DEFAULT!"" /> 
+<#if lengthUomId?has_content>
+  <#assign lengthUomId = "LEN_"+lengthUomId?lower_case />
+  <#assign lengthUom = delegator.findByPrimaryKey('Uom', {"uomId" : lengthUomId})!"" />
+</#if>
+<#assign weightUomId = WEIGHT_UOM_DEFAULT!"" />
+<#if weightUomId?has_content>
+  <#assign weightUomId = "WT_"+weightUomId?lower_case />
+  <#assign weightUom = delegator.findByPrimaryKey('Uom', {"uomId" : weightUomId})!"" />
+</#if>
+
    <#if (mode?has_content && mode =='edit' && isVariant != 'Y') || (mode?has_content && mode =='add' && !virtualProduct?has_content)>
        <div class="infoRow column">
            <div class="infoEntry">
@@ -83,7 +107,7 @@
       </div>
     </#if>
     
-    <div class="infoRow column">
+   <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
                 <label>${uiLabelMap.IntroducedDateCaption}</label>
@@ -115,6 +139,83 @@
             </div>
          </div>
     </div>
+    
+    <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label>${uiLabelMap.ProductHeightCaption}</label>
+            </div>
+            <div class="infoValue">
+                <#if (mode?has_content)>
+                    <input class="textEntry textAlignRight" maxlength="10" type="text" id="productHeight" name="productHeight" value="${parameters.productHeight!productHeight!""}"/>
+                </#if>
+            </div>
+            <div class="infoIcon">
+                <#if lengthUom?has_content>
+                    ${lengthUom.abbreviation!""}
+  					<input type="hidden" name="heightUomId" id="heightUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
+                </#if>
+            </div>
+        </div>
+    </div>
+
+    <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label>${uiLabelMap.ProductWidthCaption}</label>
+            </div>
+            <div class="infoValue">
+                <#if (mode?has_content)>
+                    <input class="textEntry textAlignRight" maxlength="10" type="text" id="productWidth" name="productWidth" value="${parameters.productWidth!productWidth!""}"/>
+                </#if>
+            </div>
+            <div class="infoIcon">
+                <#if lengthUom?has_content>
+                    ${lengthUom.abbreviation!""}
+  					<input type="hidden" name="widthUomId" id="widthUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
+                </#if>
+            </div>
+        </div>
+    </div>
+    
+    <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label>${uiLabelMap.ProductDepthCaption}</label>
+            </div>
+            <#if (mode?has_content)>
+               <div class="infoValue">
+                   <input class="textEntry textAlignRight" maxlength="10" type="text" id="productDepth" name="productDepth" value="${parameters.productDepth!productDepth!""}"/>
+               </div>
+               <div class="infoIcon">
+                   <#if lengthUom?has_content>
+                       ${lengthUom.abbreviation!""}
+  				       <input type="hidden" name="depthUomId" id="depthUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
+                   </#if>
+               </div>
+            </#if>
+        </div>
+    </div>
+    
+    <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label>${uiLabelMap.ProductWeightCaption}</label>
+            </div>
+            <#if (mode?has_content)>
+              <div class="infoValue">
+                   <input class="textEntry textAlignRight" maxlength="10" type="text" id="weight" name="weight" value="${parameters.weight!weight!""}"/>
+              </div>
+              <div class="infoIcon">
+                  <#if weightUom?has_content>
+                      ${weightUom.abbreviation!""}
+  				      <input type="hidden" name="weightUomId" id="weightUomId" value="${parameters.weightUomId!weightUomId!""}" />
+                  </#if>
+              </div>
+            </#if>
+        </div>
+    </div>
+    
     <#if (currentProduct?exists) && (mode?has_content)>
       <#assign bfProductAllAttributes = currentProduct.getRelated("ProductAttribute") />
       <#if bfProductAllAttributes?has_content>
@@ -138,9 +239,9 @@
         </div>
         <div class="infoValue">
           <#if (mode?has_content && mode == "add")>
-            <input type="text" class="textEntry" name="bfTotalInventory" id="bfTotalInventory" value="${parameters.bfTotalInventory!""}" />
+            <input type="text" class="textEntry textAlignRight" name="bfTotalInventory" id="bfTotalInventory" value="${parameters.bfTotalInventory!""}" />
           <#elseif mode?has_content && mode == "edit">
-            <input type="text" class="textEntry" name="bfTotalInventory" id="bfTotalInventory" value="${parameters.bfTotalInventory!bfTotalInventory!""}" />
+            <input type="text" class="textEntry textAlignRight" name="bfTotalInventory" id="bfTotalInventory" value="${parameters.bfTotalInventory!bfTotalInventory!""}" />
           </#if>
         </div>
       </div>
@@ -153,9 +254,9 @@
            </div>
            <div class="infoValue">
              <#if (mode?has_content && mode == "add")>
-               <input type="text" class="textEntry" name="bfWHInventory" id="bfWHInventory" value="${parameters.bfWHInventory!""}" />
+               <input type="text" class="textEntry textAlignRight" name="bfWHInventory" id="bfWHInventory" value="${parameters.bfWHInventory!""}" />
              <#elseif mode?has_content && mode == "edit">
-               <input type="text" class="textEntry" name="bfWHInventory" id="bfWHInventory" value="${parameters.bfWHInventory!bfWHInventory!""}" />
+               <input type="text" class="textEntry textAlignRight" name="bfWHInventory" id="bfWHInventory" value="${parameters.bfWHInventory!bfWHInventory!""}" />
              </#if>
            </div>
        </div>

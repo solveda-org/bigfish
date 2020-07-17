@@ -26,4 +26,11 @@ adminTool.put("toolDesc", uiLabelMap.AdminTxtMsgInfo);
 adminTool.put("toolDetail", "txtMsgSpotList");
 adminToolsList.add(adminTool);
 
+//email parameter
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.AdminEmailParameterHeading);
+adminTool.put("toolDesc", uiLabelMap.AdminEmailParameterInfo);
+adminTool.put("toolDetail", "manageBigfishParameter?parameterFileName=parameters_email_styles.xml&showDetail=true&backAction=manageEmailList");
+adminToolsList.add(adminTool);
+
 context.resultList = adminToolsList;

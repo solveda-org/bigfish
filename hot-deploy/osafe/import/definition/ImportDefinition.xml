@@ -719,6 +719,7 @@
       <field name="sequenceNum" type="String" ignored="false"></field>
       <field name="facetValueMin" type="java.lang.Long" ignored="false"></field>
       <field name="facetValueMax" type="java.lang.Long" ignored="false"></field>
+      <field name="facetTooltip" type="String" ignored="false"></field>
       </record>
     </data-file>
 </data-files>

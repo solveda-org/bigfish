@@ -185,9 +185,7 @@ if(UtilValidate.isNotEmpty(emailTypeId))
 	if(emailTypeId.equals("PRDS_TELL_FRIEND")) 
 	{
 		context.emailTypeId = emailTypeId;
-		//templates.add("<a href='emailSpotDetail?contentId=E_COMMON_HEADER'>E_COMMON_HEADER</a>");
-		//templates.add("<a href='emailSpotDetail?contentId=E_COMMON_HEADER'>E_COMMON_HEADER</a>");
-		//templates.add("<a href='emailSpotDetail?contentId=E_COMMON_HEADER'>E_COMMON_FOOTER</a>");
+		templates.add("<a href='emailSpotDetail?contentId=E_TELL_FRIEND'>E_TELL_FRIEND</a>");
 		context.templates = templates;
 	}
 	if(emailTypeId.equals("REQCAT_NOTI_EMAIL")) 

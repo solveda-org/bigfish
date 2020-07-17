@@ -21,26 +21,26 @@
 </#if>
 
 <#-- Displays the home phone entry -->
-<div class = "personalInfoPhoneHome">
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
   <input type="hidden" name="homePhoneContactMechId" value="${telecomHomeNoContactMechId!}" />
-    <div class="entry">
-      <label for="PHONE_HOME_CONTACT">
-          <#if homePhoneRequired?has_content && homePhoneRequired == "Y"><@required/></#if>${homePhoneCaption!}
-      </label>
-      <span class="USER_USA USER_CAN">
+    <label for="PHONE_HOME_CONTACT"><#if mandatory == "Y"><@required/></#if>${homePhoneCaption!}</label>
+    <div class="entryField telephone">
+      <span class="js_USER_USA js_USER_CAN">
           <input type="text" class="phone3" id="PHONE_HOME_AREA" name="PHONE_HOME_AREA" maxlength="3" value="${requestParameters.get("PHONE_HOME_AREA")!areaCodeHome!""}" />
           <input type="hidden" id="PHONE_HOME_CONTACT" name="PHONE_HOME_CONTACT" value="${requestParameters.get("PHONE_HOME_CONTACT")!contactNumberHome!""}"/>
-          <input type="hidden" id="PHONE_HOME_REQUIRED" name="PHONE_HOME_REQUIRED" value="true"/>
+          <input type="hidden" id="PHONE_HOME_MANDATORY" name="PHONE_HOME_MANDATORY" value="${mandatory}"/>
           <input type="text" class="phone3" id="PHONE_HOME_CONTACT3" name="PHONE_HOME_CONTACT3" value="${requestParameters.get("PHONE_HOME_CONTACT3")!contactNumber3Home!""}" maxlength="3" />
           <input type="text" class="phone4" id="PHONE_HOME_CONTACT4" name="PHONE_HOME_CONTACT4" value="${requestParameters.get("PHONE_HOME_CONTACT4")!contactNumber4Home!""}" maxlength="4" />
-          <span class="instructions" >${uiLabelMap.HomePhoneNotificationLabel}</span>
+          <span class="entryHelper" >${uiLabelMap.HomePhoneNotificationLabel}</span>
       </span>
-      <span style="display:none" class="USER_OTHER">
-          <input type="text" class="address" id="PHONE_HOME_CONTACT_OTHER" name="PHONE_HOME_CONTACT_OTHER" value="${requestParameters.get("PHONE_HOME_CONTACT_OTHER")!contactNumberHome!""}" />
-          <span class="instructions" >${uiLabelMap.HomePhoneNotificationLabel}</span>
+      <span style="display:none" class="js_USER_OTHER">
+          <input type="text" class="phone10" id="PHONE_HOME_CONTACT_OTHER" name="PHONE_HOME_CONTACT_OTHER" value="${requestParameters.get("PHONE_HOME_CONTACT_OTHER")!contactNumberHome!""}" />
+          <span class="entryHelper" >${uiLabelMap.HomePhoneNotificationLabel}</span>
+          <input type="hidden" name="PHONE_HOME_CONTACT_OTHER_MANDATORY" value="${mandatory}"/>
       </span>
-      ${addressHomePhoneInfo!""}
+      <span>${addressHomePhoneInfo!""}</span>
       <@fieldErrors fieldName="PHONE_HOME_AREA"/>
       <@fieldErrors fieldName="PHONE_HOME_CONTACT"/>
-  </div>
+    </div>
 </div>

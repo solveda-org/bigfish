@@ -2,11 +2,11 @@
     jQuery(document).ready(function () {
         if (jQuery('#${fieldPurpose?if_exists}_country')) {
             if(!jQuery('#${fieldPurpose?if_exists}_StateListExist').length) {
-                getAssociatedStateList('${fieldPurpose?if_exists}_country', '${fieldPurpose?if_exists}_state', '${fieldPurpose?if_exists}_STATES', '${fieldPurpose?if_exists}_STATE_TEXT');
+                getAssociatedStateList('${fieldPurpose?if_exists}_country', '${fieldPurpose?if_exists}_state', '${fieldPurpose?if_exists}_STATES');
             }
             getAddressFormat("${fieldPurpose?if_exists}");
             jQuery('#${fieldPurpose?if_exists}_country').change(function(){
-                getAssociatedStateList('${fieldPurpose?if_exists}_country', '${fieldPurpose?if_exists}_state', '${fieldPurpose?if_exists}_STATES', '${fieldPurpose?if_exists}_STATE_TEXT');
+                getAssociatedStateList('${fieldPurpose?if_exists}_country', '${fieldPurpose?if_exists}_state', '${fieldPurpose?if_exists}_STATES');
                 getAddressFormat("${fieldPurpose?if_exists}");
             });
         }
@@ -18,5 +18,11 @@
 <#if postalAddress?has_content>
     <#assign contactMechId = postalAddress.contactMechId!"">
 </#if>
-<input type="hidden" name="contactMechId" id="contactMechId" value="${parameters.contactMechId!contactMechId!""}"/>
-${screens.render("component://osafeadmin/widget/AdminDivScreens.xml#addressInfoDivSequence")}
+<#if mode?has_content && mode="edit">
+    <input type="hidden" name="contactMechId" id="contactMechId" value="${parameters.contactMechId!contactMechId!""}"/>
+</#if>
+<#if purposeType?has_content && purposeType == "BILLING_LOCATION">
+    ${screens.render("component://osafeadmin/widget/AdminDivScreens.xml#billingAddressInfoDivSequence")}
+<#else>
+    ${screens.render("component://osafeadmin/widget/AdminDivScreens.xml#shippingAddressInfoDivSequence")}
+</#if>

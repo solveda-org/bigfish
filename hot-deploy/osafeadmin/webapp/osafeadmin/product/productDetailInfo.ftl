@@ -1,4 +1,5 @@
 <#assign chargeShipping = parameters.chargeShipping! />
+<#assign returnable = parameters.returnable! />
 <#if currentProduct?has_content>
     <#assign productDetailName = ""/>
     <#if (PRODUCT_NAME?exists && PRODUCT_NAME?has_content)>
@@ -45,7 +46,10 @@
         </#list>
     </#if>
     <#if !chargeShipping?has_content>
-      <#assign chargeShipping = currentProduct.chargeShipping!"">
+      <#assign chargeShipping = currentProduct.chargeShipping!"" />
+    </#if>
+    <#if !returnable?has_content>
+      <#assign returnable = currentProduct.returnable!"" />
     </#if>
     
 </#if>
@@ -91,72 +95,7 @@
              </#if>
            </div>
        </div>
-   </div>
-
-    <#if (mode?has_content && mode == "add") && (!virtualProduct?has_content)>
-        <#if rootProductCategoryId?has_content>
-          <#assign topLevelList = delegator.findByAnd("ProductCategoryRollupAndChild", {"parentProductCategoryId" : rootProductCategoryId}, Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum')) />
-          <#assign topLevelList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(topLevelList) />
-        </#if>
-        <div class="infoRow row">
-            <div class="infoEntry">
-                <div class="infoCaption">
-                    <label>${uiLabelMap.CategoryCaption}</label>
-                </div>
-                <div class="infoValue">
-                    <select id="productCategoryId" name="productCategoryId">
-                        <option value="" <#if (parameters.productCategoryId!"") == "">selected</#if>>${uiLabelMap.SelectOneLabel}</option>
-                        <#if topLevelList?exists && topLevelList?has_content>
-                            <#list topLevelList as category>
-                                <option value="${category.productCategoryId?if_exists}" <#if (parameters.productCategoryId!"") == "${category.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;${category.categoryName?if_exists}</option>
-                                <#assign subCatList = delegator.findByAnd("ProductCategoryRollupAndChild", {"parentProductCategoryId" : category.getString("productCategoryId")}, Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum')) />
-                                <#assign subCatList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(subCatList) />
-                                <#if subCatList?exists && subCatList?has_content>
-                                    <#list subCatList as subCategory>
-                                        <option value="${subCategory.productCategoryId?if_exists}" <#if (parameters.productCategoryId!"") == "${subCategory.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;${subCategory.categoryName?if_exists}</option>
-                                    </#list>
-                                </#if>
-                            </#list>
-                        </#if>
-                    </select>
-                </div>
-            </div>
-        </div>
-    <#elseif (mode?has_content && mode == "edit") && (isVirtual = 'Y' || isFinished = 'Y')>
-        <#if productCategory?exists>
-            <#assign primaryProdCategory = delegator.findOne("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", productCategory.primaryParentCategoryId?if_exists), false)/>
-            <#if primaryProdCategory?exists>
-                <div class="infoRow column">
-                    <div class="infoEntry">
-                        <div class="infoCaption">
-                            <label>${uiLabelMap.NavBarCaption}</label>
-                        </div>
-                        <div class="infoValue">
-                            ${primaryProdCategory.categoryName!""}
-                            <input type="hidden" name="primaryParentCategoryId" id="primaryParentCategoryId" value="${primaryProdCategory.productCategoryId!""}"/>
-                        </div>
-                    </div>
-                </div>
-            </#if>
-
-            <div class="infoRow column">
-                <div class="infoEntry">
-                    <div class="infoCaption">
-                      <label>${uiLabelMap.SubItemCaption}</label>
-                    </div>
-                    <div class="infoValue">
-                      ${productCategory.categoryName!""}
-                      <input type="hidden" name="productCategoryId" id="productCategoryId" value="${productCategory.productCategoryId!""}"/>
-                    </div>
-                    <div class="infoIcon">
-                      <a href="<@ofbizUrl>productCategoryMembershipDetail?productId=${parameters.productId!currentProduct.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductcategoryMembershipTooltip}');" onMouseout="hideTooltip()"><span class="membershipIcon"></span></a>
-                    </div>
-                </div>
-            </div>
-        </#if>
-    </#if>
-
-    
+   </div>    
 
     <div class="infoRow column">
         <div class="infoEntry">
@@ -214,8 +153,21 @@
         <#assign manufacturerId = currentProduct.manufacturerPartyId! />
       </#if>
     </#if>
-
-     <div class="infoRow row">
+    
+	<#if (mode?has_content && mode == "add") && (!virtualProduct?has_content)>
+	  <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label></label>
+            </div>            
+            <div class="infoValue">
+                <input type="hidden" name="blank" id="blank" value=""/>
+            </div>
+         </div>
+       </div>
+     </#if>
+     
+     <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
                 <label>${uiLabelMap.ManufacturerCaption}</label>
@@ -237,19 +189,35 @@
         </div>
     </div>
 
+     <div class="infoRow column">
+       <div class="infoEntry">
+           <div class="infoCaption">
+               <label>${uiLabelMap.ReturnableCaption}</label>
+           </div>
+           <div class="entry checkbox short">
+             <#if (mode?has_content)>
+                <input class="checkBoxEntry" type="radio" name="returnable" value="Y" <#if returnable?exists && (returnable=="Y" ||returnable=="y" || returnable=="") >checked="checked"<#elseif !(returnable?exists)>checked="checked"</#if>/>${uiLabelMap.YesLabel}
+                <input class="checkBoxEntry" type="radio" name="returnable" value="N" <#if returnable=="N"||returnable=="n">checked="checked"</#if>/>${uiLabelMap.NoLabel}
+             </#if>
+           </div>
+       </div>
+   </div>
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
                 <label>${uiLabelMap.ProductNameCaption}</label>
             </div>
             <div class="infoValue">
-                <#if (isVariant?exists && isVariant == 'Y') ||  (mode?has_content && mode == "add" && virtualProduct?has_content)>
-                    <#assign productVariantName = Static["org.apache.commons.lang.StringEscapeUtils"].unescapeHtml(productDetailName) >
-                    <input type="hidden" name="productDetailName" id="productDetailName" value="${productVariantName!""}"/>
-                    ${productVariantName!""}
-                <#else>
-                    <textarea class="shortArea" name="productDetailName" id="productDetailName" cols="50" rows="1">${parameters.productDetailName!productDetailName!""}</textarea>
-                </#if>
+                <#if (isVariant?exists && isVariant == 'Y')>
+                     <textarea class="shortArea" name="productDetailName" id="productDetailName" cols="50" rows="1">${parameters.productDetailName!currentProduct.productName!""}</textarea>
+                
+                <#elseif (mode?has_content && mode == "add" && virtualProduct?has_content)>
+	                    <#assign productVariantName = Static["org.apache.commons.lang.StringEscapeUtils"].unescapeHtml(productDetailName) >
+	                    <input type="hidden" name="productDetailName" id="productDetailName" value="${productVariantName!""}"/>
+	                    ${productVariantName!""}
+	            <#else>
+	                    <textarea class="shortArea" name="productDetailName" id="productDetailName" cols="50" rows="1">${parameters.productDetailName!productDetailName!""}</textarea>
+	            </#if>
             </div>
         </div>
     </div>

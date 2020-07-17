@@ -1,16 +1,59 @@
-
 <script type="text/javascript">
-    jQuery(document).ready(function () {
+    jQuery(document).ready(function () 
+    {
+		<#if errorMessageList?has_content>
+          <#list errorMessageList as errorMsg>           
+            try
+            { 				
+                <#if errorMsg.getClass().getName() == "org.ofbiz.base.util.MessageString">
+                	var fld="${errorMsg.getFieldName()}";
+    				if(fld!="" || fld!=undefined)
+    				{
+    		  			jQuery('[name='+fld+']').addClass("inError");
+    		  			
+    		  			<#-- For Custom Attributes Error Field -->
+    		  			if(fld.startsWith("FIELD_ERROR_"))
+    		  			{
+    		  			    jQuery('.'+fld).addClass("inError");
+    		  			}
+    				}            
+				</#if>
+			}catch(e){}    
+            </#list>
+        </#if>
     
-        //disabled or enabled the Selectable feature based on the Finished/Virtual 
-        var virtualRadio = jQuery('input:radio[name=isVirtual]:checked');
-        selectFinishedProduct(virtualRadio);
+    
+        if (jQuery('#type').change.length)
+        {
+           jQuery('#type').change(function()
+	       {
+	           var type =  jQuery('#type').attr('value');
+	           setCustomAttributeFields(type);
+	       });
+        }
+        if(jQuery('#type').length)
+        {
+    	    setCustomAttributeFields(jQuery('#type').attr('value'));
+    	}
+    	
+    	if (jQuery('input:radio[name="mandatory"]:checked').length) 
+        {
+            var requiredRadio = jQuery('input:radio[name="mandatory"]:checked');
+            setCustomAttributeRequiredMessageField(requiredRadio);
+        }
         
-    	//handle the disable date
+        <#-- disabled or enabled the Selectable feature based on the Finished/Virtual -->
+        if (jQuery('input:radio[name="isVirtual"]:checked').length) 
+        {
+            var virtualRadio = jQuery('input:radio[name="isVirtual"]:checked');
+            selectFinishedProduct(virtualRadio);
+        }
+        
+    	<#-- handle the disable date -->
 		var enabledCheckBox = jQuery('input:radio[name=enabled]:checked').val();
 		if(enabledCheckBox == "Y")
 		{
-			//if it equals Y, then disable the disable date USER_DISABLED_DATE_TIME
+			<#-- if it equals Y, then disable the disable date USER_DISABLED_DATE_TIME -->
 			jQuery('#USER_DISABLED_DATE').prop('disabled', true);	
 			jQuery('#USER_DISABLED_DATE').val('');
 			jQuery('#USER_DISABLED_HOUR').prop('disabled', true);	
@@ -31,7 +74,7 @@
 			user_disabled_min = jQuery('#USER_DISABLED_MINUTE').val();
 			user_disabled_ampm = jQuery('#USER_DISABLED_AMPM').val();
 		
-			//else enable the disable date USER_DISABLED_DATE_TIME
+			<#-- else enable the disable date USER_DISABLED_DATE_TIME -->
 			jQuery('#USER_DISABLED_DATE').prop('disabled', false);	
 			jQuery('#USER_DISABLED_HOUR').prop('disabled', false);	
 			jQuery('#USER_DISABLED_MINUTE').prop('disabled', false);
@@ -41,12 +84,12 @@
 			jQuery(".ui-datepicker-trigger").show();
 		}	
 	
-		//when values are changed, run this:
+		<#-- when values are changed, run this: -->
 		jQuery('.USER_ENABLED_CHECKBOX_').change(function() {
 			var enabledCheckBox = jQuery('input:radio[name=enabled]:checked').val();
 			if(enabledCheckBox == "Y")
 			{
-				//if it equals Y, then disable the disable date USER_DISABLED_DATE_TIME
+				<#-- if it equals Y, then disable the disable date USER_DISABLED_DATE_TIME -->
 				jQuery('#USER_DISABLED_DATE').prop('disabled', true);	
 				jQuery('#USER_DISABLED_DATE').val('');
 				jQuery('#USER_DISABLED_HOUR').prop('disabled', true);	
@@ -62,7 +105,7 @@
 			}	
 			if(enabledCheckBox == "N")
 			{
-				//else enable the disable date USER_DISABLED_DATE_TIME
+				<#-- else enable the disable date USER_DISABLED_DATE_TIME -->
 				jQuery('#USER_DISABLED_DATE').prop('disabled', false);	
 				jQuery('#USER_DISABLED_HOUR').prop('disabled', false);	
 				jQuery('#USER_DISABLED_MINUTE').prop('disabled', false);
@@ -80,6 +123,14 @@
         });
         
         jQuery('.displayBox.slidingOpen').each(function(){
+            slidingInit(this, 'slideMinusIcon');
+        });
+        
+        jQuery('.displayListBox.slidingClose').each(function(){
+            slidingInit(this, 'slidePlusIcon');
+        });
+        
+        jQuery('.displayListBox.slidingOpen').each(function(){
             slidingInit(this, 'slideMinusIcon');
         });
         
@@ -136,7 +187,6 @@
        
        /* jQuery('input:checkbox.checkBoxEntry').change(function()
        {
-           alert("Hii2222222222");
 	        var url = "<@ofbizUrl>getOrderStatusRefundDetail</@ofbizUrl>";
            jQuery.ajax(
            {
@@ -159,7 +209,6 @@
         });
         
        /* if (jQuery('#actionId').length){
-           alert("Hiii");
            getOrderStatusChangeDisplay('#actionId');
            jQuery('#actionId').click(function(){
                getOrderStatusChangeDisplay('#actionId');
@@ -167,7 +216,6 @@
        } */
        <#if review?has_content>
            updateReview("${parameters.statusId!review.statusId}");
-           setStars("${parameters.productRating!review.productRating}");
        </#if>
 
        if (jQuery('#productCategoryId').length){
@@ -190,6 +238,15 @@
         {
             getAddressFormat('USER');
         }
+
+        if (jQuery('#countryGeoId').length)
+        {
+            getStoreAddressFormat('countryGeoId');
+            Event.observe($('countryGeoId'), 'change', function(){
+                getAssociatedStateList('countryGeoId', 'stateProvinceGeoId', 'divStateProvinceGeoId', 'divAddress3');
+                getStoreAddressFormat('countryGeoId');
+              });
+        }
         
        jQuery("div.actionIconMenu").mouseenter(function(event)
        {
@@ -198,13 +255,59 @@
        {
            hideActionIcontip(event, this)
        });
+       
     });
+
+    function setCustomAttributeFields(type)
+    {
+        if(type == "ENTRY")
+	    {
+	        jQuery('.ENTRY_FORMAT').show();
+	    }
+	    else
+	    {
+	        jQuery('.ENTRY_FORMAT').hide();
+	    }
+	    if(type == "ENTRY" || type == "ENTRY_BOX")
+	    {
+	        jQuery('.MAX_LENGTH').show();
+	    }
+	    else
+	    {
+	        jQuery('.MAX_LENGTH').hide();
+	    }
+	    if(type == "RADIO_BUTTON" || type == "CHECKBOX" || type == "DROP_DOWN" || type == "DROP_DOWN_MULTI")
+	    {
+	        jQuery('.VALUE_LIST').show();
+	    }
+	    else
+	    {
+	        jQuery('.VALUE_LIST').hide();
+	    }
+    }
+
+    function setCustomAttributeRequiredMessageField(elm)
+    {
+        if (jQuery(elm).attr('name') == undefined)
+        {
+            return;
+        }
+        if(jQuery(elm+':checked').val() == "Y")
+        {
+            jQuery('.REQ_MESSAGE').show();
+        } 
+        else 
+        {
+            jQuery('.REQ_MESSAGE').hide();
+        }
+    }
 
     function getOrderRefundData()
     {
         if (jQuery('input:radio[name=actionId]:checked').val() == "cancelOrder" || jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
         {
            var url = "<@ofbizUrl>getOrderStatusRefundDetail</@ofbizUrl>";
+           jQuery.ajaxSetup({async:false});
            jQuery.ajax(
            {
                type: "POST",
@@ -214,11 +317,12 @@
                {
                    jQuery('#orderRefundInfoBox').html('');
                    jQuery('#orderRefundInfoBox').html(data);
+                   jQuery('#orderRefundInfoBox').show();
                }
            });
-        }  
+        }
     }
-    // Popup window code
+    <#-- Popup window code -->
     function newPopupWindow(url) {
         popupWindow = window.open(
             url,'popUpWindow','height=350,width=500,left=400,top=200,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
@@ -247,7 +351,8 @@
         var templateIdValue = jQuery(templateId).val();
         if ((templateIdValue == "E_SCHED_JOB_ALERT")) 
         {
-            //TBD;
+            jQuery('.customerIdDiv').hide();
+            jQuery('.orderIdDiv').hide();
         } 
         else if ((templateIdValue == "E_CHANGE_CUSTOMER") || (templateIdValue == "E_NEW_CUSTOMER") || (templateIdValue == "E_FORGOT_PASSWORD") ) {
             jQuery('.customerIdDiv').show();
@@ -263,7 +368,8 @@
             jQuery('.customerIdDiv').hide();
             jQuery('.orderIdDiv').hide();
         }
-        else if ((templateIdValue == "TXT_CHANGE_CUSTOMER") || (templateIdValue == "TXT_NEW_CUSTOMER") || (templateIdValue == "TXT_FORGOT_PASSWORD") ) {
+        else if ((templateIdValue == "TXT_CHANGE_CUSTOMER") || (templateIdValue == "TXT_NEW_CUSTOMER") || (templateIdValue == "TXT_FORGOT_PASSWORD") )
+        {
             jQuery('.customerIdDiv').show();
             jQuery('.orderIdDiv').hide();
         }
@@ -272,6 +378,11 @@
             jQuery('.customerIdDiv').hide();
             jQuery('.orderIdDiv').show();
         } 
+        else
+        {
+            jQuery('.customerIdDiv').hide();
+            jQuery('.orderIdDiv').hide();
+        }
     }
     function setDateRange(dateFrom,dateTo,formName) {
         var form = jQuery(formName);
@@ -302,30 +413,44 @@
         });
     }
 
-    function showFeature(elm, index) {
-        if (jQuery(elm).val() == "DISTINGUISHING_FEAT") {
-            jQuery('#productFeatureId_' + index).show();
-        } else {
+    function showFeature(elm, index) 
+    {
+        if (jQuery(elm).val() == "DISTINGUISHING_FEAT") 
+        {
+            if(jQuery('#distinguishProductFeatureMulti_'+index).val().length)
+            {
+                jQuery('.productFeatureId_' + index).show();
+            }
+            else
+            {
+                jQuery('#productFeatureId_' + index).show();
+            }
+        } 
+        else 
+        {
             jQuery('#productFeatureId_' + index).hide();
+            jQuery('.productFeatureId_' + index).hide();
         }
         if (jQuery(elm).val() == "DISTINGUISHING_FEAT") 
         {
             jQuery('#selectedHelperIcon_' + index).hide();
             jQuery('#notApplicableHelperIcon_' + index).hide();
             jQuery('#descriptiveHelperIcon_' + index).show();
+            jQuery('#descriptiveFeaturePickerIcon_' + index).show();
         }
         else if(jQuery(elm).val() == "SELECTABLE_FEATURE")
         {
             jQuery('#descriptiveHelperIcon_' + index).hide();
             jQuery('#notApplicableHelperIcon_' + index).hide();
             jQuery('#selectedHelperIcon_' + index).show();
-            
+            jQuery('#descriptiveFeaturePickerIcon_' + index).hide();
         }
         else
         {
             jQuery('#selectedHelperIcon_' + index).hide();
             jQuery('#descriptiveHelperIcon_' + index).hide();
             jQuery('#notApplicableHelperIcon_' + index).show();
+            jQuery('#descriptiveFeaturePickerIcon_' + index).hide();
         }
     }
 
@@ -340,7 +465,7 @@
     
     function addListener(elm) {
         jQuery(elm).click(function(){
-            jQuery(this).parent('h2').parent('.header').next('.boxBody').slideToggle(1000);
+            jQuery(this).parent('h2').parent('.header').nextAll('.boxBody').slideToggle(1000);
             jQuery(this).toggleClass("slidePlusIcon");
             jQuery(this).toggleClass("slideMinusIcon");
         });
@@ -372,16 +497,23 @@
         {
             jQuery('.COMPLETED').hide();
         }
+        
         if (jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
         {
             jQuery('.productReturnOrderCheckbox').show();
             jQuery('.statusChangeOrderCheckbox').hide();
+            
+            jQuery('th.returnItemHead').show();
+            jQuery('td.returnItemData').show();
         }
         else 
         {
             jQuery('.productReturnOrderCheckbox').hide();
             jQuery('.statusChangeOrderCheckbox').show();
+            jQuery('th.returnItemHead').hide();
+            jQuery('td.returnItemData').hide();
         }
+        
         if (jQuery('input:radio[name=actionId]:checked').val() == "changeOrderQty") 
         {
             jQuery('.orderItemNewQty').show();
@@ -390,6 +522,7 @@
         {
             jQuery('.orderItemNewQty').hide();
         }
+        
         if (jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
         {
             jQuery('.orderItemReturningQty').show();
@@ -398,6 +531,7 @@
         {
             jQuery('.orderItemReturningQty').hide();
         }
+        
         if (jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
         {
             jQuery('.orderItemReturnReason').show();
@@ -418,17 +552,52 @@
         else if (jQuery('input:radio[name=actionId]:checked').val() == "completeOrder") 
         {
             jQuery('#statusId').val("ORDER_COMPLETED");
+            jQuery('#orderRefundInfoBox').hide();
         }
         else if (jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
         {
             jQuery('#statusId').val("PRODUCT_RETURN");
         } 
     }
+    
+    function quickShipOrder(formName)
+    {
+        jQuery("#actionIdComplete").attr('checked', 'checked');
+        getOrderStatusChangeDisplay("actionId");
+        jQuery("#orderItemSeqIdall").attr('checked', 'checked');
+        setCheckboxes(formName,'orderItemSeqId');
+        
+    }
+    function quickCancelOrder(formName)
+    {
+        jQuery("#actionIdCancel").attr('checked', 'checked');
+        getOrderStatusChangeDisplay("actionId");
+        jQuery("#orderItemSeqIdall").attr('checked', 'checked');
+        setCheckboxes(formName,'orderItemSeqId');
+    }
+    function quickReturnOrder(formName)
+    {
+        jQuery("#actionIdReturn").attr('checked', 'checked');
+        getOrderStatusChangeDisplay("actionId");
+        jQuery("#orderItemSeqIdall").attr('checked', 'checked');
+        var rowIndex = 0;
+        jQuery('.shipQuantity').each(function()
+        {
+            jQuery('#returnQuantity_'+rowIndex).val(jQuery('#shipQuantity_'+rowIndex).val());
+            rowIndex = rowIndex + 1;
+        });
+        
+        setCheckboxes(formName,'orderItemSeqId');
+    }
+    
     function showPostalAddress(contactMechId,divType) {
         jQuery('.'+divType).hide();
         jQuery('.'+divType+' :input').attr('disabled', 'disabled');
         jQuery('#'+contactMechId).show();
         jQuery('#'+contactMechId+' :input').removeAttr('disabled');
+        var contactMechIdSplit = contactMechId.split("_");
+        var shippingContactMechId = contactMechIdSplit[1];
+        updateShippingOption(shippingContactMechId);
     }
 
     function paymentOptionDisplay(paymentOption) {
@@ -465,12 +634,13 @@
         jQuery(dialogContent).show();
     }
     function hideDialog(dialog, displayDialog) {
+    	jQuery("#lookupCloseButton").hide();
         jQuery(dialog).hide();
         jQuery(displayDialog).fadeOut(300);
     }
     
    function updateStatusBtn(ActiveLabel,InActiveLabel,FormName,spanDescId,btnIdField) {
-	    // Set form value
+	    <#-- Set form value -->
 	    form = $(FormName);
 	    var buttonLabel = $(btnIdField).value;
 	
@@ -488,12 +658,19 @@
    }
    
     function setCheckboxes(formName,checkBoxName) {
-        // This would be clearer with camelCase variable names
+        <#-- This would be clearer with camelCase variable names -->
         var allCheckbox = document.forms[formName].elements[checkBoxName + "all"];
-        for(i = 0;i < document.forms[formName].elements.length;i++) {
+        var statusId = jQuery("#statusId").val();
+        for(i = 0;i < document.forms[formName].elements.length;i++) 
+        {
             var elem = document.forms[formName].elements[i];
-            if (elem.id.indexOf(checkBoxName) == 0 && elem.id.indexOf("_") < 0 && elem.type == "checkbox" && allCheckbox.type == "checkbox") {
+            if (elem.id.indexOf(checkBoxName) == 0 && elem.type == "checkbox" && allCheckbox.type == "checkbox") 
+            {
                 elem.checked = allCheckbox.checked;
+                if(statusId == "ORDER_CANCELLED" || statusId == "PRODUCT_RETURN")
+                {
+                    getOrderRefundData();
+                }
             }
         }
     }
@@ -505,73 +682,237 @@
     }
 
     
-    function showTooltip(e, text)
+    function showTooltip(event, text)
     {
-        if(document.all)e = event;
+        if(!event) event = window.event;
+        if(event.currentTarget) 
+        {
+            elm = event.currentTarget;
+        }
+        else if(event.srcElement)
+        {
+            var srcElement = event.srcElement;
+            elm = jQuery(srcElement).parent();
+        }
+        
         var tooltipBox = document.getElementById('tooltip');
 	    var obj2 = document.getElementById('tooltipText');
 	    obj2.innerHTML = text;
 	    tooltipBox.style.display = 'block';
-	    var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
-	    var leftPos = e.clientX - 100;
-	    if (leftPos<0)leftPos = 0;
-	    tooltipBox.style.left = leftPos + 'px';
 	    
-        var tooltipBoxHeight = jQuery(tooltipBox).height();
-        var elemPosBottom = e.clientY;
-        var browserVieportHeight = jQuery(window).height();
-        
-	    if((tooltipBoxHeight + elemPosBottom + 25) > browserVieportHeight)
+	    <#-- get the ScrollTop and ScrollLeft to add in top and left postion of tooltip. -->
+	    var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
+	    var sl = Math.max(document.body.scrollLeft,document.documentElement.scrollLeft);
+	    
+	    var WW = jQuery(window).width();
+	    var WH = jQuery(window).height();
+	    
+	    var EX = 0;
+	    var EY = 0;
+	    
+	    if (jQuery.browser.msie && jQuery.browser.version == '8.0')
 	    {
-	        tooltipBox.style.top = e.clientY - tooltipBox.offsetHeight -1 + st + 'px';
-	        jQuery('#tooltipBottom').addClass("tooltipBottomArrow");
-	        jQuery('#tooltipTop').removeClass("tooltipTopArrow");
+	        <#-- Not substract the scrollLeft and scrollTop because the IE 8 doesn't include the scroll to the left and top position. -->
+	        EX = jQuery(elm).children().offset().left;
+	        EY = jQuery(elm).children().offset().top;
 	    }
 	    else
 	    {
-	        tooltipBox.style.top = e.clientY + 5 + st + 'px';
-	        jQuery('#tooltipBottom').removeClass("tooltipBottomArrow");
-	        jQuery('#tooltipTop').addClass("tooltipTopArrow");
+	        <#-- subtracting the sl and st from element left and top position because element left and top includes the scroll pixels. -->
+	        EX = jQuery(elm).children().offset().left - sl;
+	        EY = jQuery(elm).children().offset().top - st;
 	    }
+	    
+	    var TTW = 0;
+	    var TTH = 0;
+	    TTW = jQuery(tooltipBox).width();
+	    TTH = jQuery(tooltipBox).height();
+	    
+	    var LP = 0;
+	    var TP = 0;
+	    var EH = jQuery(elm).children().height();
+		var EW = jQuery(elm).children().width();
+	    
+	    var TOP = eval(EY > TTH);
+	    var BOTTOM = eval(!(TOP));
+	    var LEFT = eval((TTW + EX) > WW);
+	    var RIGHT = eval(!(LEFT));
+	    
+	    /*These TOP, BOTTOM, LEFT and RIGHT are the position of tooltip and our arrow would be opposite from the tootip, 
+	      means if tooltip is on TOP then the Arrow would be at bottom of tooltip. 
+	      If the tooltip is in LEFT then the Arrow would be in right of the tooltip. */
+	    
+	    if(BOTTOM && LEFT)
+	    {
+	        jQuery('#tooltipTop').removeClass("tooltipTopLeftArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomRightArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomLeftArrow");
+	        jQuery('#tooltipTop').addClass("tooltipTopRightArrow");
+	    }
+	    else if(BOTTOM && RIGHT)
+	    {
+	        jQuery('#tooltipTop').removeClass("tooltipTopRightArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomRightArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomLeftArrow");
+	        jQuery('#tooltipTop').addClass("tooltipTopLeftArrow");
+	    }
+	    else if(TOP && LEFT)
+	    {
+	        jQuery('#tooltipTop').removeClass("tooltipTopLeftArrow");
+	        jQuery('#tooltipTop').removeClass("tooltipTopRightArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomLeftArrow");
+	        jQuery('#tooltipBottom').addClass("tooltipBottomRightArrow");
+	    }
+	    else if(TOP && RIGHT)
+	    {
+	        jQuery('#tooltipTop').removeClass("tooltipTopLeftArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomRightArrow");
+	        jQuery('#tooltipTop').removeClass("tooltipTopRightArrow");
+	        jQuery('#tooltipBottom').addClass("tooltipBottomLeftArrow");
+	    }
+	    
+	    <#-- determine the left position and top position to set to the tooltip -->
+	    if(LEFT)
+	    {
+	       <#-- adding Element Width EW so that the tooltip starts (horizontally) from right of the icon. -->
+	       LP = EX -TTW + sl + EW; 
+	    }
+	    else
+	    {
+	       LP = EX + sl;
+	    }
+	    
+	    if(BOTTOM)
+	    {
+	        <#-- adding Element Height EH so that the tooltip starts(vertically) from bottom of the icon. -->
+	        TP = (EY + st + EH);
+	    }
+	    else
+	    {
+	        TP = (EY - TTH + st);
+	    }
+	    jQuery(tooltipBox).css({ top: TP+'px' });
+	    jQuery(tooltipBox).css({ left: LP+'px' });
     }
     
-    function showTooltipImage(e, text, imageUrl)
+    function showTooltipImage(event, text, imageUrl)
     {
-    
-        if(document.all)e = event;
+	    if(!event) event = window.event;
+        if(event.currentTarget) 
+        {
+            elm = event.currentTarget;
+        }
+        else if(event.srcElement)
+        {
+            var srcElement = event.srcElement;
+            elm = jQuery(srcElement).parent();
+        }
+        
         var tooltipBox = document.getElementById('tooltip');
 	    var obj2 = document.getElementById('tooltipText');
-	    
 	    obj2.innerHTML = "<img src='"+imageUrl+"' class='toolTipImg' id='imgId'/><div class='toolTipImgText'>"+text+"</div>";
 	    obj2.style.display = 'none';
 	    var img = document.getElementById('imgId');
 	    resize(img);
+	    
 	    obj2.style.display = 'block';
 	    tooltipBox.style.display = 'block';
-	    var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
-	    var leftPos = e.clientX - 100;
-	    if (leftPos<0)leftPos = 0;
-	    tooltipBox.style.left = leftPos + 'px';
 	    
-        var tooltipBoxHeight = jQuery(tooltipBox).height();
-        var elemPosBottom = e.clientY;
-        var browserVieportHeight = jQuery(window).height();
-        
-	    if((tooltipBoxHeight + elemPosBottom + 25) > browserVieportHeight)
+	    <#-- get the ScrollTop and ScrollLeft to add in top and left postion of tooltip. -->
+	    var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
+	    var sl = Math.max(document.body.scrollLeft,document.documentElement.scrollLeft);
+	    
+	    var WW = jQuery(window).width();
+	    var WH = jQuery(window).height();
+	    
+	    var EX = 0;
+	    var EY = 0;
+	    if (jQuery.browser.msie && jQuery.browser.version == '8.0')
 	    {
-	        tooltipBox.style.top = e.clientY - tooltipBox.offsetHeight -1 + st + 'px';
-	        jQuery('#tooltipBottom').addClass("tooltipBottomArrow");
-	        jQuery('#tooltipTop').removeClass("tooltipTopArrow");
+	        <#-- Not substract the scrollLeft and scrollTop because the IE 8 doesn't include the scroll to the left and top position. -->
+	        EX = jQuery(elm).children().offset().left;
+	        EY = jQuery(elm).children().offset().top;
 	    }
 	    else
 	    {
-	        tooltipBox.style.top = e.clientY + 5 + st + 'px';
-	        jQuery('#tooltipBottom').removeClass("tooltipBottomArrow");
-	        jQuery('#tooltipTop').addClass("tooltipTopArrow");
+	        <#-- subtracting the sl and st from element left and top position because element left and top includes the scroll pixels. -->
+	        EX = jQuery(elm).children().offset().left - sl;
+	        EY = jQuery(elm).children().offset().top - st;
 	    }
-        
+	    
+	    var TTW = 0;
+	    var TTH = 0;
+	    TTW = jQuery(tooltipBox).width();
+	    TTH = jQuery(tooltipBox).height();
+	    
+	    var LP = 0;
+	    var TP = 0;
+	    var EH = jQuery(elm).children().height();
+		var EW = jQuery(elm).children().width();
+	    
+	    var TOP = eval(EY > TTH);
+	    var BOTTOM = eval(!(TOP));
+	    var LEFT = eval((TTW + EX) > WW);
+	    var RIGHT = eval(!(LEFT));
+	    
+	    /*These TOP, BOTTOM, LEFT and RIGHT are the position of tooltip and our arrow would be opposite from the tootip, 
+	      means if tooltip is on TOP then the Arrow would be at bottom of tooltip. 
+	      If the tooltip is in LEFT then the Arrow would be in right of the tooltip. */
+	    
+	    if(BOTTOM && LEFT)
+	    {
+	        jQuery('#tooltipTop').removeClass("tooltipTopLeftArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomRightArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomLeftArrow");
+	        jQuery('#tooltipTop').addClass("tooltipTopRightArrow");
+	    }
+	    else if(BOTTOM && RIGHT)
+	    {
+	        jQuery('#tooltipTop').removeClass("tooltipTopRightArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomRightArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomLeftArrow");
+	        jQuery('#tooltipTop').addClass("tooltipTopLeftArrow");
+	    }
+	    else if(TOP && LEFT)
+	    {
+	        jQuery('#tooltipTop').removeClass("tooltipTopLeftArrow");
+	        jQuery('#tooltipTop').removeClass("tooltipTopRightArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomLeftArrow");
+	        jQuery('#tooltipBottom').addClass("tooltipBottomRightArrow");
+	    }
+	    else if(TOP && RIGHT)
+	    {
+	        jQuery('#tooltipTop').removeClass("tooltipTopLeftArrow");
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomRightArrow");
+	        jQuery('#tooltipTop').removeClass("tooltipTopRightArrow");
+	        jQuery('#tooltipBottom').addClass("tooltipBottomLeftArrow");
+	    }
+	    
+	    <#-- determine the left position and top position to set to the tooltip -->
+	    if(LEFT)
+	    {
+	       <#-- adding Element Width EW so that the tooltip starts (horizontally) from right of the icon. -->
+	       LP = EX -TTW + sl + EW; 
+	    }
+	    else
+	    {
+	       LP = EX + sl;
+	    }
+	    
+	    if(BOTTOM)
+	    {
+	        <#-- adding Element Height EH so that the tooltip starts(vertically) from bottom of the icon. -->
+	        TP = (EY + st + EH);
+	    }
+	    else
+	    {
+	        TP = (EY - TTH + st);
+	    }
+	    jQuery(tooltipBox).css({ top: TP+'px' });
+	    jQuery(tooltipBox).css({ left: LP+'px' });
+	    
     }
-
+    
     function showActionIcontip(e, elm, nextDiv)
     {
     
@@ -649,47 +990,47 @@
     
 	function submitDetailForm(form, mode) {
 	    if (mode == "NE") {
-	        // create action
+	        <#-- create action -->
 	        form.action="<@ofbizUrl>${createAction!""}</@ofbizUrl>";
 	        form.submit();
 	    }else if (mode == "ED") {
-	        // update action
+	        <#-- update action -->
 	        form.action="<@ofbizUrl>${updateAction!""}</@ofbizUrl>";
 	        form.submit();
 	    }else if (mode == "DE") {
-	        // update action
+	        <#-- update action -->
 	        form.action="<@ofbizUrl>${deleteAction!""}</@ofbizUrl>";
 	        form.submit();
         }else if (mode == "EX") {
-            // execute action
+            <#-- execute action -->
             form.action="<@ofbizUrl>${execAction!""}</@ofbizUrl>";
             form.submit();
         }else if (mode == "CEX") {
-            // execute action
+            <#-- execute action -->
             form.action="<@ofbizUrl>${conditionedExecAction!""}</@ofbizUrl>";
             form.submit();
         }else if (mode == "EXC") {
-            // execute cache action
+            <#-- execute cache action -->
             form.action="<@ofbizUrl>${execCacheAction!""}</@ofbizUrl>";
             form.submit();
         }else if (mode == "CO") {
-            // common action
+            <#-- common action -->
             form.action="<@ofbizUrl>${commonAction!""}</@ofbizUrl>";
             form.submit();
         }else if (mode == "GP") {
-            // get Geo Point action
+            <#-- get Geo Point action -->
             form.action="<@ofbizUrl>${getGeoCodeAction!""}</@ofbizUrl>";
             form.submit();
         }else if (mode == "RW") {
-            // replace with action
+            <#-- replace with action -->
             form.action="<@ofbizUrl>${replaceWithAction!""}</@ofbizUrl>";
             form.submit();
         }else if (mode == "MA") {
-            // make active action
+            <#-- make active action -->
             form.action="<@ofbizUrl>${makeActiveAction!""}</@ofbizUrl>";
             form.submit();
         }else if (mode == "CF") {
-	        // confirm action
+	        <#-- confirm action -->
 	        displayDialogBox()
         }else if (mode == "PC") {
             form.action="<@ofbizUrl>${previewAction!""}</@ofbizUrl>";
@@ -697,22 +1038,22 @@
             form.submit();
             form.setAttribute("target", "");
 	    }else if (mode == "MT") {
-	    	//go to meta tag page
+	    	<#-- go to meta tag page -->
             form.action="<@ofbizUrl>${metaAction!""}</@ofbizUrl>";
             form.submit();
 	    }else if (mode == "SF") {
-            // execute action
+            <#-- execute action -->
             form.action="<@ofbizUrl>${submitFormAction!""}</@ofbizUrl>";
             form.submit();
         }else if (mode == "UC") {
-            // update cart action
+            <#-- update cart action -->
             var modifyCart = "adminModifyCart"; 
             if (updateCart()) {
                 form.action="<@ofbizUrl>" + modifyCart + "</@ofbizUrl>";
                 form.submit();
             }
         }else if (mode == "UCPS") {
-            // update cart pickup in store
+            <#-- update cart pickup in store -->
             var setStorePickup = "setStorePickup";
             form.action="<@ofbizUrl>" + setStorePickup + "</@ofbizUrl>";
             form.submit();
@@ -720,7 +1061,7 @@
 	}
 	
 	function refreshFromBottomCart(){
-		//set the values from bottom cart to the top cart
+		<#-- set the values from bottom cart to the top cart -->
 		jQuery('.BOTTOM_CART_ITEM').each(function () {
         		var newQty = jQuery(this).val(); 
         		var bottomCartInput = jQuery(this).attr("name");
@@ -728,7 +1069,7 @@
         		
         		jQuery('#update_'+bottomLineNo).val(newQty);
      	});
-     	//refresh the top cart
+     	<#-- refresh the top cart -->
      	var modifyCart = "adminModifyCart"; 
      	if (updateCart()) {
                 document.adminCheckoutFORM.action="<@ofbizUrl>" + modifyCart + "</@ofbizUrl>";
@@ -743,8 +1084,12 @@
         return String(s).search (isWhole_re) != -1
     }
 	
-    function updateCart() {
-      var cartItemsNo = ${shoppingCartSize!"0"};
+    function updateCart() 
+    {
+      <#if shoppingCart?has_content>
+        <#assign shoppingCartItemSize = shoppingCart.items().size()! />
+      </#if>
+      var cartItemsNo = ${shoppingCartItemSize!"0"};
       <#assign PDP_QTY_MIN = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"PDP_QTY_MIN")!"1"/>
       <#assign PDP_QTY_MAX = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"PDP_QTY_MAX")!"99"/> 
       var lowerLimit = ${PDP_QTY_MIN!"1"};
@@ -753,7 +1098,14 @@
       
       for (var i=0;i<cartItemsNo;i++)
       {
-          var quantity = jQuery('#update_'+i).val();
+          var qtyInCartAttrName = jQuery('#qtyInCart_'+i).attr("name");
+          var quantity = Number(0);
+          jQuery('.'+qtyInCartAttrName).each(function () 
+    	  {
+    	      quantity = quantity + Number(jQuery(this).val());
+    	  });
+      
+          //var quantity = jQuery('#update_'+i).val();
           if(quantity != 0) 
           {
           	<#if eCommerceUiLabel?exists >
@@ -792,16 +1144,50 @@
 	    {
 	        form.action="<@ofbizUrl>${uploadAction!""}</@ofbizUrl>";
 	    }
+	    else
+	    {
+	    	var newFolder = jQuery('#newFolderName').val();
+	    	var fieldId = "${parameters.mediaType!'newFolder'}";
+	    	if(newFolder != "")
+	    	{
+		    	if(fieldId=="newFolder")
+	          	{
+	          		setUploadUrlAndNewFolder(fieldId,newFolder);
+	          	}
+          	}
+	    }
+	    
         form.submit();
 	}
 	
-	function setUploadUrl(fieldId) {
+	function setUploadUrlAndNewFolder(fieldId,newFolder) 
+	{
+	  var form = document.${detailFormName!"detailForm"};
+	  var fieldValue = document.getElementById(fieldId).value;
+	  form.action="<@ofbizUrl>${uploadAction!}?${uploadParmName!}=" +fieldValue+ "&newFolderName=" +newFolder+ "</@ofbizUrl>";
+	}
+	
+	function disableNewFolderName(fieldId) 
+	{
+	  if(fieldId != "newFolder")
+	  {
+	  	jQuery('#newFolderName').attr("disabled", "disabled");
+	  }
+	  else
+	  {
+	  	jQuery('#newFolderName').removeAttr("disabled")
+	  }
+	}
+	
+	function setUploadUrl(fieldId) 
+	{
 	  var form = document.${detailFormName!"detailForm"};
 	  var fieldValue = document.getElementById(fieldId).value;
 	  form.action="<@ofbizUrl>${uploadAction!}?${uploadParmName!}=" +fieldValue+ "</@ofbizUrl>";
 	}
 	
-	function postConfirmDialog() {
+	function postConfirmDialog() 
+	{
 	    form = document.${detailFormName!"detailForm"};
 	    var action = "${confirmAction!'confirmAction'}";
 	    if(action.substr(0, 6) == "delete")
@@ -855,7 +1241,7 @@
         		jQuery(this).val(idValues[count]);
         		count = count +1;
      		});
-     		jQuery('.confirmTxt').html(confirmDialogText + ' ' + idValues[0]);
+     		jQuery('.confirmTxt').html(confirmDialogText);
     	}
         jQuery(".buttontext")[0].onclick = null;
 		jQuery('input[name="yesBtn"]').click(function() {confirmDialogResultAction('Y',action)});
@@ -1057,13 +1443,6 @@
             }
           });
           jQuery("#"+stateId).html(optionList);
-          if (jQuery(stateList).size() <= 1) {
-            jQuery("#"+addressLine3).show();
-            jQuery("#"+divStateId).hide();
-          } else {
-            jQuery("#"+addressLine3).hide();
-            jQuery("#"+divStateId).show();
-          }
         });
     }
     
@@ -1116,7 +1495,7 @@
         var rowDiv = new Element('DIV');
         rowDiv.setAttribute("class", "dataRow");
 
-        //create selected operator name div
+        <#-- create selected operator name div -->
         var columnDiv = new Element('DIV');
         columnDiv.setAttribute("class", "dataColumn operDataColumn");
         var selectObj = document.getElementById(processObject.processTypeSelectId);
@@ -1124,30 +1503,30 @@
         columnDiv.appendChild(textNode);
         rowDiv.appendChild(columnDiv);
 
-        //create selected category/product name div
+        <#-- create selected category/product name div -->
         columnDiv = new Element('DIV');
         columnDiv.setAttribute("class", "dataColumn nameDataColumn");
         textNode = document.createTextNode(document.getElementById(processObject.processTypeHiddenId2).value);
         columnDiv.appendChild(textNode);
         rowDiv.appendChild(columnDiv);
 
-        //create sremove button div
+        <#-- create sremove button div -->
         columnDiv = new Element('DIV');
         columnDiv.setAttribute("class", "dataColumn actionDataColumn");
-        //create remove button
+        <#-- create remove button -->
         var buttonAnchor = document.createElement("A");
         buttonAnchor.setAttribute("class", "standardBtn secondary");
         buttonAnchor.setAttribute("href", "javascript:deleteDivRow('"+processObject.divId+"', '"+processObject.dataRows+"', "+indexPos+")");
         buttonAnchor.appendChild(document.createTextNode('${uiLabelMap.RemoveBtn}'));
         columnDiv.appendChild(buttonAnchor);
-        //create selected operator hidden field
+        <#-- create selected operator hidden field -->
         var element = document.createElement("input");
         element.setAttribute("type", "hidden");
         element.setAttribute("value", document.getElementById(processObject.processTypeSelectId).value);
         element.setAttribute("id", processObject.newTypeHiddenNamePrefix1+indexPos)
         element.setAttribute("name", processObject.newTypeHiddenNamePrefix1+indexPos)
         columnDiv.appendChild(element);
-        //create selected category/product id hidden field
+        <#-- create selected category/product id hidden field -->
         element = document.createElement("input");
         element.setAttribute("type", "hidden");
         element.setAttribute("value", document.getElementById(processObject.processTypeHiddenId1).value);
@@ -1357,11 +1736,13 @@
         var input=document.getElementById(inputId);
         input.style.backgroundColor = "white";
     }
-    function setStyleName(styleFileName,inputField) {
-        document.getElementById(inputField).value = styleFileName;
-        <#if detailFormName?has_content>
-          submitDetailForm(document.${detailFormName!""}, 'MA');
-        </#if>
+    function setStyleName(styleFileName,inputField, detailFormName) 
+    {
+        jQuery('#'+inputField).val(styleFileName);
+        if(detailFormName.length)
+        {
+            submitDetailForm(document.forms[detailFormName], 'MA');
+        }
     }
     function setNewValue(key,value) {
         document.getElementById('newValue').value = value;
@@ -1372,20 +1753,22 @@
           //submitDetailForm(document.${detailFormName!""}, 'MA');
         </#if>
     }
-    function setStars(starValue) {
-       // Change stars image
+    function setStars(starValue, divId, inputName) 
+    {
+       <#-- Change stars image -->
        var ratingPerct = ((starValue / 5) * 100);
-        $('productRatingStars').style.width = ratingPerct+ '%';
+        $(divId).style.width = ratingPerct+ '%';
 
-       // Set new stars value in form
+        <#-- Set new stars value in form -->
         var form = document.reviewFORM;
-        form.elements['productRating'].value=starValue;
+        form.elements[inputName].value=starValue;
     }
-    function updateReview(status) {
-        // Set form value
+    function updateReview(status) 
+    {
+        <#-- Set form value -->
         var form = document.${detailFormName!"reviewForm"};
         form.elements['statusId'].value=status;
-        // Chnage display value
+        <#-- Chnage display value -->
         if (status=='PRR_APPROVED'){
             jQuery('#reviewStatus').html("${uiLabelMap.ApprovedLabel}");
             jQuery('.PRR_APPROVED').show();
@@ -1404,9 +1787,11 @@
         }
     }
   
-//begin JQuery for scheduledJobRule 
-//handle the display of the helper text for the Unit of the frequency interval 
-//when page is displayed, this will run		
+<#--
+  begin JQuery for scheduledJobRule 
+  handle the display of the helper text for the Unit of the frequency interval 
+  when page is displayed, this will run		
+-->
 jQuery(document).ready(function(){
 		var servFreq = jQuery('#SERVICE_FREQUENCY').val();
 		if(servFreq=="")
@@ -1475,7 +1860,7 @@ jQuery(document).ready(function(){
 			}
 		jQuery("#intervalUnit").text(intervalUnit);
 		}	
-	//when values are changed, run this:
+	<#-- when values are changed, run this: -->
 	jQuery('.intervalUnitSet').change(function() {
 		var servFreq = jQuery('#SERVICE_FREQUENCY').val();
 		var servInter = jQuery('#SERVICE_INTERVAL').val();
@@ -1536,7 +1921,8 @@ jQuery(document).ready(function(){
 		jQuery("#intervalUnit").text(intervalUnit);
 		}	
 	});
-});//end of JQuery for scheduledJobsRule
+});
+<#-- end of JQuery for scheduledJobsRule -->
 
 function deleteCategoryMemberRow(categoryName, parentCategoryName)
 {
@@ -1568,7 +1954,7 @@ function addCategoryMemberRow(tableId)
     });
 }
 
-//jQuery for userSecurityGroup
+<#-- jQuery for userSecurityGroup -->
 
 function deleteGroupTableRow(groupId)
 {
@@ -1599,9 +1985,9 @@ function addGroupRow(tableId)
         setTableIndexPos(table);
     });
 }
-//end of jQuery for userSecurityGroup
+<#-- end of jQuery for userSecurityGroup -->
 
-//jQuery for securityGroupPermission
+<#-- jQuery for securityGroupPermission  -->
 function deletePermissionTableRow(permissionId)
 {
 	var textConfirmDelete = "${confirmDialogText!""}";
@@ -1631,7 +2017,7 @@ function addPermissionRow(tableId)
         setTableIndexPos(table);
     });
 }
-//end of jQuery for securityGroupPermission
+<#-- end of jQuery for securityGroupPermission -->
 function setTableIndexPos(table)
 {
     var rows = table.getElementsByTagName('tr');
@@ -1694,19 +2080,75 @@ function setRowNo(rowNo) {
  	}
  }
  
-    // update the shopping cart sections and update the promotion section
-    function setShippingMethod(selectedShippingOption, isOnLoad) {
-        if (jQuery('#shoppingCartContainer').length) {
-            jQuery('#shoppingCartContainer').load('<@ofbizUrl>setShippingOption?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>',  function(){
-	            if (jQuery('#shoppingCartBottomContainer').length) {
-		            jQuery('#shoppingCartBottomContainer').load('<@ofbizUrl>setShippingOptionBottom?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(){
-		            	if((isOnLoad != null) && (isOnLoad =='N')) {
-		            		if (jQuery('#promoCodeContainer').length) { 
-				                jQuery('#promoCodeContainer').load('<@ofbizUrl>reloadPromoCode?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
-				            }
-		            	}
+    <#-- update the shopping cart sections and update the promotion section -->
+    function setShippingMethod(selectedShippingOption, isOnLoad) 
+    {
+        if (jQuery('#shoppingCartContainer').length) 
+        {
+        	jQuery.ajaxSetup({async:false});
+            jQuery('#shoppingCartContainer').load('<@ofbizUrl>setShippingOption?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>',  function()
+            {
+	            if (jQuery('#shoppingCartBottomContainer').length) 
+	            {
+		            jQuery('#shoppingCartBottomContainer').load('<@ofbizUrl>setShippingOptionBottom?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function()
+		            {
 		            });
 		        }
+            });
+            
+            if((isOnLoad != null) && (isOnLoad =='N')) 
+	        {
+	        	if (jQuery('#loyaltyPointsContainer').length) 
+	             {
+	                jQuery.get('<@ofbizUrl>adminReloadLoyaltyPoints?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(lpData)
+	             	{
+	             		jQuery('#loyaltyPointsContainer').replaceWith(lpData);	
+		            });
+	             }
+	            jQuery.get('<@ofbizUrl>reloadPromoCode?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(promoData)
+	         	{
+	         		jQuery('#promoCodeContainer').replaceWith(promoData);	
+	            });
+	        }
+	        
+	        <#-- capture warning message since it will dissapear when gift card section is reloaded -->
+	        var gcWarningMessTest;
+	        if((isOnLoad == null) || (isOnLoad !='N')) 
+	        {
+	        	gcWarningMessText = jQuery("#js_gcWarningMessText");
+	        }
+	        if (jQuery('#giftCardContainer').length) 
+		    {
+		     	jQuery.get('<@ofbizUrl>adminReloadGiftCard?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(gcData)
+		     	{
+		     		jQuery('#giftCardContainer').find('#enteredGiftCardContainter').replaceWith(jQuery(gcData).find('#enteredGiftCardContainter'));	
+		     		if((isOnLoad == null) || (isOnLoad !='N')) 
+					{
+						if(jQuery(gcWarningMessText).length)
+						{
+							<#-- re-apply error message -->
+							jQuery(".giftCardSummary").append(gcWarningMessTest);
+						}
+					}
+		        });
+		    }
+            
+            
+            jQuery.get('<@ofbizUrl>reloadBalance?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) 
+            {
+               var balanceSection = jQuery(data).find("#balanceDue");
+               jQuery("#balanceDue").replaceWith(balanceSection);
+               
+               var remainingBalance = Number(jQuery("#remainingPayment").val());
+               if(Number(remainingBalance) > 0)
+               {
+               		jQuery("#paymentOptionInfo").show();
+               }
+               else
+               {
+               		jQuery("#paymentOptionInfo").hide();
+               }
+               
             });
         }
         
@@ -1716,7 +2158,7 @@ function setRowNo(rowNo) {
         }
     }
     
-    //add promo code for checkout screen
+    <#-- add promo code for checkout screen -->
     function addManualPromoCode() {
         if (jQuery('#manualOfferCode').length && jQuery('#manualOfferCode').val() != null) {
           promo = jQuery('#manualOfferCode').val().toUpperCase();
@@ -1727,7 +2169,7 @@ function setRowNo(rowNo) {
         cform.submit();
     }
     
-    //remove promo code for checkout screen
+    <#-- remove promo code for checkout screen -->
     function removePromoCode(promoCode) {
         if (promoCode != null) {
           var cform = document.${detailFormName!"adminCheckoutFORM"};
@@ -1736,12 +2178,73 @@ function setRowNo(rowNo) {
         }
     }
     
-    //disabled or enabled the Selectable feature based on the Finished/Virtual
-    function selectFinishedProduct(elm) {
+    <#-- add promo code for checkout screen -->
+    function addGiftCardNumber()
+    {
+        if (jQuery('#giftCardNumber').length && jQuery('#giftCardNumber').val() != null)
+        {
+          giftCardNumber = jQuery('#giftCardNumber').val();
+          giftCardNumberWithoutSpace = giftCardNumber.replace(/^\s+|\s+$/g, "");
+        }
+        var cform = document.${detailFormName!"adminCheckoutFORM"};
+        cform.action="<@ofbizUrl>${addGiftCardNumberRequest!}?gcNumber="+giftCardNumberWithoutSpace+"</@ofbizUrl>";
+        cform.submit();
+    }
+    
+    <#-- remove Gift Card for checkout screen -->
+    function removeGiftCardNumber(gcPaymentMethodId)
+    {
+        if (gcPaymentMethodId != null)
+        {
+          var cform = document.${detailFormName!"adminCheckoutFORM"};
+          cform.action="<@ofbizUrl>${removeGiftCardNumberRequest!}?gcPaymentMethodId="+gcPaymentMethodId+"</@ofbizUrl>";
+          cform.submit();
+        }
+    }
+    
+    
+    
+    
+    function addLoyaltyPoints()
+    {
+    	jQuery('#js_applyLoyaltyCard').bind('click', false);
+        var cform = document.${formName!"adminCheckoutFORM"};
+        cform.action="<@ofbizUrl>${addLoyaltyPointsRequest!}</@ofbizUrl>";
+        cform.submit();
+    }
+    function removeLoyaltyPoints()
+    {
+    	jQuery('#js_removeLoyaltyCard').bind('click', false);
+	    var cform = document.${formName!"adminCheckoutFORM"};
+	    cform.action="<@ofbizUrl>${removeLoyaltyPointsRequest!}</@ofbizUrl>";
+	    cform.submit();
+    }
+    function updateLoyaltyPoints(indexOfAdj)
+    {
+    	jQuery('#js_updateLoyaltyPointsAmount').bind('click', false);
+	    var cform = document.${formName!"adminCheckoutFORM"};
+	    cform.action="<@ofbizUrl>${updateLoyaltyPointsRequest!}</@ofbizUrl>";
+	    cform.submit();
+    }
+    
+    
+    
+    
+    <#-- disabled or enabled the Selectable feature based on the Finished/Virtual -->
+    function selectFinishedProduct(elm) 
+    {
+        if (jQuery(elm).attr('name') == undefined)
+        {
+            return;
+        }
         if(jQuery(elm+':checked').val() == "N"){
             jQuery('.selectableRadio').hide();
+            jQuery('.multiSelectVaraint').hide();
+            jQuery('.buyableProductAttribute').show();
         } else {
             jQuery('.selectableRadio').show();
+            jQuery('.multiSelectVaraint').show();
+            jQuery('.buyableProductAttribute').hide();
         }
     }
     function clearCache(cacheName, cacheType)
@@ -1792,4 +2295,163 @@ function setRowNo(rowNo) {
 	})();
 	
 	}
+	
+	<#-- when gift message text is empty and a help text is selected, copy the help text to the message -->
+    function giftMessageHelpCopy(count)
+    {
+    	var helpText = jQuery("#giftMessageEnum_"+count).val();
+    	if(helpText != "")
+    	{
+    		jQuery("#giftMessageText_"+count).val(helpText);
+    	}
+    }
+    
+    <#-- show and hide the group input for the div sequencer -->
+    function showHideGroupInput(selected)
+    {
+    	var selectedValue = selected.options[selected.selectedIndex].value; 
+    	if(selectedValue != "PDPTabs")
+    	{
+    		jQuery('.divSequenceGroup').hide();
+    	}
+    	else
+    	{
+    		jQuery('.divSequenceGroup').show();
+    	}
+    }
+    
+    function setFeatureDisplay(elm)
+    {
+        var distinguishProductFeatureMultiId = jQuery(elm).attr('name');
+        var featureTypeId = distinguishProductFeatureMultiId.split('_')[1];
+        var selectedMultiFeature = jQuery(elm).val() 
+        var selectedMultiFeatures = selectedMultiFeature.split(',');
+        if(selectedMultiFeatures.length > 1)
+        {
+            jQuery('#multipleInfo_'+featureTypeId).html("Multiple ...");
+            jQuery('#multipleInfo_'+featureTypeId).show();
+            jQuery('#distinguishFeatureValue_'+featureTypeId+' option:selected').removeAttr('selected');
+            jQuery('#distinguishFeatureValue_'+featureTypeId).children('select:first').hide();
+        }
+        else
+        {
+            jQuery('#multipleInfo_'+featureTypeId).hide();
+            jQuery("#distinguishFeatureValue_"+featureTypeId+" option[value='"+selectedMultiFeature+"']").attr("selected", "selected");
+            jQuery('#distinguishFeatureValue_'+featureTypeId).children('select:first').show();
+            jQuery(elm).val("");
+        } 
+    }
+    
+    function setVirtualFeatureDisplay(elm)
+    {
+        var distinguishProductFeatureMultiId = jQuery(elm).attr('name');
+        var featureTypeId = distinguishProductFeatureMultiId.split('_')[1];
+        var selectedMultiFeature = jQuery(elm).val() 
+        var selectedMultiFeatures = selectedMultiFeature.split(',');
+        if(selectedMultiFeatures.length > 1)
+        {
+            jQuery('#multipleInfo_'+featureTypeId).html("Multiple ...");
+            jQuery('#multipleInfo_'+featureTypeId).show();
+            jQuery('#distinguishFeatureValue_'+featureTypeId+' option:selected').removeAttr('selected');
+            jQuery('#distinguishFeatureValue_'+featureTypeId).children('select:first').hide();
+        }
+        else
+        {
+            var productFeatureId = selectedMultiFeature.split('@')[0];
+            jQuery('#multipleInfo_'+featureTypeId).hide();
+            jQuery('#distinguishFeatureValue_'+featureTypeId+' option[value='+productFeatureId+']').attr('selected', 'selected');
+            jQuery('#distinguishFeatureValue_'+featureTypeId).children('select:first').show();
+            jQuery(elm).val("");
+        } 
+    }
+	
+	<#assign shipmentId = parameters.shipmentId!/>
+	
+        <#if shipmentId?has_content>
+            window.open(
+            "<@ofbizUrl>ShippingLabel.pdf?shipmentId="+${shipmentId}+"</@ofbizUrl>",'popUpWindow','height=500,width=600,left=400,top=200,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+        </#if>
+        
+    <#assign convertedFileName = parameters.convertedFileName!/>   
+    <#if convertedFileName?has_content>
+        var win = window.open("<@ofbizUrl>downloadConvertedXmlFile?convertedFileName=${convertedFileName}</@ofbizUrl>",'_blank');
+        win.focus();
+    </#if>
+    
+   function updateShippingOption(shippingContactMechId) 
+   {
+        if (jQuery('.shippingOption').length) 
+        {
+            if (jQuery('#SHIPPING_SELECT_ADDRESS').length) 
+            {
+	            if(jQuery('.shippingOption').find('.boxBody').find('#shippingOptionList').length)
+	            {
+	                jQuery.get('<@ofbizUrl>updateShippingOptions?shippingContactMechId='+shippingContactMechId+'&callback=Y&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) 
+	                {
+	                    jQuery('.shippingOption').find('.boxBody').find('#shippingOptionList').replaceWith(data);
+	                    <#-- also update the cart -->
+	                    var selectedShippingOptionValue = "";
+	                    var selectedShippingOption = jQuery('input[name="shipping_method"]:radio:checked');
+	                    if(jQuery(selectedShippingOption).length)
+	                    {
+	                    	selectedShippingOptionValue = jQuery(selectedShippingOption).val();
+	                    }
+	                    else
+	                    {
+	                    	jQuery('input[name=shipping_method]:eq(0)').attr('checked', 'checked');
+	                    	selectedShippingOption = jQuery('input[name="shipping_method"]:radio:checked');
+	                    	selectedShippingOptionValue = jQuery(selectedShippingOption).val();
+	                    }
+	                    setShippingMethod(selectedShippingOptionValue, 'N')
+                	});
+	            }
+            } 
+        }
+    }
+    
+    jQuery(document).ready(function () 
+    {
+	    if (jQuery('.shippingOption').length) 
+	    {
+	        if (jQuery('#SHIPPING_SELECT_ADDRESS').length) 
+	        {
+	        	var shippingContactMechId = jQuery('input[name="SHIPPING_SELECT_ADDRESS"]:radio:checked').val();
+	        	if(shippingContactMechId != "")
+	        	{
+	        		updateShippingOption(shippingContactMechId);
+	        	}
+	        }
+	    }
+    });
+    
+    jQuery(document).ready(function () 
+    {
+    	<#if mode?exists && mode?has_content && mode=="add">
+    		var newKeyText = jQuery('#divSequenceKey').val();
+	    	jQuery('input[name="key"]').val(newKeyText);
+			jQuery('#divSequenceKey').change(function () 
+	    	{ 
+	    		var newKeyText = jQuery('#divSequenceKey').val();
+	    		jQuery('input[name="key"]').val(newKeyText);
+	    		
+	    	});
+    	</#if>
+    });
+    
+    function addOrderAdjustment()
+    {
+        var cform = document.${detailFormName!"adminCheckoutFORM"};
+        cform.action="<@ofbizUrl>${addOrderAdjustmentRequest!}</@ofbizUrl>";
+        cform.submit();
+    }
+    function removeOrderAdjustment(orderAdjustmentId) 
+    {
+        if (orderAdjustmentId != "") 
+        {
+          var cform = document.${detailFormName!"adminCheckoutFORM"};
+          cform.action="<@ofbizUrl>adminRemoveOrderAdjustment?orderAdjustmentId="+orderAdjustmentId+"</@ofbizUrl>";
+          cform.submit();
+        }
+    }
+    
 </script>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+<!-- Shipment Custom Method -->
+<CustomMethod customMethodId="BDART_CHECK_DELIVERY" customMethodTypeId="SHIP_CHARGE_AVAIL" customMethodName="blueDartCheckoutPincode" description="Service which determines if Blue Dart 'carrier' can deliver to a customer's pincode."/>
+
+</entity-engine-xml>

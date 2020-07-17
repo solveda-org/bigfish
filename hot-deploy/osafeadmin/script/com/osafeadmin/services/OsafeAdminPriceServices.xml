@@ -7,27 +7,27 @@
 	    <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
 	        <if-empty field="parameters.listPrice">
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductListPriceError"/>
-	            <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="listPrice" list="error_list"/>
 	        <else>
 	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isFloat" ret-field="checkFloatResult">
 	                <field field="parameters.listPrice"/>
 	            </call-class-method>
 	            <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
 	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductListPriceError"/>
-	                <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="listPrice" list="error_list"/>
 	            </if-compare>
 	        </else>
 	        </if-empty>
 	        <if-empty field="parameters.defaultPrice">
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDefaultPriceError"/>
-	            <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="defaultPrice" list="error_list"/>
 	        <else>
 	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isFloat" ret-field="checkFloatResult">
 	                <field field="parameters.defaultPrice"/>
 	            </call-class-method>
 	            <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
 	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductDefaultPriceError"/>
-	                <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="defaultPrice" list="error_list"/>
 	            </if-compare>
 	        </else>
 	        </if-empty>
@@ -39,7 +39,7 @@
 		        </call-class-method>
 		        <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
 		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductVariantListPriceError"/>
-		            <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="variantListPrice" list="error_list"/>
 		        </if-compare>
 		    </if-not-empty>
 		    <if-not-empty field="parameters.variantSalePrice">
@@ -48,7 +48,7 @@
 		        </call-class-method>
 		        <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
 		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductVariantSalePriceError"/>
-		            <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="variantSalePrice" list="error_list"/>
 		        </if-compare>
 		    </if-not-empty>
 	    </if-compare>

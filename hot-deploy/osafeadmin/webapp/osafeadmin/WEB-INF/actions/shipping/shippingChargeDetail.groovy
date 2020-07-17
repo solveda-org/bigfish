@@ -1,4 +1,4 @@
-package promotion;
+package shipping;
 
 import java.util.List;
 import java.util.Map;
@@ -33,22 +33,15 @@ conditions = FastList.newInstance();
 conditions.add(EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "CARRIER"));
 mainCond = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 
-cond = FastList.newInstance();
-cond.add(EntityCondition.makeCondition("geoTypeId", EntityOperator.EQUALS, "COUNTRY"));
-mainCondOfCountry = EntityCondition.makeCondition(cond, EntityOperator.AND);
-
 partys = delegator.findList("PartyRole", mainCond, party, null, partysOps, false);
-geoType=delegator.findList("Geo", mainCondOfCountry, null, ["geoName"], includeCountryOps, false);
 
 shipmentGatewayConfig=delegator.findList("ShipmentGatewayConfig", null, null,null, includeCountryOps, false);
+
+context.productFeatureGroup = delegator.findList("ProductFeatureGroup", null, null, null, null, false);
+
 if (UtilValidate.isNotEmpty(partys))
 {
     context.partys = partys;
-}
-
-if (UtilValidate.isNotEmpty(geoType))
-{
-    context.geoType = geoType;
 }
 
 if (UtilValidate.isNotEmpty(shipmentGatewayConfig))
@@ -81,6 +74,12 @@ if (UtilValidate.isNotEmpty(productStoreShipMethId))
     context.shipCostEst = shipCostEst;
 }
 
+//get Shipment Custom Methods
+shipmentCustomMethods = delegator.findByAnd("CustomMethod", [customMethodTypeId : "SHIP_CHARGE_AVAIL"]);
+if (UtilValidate.isNotEmpty(shipmentCustomMethods))
+{
+	context.shipmentCustomMethods =shipmentCustomMethods;
+}
 
 
 

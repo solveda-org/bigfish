@@ -9,14 +9,14 @@
     </#if>
 </#if>
 <!-- address zip entry -->
-<div class="addressInfoZipPostcode">
-    <div class="entry">
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
         <label for="${fieldPurpose?if_exists}_POSTAL_CODE">
-            <span class="${fieldPurpose?if_exists}_USA"><@required/>${uiLabelMap.ZipCodeCaption}</span>
-            <span class="${fieldPurpose?if_exists}_CAN"><@required/>${uiLabelMap.PostalCodeCaption}</span>
-            <span class="${fieldPurpose?if_exists}_OTHER"><@required/>${uiLabelMap.PostalCodeCaption}</span>
+            <span><#if mandatory == "Y"><@required/></#if>${uiLabelMap.PostalCodeOrZipCaption}</span>
         </label>
-        <input type="text" maxlength="60" class="postalCode" name="${fieldPurpose?if_exists}_POSTAL_CODE" id="${fieldPurpose?if_exists}_POSTAL_CODE" value="${requestParameters.get(fieldPurpose+"_POSTAL_CODE")!postalCode!""}" />
-        <@fieldErrors fieldName="${fieldPurpose?if_exists}_POSTAL_CODE"/>
-    </div>
+        <div class="entryField">
+        	<input type="text" maxlength="60" class="postalCode" name="${fieldPurpose?if_exists}_POSTAL_CODE" id="js_${fieldPurpose?if_exists}_POSTAL_CODE" value="${requestParameters.get(fieldPurpose+"_POSTAL_CODE")!postalCode!""}" />
+        	<input type="hidden" id="${fieldPurpose?if_exists}_POSTAL_CODE_MANDATORY" name="${fieldPurpose?if_exists}_POSTAL_CODE_MANDATORY" value="${mandatory}"/>
+        	<@fieldErrors fieldName="${fieldPurpose?if_exists}_POSTAL_CODE"/>
+        </div>
 </div>

@@ -3,18 +3,18 @@
     <table class="osafe" cellspacing="0">
        <thead>
          <tr class="heading">
-           <th class="nameCol firstCol">${uiLabelMap.DivTagLabel}</th>
-           <th class="descCol">${uiLabelMap.DescLabel}</th>
+           <th class="nameCol firstCol">${uiLabelMap.KeyLabel}</th>
+           <th class="descCol">${uiLabelMap.DescriptionLabel}</th>
+           <th class="valueCol">${uiLabelMap.StyleLabel}</th>
+           <th class="radioCol">${uiLabelMap.MandatoryLabel}
+           <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.MandatoryHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+           </th>
            <th class="seqCol">${uiLabelMap.SeqNumberLabel}
            <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SeqIdHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
            </th> 
-           <#if parameters.screenType?exists && PDPTabsScreenType?exists  && parameters.screenType == PDPTabsScreenType>
-               <th class="numberCol">${uiLabelMap.GroupNumberLabel}
-               <div class="infoIcon">
-                 <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PdpTabsGroupHelperInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-               </div>
-               </th>
-           </#if>
+           <th class="numberCol">${uiLabelMap.GroupNumberLabel}
+             <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.GroupHelperInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+           </th>
          </tr>
        </thead>
        <tbody>
@@ -24,25 +24,35 @@
                 <#assign hasNext = screenList_has_next>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
                      <td class="nameCol <#if !hasNext>lastRow</#if>" >
-                       <a href="<@ofbizUrl>manageDivSeqItemDetail?key=${screenList.key?if_exists}&amp;screen=${screenList.screen?if_exists}</@ofbizUrl>">${screenList.key!}</a>
+                       <a href="<@ofbizUrl>manageDivSeqItemDetail?key=${screenList.key?if_exists}&amp;screenType=${screenList.screen?if_exists}</@ofbizUrl>">${screenList.key!}</a>
                        <input type="hidden" name="key_${screenList_index}" value="${screenList.key!}"></input>
                      </td>
                      <td class="descCol <#if !hasNext>lastRow</#if>">
                        ${screenList.description!}
                        <input type="hidden" name="description_${screenList_index}" value="${screenList.description!""}"></input>
                      </td>
-                     <td class="seqCol <#if !hasNext>lastRow</#if>">
-                     <#if screenList.value?has_content>
-                       <input type="text" name="value_${screenList_index}" class="small" id="seqNo" value="${parameters.get("value_${screenList_index}")!screenList.value}" ></input>
-                     </#if>
+                     <td class="valueCol <#if !hasNext>lastRow</#if>">
+                       ${screenList.style!}
+                       <input type="hidden" name="style_${screenList_index}" value="${screenList.style!""}"></input>
                      </td>
-                     <#if parameters.screenType?exists && PDPTabsScreenType?exists && parameters.screenType == PDPTabsScreenType>
-                         <td class="numberCol <#if !hasNext>lastRow</#if>">
-                             <#if screenList.group?has_content>
-                                 <input type="text" name="group_${screenList_index}" class="small" id="group_${screenList_index}" value="${parameters.get("group_${screenList_index}")!screenList.group!}" ></input>
-                             </#if>
-                         </td>
-                     </#if>
+                     <td class="radioCol <#if !hasNext>lastRow</#if>">
+                         <#if screenList.mandatory?has_content && (screenList.mandatory == "YES" || screenList.mandatory == "NO")>
+                             <span class="radiobutton">
+                                 <#assign mandatory = request.getParameter("mandatory_${screenList_index}")!screenList.mandatory!''/>
+                                 <input type="radio" name="mandatory_${screenList_index}" value="YES" <#if mandatory == "YES">checked="checked"</#if>/>${uiLabelMap.YesLabel}
+                                 <input type="radio" name="mandatory_${screenList_index}" value="NO" <#if mandatory == "NO">checked="checked"</#if>/>${uiLabelMap.NoLabel}
+                             </span>
+                         <#else>
+                             ${screenList.mandatory!}
+                             <input type="hidden" name="mandatory_${screenList_index}" value="${screenList.mandatory!""}"></input>
+                         </#if>
+                     </td>
+                     <td class="seqCol <#if !hasNext>lastRow</#if>">
+                         <input type="text" name="value_${screenList_index}" class="small" id="seqNo" value="${parameters.get("value_${screenList_index}")!screenList.value}" ></input>
+                     </td>
+                     <td class="numberCol <#if !hasNext>lastRow</#if>">
+                         <input type="text" name="group_${screenList_index}" class="small" id="group_${screenList_index}" value="${parameters.get("group_${screenList_index}")!screenList.group!}" ></input>
+                     </td>
                      <input type="hidden" name="screen_${screenList_index}" value="${screenList.screen!}"></input>
                 </tr>
                 <#-- toggle the row color -->
@@ -56,5 +66,5 @@
         </table>
         <input type="hidden" name="showDetail" value="false"/>
     <#else>
-        ${uiLabelMap.NoDataAvailableInfo}
+        ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
     </#if>

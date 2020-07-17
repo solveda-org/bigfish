@@ -7,7 +7,7 @@
         <set field="address" value=""/>
         <if-empty field="parameters.groupNameLocal">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreCodeError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="groupNameLocal"  list="error_list"/>
             <else>
             	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
 					<field field="parameters.groupNameLocal"/>
@@ -15,7 +15,7 @@
 				<if-compare field="isValidId" operator="equals" value="false">
 						<set field="errorKey" from-field="parameters.groupNameLocal"/>
 						<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
-						<string-to-list string="${tempErrorMessage}" list="error_list"/>
+						<string-to-list string="${tempErrorMessage}" message-field="groupNameLocal"  list="error_list"/>
 						<else>
 							<set field="maxLength" value="100" type="Integer"/>
 			                <set field="spaceReplacement" value=" " type="String"/>
@@ -28,7 +28,8 @@
 			                </call-class-method>
 			                <if-empty field="groupNameLocal">
 			                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="StoreCodeLengthError"/>
-			                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+			                    <string-to-list string="${tempErrorMessage}" message-field="groupNameLocal"  list="error_list"/>
+			                    <string-to-list string="groupNameLocal" list="error_field_list"/>
 			                    <else>
 			                        <set field="parameters.groupNameLocal" from-field="groupNameLocal"/>
 			                    </else>
@@ -39,11 +40,11 @@
         </if-empty>
         <if-empty field="parameters.groupName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreNameError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="groupName"  list="error_list"/>
         </if-empty>
         <if-empty field="parameters.address1">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress1Error"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="address1"  list="error_list"/>
             <else>
                 <string-append string="${parameters.address1}, " field="address"/>
             </else>
@@ -56,7 +57,7 @@
         </if-not-empty>
         <if-empty field="parameters.city">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCityError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="city"  list="error_list"/>
             <else>
                 <string-append string="${parameters.city}, " field="address"/>
             </else>
@@ -69,11 +70,10 @@
             <if-not-empty field="stateGeo.geoName">
                 <string-append string="${stateGeo.geoName}, " field="address"/>
             </if-not-empty>
-            <set field="parameters.address3" from-field="nullField"/>
         </if-not-empty>
         <if-empty field="parameters.postalCode">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPostalCodeError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="postalCode"  list="error_list"/>
             <else>
                 <if-compare value="USA" operator="equals" field="parameters.countryGeoId">
                     <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
@@ -82,7 +82,7 @@
                 </if-compare>
                 <if-compare field="isZipCode" operator="equals"  value="false">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidPostalCodeError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="postalCode"  list="error_list"/>
                 </if-compare>
             </else>
         </if-empty>
@@ -96,7 +96,7 @@
             <then>
                 <if-empty field="parameters.stateProvinceGeoId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="stateProvinceGeoId"  list="error_list"/>
                 </if-empty>
                 <call-map-processor in-map-name="parameters" out-map-name="contactNumberMap">
                     <simple-map-processor name="newTelecomNumber">
@@ -115,11 +115,11 @@
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankContactNumberError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="areaCode"  list="error_list"/>
                     </if-compare>
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="areaCode"  list="error_list"/>
                     </if-compare>
                 </if-compare>
             </then>
@@ -135,7 +135,7 @@
                 </call-map-processor>
                 <if-empty field="contactNumberMap.phoneContactNumber">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankContactNumberError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="contactNumberOther"  list="error_list"/>
                 </if-empty>
             </else>
         </if>
@@ -165,7 +165,7 @@
             </condition>
             <then>
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GetGeoCodeError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="productStoreId"  list="error_list"/>
             </then>
             <else>
                 <field-to-request field="latitude"/>
@@ -256,15 +256,15 @@
         <set field="address" value=""/>
         <if-empty field="parameters.groupNameLocal">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreCodeError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="groupNameLocal"  list="error_list"/>
         </if-empty>
         <if-empty field="parameters.groupName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreNameError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="groupName"  list="error_list"/>
         </if-empty>
         <if-empty field="parameters.address1">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress1Error"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="address1"  list="error_list"/>
             <else>
                 <string-append string="${parameters.address1}, " field="address"/>
             </else>
@@ -277,7 +277,7 @@
         </if-not-empty>
         <if-empty field="parameters.city">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCityError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="city"  list="error_list"/>
             <else>
                 <string-append string="${parameters.city}, " field="address"/>
             </else>
@@ -290,11 +290,10 @@
             <if-not-empty field="stateGeo.geoName">
                 <string-append string="${stateGeo.geoName}, " field="address"/>
             </if-not-empty>
-            <set field="parameters.address3" from-field="nullField"/>
         </if-not-empty>
         <if-empty field="parameters.postalCode">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPostalCodeError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="postalCode"  list="error_list"/>
             <else>
                 <if-compare value="USA" operator="equals" field="parameters.countryGeoId">
                     <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
@@ -303,7 +302,7 @@
                 </if-compare>
                 <if-compare field="isZipCode" operator="equals"  value="false">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidPostalCodeError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="postalCode"  list="error_list"/>
                 </if-compare>
             </else>
         </if-empty>
@@ -317,7 +316,7 @@
             <then>
                 <if-empty field="parameters.stateProvinceGeoId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="stateProvinceGeoId"  list="error_list"/>
                 </if-empty>
                 <call-map-processor in-map-name="parameters" out-map-name="contactNumberMap">
                     <simple-map-processor name="newTelecomNumber">
@@ -336,11 +335,11 @@
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankContactNumberError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneContactNumber"  list="error_list"/>
                     </if-compare>
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneContactNumber"  list="error_list"/>
                     </if-compare>
                 </if-compare>
             </then>
@@ -356,7 +355,7 @@
                 </call-map-processor>
                 <if-empty field="contactNumberMap.phoneContactNumber">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankContactNumberError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="phoneContactNumber"  list="error_list"/>
                 </if-empty>
             </else>
         </if>
@@ -386,7 +385,7 @@
             </condition>
             <then>
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GetGeoCodeError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="productStoreId"  list="error_list"/>
             </then>
             <else>
                 <field-to-request field="latitude"/>
@@ -486,6 +485,12 @@
 
 
     <simple-method method-name="deleteStoreLocation" short-description="Deletes a store location">
+        <!-- Delete Party product store Role -->
+        <set field="removeProductStoreRoleCtx.productStoreId" from-field="parameters.productStoreId"/>
+        <set field="removeProductStoreRoleCtx.partyId" from-field="parameters.partyId"/>
+        <set field="removeProductStoreRoleCtx.roleTypeId" value="STORE_LOCATION"/>
+        <remove-by-and map="removeProductStoreRoleCtx" entity-name="ProductStoreRole"/>
+
         <!-- Delete PartyRole -->
         <entity-one value-field="partyRole" entity-name="PartyRole">
             <field-map field-name="partyId" from-field="parameters.partyId"/>

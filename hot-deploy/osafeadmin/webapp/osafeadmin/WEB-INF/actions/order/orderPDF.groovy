@@ -41,11 +41,20 @@ if (UtilValidate.isNotEmpty(svcCtx))
     context.ordersList = orderPDFList;
     if (UtilValidate.isNotEmpty(orderPDFList)) 
     {
-        if (UtilValidate.isNotEmpty(orderPDFName)) 
+		firstOrder = orderPDFList.getFirst();
+		firstOrderId = firstOrder.orderId;
+		orderPDFName = firstOrderId;
+        if (orderPDFList.size() > 1) 
         {
-            orderPDFName = orderPDFName+(OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(), "yyyy-MM-dd-HHmm"));
-            response.setHeader("Content-Disposition","attachment; filename=\"" + UtilValidate.stripWhitespace(orderPDFName) + ".pdf" + "\";");
+			lastOrder = orderPDFList.getLast();
+			lastOrderId = lastOrder.orderId;
+			orderPDFName= orderPDFName + " " + uiLabelMap.ToLabel + " "+ lastOrderId;
         }
+		
+		if (UtilValidate.isNotEmpty(orderPDFName))
+		{
+			response.setHeader("Content-Disposition","attachment; filename=\"" + orderPDFName + ".pdf" + "\";");
+		}
         Map<String, Object> upOrderHeaderCtx = FastMap.newInstance();
         upOrderHeaderCtx.put("userLogin",userLogin);
         upOrderHeaderCtx.put("isDownloaded","Y");
@@ -134,4 +143,7 @@ if (UtilValidate.isNotEmpty(svcCtx))
         context.storePickupMap = storePickupMap;
     }
 }
+
+context.checkoutSuppressTaxIfZero = OsafeAdminUtil.isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO");
+context.checkoutShowSalesTaxMulti = OsafeAdminUtil.isProductStoreParmTrue(request,"CHECKOUT_SHOW_SALES_TAX_MULTI");
 

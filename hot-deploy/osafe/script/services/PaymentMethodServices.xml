@@ -81,10 +81,34 @@ under the License.
     </simple-method>
 
     <simple-method method-name="updateEbsPaymentMethod" short-description="Update a Ebs Payment Method">
-        <entity-one value-field="sagePayTokenPaymentMethod" entity-name="SagePayTokenPaymentMethod"/>
-        <set-nonpk-fields value-field="sagePayTokenPaymentMethod" map="parameters"/>
-        <store-value value-field="sagePayTokenPaymentMethod"/>
-        <field-to-result result-name="paymentMethodId" field="sagePayTokenPaymentMethod.paymentMethodId"/>
+        <entity-one value-field="ebsPaymentMethod" entity-name="EbsPaymentMethod"/>
+        <set-nonpk-fields value-field="ebsPaymentMethod" map="parameters"/>
+        <store-value value-field="ebsPaymentMethod"/>
+        <field-to-result result-name="paymentMethodId" field="ebsPaymentMethod.paymentMethodId"/>
+    </simple-method>
+
+    <simple-method method-name="createPayNetzPaymentMethod" short-description="Create a Ebs Payment Method">
+        <make-value value-field="newPaymentMethod" entity-name="PaymentMethod"/>
+        <set-pk-fields value-field="newPaymentMethod" map="parameters"/>
+        <if-empty field="newPaymentMethod.paymentMethodId">
+            <sequenced-id sequence-name="PaymentMethod" field="newPaymentMethod.paymentMethodId"/>
+        </if-empty>
+        <set-nonpk-fields value-field="newPaymentMethod" map="parameters"/>
+        <set field="newPaymentMethod.paymentMethodTypeId" value="EXT_PAYNETZ"/>
+        <create-value value-field="newPaymentMethod"/>
+
+        <make-value value-field="newPayNetzPaymentMethod" entity-name="PayNetzPaymentMethod"/>
+        <set field="newPayNetzPaymentMethod.paymentMethodId" from-field="newPaymentMethod.paymentMethodId"/>
+        <set-nonpk-fields value-field="newPayNetzPaymentMethod" map="parameters"/>
+        <create-value value-field="newPayNetzPaymentMethod"/>
+        <field-to-result result-name="paymentMethodId" field="newPaymentMethod.paymentMethodId"/>
+    </simple-method>
+
+    <simple-method method-name="updatePayNetzPaymentMethod" short-description="Update a Ebs Payment Method">
+        <entity-one value-field="payNetzPaymentMethod" entity-name="PayNetzPaymentMethod"/>
+        <set-nonpk-fields value-field="payNetzPaymentMethod" map="parameters"/>
+        <store-value value-field="payNetzPaymentMethod"/>
+        <field-to-result result-name="paymentMethodId" field="payNetzPaymentMethod.paymentMethodId"/>
     </simple-method>
 
 </simple-methods>

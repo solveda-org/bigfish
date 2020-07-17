@@ -226,7 +226,7 @@ public class PartyServices {
             String groupName = (String) context.get("groupName");
             String groupNameLocal = (String) context.get("groupNameLocal");
             String productStoreId = (String) context.get("productStoreId");
-            
+            String personName = (String) context.get("personName");
             String attrName = (String) context.get("attrName");
             String attrValue = (String) context.get("attrValue");
             String isDownloaded = (String) context.get("isDownloaded");
@@ -235,7 +235,7 @@ public class PartyServices {
                 // check for a partyId
                 if (UtilValidate.isNotEmpty(partyId)) {
                     paramList = paramList + "&partyId=" + partyId;
-                    andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("partyId"), EntityOperator.LIKE, EntityFunction.UPPER("%"+partyId+"%")));
+                    andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("partyId"), EntityOperator.EQUALS, EntityFunction.UPPER(partyId)));
                 }
 
                 // now the statusId - send ANY for all statuses; leave null for just enabled; or pass a specific status
@@ -342,7 +342,8 @@ public class PartyServices {
                 // ----
 
                 // modify the dynamic view
-                if (UtilValidate.isNotEmpty(firstName) || UtilValidate.isNotEmpty(lastName)) {
+                if (UtilValidate.isNotEmpty(firstName) || UtilValidate.isNotEmpty(lastName)|| UtilValidate.isNotEmpty(personName)) 
+                {
                     dynamicView.addMemberEntity("PE", "Person");
                     dynamicView.addAlias("PE", "firstName");
                     dynamicView.addAlias("PE", "lastName");
@@ -352,6 +353,16 @@ public class PartyServices {
                     fieldsToSelect.add("lastName");
                     orderBy.add("lastName");
                     orderBy.add("firstName");
+                }
+
+                if (UtilValidate.isNotEmpty(personName)) 
+                {
+                    
+                    paramList = paramList + "&personName=" + personName;
+                    List orExprs = FastList.newInstance();
+                    orExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("firstName"), EntityOperator.LIKE, EntityFunction.UPPER("%"+personName+"%")));
+                    orExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("lastName"), EntityOperator.LIKE, EntityFunction.UPPER("%"+personName+"%")));
+                    andExprs.add(EntityCondition.makeCondition(orExprs, EntityOperator.OR));
                 }
 
                 // filter on firstName
@@ -372,7 +383,8 @@ public class PartyServices {
 
                 // filter on role member
                 List roleTypes = (List) context.get("roleTypeIds");
-                if (roleTypes != null) {
+                if (UtilValidate.isNotEmpty(roleTypes)) 
+                {
                     Iterator i = roleTypes.iterator();
                     List orExprs = FastList.newInstance();
                     while (i.hasNext()) {
@@ -391,7 +403,7 @@ public class PartyServices {
                 }
                 if ((roleTypeId != null && !"ANY".equals(roleTypeId)) || (roleTypes != null && roleTypes.size() > 0)) 
                 {
-                    // add role and productStoreId to view
+                	// add role and productStoreId to view
                     dynamicView.addMemberEntity("PR", "ProductStoreRole");
                     dynamicView.addAlias("PR", "roleTypeId");
                     dynamicView.addAlias("PR", "productStoreId");
@@ -423,6 +435,29 @@ public class PartyServices {
                     dynamicView.addViewLink("PT", "PQ", Boolean.FALSE, ModelKeyMap.makeKeyMapList("partyId"));
                 	
                 }
+                // ----
+                // SkillTypes Fields
+                // ----
+                // filter on SkillTypes
+                
+                List skillTypes = (List) context.get("skillTypeIds");
+                if (skillTypes != null) {
+                    Iterator i = skillTypes.iterator();
+                    List orExprs = FastList.newInstance();
+                    while (i.hasNext()) {
+                        String skillTypeId = (String) i.next();
+                        orExprs.add(EntityCondition.makeCondition("skillTypeId", EntityOperator.EQUALS, skillTypeId));
+                    }
+                    andExprs.add(EntityCondition.makeCondition(orExprs, EntityOperator.OR));
+                }
+                if (skillTypes != null && skillTypes.size() > 0) 
+                {
+                    // add SkillType to view
+                    dynamicView.addMemberEntity("PS", "PartySkill");
+                    dynamicView.addAlias("PS", "skillTypeId");
+                    dynamicView.addViewLink("PT", "PS", Boolean.FALSE, ModelKeyMap.makeKeyMapList("partyId"));
+                	
+                }
 
                 // ----
                 // IdentificationType Fields
@@ -450,7 +485,8 @@ public class PartyServices {
                 }
                 
                 //filter by productStoreId
-                if (UtilValidate.isNotEmpty(productStoreId)) {
+                if (UtilValidate.isNotEmpty(productStoreId) && ((roleTypes != null && roleTypes.size() > 0) || (roleTypeId != null))) 
+                {
                 	paramList = paramList + "&productStoreId=" + productStoreId;
                 	andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productStoreId"), EntityOperator.EQUALS, EntityFunction.UPPER(productStoreId)));	
                 }

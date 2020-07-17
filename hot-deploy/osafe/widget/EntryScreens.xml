@@ -11,6 +11,8 @@
                 <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
                 <!-- set field="showWorkPhone" value="Y"/> -->
                 <set field="workPhoneCaption" value="${uiLabelMap.WorkPhoneCaption}"/>
+                <set field="fieldPurpose" value="PERSONAL" />
+                <set field="purposeType" value="BILLING_LOCATION"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -39,22 +41,22 @@
             <actions>
                 <set field="addressEntryBoxHeading" value="${uiLabelMap.ShippingAddressHeading}"/>
                 <set field="isShipping" from-field="isShipping" default-value="Y"/>
-                <set field="showAttnName" from-field="showAttnName" default-value="Y"/>
                 <set field="showHomePhone" value="Y"/>
                 <set field="homePhoneCaption" value="${uiLabelMap.HomePhoneCaption}"/>
                 <set field="homePhoneRequired" value="Y"/>
                 <set field="showMobilePhone" value="Y"/>
                 <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
                 <set field="fieldPurpose" value="SHIPPING" />
+                <set field="purposeType" value="SHIPPING_LOCATION"/>
+                <set field="addressDivScreenPrefix" value="shippingAddressInfo"/>
+                <set field="workPhoneCaption" value="${uiLabelMap.WorkPhoneCaption}"/>
             </actions>
             <widgets>
-                <container style="checkoutOrderShippingAddress">
                 <platform-specific>
                     <html>
                       <html-template location="component://osafe/webapp/osafe/common/entry/addressShippingEntry.ftl"/>
                     </html>
                 </platform-specific>
-                </container>
             </widgets>
         </section>
     </screen>
@@ -69,15 +71,16 @@
                 <set field="showMobilePhone" value="Y"/>
                 <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
                 <set field="fieldPurpose" value="BILLING" />
+                <set field="purposeType" value="BILLING_LOCATION"/>
+                <set field="addressDivScreenPrefix" value="billingAddressInfo"/>
+                <set field="workPhoneCaption" value="${uiLabelMap.WorkPhoneCaption}"/>
             </actions>
             <widgets>
-                <container style="checkoutOrderBillingAddress">
                 <platform-specific>
                     <html>
                       <html-template location="component://osafe/webapp/osafe/common/entry/addressBillingEntry.ftl"/>
                     </html>
                 </platform-specific>
-                </container>
             </widgets>
         </section>
     </screen>
@@ -92,15 +95,16 @@
                 <set field="showMobilePhone" value="Y"/>
                 <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
                 <set field="fieldPurpose" value="BILLING" />
+                <set field="purposeType" value="BILLING_LOCATION"/>
+                <set field="addressDivScreenPrefix" value="billingAddressInfo"/>
+                <set field="workPhoneCaption" value="${uiLabelMap.WorkPhoneCaption}"/>
             </actions>
             <widgets>
-                <container style="checkoutOrderBillingAddress">
                 <platform-specific>
                     <html>
                       <html-template location="component://osafe/webapp/osafe/common/entry/anonAddressBillingEntry.ftl"/>
                     </html>
                 </platform-specific>
-                </container>
             </widgets>
         </section>
     </screen>
@@ -122,7 +126,21 @@
         </section>
     </screen>
 
-    <screen name="emailPasswordConfirmEntryForm">
+    <screen name="customerEmailEntryForm">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/userLoginInfo/customerEmailEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="customerPasswordEntryForm">
         <section>
             <actions>
                 <set field="REG_PWD_MIN_CHAR" from-field="REG_PWD_MIN_CHAR" type="Integer" />
@@ -132,7 +150,7 @@
             <widgets>
                 <platform-specific>
                     <html>
-                      <html-template location="component://osafe/webapp/osafe/common/entry/emailPasswordConfirmEntry.ftl"/>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/userLoginInfo/customerPasswordEntry.ftl"/>
                     </html>
                 </platform-specific>
             </widgets>
@@ -148,7 +166,7 @@
             <widgets>
                 <platform-specific>
                     <html>
-                      <html-template location="component://osafe/webapp/osafe/common/entry/contactUsEntry.ftl"/>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/contactUs/contactUsEntry.ftl"/>
                     </html>
                 </platform-specific>
             </widgets>
@@ -168,7 +186,7 @@
             <widgets>
                 <platform-specific>
                     <html>
-                      <html-template location="component://osafe/webapp/osafe/common/entry/requestCatalogEntry.ftl"/>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/requestCatalog/requestCatalogEntry.ftl"/>
                     </html>
                 </platform-specific>
             </widgets>
@@ -179,7 +197,6 @@
             <actions>
                 <set field="addressEntryBoxHeading" value="${groovy:if(org.ofbiz.base.util.UtilValidate.isNotEmpty(context.contactMech))return (uiLabelMap.UpdateAddressHeading); else return (uiLabelMap.CreateAddressHeading);}"/>
                 <set field="addressInstructionsInfo" value="${uiLabelMap.UpdateAddressInstructionsInfo}"/>
-                <set field="showAttnName" value="Y"/>
                 <set field="showName" value="Y"/>
                 <set field="showHomePhone" value="Y"/>
                 <set field="homePhoneCaption" value="${uiLabelMap.HomePhoneCaption}"/>
@@ -187,6 +204,8 @@
                 <set field="showMobilePhone" value="Y"/>
                 <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
                 <set field="fieldPurpose" value="CUSTOMER" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceAddressPurpose.groovy" />
+                <set field="addressDivScreenPrefix" value="myAccountAddressBook"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -326,6 +345,19 @@
                 <platform-specific>
                     <html>
                       <html-template location="component://osafe/webapp/osafe/common/entry/js/capturePlusJs.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="emailAFriendEntryForm">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/emailAFriend/emailAFriendEntry.ftl"/>
                     </html>
                 </platform-specific>
             </widgets>

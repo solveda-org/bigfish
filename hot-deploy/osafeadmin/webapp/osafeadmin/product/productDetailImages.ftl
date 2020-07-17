@@ -50,7 +50,7 @@
        </div>
        
        <#assign urlReferenceLargeImageExist = "false"/>
-       <#if (productLargeImageStr?has_content) && (productLargeImageStr.contains("//"))>
+       <#if (productLargeImageStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(productLargeImageStr)>
          <#assign urlReferenceLargeImageExist = "true"/>
        </#if>
        
@@ -162,7 +162,7 @@
        </div>
        
        <#assign urlReferenceThumbnailImageExist = "false"/>
-       <#if (productThumbnailImageStr?has_content) && (productThumbnailImageStr.contains("//"))>
+       <#if (productThumbnailImageStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(productThumbnailImageStr)>
          <#assign urlReferenceThumbnailImageExist = "true"/>
        </#if>
        
@@ -275,7 +275,7 @@
        </div>
        
        <#assign urlReferenceDetailImageExist = "false"/>
-       <#if (productDetailImageStr?has_content) && (productDetailImageStr.contains("//"))>
+       <#if (productDetailImageStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(productDetailImageStr)>
          <#assign urlReferenceDetailImageExist = "true"/>
        </#if>
        
@@ -385,7 +385,7 @@
        </div>
        
        <#assign urlReferenceSmallImageExist = "false"/>
-       <#if (productSmallImageStr?has_content) && (productSmallImageStr.contains("//"))>
+       <#if (productSmallImageStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(productSmallImageStr)>
          <#assign urlReferenceSmallImageExist = "true"/>
        </#if>
        
@@ -512,7 +512,7 @@
        </div>
        
        <#assign urlReferenceSmallAltImageExist = "false"/>
-       <#if (productSmallAltImageStr?has_content) && (productSmallAltImageStr.contains("//"))>
+       <#if (productSmallAltImageStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(productSmallAltImageStr)>
          <#assign urlReferenceSmallAltImageExist = "true"/>
        </#if>
        

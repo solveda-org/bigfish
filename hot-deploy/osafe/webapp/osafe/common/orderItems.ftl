@@ -13,39 +13,26 @@
     <div class="orderDetails">
         <div>
             <div id="orderItemsWrap">
-        <table id="cart_display" summary="CurrentOrder_TABLE_SUMMARY">
+        <table id="order_display" class="standardTable" summary="CurrentOrder_TABLE_SUMMARY">
             <thead>
-                <#if (showStatusDetails?has_content && showStatusDetails == "Y") >
-                    <tr class="cart_headers"><th class="firstCol lastCol" colspan="<#if (useAvailability?has_content) && useAvailability == "Y" >11<#else>10</#if>"><span class="headerCaption">${uiLabelMap.OrderDetailsHeading}</span></th></tr>
-                <#else> 
-                    <tr class="cart_headers"><th class="firstCol lastCol" colspan="<#if (useAvailability?has_content) && useAvailability == "Y" >6<#else>5</#if>"><span class="headerCaption">${uiLabelMap.OrderDetailsHeading}</span></th></tr>
-                </#if>
-                <tr class="cart_headers">
+                <tr><th class="firstCol lastCol" colspan="<#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >10<#else>9</#if>"><span class="headerCaption">${uiLabelMap.OrderDetailsHeading}</span></th></tr>
+                <tr>
                   <th class="product firstCol" scope="col" colspan="2">${uiLabelMap.ProductLabel}</th>
-                    <#if (showStatusDetails?has_content && showStatusDetails == "Y") > 
-                        <th class="statusCol" scope="col">${uiLabelMap.StatusLabel}</th>
-                        <th class="shipDateCol" scope="col">${uiLabelMap.ShippingDateLabel}</th>
-                        <th class="carrierCol" scope="col">${uiLabelMap.CarrierLabel}</th>
-                        <th class="trackingIdCol" scope="col">${uiLabelMap.TrackingIdLabel}</th>
-                    </#if>
+                  <th class="statusCol" scope="col">${uiLabelMap.StatusLabel}</th>
+                  <th class="shipDateCol" scope="col">${uiLabelMap.ShippingDateLabel}</th>
+                  <th class="carrierCol" scope="col">${uiLabelMap.CarrierLabel}</th>
+                  <th class="trackingIdCol" scope="col">${uiLabelMap.TrackingIdLabel}</th>
                   <th class="quantity" scope="col">${uiLabelMap.QuantityLabel}</th>
-                    <#if (useAvailability?has_content) && useAvailability == "Y" >
-                        <th class="availability" scope="col">${uiLabelMap.AvailabilityLabel}</th>
-                    </#if>
                   <th class="priceCol numberCol" scope="col">${uiLabelMap.PriceLabel}</th>
-                    <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >
-                        <th class="priceCol numberCol" scope="col">${uiLabelMap.OfferPriceLabel}</th>
-                    </#if>
+                  <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >
+                      <th class="priceCol numberCol" scope="col">${uiLabelMap.OfferPriceLabel}</th>
+                  </#if>
                   <th class="total numberCol lastCol" scope="col">${uiLabelMap.TotalLabel}</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                  <#if (showStatusDetails?has_content && showStatusDetails == "Y") >
-                    <td id="summaryCell" <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >colspan="11"<#else>colspan="10"</#if>>
-                  <#else> 
-                    <td id="summaryCell" <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >colspan="7"<#else>colspan="6"</#if>>
-                  </#if>
+                    <td id="summaryCell" <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >colspan="10"<#else>colspan="9"</#if>>
                         <table class="summary">
                             <tr>
                               <th class="caption"><label>${uiLabelMap.SubTotalLabel}</label></th>
@@ -244,7 +231,7 @@
              <#assign IMG_SIZE_CART_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_CART_W")!""/>
     
             <#assign availability = uiLabelMap.InStockLabel>
-                <tr class="cart_contents">
+                <tr>
                     <td class="image firstCol <#if !orderItem_has_next>lastRow</#if>" scope="row">
                         <a href="${productFriendlyUrl}" id="image_${urlProductId}">
                             <img alt="${StringUtil.wrapString(productName)}" src="${productImageUrl}" class="productCartListImage" height="${IMG_SIZE_CART_H!""}" width="${IMG_SIZE_CART_W!""}">
@@ -270,23 +257,16 @@
                             </#if>
                         </dl>
                     </td>
-                    <#if (showStatusDetails?has_content && showStatusDetails == "Y") >
-                        <#if orderHeader?has_content>
-                            <#assign status = orderHeader.getRelatedOneCache("StatusItem") />
-                            <td class="statusCol <#if !orderItem_has_next>lastRow</#if>">${status.get("description",locale)}</td>
-                        </#if>
-                        <td class="shipDateCol <#if !orderItem_has_next>lastRow</#if>">${shipDate!}</td>
-                        <td class="carrierCol <#if !orderItem_has_next>lastRow</#if>">${carrierPartyGroupName!} ${description!}</td>                    
-                        <td class="trackingIdCol <#if !orderItem_has_next>lastRow</#if>"><#if trackingURL?has_content><a href="JavaScript:newPopupWindow('${trackingURL!""}');">${trackingNumber!}</a><#else>${trackingNumber!}</#if></td>
+                    <#if orderHeader?has_content>
+                      <#assign status = orderHeader.getRelatedOneCache("StatusItem") />
+                      <td class="statusCol <#if !orderItem_has_next>lastRow</#if>">${status.get("description",locale)}</td>
                     </#if>
+                    <td class="shipDateCol <#if !orderItem_has_next>lastRow</#if>">${shipDate!}</td>
+                    <td class="carrierCol <#if !orderItem_has_next>lastRow</#if>">${carrierPartyGroupName!} ${description!}</td>                    
+                    <td class="trackingIdCol <#if !orderItem_has_next>lastRow</#if>"><#if trackingURL?has_content><a href="JavaScript:newPopupWindow('${trackingURL!""}');">${trackingNumber!}</a><#else>${trackingNumber!}</#if></td>
                     <td class="quantity <#if !orderItem_has_next>lastRow</#if>">
                         ${orderItem.quantity?string.number}
                     </td>
-                    <#if (useAvailability?has_content) && useAvailability == "Y" >
-                        <td class="availability <#if !orderItem_has_next>lastRow</#if>">
-                            ${availability}
-                        </td>
-                    </#if>
                     <td class="price numberCol <#if !orderItem_has_next>lastRow</#if>">
                         <ul title="Price Information">
                             <li>

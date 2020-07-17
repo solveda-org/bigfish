@@ -4,6 +4,7 @@
         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
 
     <simple-method method-name="validateBlueDartPinCode" short-description="Validate the PinCode for India" login-required="false">
+        <set field="isValidPinCode" value="N"/>
         <if-empty field="parameters.pincode">
             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="BlueDartPinCodeError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
@@ -19,11 +20,15 @@
 			    <if-compare operator="not-equals" value="6" field="pincodeLength" type="Integer">
 			        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="BlueDartPinCodeError"/>
                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                    <set field="isValidPinCode" value="Y"/>
+                </else>
 			    </if-compare>
             </else>
             </if-compare>
         </else>
         </if-empty>
+        <field-to-request field="isValidPinCode"/>
         <check-errors/>
     </simple-method>
 </simple-methods>

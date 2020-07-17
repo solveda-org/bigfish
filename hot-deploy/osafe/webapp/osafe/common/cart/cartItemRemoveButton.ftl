@@ -1,14 +1,13 @@
-<div class="cartItemRemoveButton">
-  <div class="labelText">
+<li class="${request.getAttribute("attributeClass")!}<#if lineIndex == 0> firstRow</#if>">
+  <div>
     <label>${uiLabelMap.CartItemRemoveBtnCaption}</label>
-  </div>
-  <div class="labelValue">
     <#if !cartLine.getIsPromo()>
       <a class="standardBtn delete" href="<@ofbizUrl>deleteFromCart?delete_${cartLineIndex}=${cartLineIndex}</@ofbizUrl>" title="${uiLabelMap.RemoveItemBtn}">
-      <span>${uiLabelMap.RemoveItemBtn}</span>
+        <span>${uiLabelMap.RemoveItemBtn}</span>
       </a>
     </#if>
   </div>
-</div>
+</li>
+
 
 

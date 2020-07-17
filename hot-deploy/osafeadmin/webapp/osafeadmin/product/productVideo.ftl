@@ -49,8 +49,8 @@
        </div>
        
        <#assign urlReferenceVideoUrlExist = "false"/>
-       <#if (productVideoUrlStr?has_content) && (productVideoUrlStr.contains("//"))>
-         <#assign urlReferenceVideoUrlExist = "true"/>
+       <#if (productVideoUrlStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(productVideoUrlStr)>
+         <#assign urlReferenceVideoUrlExist = "true" />
        </#if>
        
        <#if urlReferenceVideoUrlExist = "false">
@@ -160,8 +160,8 @@
        </div>
        
        <#assign urlReferenceVideo360UrlExist = "false"/>
-       <#if (productVideo360UrlStr?has_content) && (productVideo360UrlStr.contains("//"))>
-         <#assign urlReferenceVideo360UrlExist = "true"/>
+       <#if (productVideo360UrlStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(productVideo360UrlStr)>
+         <#assign urlReferenceVideo360UrlExist = "true" />
        </#if>
        
        <#if urlReferenceVideo360UrlExist = "false">

@@ -12,7 +12,7 @@
 		                    <xs:element name="EntryFormat" type="xs:string"/>
 		                    <xs:element name="MaxLength" type="xs:string"/>
 		                    <xs:element name="ValueList" type="xs:string"/>
-		                    <xs:element name="Required" type="xs:string"/>
+		                    <xs:element name="Mandatory" type="xs:string"/>
 		                    <xs:element name="ReqMessage" type="xs:string"/>
 		                </xs:sequence>
 		            </xs:complexType>

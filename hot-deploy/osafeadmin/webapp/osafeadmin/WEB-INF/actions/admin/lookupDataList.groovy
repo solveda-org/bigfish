@@ -33,4 +33,11 @@ adminTool.put("toolDesc", uiLabelMap.ManageReviewAgesInfo);
 adminTool.put("toolDetail", "reviewAgesList");
 adminToolsList.add(adminTool);
 
+//review ages
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.ManageGiftMessageHeading);
+adminTool.put("toolDesc", uiLabelMap.ManageGiftMessageInfo);
+adminTool.put("toolDetail", "giftMessageList");
+adminToolsList.add(adminTool);
+
 context.resultList = adminToolsList;

@@ -1,8 +1,6 @@
-<div class="cartTotalNumberItems">
-  <div class="labelText">
-    <label>${uiLabelMap.CartTotalNumberItems}</label>
-  </div>
-  <div class="labelValue">
+<li class="${request.getAttribute("attributeClass")!}">
+  <div>
+    <label>${uiLabelMap.CartTotalNumberItemsCaption}</label>
     <span>${shoppingCartTotalQuantity!}</span>
   </div>
-</div>
+</li>

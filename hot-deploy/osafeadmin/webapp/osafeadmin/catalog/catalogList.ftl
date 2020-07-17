@@ -1,7 +1,4 @@
 
-<#-- variable setup and worker calls -->
-<#if resultList?exists && resultList?has_content><#assign topLevelList = resultList></#if>
-
 <#-- looping macro -->
 <#macro categories parentCategory category levelUrl levelValue listIndex listSize rowClass>
   <#assign categoryName = category.categoryName?if_exists>
@@ -122,11 +119,11 @@
     <th class="dateCol">${uiLabelMap.ActiveThruLabel}</th>
     <th class="actionCol">${uiLabelMap.ActionsLabel}</th>
   </tr>
-  <#if topLevelList?has_content>
+  <#if resultList?has_content>
     <#assign rowClass = "1">
     <#assign parentIdx=1/>
-    <#assign listSize=topLevelList.size()/>
-    <#list topLevelList as category>
+    <#assign listSize=resultList.size()/>
+    <#list resultList as category>
       <@categories parentCategory="" category=category levelUrl="categoryDetail" levelValue="1" listIndex=parentIdx listSize=listSize rowClass=rowClass/>
       <#assign parentIdx= parentIdx + 1/>
       <#-- toggle the row color -->
@@ -136,6 +133,4 @@
         <#assign rowClass = "2">
       </#if>
     </#list>
-  <#else>
-    <tr><td class="boxNumber" colspan="5">${uiLabelMap.NoMatchingDataInfo}</td></tr>
   </#if>

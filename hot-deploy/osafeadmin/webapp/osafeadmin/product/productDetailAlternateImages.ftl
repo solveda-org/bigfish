@@ -65,7 +65,7 @@
        </div>
      
       <#assign urlReferenceAltLargeImageExist = "false"/>
-       <#if (altLargeImageStr?has_content) && (altLargeImageStr.contains("//"))>
+       <#if (altLargeImageStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(altLargeImageStr)>
          <#assign urlReferenceAltLargeImageExist = "true"/>
        </#if>
        
@@ -180,7 +180,7 @@
        </div>
      
       <#assign urlReferenceAltThumbnailImageExist = "false"/>
-       <#if (altThumbnailImageStr?has_content) && (altThumbnailImageStr.contains("//"))>
+       <#if (altThumbnailImageStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(altThumbnailImageStr)>
          <#assign urlReferenceAltThumbnailImageExist = "true"/>
        </#if>
        
@@ -294,7 +294,7 @@
        </div>
      
       <#assign urlReferenceAltDetailImageExist = "false"/>
-       <#if (altDetailImageStr?has_content) && (altDetailImageStr.contains("//"))>
+       <#if (altDetailImageStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(altDetailImageStr)>
          <#assign urlReferenceAltDetailImageExist = "true"/>
        </#if>
        

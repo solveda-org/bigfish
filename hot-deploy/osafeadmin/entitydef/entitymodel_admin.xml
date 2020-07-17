@@ -64,6 +64,46 @@
       </relation>
     </view-entity>
 
+    <view-entity entity-name="PartyContentAndText"
+            package-name="org.ofbiz.osafe.admin"
+            title="PartyContent Content, DataResource and ElectronicText View Entity">
+      <member-entity entity-alias="PC" entity-name="PartyContent"/>
+      <member-entity entity-alias="CO" entity-name="Content"/>
+      <member-entity entity-alias="DR" entity-name="DataResource"/>
+      <member-entity entity-alias="ET" entity-name="ElectronicText"/>
+       <alias entity-alias="PC" name="partyId"/>
+      <alias entity-alias="PC" name="contentId"/>
+      <alias entity-alias="PC" name="partyContentTypeId"/>
+      <alias entity-alias="PC" name="fromDate"/>
+      <alias entity-alias="PC" name="thruDate"/>
+      <alias entity-alias="CO" name="dataResourceId"/>
+      <alias entity-alias="ET" name="textData"/>
+      <view-link entity-alias="PC" rel-entity-alias="CO">
+        <key-map field-name="contentId"/>
+      </view-link>
+      <view-link entity-alias="CO" rel-entity-alias="DR">
+        <key-map field-name="dataResourceId"/>
+      </view-link>
+      <view-link entity-alias="DR" rel-entity-alias="ET">
+        <key-map field-name="dataResourceId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="ElectronicText">
+        <key-map field-name="dataResourceId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="ImageDataResource">
+        <key-map field-name="dataResourceId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="OtherDataResource">
+        <key-map field-name="dataResourceId"/>
+      </relation>
+      <relation type="many" rel-entity-name="ContentAssocDataResourceViewFrom">
+        <key-map field-name="contentId" rel-field-name="contentIdStart"/>
+      </relation>
+      <relation type="many" rel-entity-name="ContentAssocDataResourceViewTo">
+        <key-map field-name="contentId" rel-field-name="contentIdStart"/>
+      </relation>
+    </view-entity>
+
     <entity entity-name="BlueDartPrepaid"
             package-name="org.ofbiz.osafe.admin"
             title="BlueDart Prepaid">

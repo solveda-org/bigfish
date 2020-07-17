@@ -1,6 +1,6 @@
 <#if plpDisFeatureTypesList?has_content>
-  <div class="plpDistinguishingFeature" id="plpDistinguishingFeature">
-        <ul class="plpDistinguishingFeatureList">
+ <li class="${request.getAttribute("attributeClass")!}">
+  <ul class="plpDistinguishingFeatureList">
           <#list plpDisFeatureTypesList as disFeatureType>
             <#assign index= 0/>
             <#if plpDisFeatureByTypeMap?has_content>
@@ -33,7 +33,7 @@
             </#if>
           </#list>
         </ul>
-  </div>
+  </li>
 </#if>
 
 

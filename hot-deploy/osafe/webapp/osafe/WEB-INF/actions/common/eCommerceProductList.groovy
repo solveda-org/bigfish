@@ -19,13 +19,33 @@ import org.ofbiz.entity.util.EntityUtil;
 import com.osafe.services.OsafeManageXml;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 
+import com.osafe.services.SolrIndexDocument;
+import com.osafe.services.CatalogUrlServlet;
+import org.ofbiz.product.product.ProductContentWrapper;
+import org.ofbiz.product.product.ProductWorker;
+import java.util.Map;
 
 String productCategoryId = parameters.productCategoryId;
-GenericValue gvProductCategory =  delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId",productCategoryId), true);
+if(UtilValidate.isEmpty(productCategoryId))
+{
+	productCategoryId =request.getAttribute("productCategoryId");
+}
+GenericValue gvProductCategory = null;
+if(UtilValidate.isNotEmpty(productCategoryId))
+{
+		gvProductCategory = delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId",productCategoryId), true);
+		//set last known categoryId from PLP
+		session.setAttribute("PLP_PRODUCT_CATEGORY_ID",productCategoryId);
+}
 
 String searchText = com.osafe.util.Util.stripHTML(parameters.searchText);
 String searchTextSpellCheck = com.osafe.util.Util.stripHTML(parameters.searchTextSpellCheck);
+context.pageSubTitle = "";
 
+if (UtilValidate.isNotEmpty(searchText))
+{
+	context.productListFormSearchText = searchText;
+}
 if (UtilValidate.isNotEmpty(gvProductCategory)) 
 {
     CategoryContentWrapper currentProductCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
@@ -72,15 +92,21 @@ if (UtilValidate.isNotEmpty(gvProductCategory))
     if(request.getAttribute("completeDocumentList"))
     {
         String SearchResultsCountsTitle = "";
+        String SearchResultsSubPageTitle = "";
         if(UtilValidate.isEmpty(searchTextSpellCheck))
         {
-        	SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsCountsTitle", UtilMisc.toMap("searchText", searchText), locale)
+        	SearchResultsPageTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsFoundTitle", UtilMisc.toMap("searchText", searchText), locale)
         }
         else
         {
-        	SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsSpellCheckCountsTitle", UtilMisc.toMap("searchText", searchText, "searchTextSpellCheck", searchTextSpellCheck), locale)
+        	SearchResultsPageTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsNotFoundTitle", UtilMisc.toMap("searchText", searchText), locale)
+        	SearchResultsSubPageTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsNotFoundSuggestionTitle", UtilMisc.toMap("searchTextSpellCheck", searchTextSpellCheck), locale)
         }
-        context.pageTitle = SearchResultsCountsTitle;
+        if(UtilValidate.isEmpty(SearchResultsSubPageTitle))
+        {
+        	context.pageSubTitle = SearchResultsSubPageTitle;
+        }
+        context.pageTitle = SearchResultsPageTitle;
     }
     context.title = searchResultsTitle + " - " + searchText;
  }
@@ -151,6 +177,7 @@ if(UtilValidate.isNotEmpty(facetGroups) && UtilValidate.isNotEmpty(facetGroupMat
 }
 context.facetValueList = facetValueList;
 
+searchTextGroups = null;
 if (UtilValidate.isNotEmpty(facetGroupMatch))
 {
 	searchText = parameters.searchText ?: "";
@@ -183,29 +210,119 @@ if (UtilValidate.isNotEmpty(facetGroupMatch))
             facetGroups.add(facetAndValue);
         }
       }
+	  searchTextGroups = facetGroups;
       context.searchTextGroups = facetGroups;
 	}
 }
-//Get Sequence for PDP Div Containers 
-XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe.properties", "ecommerce-UiSequence-xml-file"), context);
-searchRestrictionMap = FastMap.newInstance();
-searchRestrictionMap.put("screen", "Y");
-uiSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, uiSequenceScreen,true, false,true);
 
-for(Map uiSequenceScreenMap : uiSequenceSearchList) 
+
+//Refresh the product scroller Url List everytime a new PLP is displayed
+productScrollerUrlList = session.getAttribute("productScrollerUrlList");
+if(UtilValidate.isNotEmpty(productScrollerUrlList))
 {
-     if ((uiSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiSequenceScreenMap.value))) 
-     {
-         if (UtilValidate.isNotEmpty(uiSequenceScreenMap.value)) 
-         {
-             uiSequenceScreenMap.value = Integer.parseInt(uiSequenceScreenMap.value);
-         } 
-		 else 
-		 {
-             uiSequenceScreenMap.value = 0;
-         }
-     }
+	session.removeAttribute("productScrollerUrlList");
 }
-uiSequenceSearchList = UtilMisc.sortMaps(uiSequenceSearchList, UtilMisc.toList("value"));
-context.divSequenceList = uiSequenceSearchList;
+//now build the list and add it to the session
+productScrollerUrlList = FastList.newInstance();
+//get related system parameters
+plpFacetGroupVariantSwatch = Util.getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_SWATCH_IMG");
+plpFacetGroupVariantSticky = Util.getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_PDP_MATCH");
+facetGroupMatch = Util.getProductStoreParm(request,"FACET_GROUP_VARIANT_MATCH");
+if (UtilValidate.isNotEmpty(plpFacetGroupVariantSwatch))
+{
+	plpFacetGroupVariantSwatch=plpFacetGroupVariantSwatch.toUpperCase();
+}
+if (UtilValidate.isNotEmpty(plpFacetGroupVariantSticky))
+{
+	plpFacetGroupVariantSticky=plpFacetGroupVariantSticky.toUpperCase();
+}
+featureValueSelected = "";
+if (UtilValidate.isNotEmpty(facetGroupMatch))
+{
+	facetGroupMatch=facetGroupMatch.toUpperCase();
+}
+if ((UtilValidate.isNotEmpty(searchTextGroups)) && (UtilValidate.isNotEmpty(facetGroupMatch)))
+{
+	for (Map facet : searchTextGroups)
+	{
+		if (facetGroupMatch == facet.facet)
+		{
+			featureValueSelected=facet.facetValue;
+		}
+	}
+}
+
+//loop through each product and add URL to list
+List productDocumentList = session.getAttribute("productDocumentList");
+for (SolrIndexDocument productInfo : productDocumentList)
+{
+	productFriendlyUrl = "";
+	productInfoId = productInfo.getProductId();
+	if (UtilValidate.isNotEmpty(productInfoId))
+	{
+		gvproduct = delegator.findOne("Product",UtilMisc.toMap("productId",productInfoId), true);
+	}
+	//CHECK WE HAVE A DEFAULT PRODUCT CATEGORY THE PRODUCT IS MEMBER OF
+	categoryId = "";
+	if (UtilValidate.isEmpty(categoryId) && UtilValidate.isNotEmpty(gvproduct))
+	{
+		productCategoryMemberList = gvproduct.getRelatedCache("ProductCategoryMember");
+		productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
+		productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
+		if(UtilValidate.isNotEmpty(productCategoryMemberList))
+		{
+			productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
+			categoryId = productCategoryMember.productCategoryId;
+		}
+	}
+	productFeatureTypeExists = true;
+	//if plpFacetGroupVariantSticky is defined then check if this product has that feature
+	if (UtilValidate.isNotEmpty(plpFacetGroupVariantSticky) && UtilValidate.isNotEmpty(featureValueSelected))
+	{
+		productSelectableFeatureAndAppl = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId",productInfoId, "productFeatureTypeId", plpFacetGroupVariantSticky, "productFeatureApplTypeId", "SELECTABLE_FEATURE", "description", featureValueSelected), UtilMisc.toList("sequenceNum"));
+		if (productSelectableFeatureAndAppl.size() < 1)
+		{
+			productFeatureTypeExists = false;
+		}
+	}
+	//make friendly URL
+	if((UtilValidate.isNotEmpty(productInfoId)) && (UtilValidate.isNotEmpty(categoryId)))
+	{
+		   if (UtilValidate.isNotEmpty(plpFacetGroupVariantSticky)  && UtilValidate.isNotEmpty(featureValueSelected) && productFeatureTypeExists)
+		   {
+			   productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productInfoId+'&productCategoryId='+categoryId+'&productFeatureType='+plpFacetGroupVariantSticky+':'+featureValueSelected);
+		   }
+		   //if sticky was not defined or if featureValueSelected is empty
+		   if (UtilValidate.isEmpty(productFriendlyUrl))
+		   {
+			   productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productInfoId+'&productCategoryId='+categoryId);
+		   }
+	}
+	
+	//add productFriendlyUrl to the productScrollerList 
+	if (UtilValidate.isNotEmpty(productFriendlyUrl))
+	{
+		productScrollerUrlList.add(productFriendlyUrl);
+	}
+}
+
+//and add the list to the session
+if (UtilValidate.isNotEmpty(productScrollerUrlList))
+{
+	session.setAttribute("productScrollerUrlList",productScrollerUrlList);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

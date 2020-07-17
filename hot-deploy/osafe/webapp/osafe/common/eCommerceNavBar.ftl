@@ -36,6 +36,15 @@
 		   </#if>
 	   </#if>
 	  </#if>
+	  
+	  <#assign productCategoryMemberList = delegator.findByAndCache("ProductCategoryMember", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId" , category.productCategoryId?string)) />
+	  <#if productCategoryMemberList?has_content>
+	     <#assign productCategoryMemberList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productCategoryMemberList,true) />
+	     <#if productCategoryMemberList?has_content>
+	         <#local macroLevelUrl = "eCommerceProductList">
+	     </#if>
+	  </#if>
+	  
   <#elseif levelValue?has_content && levelValue="2">
       <#assign levelClass = "subLevel">
   </#if>
@@ -52,30 +61,29 @@
         <a class="${levelClass}" href="${macroLevelUrl}">
           <#if categoryName?has_content>${categoryName}<#else>${categoryDescription?default("")}</#if>
         </a>
-      
         <#if megaMenuContentId?has_content>
           <ul class="ecommerceMegaMenu ${categoryName}">
               <@renderContentAsText contentId="${megaMenuContentId}" ignoreTemplate="true"/>
           </ul>
-        <#else>
-            <#if subCatList?has_content>
-              <ul>
-              <#assign idx=1/>
-              <#assign subListSize=subCatList.size()/>
-              <#list subCatList as subCat>
-                <#assign subCategoryRollups = subCat.getRelatedCache("CurrentProductCategoryRollup")/>
-                <#assign subCategoryRollups = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(subCategoryRollups)/>
-                <#if subCategoryRollups?has_content>
-                   <#assign subCategoryRollup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(subCategoryRollups) />
-                </#if>
-                <#if (subCategoryRollup?has_content && (subCategoryRollup.sequenceNum?has_content && subCategoryRollup.sequenceNum > 0)) >
-                   <@navBar parentCategory=category category=subCat levelUrl="eCommerceProductList" levelValue="2" listIndex=idx listSize=subListSize/>
-                   <#assign idx= idx + 1/>
-                </#if>
-              </#list>
-              </ul>
+        </#if>
+        <#if subCatList?has_content>
+          <ul<#if megaMenuContentId?has_content> class="ecommerceMegaMenuAlt ${categoryName}"</#if>>
+          <#assign idx=1/>
+          <#assign subListSize=subCatList.size()/>
+          <#list subCatList as subCat>
+            <#assign subCategoryRollups = subCat.getRelatedCache("CurrentProductCategoryRollup")/>
+            <#assign subCategoryRollups = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(subCategoryRollups)/>
+            <#if subCategoryRollups?has_content>
+               <#assign subCategoryRollup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(subCategoryRollups) />
             </#if>
-         </#if>
+            <#if (subCategoryRollup?has_content && (subCategoryRollup.sequenceNum?has_content && subCategoryRollup.sequenceNum > 0)) >
+               <@navBar parentCategory=category category=subCat levelUrl="eCommerceProductList" levelValue="2" listIndex=idx listSize=subListSize/>
+               <#assign idx= idx + 1/>
+            </#if>
+          </#list>
+          </ul>
+        </#if>
+      
       </li>
     <#if levelValue?has_content && levelValue="1">
         <li class="navSpacer"></li>
@@ -87,6 +95,10 @@
     http://htmldog.com/articles/suckerfish/dropdowns/
     -->
 <#if topLevelList?has_content>
+<div id="eCommerceNavBarWidget">
+    <a href="javascript:void(0);" class="showNavWidget"><span>${uiLabelMap.ShowNavWidgetLabel}</span></a>
+	<a href="javascript:void(0);" class="hideNavWidget" style="display:none"><span>${uiLabelMap.HideNavWidgetLabel}</span></a>
+</div>
 <ul id="eCommerceNavBarMenu">
     <#assign parentIdx=1/>
     <#assign listSize=topLevelList.size()/>

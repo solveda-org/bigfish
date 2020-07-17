@@ -19,6 +19,17 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
         </div>
     </div>
 </#if>
+<#if (mode?has_content && mode =='edit' && isVariant != 'Y') || (mode?has_content && mode =='add' && !virtualProduct?has_content)>
+	<#if productCategoryMembershipBoxHeading?exists && productCategoryMembershipBoxHeading?has_content>
+	    <div class="displayBox detailInfo">
+	        <div class="header"><h2>${productCategoryMembershipBoxHeading!}</h2></div>
+	        <div class="boxBody">
+	            ${sections.render('productCategoryMembershipBoxBody')?if_exists}
+	        </div>
+	    </div>
+	</#if>
+</#if>
+
 <#if productDescriptionBoxHeading?exists && productDescriptionBoxHeading?has_content>
   <#assign sliding = "close"/>
   <#if (mode?has_content && mode =='edit' && isVariant != 'Y') || (mode?has_content && mode =='add' && !virtualProduct?has_content)>
@@ -83,14 +94,12 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
 </#if>
 
 <#if productIdentificationBoxHeading?exists && productIdentificationBoxHeading?has_content>
-  <#if goodIdentificationTypesList?exists && goodIdentificationTypesList?has_content && goodIdentificationTypesList.size() gt 0>
     <div class="displayBox detailInfo">
         <div class="header"><h2>${productIdentificationBoxHeading!}</h2></div>
         <div class="boxBody">
             ${sections.render('productIdentificationBoxBody')?if_exists}
         </div>
     </div>
-  </#if>
 </#if>
 <div class="displayBox footerInfo">
     <div>

@@ -101,6 +101,10 @@
         </if-not-empty>
         <set field="fieldLevelErrors" value="Y"/>
         <field-to-request field="fieldLevelErrors" />
+        
+        <!-- Send this request variable to updateCartOnChange -->
+        <set field="DO_CART_PROMO" value="N"/>
+        <field-to-session field="DO_CART_PROMO"/>
         <check-errors/>
 
     </simple-method>
@@ -115,6 +119,201 @@
             <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
             <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
         </call-class-method>
+        <!-- Send this request variable to updateCartOnChange -->
+        <set field="DO_CART_PROMO" value="N"/>
+        <field-to-session field="DO_CART_PROMO"/>
         <check-errors/>
     </simple-method>
+    
+    <simple-method method-name="validateLoyaltyPoints" short-description="Validate Loyalty Points" login-required="false">
+    	<call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+           <field field="request" type="javax.servlet.ServletRequest"/>
+        </call-class-method>
+        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="checkoutLoyaltyMethod">
+               <field field="request" type="javax.servlet.ServletRequest"/>
+               <string value="CHECKOUT_LOYALTY_METHOD"/>
+        </call-class-method>
+        <if-empty field="checkoutLoyaltyMethod">
+            <set field="checkoutLoyaltyMethod" value="NONE"/>
+        </if-empty>
+        <call-object-method method-name="toUpperCase" obj-field="checkoutLoyaltyMethod" ret-field="checkoutLoyaltyMethodUpperCase"/>
+        <if-compare field="checkoutLoyaltyMethodUpperCase" operator="equals" value="NONE">
+        	<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="LoyaltyPointsFailError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="loyaltyPointsId" list="error_list"/>
+        	<else>
+	        <if-not-empty field="productStoreId">
+	       		<set field="parameters.productStoreId" from-field="productStoreId"/>
+	        </if-not-empty>
+	        <!-- Check that a "Member ID" has been entered -->
+	        <if-empty field="parameters.loyaltyPointsId">
+	        	<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="LoyaltyPointsMissingError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="loyaltyPointsId" list="error_list"/>
+	            <else>
+	            	<!-- Verify that a valid "Member ID" has been entered -->
+		            <set-service-fields service-name="validateLoyaltyMember" map="parameters" to-map="isValidLoyaltyPointsUserCtx"/>
+		            <call-service service-name="validateLoyaltyMember" in-map-name="isValidLoyaltyPointsUserCtx">
+		                <result-to-field result-name="isValid" field="isValid"/>
+		            </call-service>
+		            <if-compare field="isValid" operator="equals" value="N">
+		            	<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="LoyaltyPointsUserInvalidError"/>
+		                <string-to-list string="${tempErrorMessage}" message-field="loyaltyPointsId" list="error_list"/>
+		                <else>
+		                	<!-- Verify that the balance is greater than 0 -->
+		                	<if-compare operator="equals" value="TEST" field="checkoutLoyaltyMethod">
+		                		<call-class-method class-name="com.osafe.util.Util" method-name="isNumber" ret-field="isNumber">
+					                <field field="parameters.loyaltyPointsId" type="String"/>
+					            </call-class-method>
+					            <if-compare field="isNumber" operator="equals" value="false">
+					            	<set field="parameters.loyaltyPointsId" value="0"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="LoyaltyTestNumberInvalidError"/>
+					                <string-to-list string="${tempErrorMessage}" message-field="loyaltyPointsId" list="error_list"/>
+					                <else>
+					                	<if-compare field="parameters.loyaltyPointsId" operator="less-equals" value="0" type="Integer">
+					                		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="LoyaltyZeroBalanceError"/>
+					                		<string-to-list string="${tempErrorMessage}" message-field="loyaltyPointsId" list="error_list"/>
+					                	</if-compare>
+					                </else>
+					            </if-compare>
+		                	</if-compare>
+		                	
+		                	<set-service-fields service-name="getLoyaltyPointsInfoMap" map="parameters" to-map="getLoyaltyPointsInfoMapCtx"/>
+				            <call-service service-name="getLoyaltyPointsInfoMap" in-map-name="getLoyaltyPointsInfoMapCtx">
+				                <result-to-field result-name="loyaltyPointsAmount" field="loyaltyPointsAmount"/>
+				            </call-service>
+		                	<field-to-request field="loyaltyPointsAmount"/>
+		                </else>
+		            </if-compare>
+	            </else>
+	        </if-empty>
+        	</else>
+        </if-compare>
+        <set field="fieldLevelErrors" value="Y"/>
+        <field-to-request field="fieldLevelErrors" />
+        
+        <!-- Send this request variable to updateCartOnChange -->
+        <set field="DO_CART_LOYALTY" value="N"/>
+        <field-to-session field="DO_CART_LOYALTY"/>
+        <check-errors/>
+    </simple-method>
+    
+    <simple-method method-name="validateUpdateLoyaltyPoints" short-description="Validate Update Loyalty Points" login-required="false">
+        <set field="validAmountRedeem" value="N"/>
+        <if-not-empty field="parameters.update_loyaltyPointsAmount">
+	        <if-not-empty field="parameters.loyaltyPointsAvailable">
+		        <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="isVaildNum">
+		            <field field="parameters.update_loyaltyPointsAmount" type="String" />
+		        </call-class-method>
+		        <if-compare operator="equals" value="true" field="isVaildNum" type="Boolean">
+		        <set field="loyaltyPointsAmount" value="${parameters.update_loyaltyPointsAmount}" type="Long"/>
+		        <set field="loyaltyPointsAvailable" value="${parameters.loyaltyPointsAvailable}" type="Long"/>
+		        	<if-compare operator="greater-equals" value="1" field="loyaltyPointsAmount" type="Long">
+		        		<if-compare-field operator="less-equals" to-field="loyaltyPointsAvailable" field="loyaltyPointsAmount" type="Long">
+		        			<set field="validAmountRedeem" value="Y"/>
+		        		</if-compare-field>
+		        	</if-compare>
+		        </if-compare>
+	        </if-not-empty>
+        </if-not-empty>
+        <if-compare operator="equals" value="N" field="validAmountRedeem">
+        	<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="LoyaltyPointsUpdateFailError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="update_loyaltyPointsAmount" list="error_list"/>
+        </if-compare>
+        <set field="fieldLevelErrors" value="Y"/>
+        <field-to-request field="fieldLevelErrors" />
+        <check-errors/>
+    </simple-method>
+    
+    <simple-method method-name="validateCartQuantity" short-description="validate cart quantity" login-required="false">
+        <session-to-field field="shoppingCart"/>
+        <if-not-empty field="shoppingCart">
+        	<call-object-method obj-field="shoppingCart" method-name="items" ret-field="shoppingCartItems"/>
+        	<!-- iterate through cart -->
+        	<iterate entry="shoppingCartItem" list="shoppingCartItems">
+        		<!-- get productId and quantity -->
+        		<call-object-method obj-field="shoppingCartItem" method-name="getProductId" ret-field="productId"/>
+		        <set field="productQty" value="0" type="BigDecimal"/>
+		        <!-- check other cart lines for same product Id and add to quantity -->
+		        <iterate entry="otherShoppingCartItem" list="shoppingCartItems">
+		        	<call-object-method obj-field="otherShoppingCartItem" method-name="getProductId" ret-field="otherProductId"/>
+		        	<if-compare-field operator="equals" field="productId" to-field="otherProductId">
+		        		<call-object-method obj-field="otherShoppingCartItem" method-name="getQuantity" ret-field="otherProductQty"/>
+		        		<calculate field="productQty" type="BigDecimal">
+		                    <calcop operator="add">
+		                        <calcop operator="get" field="productQty"/>
+		                        <calcop operator="get" field="otherProductQty"/>
+		                    </calcop>
+		                </calculate>
+		        	</if-compare-field>
+		        </iterate>
+		        
+		        <!-- set PDP_QTY_MIN and MAX using system parameter -->
+		        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="PDP_QTY_MIN">
+                    <field field="request" type="javax.servlet.ServletRequest"/>
+                    <string value="PDP_QTY_MIN"/>
+                </call-class-method>
+                <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="PDP_QTY_MAX">
+                    <field field="request" type="javax.servlet.ServletRequest"/>
+                    <string value="PDP_QTY_MAX"/>
+                </call-class-method>
+                
+                <!-- if system parameters are empty or invalid numbers, set to default values -->
+                <if-not-empty field="PDP_QTY_MIN">
+                	<call-class-method class-name="com.osafe.util.Util" method-name="isNumber" ret-field="isNumber">
+		                <field field="PDP_QTY_MIN" type="String"/>
+		            </call-class-method>
+		            <if-compare field="isNumber" operator="equals" value="false">
+		            	<set field="PDP_QTY_MIN" value="1"/>
+		            </if-compare>
+                	<else>
+                		<set field="PDP_QTY_MIN" value="1"/>
+                	</else>
+                </if-not-empty>
+                <if-not-empty field="PDP_QTY_MAX">
+                	<call-class-method class-name="com.osafe.util.Util" method-name="isNumber" ret-field="isNumber">
+		                <field field="PDP_QTY_MAX" type="String"/>
+		            </call-class-method>
+		            <if-compare field="isNumber" operator="equals" value="false">
+		            	<set field="PDP_QTY_MAX" value="1"/>
+		            </if-compare>
+                	<else>
+                		<set field="PDP_QTY_MAX" value="1"/>
+                	</else>
+                </if-not-empty>
+                
+                <!-- check if there are product attributes to override system parameter -->
+                <entity-one entity-name="ProductAttribute" value-field="productAttrPdpQtyMin" auto-field-map="false">
+		           <field-map field-name="productId" from-field="productId"/>
+		           <field-map field-name="attrName" value="PDP_QTY_MIN"/>
+		       </entity-one>
+		       <entity-one entity-name="ProductAttribute" value-field="productAttrPdpQtyMax" auto-field-map="false">
+		           <field-map field-name="productId" from-field="productId"/>
+		           <field-map field-name="attrName" value="PDP_QTY_MAX"/>
+		       </entity-one>
+		       <if-not-empty field="productAttrPdpQtyMin">
+			       <if-not-empty field="productAttrPdpQtyMin.attrValue">
+				       <if-not-empty field="productAttrPdpQtyMax">
+					       <if-not-empty field="productAttrPdpQtyMax.attrValue">
+					       		<set field="PDP_QTY_MIN" from-field="productAttrPdpQtyMin.attrValue"/>
+					       		<set field="PDP_QTY_MAX" from-field="productAttrPdpQtyMax.attrValue"/>
+					       </if-not-empty>
+				       </if-not-empty>
+			       </if-not-empty>
+		       </if-not-empty>
+               <if>
+	               <condition>
+		               <or>
+			               <if-compare-field field="productQty" operator="less" to-field="PDP_QTY_MIN"  type="BigDecimal"/>
+			               <if-compare-field field="productQty" operator="greater" to-field="PDP_QTY_MAX"  type="BigDecimal"/>
+		               </or>
+	               </condition>
+	               <then>
+	               		<return response-code="inValidCartQuantity"/>
+	               </then>
+               </if>
+        	</iterate>
+        </if-not-empty>
+        <check-errors/>
+    </simple-method>
+
+    
 </simple-methods>

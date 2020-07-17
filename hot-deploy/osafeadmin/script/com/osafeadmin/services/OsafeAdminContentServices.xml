@@ -63,24 +63,24 @@
             <if-empty field="content.description">
                 <if-empty field="parameters.description">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DescriptionContentError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="DEASCRIPTION" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
                 </if-empty>
             <else>
                 <if-empty field="parameters.description">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionContentError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="DEASCRIPTION" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
                 </if-empty>
             </else>
             </if-empty>
             <if-empty field="electronicText.textData">
                 <if-empty field="parameters.textData">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="TEXTDATA" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
                 </if-empty>
             <else>
                 <if-empty field="parameters.textData">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotContentError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="TEXTDATA" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
                 </if-empty>
             </else>
             </if-empty>
@@ -110,7 +110,7 @@
     <simple-method method-name="createNewContentSpot" short-description="create a new content">
         <if-empty field="parameters.contentId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentIdError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="CONTENTID" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="contentId" list="error_list"/>
             <else>
                 <set field="contentIdLength" value="20" type="Integer"/>
                 <set field="spaceReplacement" value=" " type="String"/>
@@ -123,13 +123,13 @@
                 </call-class-method>
                 <if-empty field="contentId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentIdLengthError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="CONTENTID" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="contentId" list="error_list"/>
                     <else>
                         
                         <entity-one entity-name="Content" value-field="existingContent"/>
                         <if-not-empty field="existingContent">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentIdExistError"/>
-                            <string-to-list string="${tempErrorMessage}" message-field="CONTENTID" list="error_list"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="contentId" list="error_list"/>
                             <else>
                                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
                                     <field field="parameters.contentId"/>
@@ -137,7 +137,7 @@
                                 <if-compare field="isValidId" operator="equals" value="false">
                                     <set field="errorKey" from-field="parameters.contentId"/>
                                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
-                                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                    <string-to-list string="${tempErrorMessage}" message-field="contentId" list="error_list"/>
                                 </if-compare>
                                 <set field="parameters.contentId" from-field="contentId"/>
                             </else>
@@ -152,11 +152,11 @@
         </if-empty>
         <if-empty field="parameters.description">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DescriptionContentError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="DEASCRIPTION" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
         </if-empty>
         <if-empty field="parameters.textData">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="TEXTDATA" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
         </if-empty>
         <check-errors/>
         <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentCtx"/>
@@ -293,7 +293,7 @@
         </iterate-map>
         <if-compare field="isValidSeoName" operator="equals" value="false">
 	        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeoNameError"/>
-	        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	        <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
         </if-compare>
         <check-errors/>
         <iterate-map key="contentIdKey" value="contentId" map="parameters.contentIds">

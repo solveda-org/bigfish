@@ -55,15 +55,35 @@ under the License.
         </section>
     </screen>
 
+    <screen name="email-body-decorator">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/email/getGlobalEmailVariables.groovy"/>
+            </actions>
+            <widgets>
+               <platform-specific>
+               <html>
+                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEmail.ftl">
+                       <html-template-decorator-section name="emailBody">
+                                <decorator-section-include name="emailBody"/>
+                       </html-template-decorator-section>
+                   </html-template-decorator>
+               </html>
+              </platform-specific>
+            </widgets>
+        </section>
+    </screen>
     <screen name="displayContent">
         <section>
                 <actions>
-                    <property-map resource="osafe" map-name="OSafeConfig" global="true" />
+                    <property-map resource="OsafeProperties" map-name="OSafeConfig" global="true" />
 
-                    <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}" />
-                    <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}" />
-                    <set field="clientLogoPath" value="${OSafeConfig['client-logo-path']}" />
-                    <set field="emailFontFamily" value="${OSafeConfig['email-font-family']}" />
+                    <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafeAppPath']}" />
+                    <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafeAppPath']}" />
+                    <set field="clientLogoPath" value="${OSafeConfig['clientLogoPath']}" />
+                    <set field="emailFontFamily" value="${OSafeConfig['emailFontFamily']}" />
                     <set field="contentId" from-field="contentId" />
                     <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
                 </actions>
@@ -144,7 +164,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_NEW_CUSTOMER}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -162,7 +182,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_CHANGE_CUSTOMER}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -180,7 +200,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_CONTACT_US}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -198,7 +218,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_MAILING_LIST}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -216,7 +236,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ABANDON_CART}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -234,7 +254,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_SHIP_REVIEW}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -252,7 +272,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_REQUEST_CATALOG}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -270,7 +290,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_FORGOT_PASSWORD}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -290,7 +310,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_CONFIRM}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -309,7 +329,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_CHANGE}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -328,7 +348,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_BACK_ORDER}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -347,7 +367,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_CHANGE}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -366,7 +386,7 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_SHIP_COMPL}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -384,7 +404,7 @@ under the License.
                 <set field="contentEmailBodyId" from-field="templateId"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>
@@ -402,7 +422,24 @@ under the License.
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_SCHEDULED_JOB}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
+                <decorator-screen name="email-body-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="TellFriend">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="contentEmailBodyId" value="${idMap.EMAIL_TELL_FRIEND}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="email-body-decorator">
                     <decorator-section name="emailBody">
                         <include-screen name="emailBodyContent"/>
                     </decorator-section>

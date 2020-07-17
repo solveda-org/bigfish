@@ -16,7 +16,7 @@ orderId = StringUtils.trimToEmpty(parameters.orderId);
 
 orderHeader = null;
 OrderNotes = null;
-
+shippingApplies = true;
 if (UtilValidate.isNotEmpty(orderId)) 
 {
 	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
@@ -55,6 +55,13 @@ if (UtilValidate.isNotEmpty(orderId))
 	orderHeaderAdjustments = orderReadHelper.getOrderHeaderAdjustments();
 	orderSubTotal = orderReadHelper.getOrderItemsSubTotal();
 	orderTerms = orderHeader.getRelated("OrderTerm");
+	
+	if (UtilValidate.isNotEmpty(orderReadHelper))
+	{
+		//shipping applies check
+		shippingApplies = orderReadHelper.shippingApplies();
+		context.shippingApplies = shippingApplies;
+	}
 
 	context.orderHeader = orderHeader;
 	context.orderReadHelper = orderReadHelper;
@@ -131,3 +138,34 @@ returnReasons = delegator.findList("ReturnReason", null, null, ["sequenceId"], n
 context.returnReasons = returnReasons;
 
 context.shippingContactMechList = ContactHelper.getContactMech(placingParty, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);
+
+// ship groups
+shipGroups = orderHeader.getRelatedOrderBy("OrderItemShipGroup", ["-shipGroupSeqId"]);
+context.shipGroups = shipGroups;
+
+boolean allItemsApproved = false;
+boolean allItemsCompleted = false;
+List<String> approvedList = FastList.newInstance();
+List<String> completedList = FastList.newInstance();
+
+orderItems.each { orderItem ->
+	if("ITEM_APPROVED".equals(orderItem.get("statusId"))) 
+	{
+		approvedList.add(orderItem.orderItemSeqId);
+	}
+	if("ITEM_COMPLETED".equals(orderItem.get("statusId"))) 
+	{
+		completedList.add(orderItem.orderItemSeqId);
+	}
+}
+
+if(approvedList.size() == orderItems.size())
+{
+	allItemsApproved = true;
+}
+if(completedList.size() == orderItems.size())
+{
+	allItemsCompleted = true;
+}
+context.allItemsCompleted = allItemsCompleted;
+context.allItemsApproved = allItemsApproved;

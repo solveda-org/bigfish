@@ -1,22 +1,33 @@
 package com.osafe.services.bluedart;
 
 import java.math.BigDecimal;
+import java.util.Map;
+
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ServiceUtil;
+import org.ofbiz.order.shoppingcart.ShoppingCart;  
 
 public class BlueDartServices 
 {
 
     public static final String module = BlueDartServices.class.getName();
 
-    public static String getBlueDartDeliveryAvailablity(String pincode) 
-    {
-    	Delegator delegator = DelegatorFactory.getDelegator(null);
+    public static Map<String, ?> checkDelivery(DispatchContext ctx, Map<String, ?> context) {
+    	String pincode = (String)context.get("pincode");
+    	Delegator delegator = ctx.getDelegator();
     	String deliveryAvailable = "N";
+    	Map<String, Object> response = FastMap.newInstance();
     	if(UtilValidate.isNotEmpty(pincode))
     	{
     		GenericValue blueDartPrepaid = null;
@@ -33,15 +44,20 @@ public class BlueDartServices
     			deliveryAvailable = "Y";
     		}
     	}
-    	return deliveryAvailable; 
+    	else
+    	{
+    		Debug.logInfo("Pincode Not Found", module);
+    	}
+    	response.put("deliveryAvailable", deliveryAvailable);
+    	return response;
     }
     
-    
-    public static BigDecimal getBlueDartCODLimit(String pincode) 
-    {
-    	Delegator delegator = DelegatorFactory.getDelegator(null);
-	    BigDecimal codLimit = BigDecimal.ZERO;
-	    if(UtilValidate.isNotEmpty(pincode))
+    public static Map<String, ?> checkCodLimit(DispatchContext ctx, Map<String, ?> context) {
+    	String pincode = (String)context.get("pincode");
+    	Delegator delegator = ctx.getDelegator();
+    	BigDecimal codLimit = BigDecimal.ZERO;
+    	Map<String, Object> response = FastMap.newInstance();
+    	if(UtilValidate.isNotEmpty(pincode))
 	    {
 		    GenericValue blueDartCodpin = null;
 		    try 
@@ -67,6 +83,51 @@ public class BlueDartServices
 		    	}
 		    }
 	    }
-	    return codLimit;
-	}
+    	else
+    	{
+    		Debug.logInfo("Pincode Not Found", module);
+    	}
+    	response.put("codLimit", codLimit);
+    	return response;
+    }
+    
+    public static Map<String, ?> blueDartCheckoutPincode(DispatchContext ctx, Map<String, ?> context) 
+    {
+    	//String pincode = (String)context.get("pincode");
+    	String pincode = null;
+    	ShoppingCart shoppingCart = (ShoppingCart)context.get("shoppingCart");
+    	if(UtilValidate.isNotEmpty(shoppingCart))
+	    {
+    		GenericValue postalAddress = shoppingCart.getShippingAddress();
+    		if(UtilValidate.isNotEmpty(postalAddress))
+    	    {
+    			pincode = (String)postalAddress.getString("postalCode");
+    	    }
+	    }
+    	Map<String, Object> response = FastMap.newInstance();
+    	LocalDispatcher dispatcher = ctx.getDispatcher();
+    	
+    	String isAvailable = "N";
+    	
+    	if(UtilValidate.isNotEmpty(pincode))
+	    {
+    		Map<String, Object> svcCtx = FastMap.newInstance();
+    		svcCtx.put("pincode", pincode);
+    		//context.put("pincode", pincode);
+    		Map<String, Object> processorResult = FastMap.newInstance();
+    		try {
+    			processorResult = dispatcher.runSync("checkDelivery", svcCtx);
+            } catch (GenericServiceException e) {
+                Debug.logError(e, module);
+            }
+    		
+    		if(UtilValidate.isNotEmpty(processorResult))
+    	    {
+    			isAvailable = (String)processorResult.get("deliveryAvailable");
+    	    }
+	    }
+    	
+    	response.put("isAvailable", isAvailable);
+    	return response;
+    }
 }

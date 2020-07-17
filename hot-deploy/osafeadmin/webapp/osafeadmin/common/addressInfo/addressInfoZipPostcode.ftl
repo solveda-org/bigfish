@@ -4,19 +4,20 @@
       <#assign postalCode = "">
     </#if>
 </#if>
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <!-- address zip entry -->
-<div class = "addressInfoZipPostcode">
+<div class="${request.getAttribute("attributeClass")!}">
     <div class="infoRow">
         <div class="infoEntry">
             <div class="infoCaption">
                 <label>
-					<span class="required">*</span>
-                    <span class="${fieldPurpose?if_exists}_USA">${uiLabelMap.ZipCodeCaption}</span>
-                    <span class="${fieldPurpose?if_exists}_CAN ${fieldPurpose?if_exists}_OTHER">${uiLabelMap.PostalCodeCaption}</span>
+					<#if mandatory == "Y"><span class="required">*</span></#if>
+                    <span>${uiLabelMap.ZipOrPostalCodeCaption}</span>
                 </label>
             </div>
             <div class="infoValue">
                 <input type="text" maxlength="60" class="postalCode" name="${fieldPurpose?if_exists}_postalCode" id="${fieldPurpose?if_exists}_postalCode" value="${parameters.get("${fieldPurpose?if_exists}_postalCode")!postalCode!""}" />
+                <input type="hidden" id="${fieldPurpose?if_exists}_postalCode_mandatory" name="${fieldPurpose?if_exists}_postalCode_mandatory" value="${mandatory}"/>
             </div>
         </div>
     </div>

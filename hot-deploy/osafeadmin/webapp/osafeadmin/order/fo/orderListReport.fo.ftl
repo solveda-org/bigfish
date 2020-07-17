@@ -55,23 +55,16 @@ under the License.
     <#assign payToPartyId = productStore.payToPartyId>
     <#assign partyGroup =   delegator.findByPrimaryKey("PartyGroup",Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",payToPartyId))/>
     <#if partyGroup?has_content>
-      <#assign logoImageUrl = partyGroup.logoImageUrl/>
       <#assign companyName = partyGroup.groupName>
     </#if>
+    <#assign logoImageUrl = Static["com.osafe.util.Util"].getProductStoreParm(request, "EMAIL_CLNT_LOGO")/>
+    <#assign HTTP_HOST = Static["com.osafe.util.Util"].getProductStoreParm(request, "HTTP_HOST")/>
     
      <#-- Company Address -->
     <#assign companyAddresses = delegator.findByAnd("PartyContactMechPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",payToPartyId, "contactMechPurposeTypeId","GENERAL_LOCATION"))/>
     <#assign selAddresses = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(companyAddresses, nowTimestamp, "fromDate", "thruDate", true)/>
     <#if selAddresses?has_content>
      <#assign companyAddress = delegator.findByPrimaryKey("PostalAddress", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",selAddresses[0].contactMechId))/>
-     <#assign country = companyAddress.getRelatedOne("CountryGeo")/>
-     <#if country?has_content>
-       <#assign countryName = country.get("geoName", locale)/>
-     </#if>
-     <#assign stateProvince = companyAddress.getRelatedOne("StateProvinceGeo")/>
-     <#if stateProvince?has_content>
-       <#assign stateProvinceAbbr = stateProvince.abbreviation/>
-     </#if>
     </#if>
     
      <#-- Company Phone-->
@@ -142,8 +135,8 @@ under the License.
         	<#assign telecomNumber = partyPurposePhone.getRelatedOne("TelecomNumber")/>
             <#assign phoneWorkTelecomNumber =telecomNumber/>
 	        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(phoneWorkTelecomNumber.areaCode?if_exists, phoneWorkTelecomNumber.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
-	        <#if phoneWorkTelecomNumber.extension?has_content>
-	          <#assign partyWorkPhoneExt = phoneWorkTelecomNumber.extension!/> 
+	        <#if partyPurposePhone.extension?has_content>
+	          <#assign partyWorkPhoneExt = partyPurposePhone.extension!/> 
 	        </#if>
         </#if>
 
@@ -178,17 +171,14 @@ under the License.
                     <fo:table-row>
                         <fo:table-cell>
                                 <fo:block text-align="left">
-                                    <#if logoImageUrl?has_content><fo:external-graphic src="<@ofbizContentUrl>${logoImageUrl}</@ofbizContentUrl>" overflow="hidden" height="40px" content-height="scale-to-fit"/></#if>
+                                    <#if logoImageUrl?has_content><fo:external-graphic src="${HTTP_HOST}${logoImageUrl!""}" overflow="hidden" height="40px" content-height="scale-to-fit"/></#if>
                                 </fo:block>
                                 
                                 <fo:block font-size="8pt">
                                 <fo:block>${companyName}</fo:block>
                                 <#if companyAddress?exists>
-                                    <#if companyAddress?has_content>
-                                        <fo:block>${companyAddress.address1?if_exists}</fo:block>
-                                        <#if companyAddress.address2?has_content><fo:block>${companyAddress.address2?if_exists}</fo:block></#if>
-                                        <fo:block>${companyAddress.city?if_exists}, ${stateProvinceAbbr?if_exists} ${companyAddress.postalCode?if_exists}, ${countryName?if_exists}</fo:block>
-                                    </#if>
+                                  ${setRequestAttribute("PostalAddress",companyAddress)}
+                                  ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddressPDF")}
                                 <#else>
                                     <fo:block>${uiLabelMap.NoPostalAddressInfo}</fo:block>
                                     <fo:block>${uiLabelMap.ForCaption} ${companyName}</fo:block>
@@ -493,17 +483,8 @@ under the License.
                       <fo:table-cell>
                        <fo:block font-size="7pt" start-indent="10pt">
                         <#if postalAddress?has_content>
-                         <#if postalAddress.toName?has_content><fo:block>${postalAddress.toName?if_exists}</fo:block></#if>
-                          <fo:block>${postalAddress.address1?if_exists}</fo:block>
-                         <#if postalAddress.address2?has_content><fo:block>${postalAddress.address2?if_exists}</fo:block></#if>
-                          <fo:block>
-                           <#assign stateGeo = (delegator.findOne("Geo", {"geoId", postalAddress.stateProvinceGeoId?if_exists}, false))?if_exists />
-                           ${postalAddress.city}<#if stateGeo?has_content && stateGeo.geoId != '_NA_'>, ${stateGeo.geoName?if_exists}</#if> ${postalAddress.postalCode?if_exists}
-                          </fo:block>
-                          <fo:block>
-                           <#assign countryGeo = (delegator.findOne("Geo", {"geoId", postalAddress.countryGeoId?if_exists}, false))?if_exists />
-                           <#if countryGeo?has_content>${countryGeo.geoName?if_exists}</#if>
-                          </fo:block>
+                          ${setRequestAttribute("PostalAddress",postalAddress)}
+                          ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddressPDF")}
                         </#if>
                        </fo:block>
                       </fo:table-cell>
@@ -573,61 +554,93 @@ under the License.
                             <fo:block font-weight="bold" font-size="10pt" text-align="center" background-color="#EEEEEE">${uiLabelMap.PaymentInfoHeading}</fo:block>
                         </fo:table-cell>
                     </fo:table-row>
-                    <fo:table-row>
-                        <fo:table-cell text-align="start" >
-                            <fo:block font-size="8pt" font-weight="bold" text-align="right">${uiLabelMap.ShipMethodCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
+                    
+                    <#assign shipGroups = delegator.findByAnd("OrderItemShipGroup", {"orderId" : orderId})>
+                    <#assign shipGroup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(shipGroups) />
 
-                        <#assign shipGroups = delegator.findByAnd("OrderItemShipGroup", {"orderId" : orderId})>
-                        <#assign shipGroup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(shipGroups) />
                         <#if shipGroups?has_content>
                           <#if isStorePickup?has_content && isStorePickup == "Y">
-                            <fo:block font-size="8pt" start-indent="10pt">${uiLabelMap.PickupInStoreLabel}</fo:block>
+                          <fo:table-row>
+                            <fo:table-cell text-align="start" >
+                                <fo:block font-size="8pt" font-weight="bold" text-align="right">${uiLabelMap.ShipMethodCaption}</fo:block>
+                            </fo:table-cell>
+                            <fo:table-cell>
+                                <fo:block font-size="8pt" start-indent="10pt">${uiLabelMap.PickupInStoreLabel}</fo:block>
+                            </fo:table-cell>
+                          </fo:table-row>
                           <#else>
-                         
+                          <fo:table-row>
+	                        <fo:table-cell text-align="start" >
+	                            <fo:block font-size="8pt" font-weight="bold" text-align="right">
+	                                ${uiLabelMap.ShipDateCaption}
+	                            </fo:block>
+	                        </fo:table-cell>
+	                        <fo:table-cell>
+	                            <fo:block font-size="8pt" start-indent="10pt">
+	                                <#if shipGroups?size == 1>
+	                                    ${(shipGroup.estimatedShipDate?string(preferredDateFormat))!""}
+	                                <#else>
+	                                    ${uiLabelMap.MultipleShipmentsLabel}
+	                                </#if>
+	                            </fo:block>
+	                        </fo:table-cell>
+	                      </fo:table-row>
+                          <fo:table-row>
+                            <fo:table-cell text-align="start" >
+                                <fo:block font-size="8pt" font-weight="bold" text-align="right">${uiLabelMap.ShipMethodCaption}</fo:block>
+                            </fo:table-cell>
+                                
 		                            <#assign shipmentMethodType = shipGroup.getRelatedOne("ShipmentMethodType")?if_exists>
 		                            <#assign shipGroupAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
 		                            
 		                            <#if orderHeader.orderTypeId == "SALES_ORDER" && shipGroup.shipmentMethodTypeId?has_content>
 		                              <#if shipGroup.carrierPartyId?has_content || shipmentMethodType?has_content>
 		                                <#if orderHeader?has_content && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_REJECTED">
-		                                
+		                                  <fo:table-cell>
 		                                  <fo:block font-size="8pt" start-indent="10pt">
+		                                    <#if shipGroups?size == 1 >
 		                                    <#if shipGroup.carrierPartyId?has_content>
 		                                      <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shipGroup.carrierPartyId))?if_exists />
-		                                        <#if carrier?has_content>${carrier.groupName?default(carrier.partyId)}</#if>
+		                                        <#if carrier?has_content>
+		                                          ${carrier.groupName?default(carrier.partyId)}
+		                                        <#else>
+		                                          ${shipGroup.carrierPartyId!}
+		                                        </#if>
 		                                    </#if>
 		                                    ${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}
+		                                    </#if>
 		                                  </fo:block>
-		                                  
+		                                  </fo:table-cell>
 		                                </#if>
 		                              </#if>
 		                            </#if>
-                          
+                              </fo:table-row>
+                              <fo:table-row  height="20px">
+                                  <fo:table-cell text-align="start" >
+                                      <fo:block font-size="8pt" font-weight="bold" text-align="right">
+                                          ${uiLabelMap.TrackingNoCaption}
+                                      </fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell>
+                                      <fo:block font-size="8pt" start-indent="10pt">
+                                          <#if shipGroups?size == 1 && shipGroup.trackingNumber?has_content>
+                                              ${shipGroup.trackingNumber}
+                                          </#if>
+                                      </fo:block>
+                                  </fo:table-cell>
+                              </fo:table-row>
                           </#if>
                         <#else>
-                          <fo:block font-size="8pt" start-indent="10pt">${uiLabelMap.NoShippingMethodInfo}</fo:block>
+                           <fo:table-row>
+                           <fo:table-cell text-align="start" >
+                                <fo:block font-size="8pt" font-weight="bold" text-align="right">${uiLabelMap.ShipMethodCaption}</fo:block>
+                           </fo:table-cell>
+                           <fo:table-cell>
+                               <fo:block font-size="8pt" start-indent="10pt">${uiLabelMap.NoShippingMethodInfo}</fo:block>
+                           </fo:table-cell>
+                           </fo:table-row>
                         </#if>
-                        </fo:table-cell>
-                      </fo:table-row>
-                      
-                      <fo:table-row  height="20px">
-                        <fo:table-cell text-align="start" >
-                          <#if shipGroup.trackingNumber?has_content || orderShipmentInfoSummaryList?has_content>
-                            <fo:block font-size="8pt" font-weight="bold" text-align="right">
-                              ${uiLabelMap.TrackingNoCaption}
-                            </fo:block>
-                          </#if>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                          <#if shipGroup.trackingNumber?has_content>
-                            <fo:block font-size="8pt" start-indent="10pt">
-                              ${shipGroup.trackingNumber}
-                            </fo:block>
-                          </#if>
-                        </fo:table-cell>
-                      </fo:table-row>
+                        
                       
                       <#if isStorePickup?has_content && isStorePickup == "Y">
                         <#assign storeContactMechValueMap = storePickupInfo.storeContactMechValueMap! />
@@ -652,21 +665,10 @@ under the License.
                                 </fo:table-cell>
                                 <fo:table-cell>
                                   <fo:block font-size="7pt">
-                                    <#if postalAddress.toName?has_content>
-                                      <fo:block start-indent="10pt">${postalAddress.toName}</fo:block>
+                                    <#if postalAddress?has_content>
+                                      ${setRequestAttribute("PostalAddress",postalAddress)}
+                                      ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddressPDF")}
                                     </#if>
-                                    <#if postalAddress.attnName?has_content>
-                                      <fo:block start-indent="10pt">${postalAddress.attnName}</fo:block>
-                                    </#if>
-                                    <fo:block start-indent="10pt">${postalAddress.address1}</fo:block>
-                                    <#if postalAddress.address2?has_content>
-                                      <fo:block start-indent="10pt">${postalAddress.address2}</fo:block>
-                                    </#if>
-                                    <fo:block start-indent="10pt">
-                                      ${postalAddress.city?if_exists}<#if postalAddress.stateProvinceGeoId?has_content>, ${postalAddress.stateProvinceGeoId} </#if>
-                                      ${postalAddress.postalCode?if_exists}
-                                    </fo:block>
-                                    <fo:block start-indent="10pt">${postalAddress.countryGeoId?if_exists}</fo:block>
                                   </fo:block>
                                 </fo:table-cell>
                               </fo:table-row>
@@ -681,182 +683,220 @@ under the License.
                           </#if>
                         </#if>
                       </#if>
-
-                      <fo:table-row>
-                        <fo:table-cell>
-                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.PaymentMethodCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                           <fo:block font-size="7pt">
-                             <#assign orderPayments = orderReadHelper.getPaymentPreferences()/>
-                            <#if orderPayments?has_content>
-	                          <#list orderPayments as orderPaymentPreference>
-	                                <#assign paymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")?if_exists>
-	                                <#assign oppStatusItem = orderPaymentPreference.getRelatedOne("StatusItem")>
-	                                <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>          
-	                                <#assign gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse")>
-	                                <#if ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "CREDIT_CARD") && (orderPaymentPreference.getString("paymentMethodId")?has_content))>
-	                                    <#assign creditCard = orderPaymentPreference.getRelatedOne("PaymentMethod").getRelatedOne("CreditCard")>
-	                                    <fo:block start-indent="10pt">${creditCard.get("cardType")?if_exists}</fo:block>
-	                                <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD") && isStorePickup?has_content && isStorePickup == "Y")>
-	                                    <fo:block start-indent="10pt">${uiLabelMap.PayInStoreInfo}</fo:block>
-	                                <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD"))>
-	                                    <fo:block start-indent="10pt">${uiLabelMap.CashOnDeliveryInfo}</fo:block>
-	                                <#else>
-	                                	<#if paymentMethod?has_content>
-	                                    	<#assign paymentMethodType = paymentMethod.getRelatedOne("PaymentMethodType")>
+				      <#assign orderPayments = orderReadHelper.getPaymentPreferences()/>
+				      <#assign currencyUomId = orderReadHelper.getCurrency()>
+					  <#if orderPayments?has_content>
+					    <#list orderPayments as orderPaymentPreference>
+					     <#assign oppStatusItem = orderPaymentPreference.getRelatedOne("StatusItem")>
+					     <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>
+					     <#assign orderPaymentPreferenceId = orderPaymentPreference.getString("orderPaymentPreferenceId")?if_exists>
+					     <#assign paymentMethodId = orderPaymentPreference.getString("paymentMethodId")?if_exists>
+					     <#assign paymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")?if_exists>
+					     <#assign gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse")>
+					      <#if orderPayments.size() == 1>
+		                      <fo:table-row>
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.PaymentMethodCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+	                                    <fo:block start-indent="10pt">
+	                                    <#if ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD") && isStorePickup?has_content && isStorePickup == "Y")>
+							                  ${uiLabelMap.PayInStoreInfo}
+							            <#else>
+	                                    	<#if paymentMethodType?has_content>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</#if>
 	                                    </#if>
-	                                    <fo:block start-indent="10pt"><#if paymentMethod?has_content>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</#if></fo:block>
-	                                </#if>
-	                          </#list>
-                            <#else>
-                          		<fo:block font-size="8pt" start-indent="10pt">${uiLabelMap.NoPaymentMethodInfo}</fo:block>
-                            </#if>
-                           </fo:block>
-                        </fo:table-cell>
-                      </fo:table-row>
-                      
-                      
-                      
-                      
-                   <#if ((paymentMethod?has_content) && (paymentMethod.paymentMethodTypeId == "CREDIT_CARD"))>
-                      <fo:table-row>
-                        <fo:table-cell>
-                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.NumberCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                           <fo:block font-size="7pt">
-                              <#assign cardNumber = creditCard.get("cardNumber") />
-                              <fo:block start-indent="10pt">${cardNumber}</fo:block>
-                           </fo:block>
-                        </fo:table-cell>
-                      </fo:table-row>
-                      
-                      <fo:table-row height="20px">
-                        <fo:table-cell>
-                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.ExpireDateCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                           <fo:block font-size="7pt">
-                               <fo:block start-indent="10pt">${creditCard.get("expireDate")?if_exists}</fo:block>
-                           </fo:block>
-                        </fo:table-cell>
-                      </fo:table-row>
-                   </#if>
-                    
-                    
-
-                      <fo:table-row>
-                        <fo:table-cell>
-                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.AmountCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                           <fo:block font-size="7pt">
-                            <#list orderPayments as orderPaymentPreference>
-                                <fo:block start-indent="10pt"><@ofbizCurrency amount=orderPaymentPreference.maxAmount?default(0.00) rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId/></fo:block>
-                            </#list>
-                           </fo:block>
-                        </fo:table-cell>
-                      </fo:table-row>
-                     <fo:table-row height="20px">
-                        <fo:table-cell>
-                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.StatusCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                           <fo:block font-size="7pt">
-                            <#list orderPayments as orderPaymentPreference>
-                                <#assign oppStatusItem = orderPaymentPreference.getRelatedOne("StatusItem")>
-                                <fo:block start-indent="10pt">${oppStatusItem.get("description",locale)}</fo:block>
-                            </#list>
-                           </fo:block>
-                        </fo:table-cell>
-                      </fo:table-row>
-                     <fo:table-row>
-                        <fo:table-cell>
-                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.AuthorizedCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                           <fo:block font-size="7pt">
-                            <#list orderPayments as orderPaymentPreference>
-                                <#assign gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse")>
-                                <#if (gatewayResponses?has_content)>
-                               <#list gatewayResponses as gatewayResponse>
-                                <#assign transactionCode = gatewayResponse.getRelatedOne("TranCodeEnumeration")>
-                                <#assign enumCode = transactionCode.get("enumCode")>
-                                   <#if (enumCode == "AUTHORIZE")>
-                                      <fo:block start-indent="10pt">${gatewayResponse.transactionDate?string(preferredDateFormat)}</fo:block>
-                                   </#if>
-                                </#list>
-                                </#if>
-                            </#list>
-                           </fo:block>
-                        </fo:table-cell>
-                      </fo:table-row>
-                     <fo:table-row>
-                        <fo:table-cell>
-                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.AuthorizedRefCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                           <fo:block font-size="7pt">
-                            <#list orderPayments as orderPaymentPreference>
-                                <#assign gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse")>
-                                <#if (gatewayResponses?has_content)>
-                               <#list gatewayResponses as gatewayResponse>
-                                <#assign transactionCode = gatewayResponse.getRelatedOne("TranCodeEnumeration")>
-                                <#assign enumCode = transactionCode.get("enumCode")>
-                                   <#if (enumCode == "AUTHORIZE")>
-                                      <fo:block start-indent="10pt">${gatewayResponse.referenceNum?if_exists}</fo:block>
-                                   </#if>
-                                </#list>
-                                </#if>
-                            </#list>
-                           </fo:block>
-                        </fo:table-cell>
-                      </fo:table-row>
-                     <fo:table-row>
-                        <fo:table-cell>
-                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.CaptureCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                           <fo:block font-size="7pt">
-                            <#list orderPayments as orderPaymentPreference>
-                                <#assign gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse")>
-                                <#if (gatewayResponses?has_content)>
-                               <#list gatewayResponses as gatewayResponse>
-                                <#assign transactionCode = gatewayResponse.getRelatedOne("TranCodeEnumeration")>
-                                <#assign enumCode = transactionCode.get("enumCode")>
-                                   <#if (enumCode == "CAPTURE")>
-                                      <fo:block start-indent="10pt">${gatewayResponse.transactionDate?string(preferredDateFormat)}</fo:block>
-                                   </#if>
-                                </#list>
-                                </#if>
-                            </#list>
-                           </fo:block>
-                        </fo:table-cell>
-                      </fo:table-row>
-                     <fo:table-row height="20px">
-                        <fo:table-cell>
-                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.CaptureRefCaption}</fo:block>
-                        </fo:table-cell>
-                        <fo:table-cell>
-                           <fo:block font-size="7pt">
-                            <#list orderPayments as orderPaymentPreference>
-                                <#assign gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse")>
-                                <#if (gatewayResponses?has_content)>
-                               <#list gatewayResponses as gatewayResponse>
-                                <#assign transactionCode = gatewayResponse.getRelatedOne("TranCodeEnumeration")>
-                                <#assign enumCode = transactionCode.get("enumCode")>
-                                   <#if (enumCode == "CAPTURE")>
-                                      <fo:block start-indent="10pt">${gatewayResponse.referenceNum?if_exists}</fo:block>
-                                   </#if>
-                                </#list>
-                                </#if>
-                            </#list>
-                           </fo:block>
-                        </fo:table-cell>
-                      </fo:table-row>
-                
-
+	                                    </fo:block>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+					       <#if ((paymentMethod?has_content) && (paymentMethod.paymentMethodTypeId == "CREDIT_CARD"))>
+				            <#assign creditCard = orderPaymentPreference.getRelatedOne("PaymentMethod").getRelatedOne("CreditCard")>
+		                      <fo:table-row>
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.CardTypeCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                              <fo:block start-indent="10pt">${creditCard.get("cardType")?if_exists}</fo:block>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+		                      <fo:table-row>
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.NumberCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                              <#assign cardNumber = creditCard.get("cardNumber") />
+		                              <fo:block start-indent="10pt">${cardNumber}</fo:block>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+		                      <fo:table-row height="20px">
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.ExpireDateCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                               <fo:block start-indent="10pt">${creditCard.get("expireDate")?if_exists}</fo:block>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+					       <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "GIFT_CARD"))>
+				            <#assign giftCard = orderPaymentPreference.getRelatedOne("PaymentMethod").getRelatedOne("GiftCard")>
+		                      <fo:table-row>
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.NumberCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                              <fo:block start-indent="10pt">${giftCard.cardNumber!}</fo:block>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+		                      <fo:table-row height="20px">
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.ExpireDateCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                               <fo:block start-indent="10pt">${giftCard.get("expireDate")?if_exists}</fo:block>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+		                   </#if>
+	                      <fo:table-row>
+	                        <fo:table-cell>
+	                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.AmountCaption}</fo:block>
+	                        </fo:table-cell>
+	                        <fo:table-cell>
+	                           <fo:block font-size="7pt">
+	                                <fo:block start-indent="10pt"><@ofbizCurrency amount=orderPaymentPreference.maxAmount?default(0.00) rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+	                           </fo:block>
+	                        </fo:table-cell>
+	                      </fo:table-row>
+	                     <fo:table-row>
+	                        <fo:table-cell>
+	                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.StatusCaption}</fo:block>
+	                        </fo:table-cell>
+	                        <fo:table-cell>
+	                           <fo:block font-size="7pt">
+	                                <fo:block start-indent="10pt">${oppStatusItem.get("description",locale)}</fo:block>
+	                           </fo:block>
+	                        </fo:table-cell>
+	                      </fo:table-row>
+                           <#if (gatewayResponses?has_content)>
+		                     <fo:table-row>
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.AuthorizedCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                               <#list gatewayResponses as gatewayResponse>
+		                                <#assign transactionCode = gatewayResponse.getRelatedOne("TranCodeEnumeration")>
+		                                <#assign enumCode = transactionCode.get("enumCode")>
+		                                   <#if (enumCode == "AUTHORIZE")>
+		                                      <fo:block start-indent="10pt">${gatewayResponse.transactionDate?string(preferredDateFormat)}</fo:block>
+		                                   </#if>
+	                                   </#list>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+		                     <fo:table-row>
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.AuthorizedRefCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                               <#list gatewayResponses as gatewayResponse>
+		                                <#assign transactionCode = gatewayResponse.getRelatedOne("TranCodeEnumeration")>
+		                                <#assign enumCode = transactionCode.get("enumCode")>
+		                                   <#if (enumCode == "AUTHORIZE")>
+		                                      <fo:block start-indent="10pt">${gatewayResponse.referenceNum?if_exists}</fo:block>
+		                                   </#if>
+	                                   </#list>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+		                      <fo:table-row>
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.CaptureCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                               <#list gatewayResponses as gatewayResponse>
+		                                <#assign transactionCode = gatewayResponse.getRelatedOne("TranCodeEnumeration")>
+		                                <#assign enumCode = transactionCode.get("enumCode")>
+		                                   <#if (enumCode == "CAPTURE")>
+		                                      <fo:block start-indent="10pt">${gatewayResponse.transactionDate?string(preferredDateFormat)}</fo:block>
+		                                   </#if>
+		                                </#list>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+		                      <fo:table-row height="20px">
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.CaptureRefCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                               <#list gatewayResponses as gatewayResponse>
+		                                <#assign transactionCode = gatewayResponse.getRelatedOne("TranCodeEnumeration")>
+		                                <#assign enumCode = transactionCode.get("enumCode")>
+		                                   <#if (enumCode == "CAPTURE")>
+		                                      <fo:block start-indent="10pt">${gatewayResponse.referenceNum?if_exists}</fo:block>
+		                                   </#if>
+	                                   </#list>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                       </fo:table-row>
+		                   </#if>
+		                  <#else>
+		                      <fo:table-row>
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.PaymentMethodCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+	                                    <fo:block start-indent="10pt"><#if paymentMethodType?has_content>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</#if></fo:block>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+		                      <fo:table-row>
+		                        <fo:table-cell>
+		                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.AmountCaption}</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                           <fo:block font-size="7pt">
+		                                <fo:block start-indent="10pt"><@ofbizCurrency amount=orderPaymentPreference.maxAmount?default(0.00) rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+		                           </fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+			                  <fo:table-row>
+			                        <fo:table-cell>
+			                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.StatusCaption}</fo:block>
+			                        </fo:table-cell>
+			                        <fo:table-cell>
+			                           <fo:block font-size="7pt">
+			                                <fo:block start-indent="10pt">${oppStatusItem.get("description",locale)}</fo:block>
+			                           </fo:block>
+			                        </fo:table-cell>
+			                   </fo:table-row>
+                          </#if>
+                        </#list>
+                      <#else>
+	                      <fo:table-row>
+	                        <fo:table-cell>
+	                            <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.PaymentMethodCaption}</fo:block>
+	                        </fo:table-cell>
+	                        <fo:table-cell>
+	                           <fo:block font-size="7pt">
+	                          		<fo:block font-size="8pt" start-indent="10pt">${uiLabelMap.NoPaymentMethodInfo}</fo:block>
+	                           </fo:block>
+	                        </fo:table-cell>
+	                      </fo:table-row>
+                      </#if>
                </fo:table-body>
              </fo:table>
               </fo:table-cell>
@@ -881,9 +921,9 @@ under the License.
             <fo:table-cell>
             <fo:table>
             <fo:table-column column-width=".6in"/>
-            <fo:table-column column-width=".7in"/>
-            <fo:table-column column-width="1.35in"/>
-            <fo:table-column column-width="1.35in"/>
+            <fo:table-column column-width="1.05in"/>
+            <fo:table-column column-width="1.05in"/>
+            <fo:table-column column-width="1.30in"/>
             <fo:table-column column-width=".7in"/>
             <fo:table-column column-width=".3in"/>
             <fo:table-column column-width=".68in"/>
@@ -941,6 +981,9 @@ under the License.
                 <#assign shippingAmount = shippingAmount.add(Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true))>
                 <#assign taxAmount = Static["org.ofbiz.order.order.OrderReadHelper"].getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal>
                 <#assign grandTotal = orderReadHelper.getOrderGrandTotal()>
+                <#assign otherAdjustmentsList = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(orderHeaderAdjustments, [Static["org.ofbiz.entity.condition.EntityCondition"].makeCondition("orderAdjustmentTypeId", Static["org.ofbiz.entity.condition.EntityOperator"].NOT_EQUAL, "PROMOTION_ADJUSTMENT")])/>
+                <#assign otherAdjustmentsAmount = Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustments(otherAdjustmentsList, orderSubTotal, true, false, false)/>
+
                 <#list orderItems as orderItem>
                     <#assign orderItemType = orderItem.getRelatedOne("OrderItemType")?if_exists>
                     <#assign productId = orderItem.productId?if_exists>
@@ -1020,16 +1063,6 @@ under the License.
                             <fo:block><@ofbizCurrency amount=Static["org.ofbiz.order.order.OrderReadHelper"].getOrderItemSubTotal(orderItem, orderAdjustments) rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                         </fo:table-cell>
                     </fo:table-row>
-                    <#if itemAdjustment != 0>
-                        <fo:table-row>
-                            <fo:table-cell>
-                                <fo:block >
-                                    <fo:inline font-style="italic">${uiLabelMap.AdjustmentsCaption}</fo:inline>
-                                    <@ofbizCurrency amount=itemAdjustment rounding=globalContext.currencyRounding isoCode=currencyUomId/>
-                                </fo:block>
-                            </fo:table-cell>
-                        </fo:table-row>
-                    </#if>
                 </#list>
                </fo:table-body>
                </fo:table>
@@ -1053,7 +1086,7 @@ under the License.
                         <fo:block text-align="right">${uiLabelMap.SubtotalCaption}</fo:block>
                     </fo:table-cell>
                     <fo:table-cell>
-                        <fo:block text-align="right"><@ofbizCurrency amount=orderSubTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+                        <fo:block text-align="right" margin-right="0.1in"><@ofbizCurrency amount=orderSubTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                     </fo:table-cell>
                   </fo:table-row>
                   <#list headerAdjustmentsToShow as orderHeaderAdjustment>
@@ -1079,43 +1112,111 @@ under the License.
                               </#if>
                              </#list>
                          </#if>
-                      </#if>
-                      <fo:table-row>
+                         <fo:table-row>
                             <fo:table-cell number-columns-spanned="2">
                                 <fo:block text-align="right"><#if promoText?has_content>${promoText}<#if promoCodeText?has_content> (${promoCodeText})</#if><#else>${adjustmentType.get("description",locale)?if_exists}</#if>:</fo:block>
                             </fo:table-cell>
                             <fo:table-cell>
-                                <fo:block text-align="right"><@ofbizCurrency amount=orderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+                                <fo:block text-align="right" margin-right="0.1in"><@ofbizCurrency amount=orderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                             </fo:table-cell>
-                      </fo:table-row>
+                         </fo:table-row>
+                      </#if>
                   </#list>
+                  <#list headerAdjustmentsToShow as orderHeaderAdjustment>
+		            <#assign adjustmentType = orderHeaderAdjustment.getRelatedOne("OrderAdjustmentType")>
+		            <#assign loyaltyOrderAdjustmentTypeId = adjustmentType.orderAdjustmentTypeId/>
+                    <#if loyaltyOrderAdjustmentTypeId == "LOYALTY_POINTS">
+	                  <#assign orderAdjTotal = orderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment)!0/>
+	                  <fo:table-row>
+                        <fo:table-cell number-columns-spanned="2">
+                            <fo:block text-align="right">${adjustmentType.get("description",locale)?if_exists}:</fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell>
+                            <fo:block text-align="right" margin-right="0.1in"><@ofbizCurrency amount=orderAdjTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+		            </#if>
+		          </#list>
                   <fo:table-row>
                     <fo:table-cell></fo:table-cell>
                     <fo:table-cell>
                         <fo:block text-align="right">${uiLabelMap.ShipHandleCaption}</fo:block>
                     </fo:table-cell>
                     <fo:table-cell>
-                        <fo:block text-align="right"><@ofbizCurrency amount=shippingAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+                        <fo:block text-align="right" margin-right="0.1in"><@ofbizCurrency amount=shippingAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                     </fo:table-cell>
                   </fo:table-row>
-                    <#if (!Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(CHECKOUT_SUPPRESS_TAX_IF_ZERO!"")) || (taxAmount?has_content && (taxAmount &gt; 0))>
-                        <fo:table-row>
-                            <fo:table-cell></fo:table-cell>
-                            <fo:table-cell>
-                                <fo:block text-align="right"><#if (taxAmount?default(0)> 0)>${uiLabelMap.TaxTotalCaption}<#else>${uiLabelMap.SalesTaxCaption}</#if></fo:block>
-                            </fo:table-cell>
-                            <fo:table-cell>
-                                <fo:block text-align="right"><@ofbizCurrency amount=taxAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
-                            </fo:table-cell>
-                        </fo:table-row>
+                  
+                  <#assign totalTaxPercent = 0/>
+                    <#if orderAdjustments?has_content>
+            	      <#assign orderShipTaxAdjustments = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(orderAdjustments,Static["org.ofbiz.base.util.UtilMisc"].toMap("orderAdjustmentTypeId","SALES_TAX")) />  
+            	      <#assign distinctTaxAuthorityRateSeqIds = Static["org.ofbiz.entity.util.EntityUtil"].getFieldListFromEntityList(orderShipTaxAdjustments, "taxAuthorityRateSeqId", true)>
+					  <#list distinctTaxAuthorityRateSeqIds as taxAuthorityRateSeqId >
+					      <#assign taxAdjustmentsByTaxAuthRateSeqId = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(orderShipTaxAdjustments,Static["org.ofbiz.base.util.UtilMisc"].toMap("taxAuthorityRateSeqId",taxAuthorityRateSeqId)) /> 
+					      <#assign appliedTax = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(taxAdjustmentsByTaxAuthRateSeqId) />  
+					      <#assign totalTaxPercent = totalTaxPercent + appliedTax.sourcePercentage/>
+					  </#list>
+            	    </#if>
+                    <#if (!checkoutSuppressTaxIfZero!"") || (taxAmount?has_content && (taxAmount &gt; 0))>
+                    	<#if checkoutShowSalesTaxMulti?exists && checkoutShowSalesTaxMulti?has_content && checkoutShowSalesTaxMulti>
+					        <#if orderShipTaxAdjustments?exists && orderShipTaxAdjustments?has_content>
+							  <#if distinctTaxAuthorityRateSeqIds?has_content>
+							    <#list distinctTaxAuthorityRateSeqIds as taxAuthorityRateSeqId >
+								  <#assign taxAdjustmentsByTaxAuthRateSeqId = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(orderShipTaxAdjustments,Static["org.ofbiz.base.util.UtilMisc"].toMap("taxAuthorityRateSeqId",taxAuthorityRateSeqId)) /> 
+								  <#assign salesTaxAmount = 0/>
+								  <#list taxAdjustmentsByTaxAuthRateSeqId as salesTaxAdjustment>
+								    <#assign salesTaxAmount = salesTaxAmount + salesTaxAdjustment.amount/>
+								  </#list>
+								  <#assign appliedTax = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(taxAdjustmentsByTaxAuthRateSeqId) />  
+								  <#-- display in summary section -->
+								  <fo:table-row>
+					                <fo:table-cell number-columns-spanned="2">
+					                  <fo:block text-align="right">${uiLabelMap.SalesTaxLabel!}(${appliedTax.comments!} ${appliedTax.sourcePercentage?string("0.00")}%):</fo:block>
+					                </fo:table-cell>
+					                <fo:table-cell>
+					                  <fo:block text-align="right" margin-right="0.1in"><@ofbizCurrency amount=salesTaxAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+					                </fo:table-cell>
+					              </fo:table-row>
+								  <#-- display in summary section -->
+								</#list>
+							  </#if>
+							<#else>
+						      <fo:table-row>
+		                        <fo:table-cell number-columns-spanned="2">
+		                          <fo:block text-align="right">${uiLabelMap.SalesTaxLabel!}(${totalTaxPercent?string("0.00")}%):</fo:block>
+		                        </fo:table-cell>
+		                        <fo:table-cell>
+		                          <fo:block text-align="right" margin-right="0.1in"><@ofbizCurrency amount=taxAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+		                        </fo:table-cell>
+		                      </fo:table-row>
+							</#if>
+                    	<#else>
+						  <fo:table-row>
+	                         <fo:table-cell number-columns-spanned="2">
+	                             <fo:block text-align="right">${uiLabelMap.SalesTaxLabel!}(${totalTaxPercent?string("0.00")}%):</fo:block>
+	                         </fo:table-cell>
+	                         <fo:table-cell>
+	                             <fo:block text-align="right" margin-right="0.1in"><@ofbizCurrency amount=taxAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+	                         </fo:table-cell>
+	                      </fo:table-row>
+                        </#if>
                     </#if>
+                    
+                    <fo:table-row>
+                          <fo:table-cell number-columns-spanned="2">
+                              <fo:block text-align="right">${uiLabelMap.AdjustmentsCaption}</fo:block>
+                          </fo:table-cell>
+                          <fo:table-cell>
+                              <fo:block text-align="right" margin-right="0.1in"><@ofbizCurrency amount=otherAdjustmentsAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+                          </fo:table-cell>
+                    </fo:table-row>
                     <fo:table-row>
                         <fo:table-cell></fo:table-cell>
                         <fo:table-cell>
                             <fo:block font-weight="bold" text-align="right">${uiLabelMap.OrderTotalCaption}</fo:block>
                          </fo:table-cell>
                          <fo:table-cell>
-                            <fo:block font-weight="bold" text-align="right"><@ofbizCurrency amount=grandTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
+                            <fo:block font-weight="bold" text-align="right" margin-right="0.1in"><@ofbizCurrency amount=grandTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                          </fo:table-cell>
                     </fo:table-row>
              </fo:table-body>
@@ -1290,7 +1391,7 @@ under the License.
                   <#else>
                     <fo:table-row>
                       <fo:table-cell number-columns-spanned="5">
-                        <fo:block text-align="center">${uiLabelMap.NoDataAvailableInfo}</fo:block>
+                        ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
                       </fo:table-cell>
                     </fo:table-row>
                   </#if>
@@ -1346,7 +1447,7 @@ under the License.
                   <#else>
                     <fo:table-row>
                       <fo:table-cell number-columns-spanned="2">
-                        <fo:block text-align="center">${uiLabelMap.NoDataAvailableInfo}</fo:block>
+                        ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
                       </fo:table-cell>
                     </fo:table-row>
                   </#if>

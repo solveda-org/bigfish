@@ -89,7 +89,7 @@
                     <html>
                         <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
                             <html-template-decorator-section name="pincodeChecker_DialogBox">
-                                <container id="pincodeCheckContainer">
+                                <container id="js_pincodeCheckContainer">
                                 <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
                                 <platform-specific>
                                     <html>
@@ -125,7 +125,7 @@
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePinCodeChecker.groovy" />
             </actions>
             <widgets>
-                <container id="pincodeCheckContainer">
+                <container id="js_pincodeCheckContainer">
                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
                     <platform-specific>
                         <html>
@@ -213,7 +213,7 @@
                  <html>
                         <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
                             <html-template-decorator-section name="plpQuicklook_DialogBox">
-                              <container id="plpQuicklook_Container">
+                              <container id="js_plpQuicklook_Container" style="plpQuicklook_Container">
                               </container>
                             </html-template-decorator-section>
                         </html-template-decorator>
@@ -227,7 +227,7 @@
             <actions>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <property-map resource="osafe" map-name="OSafeConfig" global="true" />
+                <property-map resource="OsafeProperties" map-name="OSafeConfig" global="true" />
                 <set field="uiSequenceScreen" value="Quicklook"/>
                 <set field="activeZoomParam" value="QUICKLOOK_IMG_ZOOM_ACTIVE_FLAG" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
@@ -235,11 +235,12 @@
                 <set field="dialogPurpose" value="plpQuicklook_" global="true"/>
                 <set field="jqueryIdPrefix" value="quicklook_"/>
                 <set field="showHeadingTertiaryInformation" value="Y" />
+                <set field="addToCartRecurrenceAction" value="addRecurrenceItemToCart"/>
                 <set field="addToCartAction" value="addItemToCart"/>
                 <set field="addToWishListAction" value="addItemToWishList"/>
             </actions>
             <widgets>
-                 <container id="plpQuicklook_Container">
+                 <container id="js_plpQuicklook_Container" style="plpQuicklook_Container">
                    <platform-specific>
                        <html>
                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonProductDetailJS.ftl" />
@@ -247,7 +248,8 @@
                    </platform-specific>
                    <platform-specific>
                      <html>
-                      <html-template location="component://osafe/webapp/osafe/common/eCommerceProductDetail.ftl"/>
+                      <!-- <html-template location="component://osafe/webapp/osafe/common/eCommerceProductDetail.ftl"/> -->
+                      <html-template location="component://osafe/webapp/osafe/common/eCommerceQuicklook.ftl"/>
                      </html>
                    </platform-specific>
                  </container>
@@ -299,7 +301,7 @@
                 <set field="pickupStoreButtonVisible" value="Y"/>
                 <set field="displayInitialStores" value="N" />
                 <set field="cancelButtonVisible" value="Y"/>
-                <set field="cancelButtonClass" value="standardBtn positive cancelPickupStore"/>
+                <set field="cancelButtonClass" value="standardBtn negative js_cancelPickupStore"/>
                 <set field="cancelButtonUrl" value="storeInfoOrShippingOption"/>
                 <set field="cancelButtonDescription" value="${uiLabelMap.CancelStoreSelectBtn}"/>
                 <set field="CancelStoreSelectInfo" value="${uiLabelMap.CancelStoreSelectInfo}"/>
@@ -316,27 +318,10 @@
                                     <include-screen name="pageTitle" location="component://osafe/widget/EcommerceScreens.xml"/>
                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
                                     <include-screen name="PTS_STORE_PICKUP" location="component://osafe/widget/EcommerceContentScreens.xml" />
-                                    <platform-specific>
-                                        <html>
-                                            <html-template-decorator  location="component://osafe/webapp/osafe/common/commonGeoLocation.ftl" >
-                                                <html-template-decorator-section name="searchBoxBody">
-                                                    <include-screen name="storeLocatorSearch" location="component://osafe/widget/EcommerceScreens.xml"/>
-                                                </html-template-decorator-section>
-                                                <html-template-decorator-section name="commonGeoLocationChart">
-                                                    <platform-specific>
-                                                        <html>
-                                                            <html-template location="component://osafe/webapp/osafe/common/checkoutGeoLocationChart.ftl"/>
-                                                        </html>
-                                                    </platform-specific>
-                                                </html-template-decorator-section>
-                                                <html-template-decorator-section name="listBoxBody">
-                                                    <include-screen name="storeLocatorList" location="component://osafe/widget/EcommerceScreens.xml"/>
-                                                </html-template-decorator-section>
-                                                <html-template-decorator-section name="ecommerceCommonButtons">
-                                                    <include-screen name="ecommerceCommonButtons" location="component://osafe/widget/CommonScreens.xml"/>
-                                                </html-template-decorator-section>
-                                            </html-template-decorator >
-                                        </html>
+	                                <platform-specific>
+	                                    <html>
+                                			<html-template location="component://osafe/webapp/osafe/common/storeLocator/storeLocator.ftl"/>
+                                    	</html>
                                     </platform-specific>
                                     <include-screen name="PES_STORE_PICKUP" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                 </container>
@@ -347,6 +332,7 @@
             </widgets>
         </section>
     </screen>
+
 
     <screen name="storePickupSearchResult">
         <section>
@@ -363,7 +349,7 @@
                 <set field="pickupStoreButtonVisible" value="Y"/>
                 <set field="displayInitialStores" value="Y" />
                 <set field="cancelButtonVisible" value="Y"/>
-                <set field="cancelButtonClass" value="standardBtn positive cancelPickupStore"/>
+                <set field="cancelButtonClass" value="standardBtn negative js_cancelPickupStore"/>
                 <set field="cancelButtonUrl" value="storeInfoOrShippingOption"/>
                 <set field="cancelButtonDescription" value="${uiLabelMap.CancelStoreSelectBtn}"/>
                 <set field="CancelStoreSelectInfo" value="${uiLabelMap.CancelStoreSelectInfo}"/>
@@ -375,34 +361,18 @@
                     <include-screen name="pageTitle" location="component://osafe/widget/EcommerceScreens.xml"/>
                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
                     <include-screen name="PTS_STORE_PICKUP" location="component://osafe/widget/EcommerceContentScreens.xml" />
-                    <platform-specific>
-                        <html>
-                            <html-template-decorator  location="component://osafe/webapp/osafe/common/commonGeoLocation.ftl" >
-                                <html-template-decorator-section name="searchBoxBody">
-                                    <include-screen name="storeLocatorSearch" location="component://osafe/widget/EcommerceScreens.xml"/>
-                                </html-template-decorator-section>
-                                <html-template-decorator-section name="commonGeoLocationChart">
-                                    <platform-specific>
-                                        <html>
-                                            <html-template location="component://osafe/webapp/osafe/common/checkoutGeoLocationChart.ftl"/>
-                                        </html>
-                                    </platform-specific>
-                                </html-template-decorator-section>
-                                <html-template-decorator-section name="listBoxBody">
-                                    <include-screen name="storeLocatorList" location="component://osafe/widget/EcommerceScreens.xml"/>
-                                </html-template-decorator-section>
-                                <html-template-decorator-section name="ecommerceCommonButtons">
-                                    <include-screen name="ecommerceCommonButtons" location="component://osafe/widget/CommonScreens.xml"/>
-                                </html-template-decorator-section>
-                            </html-template-decorator >
-                        </html>
-                    </platform-specific>
+                     <platform-specific>
+                         <html>
+                    			<html-template location="component://osafe/webapp/osafe/common/storeLocator/storeLocator.ftl"/>
+                        	</html>
+                        </platform-specific>
                     <include-screen name="PES_STORE_PICKUP" location="component://osafe/widget/EcommerceContentScreens.xml" />
                 </container>
             </widgets>
         </section>
     </screen>
     
+
     <screen name="lightCartDialog">
         <section>
             <actions>
@@ -425,7 +395,7 @@
                                 <container id="lightCart_Container">
                                     <platform-specific>
                                         <html>
-                                        	<html-template location="component://osafe/webapp/osafe/common/entry/js/checkoutJS.ftl"/>
+                                        	<html-template location="component://osafe/webapp/osafe/common/entry/js/lightCartJS.ftl"/>
                                         	<html-template location="component://osafe/webapp/osafe/common/entry/js/commonJS.ftl"/>
                                         <!-- Change this ftl name to a more descriptive one -->
                                             <html-template location="component://osafe/webapp/osafe/common/cart/cartLightBox.ftl" />

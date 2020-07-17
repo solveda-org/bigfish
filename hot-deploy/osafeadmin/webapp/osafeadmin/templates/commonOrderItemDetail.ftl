@@ -1,5 +1,6 @@
 <form method="post" name="${detailFormName!""}" <#if detailFormId?exists>id="${detailFormId!}"</#if>>
 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHiddenFields")}
+${sections.render('tooltipBody')?if_exists}
 <#if generalInfoBoxHeading?exists && generalInfoBoxHeading?has_content>
     <div class="displayBox generalInfo">
         <div class="header">
@@ -24,20 +25,23 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
 <#if orderItems?exists && orderItems?has_content>
   <#list orderItems as orderItem >
   ${setRequestAttribute("orderItem",orderItem)}
-    <div class="displayBox generalInfo">
+    <div class="displayListBox generalInfo">
         ${sections.render('orderItemInfoBoxBody')!}
-        <#if orderItem.statusId == "ITEM_COMPLETED">
-	        <div class="header"><h2>${orderItemShippingInfoBoxHeading!}</h2></div>
-	        <div class="boxBody">
-	            ${sections.render('orderItemShippingInfoBoxBody')!}
-	        </div>
-        </#if>
         <div class="header"><h2>${orderItemNotesBoxHeading!}</h2></div>
         <div class="boxBody">
             ${sections.render('orderItemNotesBoxBody')!}
         </div>
+        <div class="header"><h2>${orderItemAttributeBoxHeading!}</h2></div>
+        <div class="boxBody">
+            ${sections.render('orderItemAttributeBoxBody')!}
+        </div>
     </div>
   </#list>
+  <div class="displayBox orderItemsSummaryInfo">
+  	<div class="boxBody">
+        ${sections.render('orderItemsSummaryBoxBody')!}
+    </div>
+  </div>
 </#if>
 
 <div class="displayBox footerInfo">

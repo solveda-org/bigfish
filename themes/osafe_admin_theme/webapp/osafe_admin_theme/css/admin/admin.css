@@ -72,6 +72,24 @@ overflow-y:scroll; /* adds constant scroll bar to avoid skipping */
 }
 
 
+input::-webkit-outer-spin-button, /* Removes all trace of spin buttons on input[number]; webkit only;*/
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; 
+}
+
+input::-moz-focus-inner /* Removes padding/margin discrepancy between anchor buttons and input buttons */
+{ 
+    border: 0;
+    padding: 0;
+}
+
+/* apply a natural box layout model to all elements */
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+ }
+
+
 /****************************************************************
 * Background, Font Family, Default Text
 ****************************************************************/
@@ -92,15 +110,10 @@ input[type=text],input[type=password], select, textarea {
     border: 1px solid #000000;
     margin: 0; /* Establishes Default in Chrome */
 }
-input[type=text]:focus,input[type=password]:focus, select:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus {
    background: #f5f2ec;
    border: 1px solid #BF7400;
 }
-
-option {
-
-}
-
 
 input[type="checkbox"],
 input[type="radio"]{
@@ -157,12 +170,10 @@ textarea.mediumArea {
 textarea.smallArea {
     width: 800px;
     height: 80px;
-    margin: 0 0 10px 0;
 }
 textarea.shortArea {
     width: 800px;
     height: 40px;
-    margin: 2px 0;
 }
 input[type="text"].regular {
     width: 110px;
@@ -183,10 +194,13 @@ input[type="text"].xxLarge {
     width: 800px;
 }
 input[type="text"].phone3 {
-    width: 3em;
+    width: 30px;
 }
 input[type="text"].phone4 {
-    width: 4em;
+    width: 40px;
+}
+input[type="text"].phoneExt {
+    width: 40px;
 }
 input[type="text"]#phoneWorkExtOther {
     width: 40px;
@@ -254,7 +268,7 @@ body.all {
     }
 #pageContainer {
     clear: both;
-    padding: 0 16px 10px 16px;
+    padding: 0 15px 10px 15px;
 /*    width: 1068px;  */
 
 }
@@ -272,7 +286,6 @@ body.all {
 label, .caption{
     text-align: right;
     padding: 0 2px 0 0;
-    text-transform: capitalize;
 }
 
 /****************************************************************
@@ -282,19 +295,18 @@ label, .caption{
 input[type="submit"].standardBtn,
 input[type="button"].standardBtn,
 a.standardBtn {
-    font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
-    font-weight:bold;
-    font-size:13px;
-    /*margin: 0 0 0 10px; */
-    margin: 0 10px 0 0 ;
-    color: #ffffff;
-    cursor: pointer;
+    background: none repeat scroll 0 0 #A50000;
     border: 1px solid #000000;
-    background: #A50000;
-    text-transform: inherit;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0 10px 0 0;
+    padding: 1px 5px;
+    text-align: center;
     text-decoration: none;
-    padding: 1px 5px 1px 5px;
 }
+
 input[type="submit"].standardBtn:hover,
 input[type="button"].standardBtn:hover {
     
@@ -317,9 +329,7 @@ a.standardBtn.secondary {
     border: 1px solid #000;
     background: #fff2de;
     font-weight:normal;
-    text-transform: inherit;
     text-decoration: none;
-    padding: 1px 5px 1px 5px;
     display: inline-block;
 }
 
@@ -369,18 +379,18 @@ a.standardBtn.logout:hover {
     * Paging Buttons
     ****************************************************************/
 .pagingLinksBox {
-    background: #feeaca;
-    font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
     float: left;
+    margin: 0 0 2px;
     width: 100%;
     }
 
 ul.pagingLinksBody {
-    }
+    width: 100%;
+}
 ul.pagingLinksBody li {
     float: left;
     padding: 2px;
-    }
+}
 
 ul.pagingLinksBody li.pagingLinks {
     font-size: 11px;
@@ -394,16 +404,20 @@ ul.pagingLinksBody li.pagingLinksText {
     margin: 0 420px;
 }
 ul.pagingLinksBody li.pagingLinksText.showpages{
-    margin: 0px;
+    margin: 0 0 0 280px;
     position:relative;
-    padding: 0 0 0 280px;
-}
-ul.pagingLinksBody li.pagingLinksText.showpagesnext{
-    margin: 0px;
-    position:relative;
-    padding: 0 0 0 387px;
 }
 
+.pagingLinksBody form {
+    display: inline-block;
+    *display: inline; /* IE7 Only */
+}
+
+ul.pagingLinksBody li.pagingLinksText.showpagesnext{
+    float: left;
+    margin: 0 0 0 400px;
+    position: relative;
+}
 
 ul.pagingLinksBody li.pagingLinks a {
     color: #A50000;
@@ -452,11 +466,11 @@ h1 {
 }
 
 h1 span.pageTitleAdditionalText {
-     text-transform: none;
+
 }
 
 span.headingOrderId{
-    text-transform: uppercase;
+
 }
 
 h2 {
@@ -673,9 +687,10 @@ ul.navigationMenu li li li.sfHover ul {
     border: medium none;
     font-size: 13px !important;
     font-weight: bold;
-    padding: 2px 5px;
+    padding: 2px 5px 2px 10px;
     text-align: left;
     white-space: nowrap;
+	margin: 0;
 }
 
  /* basic Cloring of Navbar Item Text */
@@ -686,10 +701,17 @@ ul.navigationMenu li li li.sfHover ul {
 .navigationMenu li.topLevel {
     width: 10%; /* Ten Top Level Links */
 }
+
 /* Hide Vertical bar to left of first top level item */
 .navigationMenu  li.topLevel.firstItem {
 
 }
+
+/* Hide Vertical bar to right of last top level item */
+.navigationMenu li.topLevel {
+
+}
+
 /* Vertical bar to right of last top level item */
 .navigationMenu  li.topLevel.lastItem {
 
@@ -735,6 +757,19 @@ ul.navigationMenu li li li.sfHover ul {
 /****************************************************************
 * Error Messages
 ****************************************************************/
+
+.inError,
+.inError:focus {
+    background: none repeat scroll 0 0 #FBE7E8!important;
+    border: 1px solid #C00000 !important;
+}
+
+.inError+span {
+    color: #C00000;
+    font-weight: 700;
+}
+
+
 .content-messages {
     margin: .5em 0 1em 0;
     color: #000000;
@@ -761,6 +796,8 @@ ul.navigationMenu li li li.sfHover ul {
 
 .eCommerceErrorMessage {
     border: 1px solid #c00000;
+    overflow-y: hidden;
+    overflow-x: auto;
 }
 .eCommerceErrorMessage .errorImage {
     border: 1px solid #c00000; 
@@ -813,18 +850,14 @@ ul.navigationMenu li li li.sfHover ul {
     margin: 0 0 1em 0;
 }
 
-.displayBox {
-    /*margin: 1em 0;*/
-
-
-}
-
 .displayBox, .displayListBox table{
     /*width: 100%;*/
     width: 1064px;
 }
 
-.displayBox .header, .displaySearchBox .header , .displayListBox .header {
+.displayBox .header,
+.displaySearchBox .header,
+.displayListBox .header {
     background: none repeat scroll 0 0 #BF7400;
     border-bottom: 1px solid #000000;
     float: left;
@@ -837,12 +870,28 @@ ul.navigationMenu li li li.sfHover ul {
     text-align:left;
 }
 
+.displayBox .header.sub {
+
+}
+
+.infoRow.row .header {
+    border-left: medium none !important;
+    border-radius: 0 0 0 0;
+    border-right: medium none !important;
+}
+
 .displaySearchBox .header , .displayListBox .header {
     text-align: left;
 }
-.displaySearchBox .header h2 , .displayListBox .header h2  , .displayBox .header h2 {
+.displaySearchBox .header h2,
+.displayListBox .header h2,
+.displayBox .header h2,
+.heading h2 {
     float: left;
-    margin: 0 0 0 10px;
+    padding: 0 10px;
+    text-align: left;
+    width: 100%;
+    *padding: 0;
 }
 
 .displayBox .header h2 .headingHelperText {
@@ -850,6 +899,9 @@ ul.navigationMenu li li li.sfHover ul {
     font-size: 10px;
 }
 
+.displaySearchBox  div.searchButton {
+
+}
 .displayBox .subHeader {
     background: #ecb564;
     border-bottom: 1px solid #000000;
@@ -867,7 +919,7 @@ ul.navigationMenu li li li.sfHover ul {
     margin: 0 0 10px 0;
 }
 .infoRow .header h2 {
-
+    
 }
 .subHeader h3 {
     font-size: 1.3em;
@@ -890,9 +942,18 @@ ul.navigationMenu li li li.sfHover ul {
     padding: 10px 0;
 }
 
+.displayListBox .boxBody {
+   padding: 0 0 10px 0;
+}
+
 .displayBox.detailInfo .boxBody table,
 .displaySearchBox.detailInfo .boxBody table {
      margin: -10px 0 0 0; /* To compensate for the boxBody padding */
+}
+
+#dashboard .displayBox .boxBody,
+#dashboard .displaySearchBox .boxBody {
+    padding: 0 0 2px 0;
 }
 
 .displayBox .boxBody:after, .displaySearchBox .boxBody:after, .displayListBox .boxBody:after {
@@ -1006,11 +1067,11 @@ categoryDetail:after {
     visibility: hidden;
     }
 .commonSearchList .displaySearchBox {
-    width: 1064px;
+
 }
 
 .commonSearchList .displayListBox {
-    width: 1064px;
+
 }
 .commonSearchList .displayBox{
 
@@ -1024,12 +1085,14 @@ categoryDetail:after {
     border: 2px solid #000000;
     float: left;
     margin: 0 auto 1em auto;
+width: 1064px;
 }
 
 .entryRow {
     clear: left;
     float: left;
-    min-height: 25px; /* Set the same as infoRow for row uniformity */
+    margin: 4px 0;
+    min-height: 20px; /* Set the same as infoRow for row uniformity */
     position: relative;   /*  so icons with can use absolute positioning  */
     width: 100%;
     *float: none; /* IE7 Only */
@@ -1174,8 +1237,9 @@ div.searchButton {
     float: left;
     width: 100%;
     background: #feeaca;
-    min-height: 25px; /* Accommodates Icons and Input Fields */ 
-    min-height: 25px\9;  /* IE9 */
+    margin: 4px 0;
+    min-height: 20px; /* Accommodates Icons and Input Fields */ 
+    min-height: 20px\9;  /* IE9 */
     /* *float: none; IE7 Only */
 }
 
@@ -1189,9 +1253,6 @@ div.searchButton {
     *float: none; /* IE7 only */
 }
 
-.infoRow.column div.infoValue input {
-
-}
 
 .infoRow label, .infoRow div.entry, .infoRow div.infoValue{
     float: left;
@@ -1222,7 +1283,8 @@ float: left;
 .infoRow div.infoValue {
     color: #A50000;
     font-weight: normal;
-    min-height: 25px;  /* Need for empty DIVs and multiple infoValues in one infoRow */
+    
+    min-height: 20px;  /* Need for empty DIVs and multiple infoValues in one infoRow */
     text-align: justify;
 }
 
@@ -1241,7 +1303,8 @@ float: left;
 }
 div.infoValue div.dataRow {
     float: left;
-    margin:0 0 10px 0;
+    /* margin:0 0 10px 0; */
+    min-height: 20px;    
 }
 div.infoValue div.lastDataRow {
     margin-bottom: 0px;
@@ -1350,7 +1413,6 @@ div.infoValue div.geoCode {
 .infoRow div.infoDetail label {
     text-align: center;
     width: 160px!important;
-    text-transform: none !important;
 }
 
 .infoRow div.infoText {
@@ -1364,7 +1426,6 @@ div.infoValue div.geoCode {
 .infoRow div.infoText label {
     text-align: center;
     width: 160px!important;
-    text-transform: none !important;
 }
 
 .infoRow div.entry.checkbox {
@@ -1374,6 +1435,13 @@ div.infoValue div.geoCode {
     padding: 0 5px 0 0;
     font-size: 13px;
 }
+
+.checkboxCol {
+    float: left;
+    width: 220px;
+}
+
+
 .infoRow select.short {
     width: 110px;
 }
@@ -1492,9 +1560,16 @@ float: left;
 
 
 }
-.boxBody td.idCol, .boxBody th.idCol, {
-   /*width: 150px;*/
+.displayListBox .boxBody td.idCol, .boxBody th.idCol, .boxBody td.idCol{
+  /*width: 150px; */
     text-align: center;
+}
+.displayListBox .boxBody td.idCol a, .boxBody th.idCol a, .infoValue a, td.totalCaption a, .nameCol a, .usageCol a, td.actionCol a {
+
+}
+.displayListBox .boxBody td.idCol a:hover, .boxBody th.idCol a:hover, td.totalCaption a:hover, .nameCol a:hover, .usageCol a:hover {
+
+
 }
 .boxBody td.idCol.firstCol, .boxBody th.idCol.firstCol {
     text-align: left;
@@ -1544,6 +1619,7 @@ float: left;
 .boxBody td.actionCol, .boxBody th.actionCol {
     /*width: 100px;*/
     text-align: center;
+    white-space: nowrap; /* makes icons appear inline without putting a width on the td */
 }
 .displayListBox .boxBody td.actionColSmall, .boxBody th.actionColSmall, .boxBody td.actionColSmall {
     /*width: 40px;*/
@@ -1561,7 +1637,7 @@ float: left;
 }
 .displayListBox .boxBody td.typeCol, .boxBody th.typeCol {
     /*width: 170px;*/
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .displayListBox .boxBody td.cityCol, .boxBody th.cityCol {
@@ -1589,12 +1665,7 @@ float: left;
 .displayListBox .boxBody td.descCol, .boxBody th.descCol {
     /*width: 250px;*/
     text-align: left;
-
-
- /*   overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;  */
-} 
+}
 
 .displayListBox .boxBody td.noteCol, .boxBody th.noteCol {
     /*width: 600px;*/
@@ -1614,6 +1685,11 @@ float: left;
     /*width: 350px;*/
     text-align: left;
 }
+
+.boxBody td.gradeCol, .boxBody th.gradeCol {
+    text-align: center;
+}
+
 /****************************************************************
 * Period Box
 ****************************************************************/
@@ -1889,7 +1965,7 @@ float: left;
 }
 
 #orderManagementOrderDetail .displayBox.paymentInfo div.infoValue p {
-    float: left;
+
 }
 
 
@@ -1914,6 +1990,7 @@ float: left;
 #orderManagementOrderDetail .displayBox.generalInfo .infoRow div.infoValue p {
     float: left;
 }
+
 /****************************************************************
 * Order Detail : Customer Information
 ****************************************************************/
@@ -1931,7 +2008,7 @@ float: left;
     text-align: right;
 }
 
-.displayListBox.orderItemInfo {
+#orderManagementOrderDetail .displayListBox.orderItemInfo {
     clear: left;
     margin: 0 0 1em 0;
 }
@@ -1961,11 +2038,11 @@ input[type="text"].promoCodeEntry {
 }
 
 .infoRow.promoConditionProduct {
-    padding: 10px 0 0;
+
 }
 
 .infoRow.promoActionProduct {
-    padding: 10px 0 0;
+
 }
 
 
@@ -2188,7 +2265,7 @@ table.osafe tfoot > tr:hover {
 }
 
 table.orderSummary {
-    width: 400px;
+    width: auto;
     float: right;
     margin: .5em .1em .5em 0;
     border: 1px solid #0c0c0;
@@ -2199,6 +2276,10 @@ table.osafe tfoot table.orderSummary {
     width:auto!important;
 }
 table.osafe tr.ListTotal {
+ /*   background-color: #fff; */
+}
+
+table.osafe tr.ListTotal:hover {
 
 }
 table.orderListTotal {
@@ -2258,7 +2339,11 @@ table.osafe th.longDescCol,td.longDescCol {
 }
 
 table.osafe th.seqCol, th.valueCol {
-    /*width: 150px;*/
+    /* width: 150px; */
+    text-align: left;
+}
+table.osafe td.seqCol, td.valueCol{
+   /* width: 150px; */
     text-align: left;
 }
 
@@ -2318,12 +2403,9 @@ tr.noResult td {
     text-align: center!important;
 }
 .adminMore {
-	position: absolute;
-    color: white;
-    font-size: 14px;
-	width: 100px;
-	float: right;
-
+    color: #FFFFFF;
+    float: right;
+    font-size: 12px;
 }
 
 /****************************************************************
@@ -2374,7 +2456,7 @@ table.tablesorter thead tr .headerSortDown {
 .dialogBox {
     display: none;
     position: fixed;
-	width: auto!important; 
+    /* width: auto!important; width set by JS */
     height: auto;
     padding: 0px;
     z-index: 102;
@@ -2403,13 +2485,25 @@ table.tablesorter thead tr .headerSortDown {
    float: left;
    text-align:center;
    padding: 3px 0;
-   width: 510px;
+   width: 100%;
    border-bottom: 1px solid #000;
    z-index: 1;
 }
 #displayLookUpDialog {
 	width: 500px;
 	height: auto!important;
+}
+
+#lookupBody {
+
+}
+
+.lookupList {
+
+}
+
+#customerList {
+position: relative; 
 }
 
 #displayLookUpDialog .selectorHeader, #displayLookUpDialog .selectorSearchBox, #displayLookUpDialog .selectorListBox {
@@ -2443,11 +2537,12 @@ table.tablesorter thead tr .headerSortDown {
     color: #a50000;
 }
 ul.pagingLinksBody li.noResultsText {
-    margin: 0 420px;
+    float: none;
+    text-align: center;
 }
 
 ul.pagingLinksBody li.noResultsText.criteria {
-    margin: 0 320px;
+
 }
 
 /****************************************************************
@@ -2468,6 +2563,7 @@ ul.pagingLinksBody li.enterCriteriaText {
     background:#fff;
     border:1px solid #000000;
     padding:2px 10px 1px 10px;
+    white-space: nowrap;
 }
 td div.infoEntry input[type="text"] {
     width:80px!important;
@@ -2496,6 +2592,7 @@ td div.infoEntry input[type="text"] {
     padding: 5px;
     background:#FFF;
 }
+
 .tooltipMiddle span{
     position:relative;
     font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
@@ -2504,26 +2601,37 @@ td div.infoEntry input[type="text"] {
     top:-2px;
 }
 
-.tooltipBottomArrow{
-    background-image: url(/osafe_admin_theme/images/classic/tooltip/bottomcurve.png);
-    background-repeat:no-repeat;
-    width:auto;
-    height:20px;
-    clear:both;
+.tooltipBottomLeftArrow {
+    background: url("/osafe_admin_theme/images/classic/tooltip/tooltipBottomLeftArrow.png") no-repeat scroll 5px 0 transparent;
+    clear: both;
+    height: 13px;
     position: relative;
-    top:-1px;
-    *width: 100px; /* IE7 Only */
+    top: -1px;
+    width: auto;
 }
-
-.tooltipTopArrow{
-    background-image: url(/osafe_admin_theme/images/classic/tooltip/topcurve.png);
-    background-repeat:no-repeat;
-    width:auto;
-    height:20px;
-    clear:both;
+.tooltipTopLeftArrow {
+    background: url("/osafe_admin_theme/images/classic/tooltip/tooltipTopLeftArrow.png") no-repeat scroll 5px 0 transparent;
+    clear: both;
+    height: 13px;
     position: relative;
-    top:2px;
-    *width: 100px; /* IE7 Only */
+    top: 1px;
+    width: auto;
+}
+.tooltipBottomRightArrow {
+    background: url("/osafe_admin_theme/images/classic/tooltip/tooltipBottomRightArrow.png") no-repeat scroll right 0 transparent;
+    clear: both;
+    height: 13px;
+    position: relative;
+    top: -1px;
+    width: auto;
+}
+.tooltipTopRightArrow {
+    background: url("/osafe_admin_theme/images/classic/tooltip/tooltipTopRightArrow.png") no-repeat scroll right 0 transparent;
+    clear: both;
+    height: 13px;
+    position: relative;
+    top: 1px;
+    width: auto;
 }
 
 .toolTipImg {
@@ -2637,6 +2745,9 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 }
 
+.helperIcon:hover {
+    cursor: pointer;
+}
 .wildcardIcon {
     background-image: url(/osafe_admin_theme/images/classic/icon/wildcardIcon.gif);
     background-repeat:no-repeat;
@@ -2657,6 +2768,13 @@ td div.infoEntry input[type="text"] {
     width: 16px;
 }
 
+.featureIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/productFeature.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
 .noImage {
     background-image: url(/osafe_admin_theme/images/classic/noimage/noImageLoded.gif);
     background-repeat:no-repeat;
@@ -2868,7 +2986,6 @@ td div.infoEntry input[type="text"] {
     width: 16px;
     height:16px;
     display: inline-block;
-    margin: 0 0 0 5px; /* Needed because icon is floated next to a value */
 }
 
 .lockIcon {
@@ -2955,6 +3072,7 @@ a.standardBtn.adminCartIcon:hover {
     width: 16px;
     height:16px;
     display: inline-block;
+    margin: 0 0 0 4px;
 }
 
 .editIcon {
@@ -3032,10 +3150,8 @@ a.standardBtn.adminCartIcon:hover {
 .shipmentDetailIcon {
     background-image: url("/osafe_admin_theme/images/classic/icon/shipmentDetailIcon.gif");
     background-repeat: no-repeat;
-    display: block;
-    float: left;
+    display: inline-block;
     height: 16px;
-    margin: 0 0 0 5px;
     position: relative;
     width: 16px;
 }
@@ -3047,6 +3163,55 @@ a.standardBtn.adminCartIcon:hover {
     height: 15px;
     width: 15px;
 }
+
+.printIcon {
+    background-image: url("/osafe_admin_theme/images/classic/icon/printIcon.gif");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
+.printDollarIcon {
+    background-image: url("/osafe_admin_theme/images/classic/icon/printDollarIcon.gif");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
+.userIcon {
+    background-image: url("/osafe_admin_theme/images/classic/icon/userIcon.gif");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
+.shippingLabelPrintIcon {
+    background-image: url("/osafe_admin_theme/images/classic/icon/shippingLabelPrintIcon.gif");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
+.giftMessageIcon {
+    background-image: url("/osafe_admin_theme/images/classic/icon/giftMessageIcon.gif");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
+.approveIcon {
+    background-image: url("/osafe_admin_theme/images/classic/icon/approveIcon.gif");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
 
 
 
@@ -3071,6 +3236,7 @@ a.standardBtn.adminCartIcon:hover {
     clear: left;
     float: left;
     padding: 0.5em 0 0.5em 10px;
+    *clear: none; /*IE7*/
 }
 
 .displayBox.footerInfo .entryButton {
@@ -3093,7 +3259,6 @@ a.standardBtn.adminCartIcon:hover {
 .linkButton{
     display: inline-block;
     float: right;
-    /*padding: 0.5em 0;*/
 }
 
 .mediaImage {
@@ -3126,14 +3291,35 @@ table#sortTable tfoot tr {
 .productLoaderDataOverflow {
     overflow: auto;
 }
+
 .heading {
     background: #ECB564;
     border-bottom: 1px solid #0C0C0C;
     border-top: 1px solid #0C0C0C;
     border-right: 1px solid transparent;
     font-weight: bold;
-    padding: 2px 0 2px 10px;
+    padding: 0 0 0 3px;
 }
+
+.heading h3 {
+    font-size: 12px !important;
+    font-weight: bold;
+}
+
+.displayBox.topPromotions div.heading {  
+    float: left;
+    width: 506px;
+}
+
+div.heading {
+    float: left;
+    width: 100%;
+}
+
+.infoRow.row .heading {
+    border-top: 1px solid #0C0C0C;
+}
+
 .productLoaderTab input[type="button"].standardBtn.errorMark {
     background-image: url(/osafe_admin_theme/images/classic/icon/errorMark.jpg);
     background-repeat:no-repeat;
@@ -3204,6 +3390,12 @@ table#sortTable tfoot tr {
     position: relative;
     top: 25px;
 }
+
+.entryHelperText {
+    display: inline;
+    margin: 0 0 0 5px;
+}
+
 
 /****************************************************************
 * Login Section // Gateway to All Themes //
@@ -3437,7 +3629,6 @@ Lookups and Selectors
     margin: 0 0 0 10px;
     padding: 1px 5px;
     text-decoration: none;
-    text-transform: inherit;
  }
 
 .selectorSearchBox {
@@ -4214,6 +4405,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 
 /* BigFish Feeds */
 
+
 #feedsExportDetail .infoRow .infoEntry {
      float: right;
      margin: 0 330px 0 0;
@@ -4292,7 +4484,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 .actionIconBox {
     background-image: url("/osafe_admin_theme/images/classic/tooltip/ToolTipArrow.png");
     background-repeat: no-repeat;
-    padding: 0 11px 0 0;
+    padding: 0 10px 0 0;
     width: 315px;
 }
 
@@ -4447,7 +4639,9 @@ a.standardBtn.contextIcon {
 }
 
 .leftFloat {
-    float: left!important;
+    display: inline;
+    position: relative;
+    top: -3px;
 }
 
 .rightFloat {
@@ -4530,7 +4724,7 @@ h2 span.addIcon {
 }
 
 .displayBox.addressInfo .boxBody #billing_addressEntry .infoRow .header,
-.displayBox.addressInfo .boxBody #shipping_addressEntry .infoRow .header {
+.displayBox.addressInfo .boxBody #shipping_addressEntry .infoRow .header, {
    background: #ECB564;
 }
 
@@ -4540,7 +4734,8 @@ h2 span.addIcon {
 }
 
 .displayBox.addressInfo .boxBody #billing_addressEntry .infoRow .header h2,
-.displayBox.addressInfo .boxBody #shipping_addressEntry .infoRow .header h2 {
+.displayBox.addressInfo .boxBody #shipping_addressEntry .infoRow .header h2,
+.heading h2 {
    color: #000000;
    font-size: small;
 }
@@ -4571,6 +4766,11 @@ h2 span.addIcon {
     top: -3px;
 }
 
+#orderManagementOrderDetail td.statusCol .shipmentDetailIcon {
+    float: right;
+    margin: 0;
+}
+
 /* All Stores */
 
 .productStoreEntry,
@@ -4585,3 +4785,64 @@ h2 span.addIcon {
 .productStoreEntry #productStoreall {
 
 }
+
+#postingManagement .actionCol {
+    width: 40px;
+}
+
+#postingManagement .actionCol a {
+    cursor: pointer;
+    display: inline-block;
+    margin: 2px 0 0;
+}
+
+.statusButtons {
+    display: inline;
+}
+
+.displayBox.orderItemsSummaryInfo {
+    border: none;
+}
+
+.displayBox.orderItemsSummaryInfo .boxBody {
+    background: none!important;
+}
+
+.displayBox.orderItemsSummaryInfo .boxBody tr {
+    background: none!important;
+}
+
+.displayBox.orderItemsSummaryInfo .boxBody .orderSummary tr:hover {
+    background: #F5D09B!important;
+}
+
+.detailBoxDateHeading {
+    margin: 0 25px 0 0;
+}
+
+.detailBoxDescriptionHeading {
+    margin: 0 160px 0 0;
+}
+
+.detailBoxMaxAmountHeading {
+    margin: 0 160px 0 0;
+}
+
+.detailBoxStatusDescriptionHeading {
+
+}
+
+.customerInfo .infoValue p,
+.paymentInfo .infoValue p {
+    width: 290px;
+}
+
+#feedsList .nameCol {
+    width: 300px;
+}
+
+
+
+
+
+

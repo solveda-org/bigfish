@@ -1,4 +1,3 @@
-<#if (!resultList?has_content)>
 <script type="text/javascript">
   jQuery(document).ready(function () {
     jQuery('tr.noResult td').attr("colspan", jQuery('tr.heading th').size());
@@ -22,4 +21,3 @@
       </#if>
     </td>
   </tr>
-</#if> 

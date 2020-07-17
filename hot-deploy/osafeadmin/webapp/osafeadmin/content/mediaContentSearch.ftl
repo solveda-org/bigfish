@@ -2,17 +2,20 @@
 <input type="hidden" class="confirmHiddenFields" name="currentMediaType" id="currentMediaType" value=""/>
 <div class="entryRow">
     <div class="entry long">
-      <label>${uiLabelMap.TypeCaption}</label>
+      <label>${uiLabelMap.MediaFolderCaption}</label>
+      <#assign intiCb = "${initializedCB}"/>  
       <div class="entryInput checkbox medium">
-        <input class="checkBoxEntry" type="radio" id="images" name="mediaType"  value="images" <#if parameters.mediaType?exists && parameters.mediaType?string == "images">checked="checked"</#if>/>${uiLabelMap.ImageLabel}
-        <input class="checkBoxEntry" type="radio" id="flash" name="mediaType" value="flash" <#if parameters.mediaType?exists && parameters.mediaType?string == "flash">checked="checked"</#if>/>${uiLabelMap.FlashLabel}
-        <input class="checkBoxEntry" type="radio" id="document" name="mediaType" value="document" <#if parameters.mediaType?exists && parameters.mediaType?string == "document">checked="checked"</#if>/>${uiLabelMap.DocumentLabel}
+        <input type="checkbox" class="checkBoxEntry" name="viewall" id="viewall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','view')" <#if parameters.viewall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.AllLabel}
+        <#list directoryNameList as directoryName>
+          <#assign inputName = StringUtil.removeSpaces(directoryName)!""/>  
+          <input class="checkBoxEntry" type="checkbox" id="view${directoryName}" name="${inputName}"  value="${directoryName}" <#if (parameters.get(inputName)?has_content) || ((intiCb?exists) && (intiCb == "N"))>checked="checked"</#if>/>${directoryName}
+        </#list>
       </div>
     </div>
 </div>
 <div class="entryRow">
     <div class="entry long">
-      <label>${uiLabelMap.MediaNameCaption}</label>
+      <label>${uiLabelMap.FileNameCaption}</label>
       <div class="entryInput">
         <input class="largeTextEntry" type="text" id="mediaName" name="mediaName" value="${parameters.mediaName!""}"/>
       </div>

@@ -2,9 +2,9 @@ package com.osafe.services;
 
 import java.util.List;
 import java.util.Map;
-
 import javolution.util.FastList;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
@@ -12,9 +12,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
-
 import com.osafe.services.AddressVerificationResponse;
-
 import com.osafe.util.Util;
 
 public class AddressServices {
@@ -25,6 +23,7 @@ public class AddressServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Map<String, Object> responseMap = ServiceUtil.returnSuccess();
+        List suggestionList = FastList.newInstance();
 
         String productStoreId = (String) context.get("productStoreId");
         String address1 = (String) context.get("address1");
@@ -36,22 +35,24 @@ public class AddressServices {
         String postalCode = (String) context.get("postalCode");
         String postalCodeExt = (String) context.get("postalCodeExt");
         String country = (String) context.get("countryGeoId");
-
-        List suggestionList = FastList.newInstance();
+        
+        responseMap.put("address1",address1);
+        responseMap.put("address2",address2);
+        responseMap.put("address3",address3);
+        responseMap.put("city",city);
+        responseMap.put("stateProvinceGeoId",state);
+        responseMap.put("countyGeoId",county);
+        responseMap.put("postalCode",postalCode);
+        responseMap.put("postalCodeExt",postalCodeExt);
+        responseMap.put("countryGeoId",country);
+        responseMap.put("responseCode",AddressVerificationResponse.AS);
+        responseMap.put("suggestionList",suggestionList);
+        
         String addressValidationMethod = Util.getProductStoreParm(productStoreId, "ADDRESS_VERIFICATION_METHOD");
-    	if (UtilValidate.isEmpty(addressValidationMethod) || addressValidationMethod.equalsIgnoreCase("NONE"))
+
+    	if (UtilValidate.isEmpty(addressValidationMethod))
     	{
-    		addressValidationMethod="NONE";
-            responseMap.put("address1",address1);
-            responseMap.put("address2",address2);
-            responseMap.put("address3",address3);
-            responseMap.put("city",city);
-            responseMap.put("stateProvinceGeoId",state);
-            responseMap.put("countyGeoId",county);
-            responseMap.put("postalCode",postalCode);
-            responseMap.put("postalCodeExt",postalCodeExt);
-            responseMap.put("countryGeoId",country);
-            responseMap.put("responseCode",AddressVerificationResponse.AS);
+    		return responseMap;
     	}
 
     	if(addressValidationMethod.equalsIgnoreCase("MELISSA_DATA"))
@@ -84,24 +85,16 @@ public class AddressServices {
                     responseMap.put("countryGeoId",result.get("countryGeoId"));
                     responseMap.put("responseCode",result.get("responseCode"));
                     suggestionList = (List) result.get("suggestionList");
-                }
-                else
-                {
-                    responseMap.put("address1",address1);
-                    responseMap.put("address2",address2);
-                    responseMap.put("address3",address3);
-                    responseMap.put("city",city);
-                    responseMap.put("stateProvinceGeoId",state);
-                    responseMap.put("countyGeoId",county);
-                    responseMap.put("postalCode",postalCode);
-                    responseMap.put("postalCodeExt",postalCodeExt);
-                    responseMap.put("countryGeoId",country);
+                    responseMap.put("suggestionList",suggestionList);
                 }
             }
-            catch (Exception e){ }
+            catch (Exception e)
+            {
+            	String errMsg = "Could not validate Address using [" + addressValidationMethod + "]";
+                Debug.logError(e, errMsg, module);
+            }
     	}
-        responseMap.put("suggestionList",suggestionList);
+        
         return responseMap;
     }
-
 }

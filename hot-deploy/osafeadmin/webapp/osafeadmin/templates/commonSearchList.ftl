@@ -30,7 +30,9 @@
     <div class="boxBody">
         <table class="osafe <#if (resultList?has_content && resultList.size() > 0)>tablesorter</#if>" <#if (resultList?has_content && resultList.size() > 0)>id="sortTable"</#if>>
             ${sections.render('listBoxBody')?if_exists}
+           <#if (!resultList?has_content)> 
             ${sections.render('listNoResultBody')?if_exists}
+           </#if>
         </table>
         ${sections.render('commonListButton')?if_exists}
     </div>

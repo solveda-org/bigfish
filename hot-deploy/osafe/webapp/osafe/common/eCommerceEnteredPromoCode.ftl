@@ -22,39 +22,53 @@
         <#assign productPromoUseMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("productPromoCodeId", productPromoCodeEntered, "productPromoId", productPromoCode.productPromoId!, "totalDiscountAmount", 0, "quantityLeftInActions", null)/>
         <#assign changed = productPromoUseInfoList.add(productPromoUseMap)/>
     </#list>
-
-    <#list productPromoUseInfoList as productPromoUseInfo>
-      <div class="ecommercePromocodeDetail">
-        <div class="ecommercePromocodeName">
-            <#if productPromoUseInfo.productPromoCodeId?has_content>
-                ${productPromoUseInfo.productPromoCodeId!""}
-            <#elseif productPromoUseInfo.productPromoId?has_content>
-                <#assign productPromo = delegator.findByPrimaryKeyCache("ProductPromo", {"productPromoId" : productPromoUseInfo.productPromoId})/>
-                <#if productPromo?has_content>
-                    ${productPromo.promoName!""}
-                </#if>
-            </#if>
-        </div>
-        <div class="ecommercePromocodeDesc">
-            <#if productPromoUseInfo.productPromoId?has_content>
-                <#assign productPromo = delegator.findByPrimaryKeyCache("ProductPromo", {"productPromoId" : productPromoUseInfo.productPromoId})/>
-                <#if productPromo?has_content>
-                    ${productPromo.promoText!""}
-                </#if>
-            </#if>
-        </div>
-     <div class="ecommercePromocodeStatus">
-         <#if (productPromoUseInfo.quantityLeftInActions?string == null) || (productPromoUseInfo.quantityLeftInActions?double > 0)>
-             ${uiLabelMap.PromoCodeAddedOnlyInfo}
-         <#else>
-             ${uiLabelMap.PromoCodeAppliedInfo}
-         </#if>
-     </div>
-     <div class="ecommercePromocodeAction">
-         <#if productPromoUseInfo.productPromoCodeId?has_content>
-             <a href="javascript:removePromoCode('${productPromoUseInfo.productPromoCodeId}');">${uiLabelMap.RemoveOfferLabel}</a>
-         </#if>
-     </div>
-     </div>
-    </#list>
+   <div class="boxList promoCodeList">
+	    <#list productPromoUseInfoList as productPromoUseInfo>
+		  <div class="boxListItemTabular actionResultItem promoCodeItem">
+		    <ul class="displayList">
+			 <li class="id promoCode">
+			  <div>
+                <label>${uiLabelMap.PromoCodeCaption}</label>
+	            <#if productPromoUseInfo.productPromoCodeId?has_content>
+	                <span>${productPromoUseInfo.productPromoCodeId!""}</span>
+	            <#elseif productPromoUseInfo.productPromoId?has_content>
+	                <#assign productPromo = delegator.findByPrimaryKeyCache("ProductPromo", {"productPromoId" : productPromoUseInfo.productPromoId})/>
+	                <#if productPromo?has_content>
+	                  <span>${productPromo.promoName!""}</span>
+	                </#if>
+	            </#if>
+	          </div>
+	        </li>
+	        <li class="string promoDescription">
+	         <div>
+                <label>${uiLabelMap.PromotionCaption}</label>
+	            <#if productPromoUseInfo.productPromoId?has_content>
+	                <#assign productPromo = delegator.findByPrimaryKeyCache("ProductPromo", {"productPromoId" : productPromoUseInfo.productPromoId})/>
+	                <#if productPromo?has_content>
+	                    <span>${productPromo.promoText!""}</span>
+	                </#if>
+	            </#if>
+	        </div>
+	       </li>
+	       <li class="string promoSummary">
+	        <div>
+                <label>${uiLabelMap.MessageCaption}</label>
+		        <#if (productPromoUseInfo.quantityLeftInActions?string == null) || (productPromoUseInfo.quantityLeftInActions?double > 0)>
+		             <span>${uiLabelMap.PromoCodeAddedOnlyInfo}</span>
+		        <#else>
+		             <span>${uiLabelMap.PromoCodeAppliedInfo}</span>
+		        </#if>
+		    </div>
+		   </li>
+		   <li class="action remove">
+		    <div>
+		        <#if productPromoUseInfo.productPromoCodeId?has_content>
+		           <a href="javascript:removePromoCode('${productPromoUseInfo.productPromoCodeId}');"><span>${uiLabelMap.RemoveOfferLabel}</span></a>
+		        </#if>
+		    </div>
+	       </li>
+	      </ul>
+		 </div>
+	    </#list>
+   </div>
 </#if>

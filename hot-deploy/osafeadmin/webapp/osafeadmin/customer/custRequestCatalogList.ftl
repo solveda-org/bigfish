@@ -2,7 +2,7 @@
 <thead>
   <tr class="heading">
     <th class="idCol firstCol">${uiLabelMap.IdLabel}</th>
-    <th class="idCol firstCol">${uiLabelMap.CustomerNoLabel}</th>
+    <th class="idCol firstCol">${uiLabelMap.CustNoLabel}</th>
     <th class="nameCol">${uiLabelMap.LastNameLabel}</th>
     <th class="nameCol">${uiLabelMap.FirstNameLabel}</th>
     <th class="descCol">${uiLabelMap.AddressLabel}</th>

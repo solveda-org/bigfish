@@ -8,9 +8,13 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
+
 import javolution.util.FastList;
 import javolution.util.FastMap;
+
 import org.jdom.JDOMException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
@@ -27,11 +31,14 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+
 import com.osafe.util.OsafeAdminUtil;
+
 import org.ofbiz.base.util.StringUtil;
 
 public class OsafeAdminCatalogServices {
     public static final String module = OsafeAdminMediaContent.class.getName();
+    private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
     
     public static Map<String, Object> addProductImageAndContent(DispatchContext dctx, Map<String, ? extends Object> context)
     throws IOException, JDOMException {
@@ -52,7 +59,7 @@ public class OsafeAdminCatalogServices {
     
     if (imageResourceType.equals("file")) 
     {
-        String osafeThemeServerPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "osafe.theme.server"), context);
+        String osafeThemeServerPath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("osafeThemeServer"), context);
         int extensionIndex = fileName.lastIndexOf(".");
         if (extensionIndex == -1) {
         	filenameToUse = fileName;
@@ -232,7 +239,7 @@ public class OsafeAdminCatalogServices {
     
     if (imageResourceType.equals("file")) 
     {
-        String osafeThemeServerPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "osafe.theme.server"), context);
+        String osafeThemeServerPath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("osafeThemeServer"), context);
         
         int extensionIndex = fileName.lastIndexOf(".");
         if (extensionIndex == -1) {
@@ -391,7 +398,7 @@ public class OsafeAdminCatalogServices {
     String imageUrl = "";
     String filenameToUse = "";
     if (imageResourceType.equals("file")) {
-        String osafeThemeServerPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "osafe.theme.server"), context);
+        String osafeThemeServerPath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("osafeThemeServer"), context);
         
         filenameToUse = StringUtil.replaceString(fileName, " ", "_");
         
@@ -544,13 +551,25 @@ public class OsafeAdminCatalogServices {
         Long sequenceNum = (Long) context.get("sequenceNum");
         Timestamp fromDate = (Timestamp) context.get("fromDate");
         Timestamp thruDate = (Timestamp) context.get("thruDate");
-        try {
-            // create the ProductFeatureAppl record
-            GenericValue productFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", productFeatureId, "productFeatureApplTypeId", productFeatureApplTypeId, "fromDate", fromDate));
-            productFeatureAppl.put("sequenceNum", sequenceNum);
-            productFeatureAppl.put("thruDate", thruDate);
-            productFeatureAppl.create();
-		} catch (GenericEntityException e) {
+        try 
+        {
+        	GenericValue productFeatureAppl = delegator.findByPrimaryKey("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", productFeatureId, "fromDate", fromDate));
+        	if(UtilValidate.isEmpty(productFeatureAppl))
+        	{
+        		productFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", productFeatureId, "productFeatureApplTypeId", productFeatureApplTypeId, "fromDate", fromDate));
+        		productFeatureAppl.put("sequenceNum", sequenceNum);
+                productFeatureAppl.put("thruDate", thruDate);
+                productFeatureAppl.create();
+        	}
+        	else
+        	{
+        		productFeatureAppl.put("sequenceNum", sequenceNum);
+                productFeatureAppl.put("thruDate", thruDate);
+                productFeatureAppl.store();
+        	}
+		} 
+        catch (GenericEntityException e) 
+        {
 			Debug.logError(e, module);
 		}
         return ServiceUtil.returnSuccess();
@@ -611,4 +630,182 @@ public class OsafeAdminCatalogServices {
         return resp;
     }
     
+    public static Map<String, Object> addPartyImageAndContent(DispatchContext dctx, Map<String, ? extends Object> context)
+    	    throws IOException, JDOMException {
+
+    	    LocalDispatcher dispatcher = dctx.getDispatcher();
+    	    Delegator delegator = dctx.getDelegator();
+    	    GenericValue userLogin = (GenericValue) context.get("userLogin");
+    	    String partyId = (String) context.get("partyId");
+    	    String partyContentTypeId = (String) context.get("partyContentTypeId");
+    	    ByteBuffer imageData = (ByteBuffer) context.get("uploadedFile");
+    	    String fileName = (String)context.get("_uploadedFile_fileName");
+    	    String imageFilePath = (String)context.get("imageFilePath");
+    	    String imageUrlRef = (String)context.get("imageUrlRef");
+    	    String imageResourceType = (String)context.get("imageResourceType");
+    	    
+    	    String imageUrl = "";
+    	    String filenameToUse = "";
+    	    
+    	    if (imageResourceType.equals("file")) 
+    	    {
+    	        String osafeThemeServerPath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("osafeThemeServer"), context);
+    	        int extensionIndex = fileName.lastIndexOf(".");
+    	        if (extensionIndex == -1) {
+    	        	filenameToUse = fileName;
+    	        } else {
+    	        	filenameToUse = fileName.substring(0, extensionIndex);
+    	        }
+    	        filenameToUse = StringUtil.replaceString(filenameToUse, " ", "_");
+    	        
+    	        List<GenericValue> fileExtension = FastList.newInstance();
+    	        try {
+    	            fileExtension = delegator.findByAnd("FileExtension", UtilMisc.toMap("mimeTypeId", (String) context.get("_uploadedFile_contentType")));
+    	        } catch (GenericEntityException e) {
+    	            Debug.logError(e, module);
+    	            return ServiceUtil.returnError(e.getMessage());
+    	        }
+
+    	        GenericValue extension = EntityUtil.getFirst(fileExtension);
+    	        if (extension != null) {
+    	            filenameToUse += "." + extension.getString("fileExtensionId");
+    	        }
+
+    	        File file = new File(osafeThemeServerPath + imageFilePath + filenameToUse);
+    	        
+    	        if (!new File(osafeThemeServerPath + imageFilePath).exists()) {
+    	        	new File(osafeThemeServerPath + imageFilePath).mkdirs();
+    		    }
+    	        
+    	        try {
+    	            RandomAccessFile out = new RandomAccessFile(file, "rw");
+    	            out.write(imageData.array());
+    	            out.close();
+    	        } catch (FileNotFoundException e) {
+    	            Debug.logError(e, module);
+    	            return ServiceUtil.returnError("Unable to open file for writing: " + file.getAbsolutePath());
+    	        } catch (IOException e) {
+    	            Debug.logError(e, module);
+    	            return ServiceUtil.returnError("Unable to write binary data to: " + file.getAbsolutePath());
+    	        }
+
+    	        imageUrl = imageFilePath + filenameToUse;
+    	    }
+    	    else if(imageResourceType.equals("url"))
+    	    {
+    	    	if(UtilValidate.isNotEmpty(imageUrlRef))
+    	    	{
+    	    		imageUrl = imageUrlRef;
+    	    		filenameToUse = imageUrlRef.substring(imageUrlRef.lastIndexOf("/")+1);
+    	    	}
+    	    }
+    	        GenericValue partyContent = null;
+    	        String contentId = null;
+    	        try {
+    	            List partyContentList = delegator.findByAnd("PartyContent", UtilMisc.toMap("partyId", partyId, "partyContentTypeId",partyContentTypeId));
+    	            if(UtilValidate.isNotEmpty(partyContentList)) {
+    	            	partyContentList = EntityUtil.filterByDate(partyContentList);
+    	                partyContent = EntityUtil.getFirst(partyContentList);
+    	                contentId = (String) partyContent.get("contentId");
+    	            }
+    	        } catch (GenericEntityException e1) {
+    	            // TODO Auto-generated catch block
+    	            e1.printStackTrace();
+    	        }
+    	        if (UtilValidate.isNotEmpty(imageUrl) && imageUrl.length() > 0) {
+    	            Map<String, Object> dataResourceCtx = FastMap.newInstance();
+    	            dataResourceCtx.put("objectInfo", imageUrl);
+    	            dataResourceCtx.put("dataResourceName", filenameToUse);
+    	            dataResourceCtx.put("userLogin", userLogin);
+
+    	            if (UtilValidate.isNotEmpty(contentId)) {
+    	                GenericValue content = null;
+    	                try {
+    	                    content = delegator.findOne("Content", UtilMisc.toMap("contentId", contentId), false);
+    	                } catch (GenericEntityException e) {
+    	                    Debug.logError(e, module);
+    	                    return ServiceUtil.returnError(e.getMessage());
+    	                }
+
+    	                if (content != null) {
+    	                    GenericValue dataResource = null;
+    	                    try {
+    	                        dataResource = content.getRelatedOne("DataResource");
+    	                    } catch (GenericEntityException e) {
+    	                        Debug.logError(e, module);
+    	                        return ServiceUtil.returnError(e.getMessage());
+    	                    }
+
+    	                    if (dataResource != null) {
+    	                        dataResourceCtx.put("dataResourceId", dataResource.getString("dataResourceId"));
+    	                        try {
+    	                            dispatcher.runSync("updateDataResource", dataResourceCtx);
+    	                        } catch (GenericServiceException e) {
+    	                            Debug.logError(e, module);
+    	                            return ServiceUtil.returnError(e.getMessage());
+    	                        }
+    	                    } else {
+    	                        dataResourceCtx.put("dataResourceTypeId", "SHORT_TEXT");
+    	                        dataResourceCtx.put("mimeTypeId", "text/html");
+    	                        Map<String, Object> dataResourceResult = FastMap.newInstance();
+    	                        try {
+    	                            dataResourceResult = dispatcher.runSync("createDataResource", dataResourceCtx);
+    	                        } catch (GenericServiceException e) {
+    	                            Debug.logError(e, module);
+    	                            return ServiceUtil.returnError(e.getMessage());
+    	                        }
+
+    	                        Map<String, Object> contentCtx = FastMap.newInstance();
+    	                        contentCtx.put("contentId", contentId);
+    	                        contentCtx.put("dataResourceId", dataResourceResult.get("dataResourceId"));
+    	                        contentCtx.put("userLogin", userLogin);
+    	                        try {
+    	                            dispatcher.runSync("updateContent", contentCtx);
+    	                        } catch (GenericServiceException e) {
+    	                            Debug.logError(e, module);
+    	                            return ServiceUtil.returnError(e.getMessage());
+    	                        }
+    	                    }
+    	                }
+    	            } else {
+    	                dataResourceCtx.put("dataResourceTypeId", "SHORT_TEXT");
+    	                dataResourceCtx.put("mimeTypeId", "text/html");
+    	                Map<String, Object> dataResourceResult = FastMap.newInstance();
+    	                try {
+    	                    dataResourceResult = dispatcher.runSync("createDataResource", dataResourceCtx);
+    	                } catch (GenericServiceException e) {
+    	                    Debug.logError(e, module);
+    	                    return ServiceUtil.returnError(e.getMessage());
+    	                }
+
+    	                Map<String, Object> contentCtx = FastMap.newInstance();
+    	                contentCtx.put("contentTypeId", "DOCUMENT");
+    	                contentCtx.put("dataResourceId", dataResourceResult.get("dataResourceId"));
+    	                contentCtx.put("userLogin", userLogin);
+    	                Map<String, Object> contentResult = FastMap.newInstance();
+    	                try {
+    	                    contentResult = dispatcher.runSync("createContent", contentCtx);
+    	                } catch (GenericServiceException e) {
+    	                    Debug.logError(e, module);
+    	                    return ServiceUtil.returnError(e.getMessage());
+    	                }
+    	                Map<String, Object> partyContentCtx = FastMap.newInstance();
+    	                partyContentCtx.put("partyId", partyId);
+    	                partyContentCtx.put("partyContentTypeId", partyContentTypeId);
+    	                partyContentCtx.put("fromDate", (Timestamp) context.get("fromDate"));
+    	                partyContentCtx.put("thruDate", (Timestamp) context.get("thruDate"));
+    	                partyContentCtx.put("userLogin", userLogin);
+    	                partyContentCtx.put("contentId", contentResult.get("contentId"));
+    	                try {
+    	                    dispatcher.runSync("createPartyContent", partyContentCtx);
+    	                } catch (GenericServiceException e) {
+    	                    Debug.logError(e, module);
+    	                    return ServiceUtil.returnError(e.getMessage());
+    	                }
+    	            }
+    	        }
+    	    
+    	       return ServiceUtil.returnSuccess();
+    	}
+     
 }

@@ -32,6 +32,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ServiceUtil;
 
 /**
  * WebTools Services
@@ -41,7 +42,8 @@ public class OsafeWebToolsServices {
 
     public static final String module = OsafeWebToolsServices.class.getName();
 
-    public static Map<String, Object> entityImportDir(DispatchContext dctx, Map<String, ? extends Object> context) {
+    public static Map<String, Object> entityImportDir(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
@@ -57,28 +59,34 @@ public class OsafeWebToolsServices {
         Integer txTimeout = (Integer)context.get("txTimeout");
         Long filePause = (Long)context.get("filePause");
 
-        if (txTimeout == null) {
+        if (txTimeout == null) 
+        {
             txTimeout = Integer.valueOf(7200);
         }
-        if (filePause == null) {
+        if (filePause == null) 
+        {
             filePause = Long.valueOf(0);
         }
 
-        if (UtilValidate.isNotEmpty(path)) {
+        if (UtilValidate.isNotEmpty(path)) 
+        {
             long pauseLong = filePause != null ? filePause.longValue() : 0;
             File baseDir = new File(path);
 
-            if (baseDir.isDirectory() && baseDir.canRead()) {
+            if (baseDir.isDirectory() && baseDir.canRead()) 
+            {
                 File[] fileArray = baseDir.listFiles();
                 FastList<File> files = FastList.newInstance();
                 
-                for (File file: fileArray) {
+                for (File file: fileArray) 
+                {
                     if (file.getName().toUpperCase().endsWith("XML")) {
                         files.add(file);
                     }
                 }
                 
-                Collections.sort(files, new Comparator<File>() {
+                Collections.sort(files, new Comparator<File>() 
+                {
                     public int compare(File f1, File f2)
                     {
                         return f1.getName().compareTo(f2.getName());
@@ -89,11 +97,12 @@ public class OsafeWebToolsServices {
                 int initialListSize = files.size();
                 int lastUnprocessedFilesCount = 0;
                 FastList<File> unprocessedFiles = FastList.newInstance();
-                while (files.size()>0 &&
-                        files.size() != lastUnprocessedFilesCount) {
+                while (files.size()>0 && files.size() != lastUnprocessedFilesCount) 
+                {
                     lastUnprocessedFilesCount = files.size();
                     unprocessedFiles = FastList.newInstance();
-                    for (File f: files) {
+                    for (File f: files) 
+                    {
                         Map<String, Object> parseEntityXmlFileArgs = UtilMisc.toMap("mostlyInserts", mostlyInserts,
                                 "createDummyFks", createDummyFks,
                                 "checkDataOnly", checkDataOnly,
@@ -101,26 +110,38 @@ public class OsafeWebToolsServices {
                                 "txTimeout", txTimeout,
                                 "userLogin", userLogin);
 
-                        try {
+                        try 
+                        {
                             URL furl = f.toURI().toURL();
                             parseEntityXmlFileArgs.put("url", furl);
                             Map<String, Object> outputMap = dispatcher.runSync("parseEntityXmlFile", parseEntityXmlFileArgs);
+                            if(UtilValidate.isNotEmpty(outputMap.get("responseMessage"))&& outputMap.get("responseMessage").equals("error"))
+                            {
+                            	return ServiceUtil.returnError(outputMap.get("errorMessage").toString());
+                            }
                             Long numberRead = (Long) outputMap.get("rowProcessed");
                             messages.add("Got " + numberRead.longValue() + " entities from " + f);
-                            if (deleteFiles) {
+                            if (deleteFiles) 
+                            {
                                 messages.add("Deleting " + f);
                                 f.delete();
                             }
-                        } catch (Exception e) {
+                        } 
+                        catch (Exception e) 
+                        {
                             unprocessedFiles.add(f);
                             messages.add("Failed " + f + " adding to retry list for next pass");
                         }
                         // pause in between files
-                        if (pauseLong > 0) {
+                        if (pauseLong > 0) 
+                        {
                             Debug.log("Pausing for [" + pauseLong + "] seconds - " + UtilDateTime.nowTimestamp());
-                            try {
+                            try 
+                            {
                                 Thread.sleep((pauseLong * 1000));
-                            } catch (InterruptedException ie) {
+                            } 
+                            catch (InterruptedException ie) 
+                            {
                                 Debug.log("Pause finished - " + UtilDateTime.nowTimestamp());
                             }
                         }
@@ -136,18 +157,26 @@ public class OsafeWebToolsServices {
                 messages.add("Failed:    " + lastUnprocessedFilesCount + " of " + initialListSize);
                 messages.add("---------------------------------------");
                 messages.add("Failed Files:");
-                if(lastUnprocessedFilesCount == 0) {
+                if(lastUnprocessedFilesCount == 0) 
+                {
                     messages.add("SUCCESS");
-                } else {
+                } 
+                else 
+                {
                     messages.add("ERROR");
                 }
-                for (File file: unprocessedFiles) {
+                for (File file: unprocessedFiles) 
+                {
                     messages.add(file.toString());
                 }
-            } else {
+            } 
+            else 
+            {
                 messages.add("path not found or can't be read");
             }
-        } else {
+        } 
+        else 
+        {
             messages.add("No path specified, doing nothing.");
         }
         // send the notification

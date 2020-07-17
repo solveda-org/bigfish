@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 
@@ -35,16 +38,32 @@ import com.osafe.util.OsafeAdminUtil;
 
 
 public class OsafeAdminEvent {
-    
+
+    private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
+	
     public static String validateMediaContent(HttpServletRequest request, HttpServletResponse response) {
         Locale locale = UtilHttp.getLocale(request);
         if (locale == null)
             locale = Locale.getDefault();
         String mediaType = request.getParameter("mediaType");
+        String newFolderName = request.getParameter("newFolderName");
+        if(mediaType.equals("newFolder"))
+        {
+        	if(UtilValidate.isEmpty(newFolderName))
+            {
+        		String errMsg = UtilProperties.getMessage("OSafeAdminUiLabels", "NewFolderLabel", locale);
+                request.setAttribute("_ERROR_MESSAGE_", errMsg);
+                return "error";
+            }
+        	else
+        	{
+        		mediaType = newFolderName;
+        	}
+        }
         Map<String, Object> serviceContext = FastMap.newInstance();
         
-        String osafeThemeServerPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "osafe.theme.server"), serviceContext);
-        String userContentImagePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "user-content.image-path"), serviceContext);
+        String osafeThemeServerPath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("osafeThemeServer"), serviceContext);
+        String userContentImagePath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("userContentImagePath"), serviceContext);
         
         String contentTargetPath =  osafeThemeServerPath + userContentImagePath + mediaType+"/";
         String contentTempPath =  osafeThemeServerPath+"/osafe_theme/images/temp_user_content/";
@@ -59,7 +78,7 @@ public class OsafeAdminEvent {
             return "error";
         }
         String mediaFileName = uploadTempObject.getFilename();
-        List<File> fileList = OsafeAdminUtil.getUserContent(mediaType);
+        List<File> fileList = OsafeAdminUtil.getUserContent(mediaType, true);
         List<String> fileNameList = FastList.newInstance();
         for(File file : fileList) {
             fileNameList.add(file.getName());
@@ -101,9 +120,9 @@ public class OsafeAdminEvent {
             ProductContentTypeList.add("PDP_VIDEO_URL");
             ProductContentTypeList.add("PDP_VIDEO_360_URL");
             int totAltImg = 1;
-            if(UtilValidate.isNotEmpty(UtilProperties.getPropertyValue("osafe", "pdp-alternate-images")))
+            if(UtilValidate.isNotEmpty(OSAFE_PROPS.getString("pdpAlternateImages")))
             {
-                totAltImg = Integer.parseInt(UtilProperties.getPropertyValue("osafe", "pdp-alternate-images"));
+                totAltImg = Integer.parseInt(OSAFE_PROPS.getString("pdpAlternateImages"));
             }
             for(int altImgNo = 1; altImgNo <= totAltImg; altImgNo++)
             {
@@ -113,7 +132,7 @@ public class OsafeAdminEvent {
             }
             productCategories = OsafeAdminCatalogServices.getRelatedCategories(delegator, browseRootProductCategoryId, null, true, false, true);
             Map<String, Object> serviceContext = FastMap.newInstance();
-            String osafeThemeServerPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "osafe.theme.server"), serviceContext);
+            String osafeThemeServerPath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("osafeThemeServer"), serviceContext);
             for (Map<String, Object> workingCategoryMap : productCategories) 
             {
                GenericValue workingCategory = null;

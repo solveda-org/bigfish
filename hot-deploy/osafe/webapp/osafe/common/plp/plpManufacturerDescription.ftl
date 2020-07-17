@@ -1,3 +1,5 @@
-<div class="plpManufacturerDescription">
-    <p class="profileDescription">${plpManufacturerDescription!""}</p>
-</div>
+<li class="${request.getAttribute("attributeClass")!}">
+ <div>
+  <span>${plpManufacturerDescription!""}</span>
+ </div>
+</li>   

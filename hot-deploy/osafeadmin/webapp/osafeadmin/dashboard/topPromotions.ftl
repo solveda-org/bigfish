@@ -2,7 +2,7 @@
 <!-- start displayBox -->
 <div class="displayBox topPromotions">
     <div class="header"><h2>${uiLabelMap.AnalysisTopPromotionsHeading}</h2></div>
-    <div class="subHeader"><h3>${uiLabelMap.TopPromotionsHeading}</h3></div>
+    <div class="heading"><h3>${uiLabelMap.TopPromotionsHeading}</h3></div>
     <div class="boxBody">
         <table class = "osafe">
         <#if topPromotionsList?has_content>
@@ -22,9 +22,7 @@
                 </#if>
             </#list>
         <#else>
-                <tr>
-                    <td colspan="2" class="boxNumber lastRow">${uiLabelMap.NoDataAvailableInfo}</td>
-                </tr>
+            ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}        
         </#if>
         </table>
     </div>

@@ -8,8 +8,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
+
 import com.osafe.util.Util;
+
 import javax.servlet.http.HttpServletRequest;
 
 import javolution.util.FastList;
@@ -31,6 +35,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.category.CategoryContentWrapper;
 import org.ofbiz.product.store.ProductStoreWorker;
+
 import com.osafe.services.SolrIndexDocument;
 
 public class RefinementsHelperSolr {
@@ -38,6 +43,7 @@ public class RefinementsHelperSolr {
     private static final String module = RefinementsHelperSolr.class.getName();
     private CommandContext commandContext;
     private Delegator delegator = null;
+    private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
 
     public RefinementsHelperSolr(CommandContext commandContext, Delegator delegator) {
         this.commandContext = commandContext;
@@ -107,14 +113,13 @@ public class RefinementsHelperSolr {
                     String facetName = facetType;
                     genericRefinement.setType(facetType);
 
-                    String facetTypeId = facetType.replaceFirst(SolrConstants.EXTRACT_PRODUCT_FEATURE_PREFIX, "");
-                    genericRefinement.setProductFeatureTypeId(facetTypeId);
+                    genericRefinement.setProductFeatureTypeId(facetType);
 
                     Map<String, String> filterGroupsDescriptions = commandContext.getFilterGroupsDescriptions();
                     if (filterGroupsDescriptions.containsKey(facetType)) {
                         facetName = filterGroupsDescriptions.get(facetType);
                     } else {
-                        facetName = WordUtils.capitalizeFully(facetTypeId);
+                        facetName = WordUtils.capitalizeFully(facetType);
                     }
 
                     genericRefinement.setName(facetName);
@@ -464,7 +469,7 @@ public class RefinementsHelperSolr {
             String priceFilterGroupValue = null;
             if (isPrice) {
                 priceFilterGroupValue = key;
-                priceFilterGroupValue = priceFilterGroupValue.replaceAll("price", "productFeature_PRICE");
+                priceFilterGroupValue = priceFilterGroupValue.replaceAll("price", "PRICE");
 
                 if (filterGroupList.size() > 0) {
                     url += "|";
@@ -474,7 +479,7 @@ public class RefinementsHelperSolr {
             String customerRatingFilterGroupValue = null;
             if (isCustomerRating) {
                 customerRatingFilterGroupValue = key;
-                customerRatingFilterGroupValue = customerRatingFilterGroupValue.replaceAll("customerRating", "productFeature_CUSTOMER_RATING");
+                customerRatingFilterGroupValue = customerRatingFilterGroupValue.replaceAll("customerRating", "CUSTOMER_RATING");
 
                 if (filterGroupList.size() > 0) {
                     url += "|";
@@ -510,8 +515,8 @@ public class RefinementsHelperSolr {
             genericRefinementValue.setStart(Double.parseDouble(ratingNumber));
             genericRefinementValue.setSortMethod("desc");
 
-            String productReviewImagesPath = UtilProperties.getPropertyValue("osafe.properties", "product-review.images-path");
-            String iconName = UtilProperties.getPropertyValue("osafe.properties", "product-review.facet-icon-name");
+            String productReviewImagesPath = OSAFE_PROPS.getString("productReviewImagesPath");
+            String iconName = OSAFE_PROPS.getString("productReviewFacetIconName");
 
             String displayImage = productReviewImagesPath + ratingNumber + "_0/" + iconName;
 

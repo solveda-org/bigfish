@@ -4,10 +4,12 @@
   <#assign showSavingPercentAbove = PRODUCT_PCT_THRESHOLD!"0"/>
   <#assign showSavingPercentAbove = (showSavingPercentAbove?number)/100.0 />
   <#assign youSavePercent = ((plpListPrice - plpPrice)/plpListPrice) />
-  <div class="plpPriceSavingPercent">
+ <li class="${request.getAttribute("attributeClass")!}">
+  <div class="js_plpPriceSavingPercent">
     <#if youSavePercent gt showSavingPercentAbove?number>
       <label>${uiLabelMap.YouSaveCaption}</label>
-      <span class="price">${youSavePercent?string("#0%")}</span>
+      <span>${youSavePercent?string("#0%")}</span>
     </#if>
   </div>
+ </li>   
 </#if>

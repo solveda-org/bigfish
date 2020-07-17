@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
     <Geo geoId="AB" geoTypeId="PROVINCE" geoName="Alberta" geoCode="AB" abbreviation="AB" lastUpdatedStamp="2011-07-19 14:36:33.0" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.813" createdTxStamp="2008-05-07 11:45:36.677"/>
     <Geo geoId="BC" geoTypeId="PROVINCE" geoName="British Columbia" geoCode="BC" abbreviation="BC" lastUpdatedStamp="2011-07-19 14:36:33.953" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.813" createdTxStamp="2008-05-07 11:45:36.677"/>
     <Geo geoId="ES-A" geoTypeId="PROVINCE" geoName="Alicante" geoCode="A" abbreviation="A" lastUpdatedStamp="2011-07-19 14:36:36.267" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.4" createdTxStamp="2008-05-07 11:45:36.38"/>
@@ -186,3 +188,4 @@
     <Geo geoId="QC" geoTypeId="PROVINCE" geoName="Quebec" geoCode="QC" abbreviation="QC" lastUpdatedStamp="2011-07-19 14:36:50.53" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.823" createdTxStamp="2008-05-07 11:45:36.677"/>
     <Geo geoId="SK" geoTypeId="PROVINCE" geoName="Saskatchewan" geoCode="SK" abbreviation="SK" lastUpdatedStamp="2011-07-19 14:36:50.97" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.823" createdTxStamp="2008-05-07 11:45:36.677"/>
     <Geo geoId="YT" geoTypeId="PROVINCE" geoName="Yukon" geoCode="YT" abbreviation="YT" lastUpdatedStamp="2011-07-19 14:49:44.66" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.827" createdTxStamp="2008-05-07 11:45:36.677"/>
+</entity-engine-xml>

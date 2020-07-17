@@ -23,7 +23,7 @@
          <input type="hidden" name="filterGroup"  value="${filterGroup}">
        </#if>
        <#if PLP_AVAILABLE_SORT?has_content && request.getAttribute("sortOptions")?has_content>
-        <label for="sortResults">${uiLabelMap.SortByLabel}:</label>
+        <label for="sortResults">${uiLabelMap.SortByLabel}</label>
         <select id="sortResults" name="sortResults" class="sortOptions" onchange="this.form.submit();">
           <#assign sortOptions = request.getAttribute("sortOptions")>
             <#list sortOptions as sortOption>

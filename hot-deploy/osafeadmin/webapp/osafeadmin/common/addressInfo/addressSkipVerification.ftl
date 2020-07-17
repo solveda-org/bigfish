@@ -1,5 +1,5 @@
 <!-- address skip verification -->
-<div class = "addressSkipVerification">
+<div class="${request.getAttribute("attributeClass")!}">
     <div class="infoRow">
         <div class="infoEntry">
             <div class="infoCaption"><label>&nbsp;</label></div>

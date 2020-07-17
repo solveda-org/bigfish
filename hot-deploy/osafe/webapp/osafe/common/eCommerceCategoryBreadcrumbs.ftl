@@ -54,17 +54,17 @@ under the License.
           <#assign catName = category.description!/>
         </#if>
         <#if (curCategoryId?exists && curCategoryId == category.productCategoryId) && !facetGroups?has_content && !product_id?has_content>
-           ${catName}
+           <span>${catName}</span>
         <#else>
            <#assign catalogFriendlyUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'${categoryUrl}?productCategoryId=${category.productCategoryId!""}')/>
-           <a href="${catalogFriendlyUrl}">${catName}</a>
+           <a href="${catalogFriendlyUrl}"><span>${catName}</span></a>
         </#if>
       </li>
 </#macro>
 
 <#macro renderProductCrumb pdpProductName>
   <li>
-    ${pdpProductName}
+    <span>${pdpProductName}</span>
   </li>
 </#macro>
 
@@ -141,7 +141,7 @@ under the License.
                 <#assign catOrSearchText = "productCategoryId=" + curCategoryId/>
             </#if>
            <#if index==listSize>
-              ${facetPart2Desc}
+              <span>${facetPart2Desc}</span>
             <#else>
              <a href="<@ofbizUrl><#if !searchText?has_content>eCommerceProductList<#else>siteSearch</#if>?${catOrSearchText}&filterGroup=${filterGroupValue?if_exists}</@ofbizUrl>">${facetPart2Desc}</a>
            </#if>
@@ -152,15 +152,15 @@ under the License.
 <div class="breadcrumbs">
   <ul id="breadcrumb">
     <li class="first">
-      <a href="<@ofbizUrl>main</@ofbizUrl>">${uiLabelMap.Home}</a>
+      <a href="<@ofbizUrl>main</@ofbizUrl>"><span>${uiLabelMap.Home}</span></a>
     </li>
     <#if searchText?has_content && filterGroupValues?has_content>
       <li>
-        <a href="<@ofbizUrl>siteSearch?searchText=${searchText}</@ofbizUrl>">${searchText}</a>
+        <a href="<@ofbizUrl>siteSearch?searchText=${searchText}</@ofbizUrl>"><span>${searchText}</span></a>
       </li>
     <#else>
 	     <#if searchText?has_content>
-	        <li>${searchText}</li>
+	        <li><span>${searchText}</span></li>
 	     </#if>
     </#if>
     <#-- Show the category branch -->

@@ -3,7 +3,6 @@
 
     <!-- OFBiz Core security -->
 
-
     <Party partyId="_NA_" partyTypeId="PERSON"/>
     <Person partyId="_NA_"/>
     <PartyRole partyId="_NA_" roleTypeId="CARRIER"/>
@@ -55,6 +54,23 @@
     <Enumeration enumId="RA_51_TO_60" enumTypeId="REVIEW_AGE" description="51 - 60" enumCode="RA_51_TO_60" sequenceId="06"/>
     <Enumeration enumId="RA_61_AND_OLDER" enumTypeId="REVIEW_AGE" description="61 and older" enumCode="RA_61_AND_OLDER" sequenceId="07"/>
 
+    <!-- GIFT_MESSAGE -->
+    <Enumeration enumId="GM_MOTHERS_DAY" enumTypeId="GIFT_MESSAGE" description="Happy Mother’s Day." enumCode="GM_MOTHERS_DAY" sequenceId="01"/>
+    <Enumeration enumId="GM_SYMBOL" enumTypeId="GIFT_MESSAGE" description="A symbol of my love and appreciation for you." enumCode="GM_SYMBOL" sequenceId="02"/>
+    <Enumeration enumId="GM_MY_LOVE" enumTypeId="GIFT_MESSAGE" description="My love for you will last as long as this rose, forever." enumCode="GM_MY_LOVE" sequenceId="03"/>
+    <Enumeration enumId="GM_HATE_SS" enumTypeId="GIFT_MESSAGE" description="I Love You! But I Hate Steven Singer!" enumCode="GM_HATE_SS" sequenceId="04"/>
+    <Enumeration enumId="GM_FINALLY" enumTypeId="GIFT_MESSAGE" description="Finally, flowers that won’t end up in the trash in a week." enumCode="GM_FINALLY" sequenceId="05"/>
+    <Enumeration enumId="GM_HAPPY_ANNIV" enumTypeId="GIFT_MESSAGE" description="Happy Anniversary. Every year it gets better." enumCode="GM_HAPPY_ANNIV" sequenceId="06"/>
+    <Enumeration enumId="GM_NEXT_TIME" enumTypeId="GIFT_MESSAGE" description="Next time I am in big trouble, remember this note." enumCode="GM_NEXT_TIME" sequenceId="07"/>
+    <Enumeration enumId="GM_I_KNOW" enumTypeId="GIFT_MESSAGE" description="I know it’s not the ring, but you’ve gotta admit it is pretty sweet." enumCode="GM_I_KNOW" sequenceId="08"/>
+    <Enumeration enumId="GM_YES_ITS_REAL" enumTypeId="GIFT_MESSAGE" description="YES IT’S REAL!" enumCode="GM_YES_ITS_REAL" sequenceId="09"/>
+    <Enumeration enumId="GM_ONLY_THING" enumTypeId="GIFT_MESSAGE" description="The only thing that sparkles more are your eyes." enumCode="GM_ONLY_THING" sequenceId="10"/>
+    <Enumeration enumId="GM_PRINCESS" enumTypeId="GIFT_MESSAGE" description="For my princess." enumCode="GM_PRINCESS" sequenceId="11"/>
+    <Enumeration enumId="GM_TONIGHT" enumTypeId="GIFT_MESSAGE" description="Is tonight the night?" enumCode="GM_TONIGHT" sequenceId="12"/>
+    <Enumeration enumId="GM_NAUGHTY" enumTypeId="GIFT_MESSAGE" description="You sure have been naughty, here’s some coal!" enumCode="GM_NAUGHTY" sequenceId="13"/>
+    <Enumeration enumId="GM_PERFECT" enumTypeId="GIFT_MESSAGE" description="Perfect for someone soooo pretty." enumCode="GM_PERFECT" sequenceId="14"/>
+    <Enumeration enumId="GM_POINTS" enumTypeId="GIFT_MESSAGE" description="How many points can I score with this great gift?" enumCode="GM_POINTS" sequenceId="15"/>
+    <Enumeration enumId="GM_BEST_MOM" enumTypeId="GIFT_MESSAGE" description="To the best Mom in the world!" enumCode="GM_BEST_MOM" sequenceId="16"/>
 
     <!-- CONTENT STATUS DESCRIPTIONS -->
     <StatusItem statusId="CTNT_INITIAL_DRAFT" description="Initial Draft"/>
@@ -69,25 +85,20 @@
     <PaymentGatewayConfig paymentGatewayConfigId="SAGEPAYTOKEN_CONFIG" paymentGatewayConfigTypeId="SAGEPAYTOKEN" description="SagePay Token Config"/>
     <PaymentGatewaySagePayToken paymentGatewayConfigId="SAGEPAYTOKEN_CONFIG" vendor="YOUR VENDOR NAME" productionHost="https://live.sagepay.com:443" testingHost="https://test.sagepay.com:443" sagePayMode="TEST" protocolVersion="2.23" authenticationTransType="DEFERRED" authenticationUrl="/gateway/service/vspdirect-register.vsp" authoriseTransType="RELEASE" authoriseUrl="/gateway/service/vspdirect-register.vsp" releaseTransType="RELEASE" releaseUrl="/gateway/service/vspdirect-register.vsp" voidTransType="VOID" voidUrl="/gateway/service/vspdirect-register.vsp" refundTransType="REFUND" refundUrl="/gateway/service/vspdirect-register.vsp" registrationTransType="TOKEN" registrationUrl="/gateway/service/directtoken.vsp" storeToken="0"/>
 
-    <!-- Payment Custom Method -->
-    <CustomMethod customMethodId="CC_AUTH_SGPAYTKN" customMethodTypeId="CC_AUTH" customMethodName="sagepaytokenCCAuth" description="SagePay token authorize"/>
-    <CustomMethod customMethodId="CC_CAPTURE_SGPAYTKN" customMethodTypeId="CC_CAPTURE" customMethodName="sagepaytokenCCCapture" description="SagePay token capture"/>
-    <CustomMethod customMethodId="CC_REFUND_SGPAYTKN" customMethodTypeId="CC_REFUND" customMethodName="sagepaytokenCCRefund" description="SagePay token refund"/>
-    <CustomMethod customMethodId="CC_RELEASE_SGPAYTKN" customMethodTypeId="CC_RELEASE" customMethodName="sagepaytokenCCRelease" description="SagePay token release"/>
-
     <!-- EBS Payment Gateway Config -->
     <PaymentGatewayConfig paymentGatewayConfigId="EBS_CONFIG" paymentGatewayConfigTypeId="EBS" description="EBS Config"/>
     <PaymentGatewayEbs paymentGatewayConfigId="EBS_CONFIG" apiUrl="https://secure.ebs.in/api/1_0" merchantId="MERCHANT ID" secretKey="MERCHANT SECRET KEY" mode="TEST" redirectUrl="https://secure.ebs.in/pg/ma/sale/pay/" returnUrl="https://www.yourdomainname.com/online/control/ebsCheckoutReturn?DR={DR}"/>
 
-   
-    <!-- EBS Payment Custom Method -->
-    <CustomMethod customMethodId="EBS_AUTH" customMethodTypeId="EBS_AUTH" customMethodName="ebsAuthProcessor" description="EBS payment authorize"/>
-    <CustomMethod customMethodId="EBS_RELEASE" customMethodTypeId="EBS_RELEASE" customMethodName="ebsRelease" description="EBS Order Release"/>
-    <CustomMethod customMethodId="EBS_CAPTURE" customMethodTypeId="EBS_CAPTURE" customMethodName="ebsCapture" description="EBS payment capture"/>
-    <CustomMethod customMethodId="EBS_REFUND" customMethodTypeId="EBS_REFUND" customMethodName="ebsRefund" description="EBS payment refund"/>
-    
     <!-- BLUEDART Shipment Gateways Settings -->
     <ShipmentGatewayConfig shipmentGatewayConfigId="BLUEDART_CONFIG" shipmentGatewayConfTypeId="BLUEDART" description="BLUEDART Config"/>
     <ShipmentGatewayBlueDart shipmentGatewayConfigId="BLUEDART_CONFIG" connectUrl="http://www.bluedart.com/servlet/RoutingServlet" connectTimeout="60" customerId="REG111111" customerLisenceKey="REG111111" versionNum="1.3" scanNum="1" format="HTML" />
-    
+
+    <!-- Tender Card Payment Gateway Config -->
+    <PaymentGatewayConfig paymentGatewayConfigId="TENDER_CARD_CONFIG" paymentGatewayConfigTypeId="TENDER_CARD" description="Tender Gift Card Config"/>
+    <PaymentGatewayTenderCard paymentGatewayConfigId="TENDER_CARD_CONFIG" apiUrl="http://transactions.imatts.com/transactionprocessor/HttpPostTransactions.ashx" tenderCardId="10011002" terminalId="1"/>
+
+    <!-- Atom PayNetz Payment Gateway Config -->
+    <PaymentGatewayConfig paymentGatewayConfigId="PAYNETZ_CONFIG" paymentGatewayConfigTypeId="PAYNETZ" description="Atom PayNetz Config"/>
+    <PaymentGatewayPayNetz paymentGatewayConfigId="PAYNETZ_CONFIG" apiUrl="" loginId="160" password="Test@123" productId="NSE" payNetzMode="TEST" redirectUrl="http://203.114.240.183/paynetz/epi/fts" returnUrl="https://www.yourdomainname.com/online/control/payNetzCheckoutReturn" transactionType="NBFundTransfer"/>
+
 </entity-engine-xml>

@@ -141,6 +141,9 @@
     <property key="PAGE_TOP_SPOT_SEARCH_NO_RESULT">
         <value xml:lang="en">PTS_SEARCH_NO_RESULT</value>
     </property>
+    <property key="PAGE_TOP_SPOT_GIFT_MESSAGE">
+        <value xml:lang="en">PTS_GIFT_MESSAGE</value>
+    </property>
 
     <property key="PAGE_END_SPOT_ADDRESS_BOOK_VIEW">
         <value xml:lang="en">PES_ADDR_BOOK_VIEW</value>
@@ -226,6 +229,9 @@
     <property key="PDP_CONTENT_05">
         <value xml:lang="en">PDP_CONTENT_05</value>
     </property>
+    <property key="CHECKOUT_CC_VERIFY">
+        <value xml:lang="en">CHECKOUT_CC_VERIFY</value>
+    </property>
     <property key="PAGE_TOP_SPOT_STORE_PICKUP">
         <value xml:lang="en">PTS_STORE_PICKUP</value>
     </property>
@@ -238,6 +244,21 @@
     <property key="PAGE_END_SPOT_WISHLIST">
         <value xml:lang="en">PES_WISHLIST</value>
     </property>
+    <property key="PAGE_END_SPOT_GIFT_MESSAGE">
+        <value xml:lang="en">PES_GIFT_MESSAGE</value>
+    </property>
+    <property key="MULTI_ADDR_ESPOT">
+        <value xml:lang="en">MULTI_ADDR_ESPOT</value>
+    </property>
+    <property key="MULTI_SHIPPING_ESPOT">
+        <value xml:lang="en">MULTI_SHIPPING_ESPOT</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_EMAIL_A_FRIEND">
+        <value xml:lang="en">PTS_EMAIL_A_FRIEND</value>
+    </property>
+    <property key="PAGE_END_SPOT_EMAIL_A_FRIEND">
+        <value xml:lang="en">PES_EMAIL_A_FRIEND</value>
+    </property>
 
     <!-- *** ECOMMERCE PDP SPOT MENU HOT SPOTS *************************************** -->
     <property key="PDP_SPOT_INTRODUCED">
@@ -245,6 +266,9 @@
     </property>
     <property key="PDP_SPOT_DISCONTINUED">
         <value xml:lang="en">PS_DISCONTINUED</value>
+    </property>
+    <property key="PS_OUT_OF_STOCK">
+        <value xml:lang="en">PS_OUT_OF_STOCK</value>
     </property>
 
     <!-- *** ECOMMERCE EMAIL MENU HOT SPOTS *************************************** -->
@@ -289,6 +313,9 @@
     </property>
     <property key="EMAIL_MAILING_LIST">
         <value xml:lang="en">E_MAILING_LIST</value>
+    </property>
+    <property key="EMAIL_TELL_FRIEND">
+        <value xml:lang="en">E_TELL_FRIEND</value>
     </property>
     <property key="STATIC_PAGE_ABOUT_US">
         <value xml:lang="en">SP_ABOUT_US</value>

@@ -21,8 +21,9 @@
         <section>
             <actions>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-                <set field="siteLogoContentId" value="${idMap.SITE_INFO_SITE_LOGO}" />
                 <set field="siteTitleContentId" value="${idMap.SITE_INFO_HEADER_CONTENT}" />
+				<set field="uiSequenceScreen" value="SiteHeader" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
             </actions>
             <widgets>
                 <container id="eCommerceHeader">
@@ -41,6 +42,9 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="title" value="${uiLabelMap.EcommerceApplication}" />
                 <set field="mainPanelStyle" value="homePage" />
+                <set field="contentPanelStyle" value="eCommerceHomePage"/>
+                <!-- For Page Tagging to be generated -->
+                <set field="createAccountPageTagging" value="Y" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceHomePage.groovy" />
             </actions>
             <widgets>
@@ -62,8 +66,6 @@
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="eCommerceLeftPanel" value="eCommerceRefineByCategory" />
-                <set field="uiSequenceScreen" value="CLP"/>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCategoryList.groovy" />
             </actions>
             <widgets>
@@ -71,7 +73,7 @@
                     <decorator-section name="body">
                         <platform-specific>
                             <html>
-                                <html-template location="component://osafe/webapp/osafe/common/entry/js/ecommercePlpJS.ftl"/>
+                                <html-template location="component://osafe/webapp/osafe/common/entry/js/commonProductListJS.ftl"/>
                             </html>
                         </platform-specific>
                         <section>
@@ -96,20 +98,19 @@
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="eCommerceLeftPanel" value="eCommerceRefineByCategoryFacet" />
-                <set field="uiSequenceScreen" value="PLP"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductList.groovy" />
                 <set field="dialogPurpose" value="plpQuicklook_" global="true"/>
                 <set field="dialogActionRequest" value="eCommercePlpQuickLook" global="true"/>
                 <set field="dialogBoxStyle" value="plpQuicklook" global="true"/>
+                <set field="addToCartPlpAction" value="addPlpItemToCart"/>
+                <set field="addToWishListPlpAction" value="addPlpItemToWishlist"/>
+                <set field="addMultiItemsToCartAction" value="addMultiItemsToCart"/>
+                <set field="addMultiItemsToWishlistAction" value="addMultiItemsToWishlist"/>
+                <set field="formName" value="productListForm"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
                     <decorator-section name="body">
-                        <platform-specific>
-                            <html>
-                                <html-template location="component://osafe/webapp/osafe/common/entry/js/ecommercePlpJS.ftl"/>
-                            </html>
-                        </platform-specific>
                         <section>
                             <actions> 
                                 <set field="thumbImageHeight" from-field="IMG_SIZE_PLP_H"/>
@@ -120,9 +121,16 @@
                                     <include-screen name="categoryBreadcrumbs" />
                                     <platform-specific>
                                         <html>
-                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceProductList.ftl" />
+                                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonProductListJS.ftl" />
                                         </html>
                                     </platform-specific>
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceProductList.ftl" />
+                                            <html-template location="component://osafe/webapp/osafe/templates/commonTooltip.ftl"/>
+                                        </html>
+                                    </platform-specific>
+                                    <!--  <include-screen name="eCommerceTooltip" /> -->
                                 </container>
                             </widgets>
                         </section>
@@ -132,12 +140,14 @@
             </widgets>
         </section>
     </screen>
+    
     <screen name="eCommerceSearchResultNotFound">
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="Sorry!" />
                 <set field="title" from-field="${parameters.searchText} - ${uiLabelMap.SearchResults}" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceSearchResultNotFound.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -166,8 +176,7 @@
     <screen name="eCommerceProductDetail">
         <section>
             <actions>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true" />
-                <set field="uiSequenceScreen" value="PDP"/>
+                <property-map resource="OsafeProperties" map-name="OSafeConfig" global="true" />
                 <set field="activeZoomParam" value="PDP_IMG_ZOOM_ACTIVE_FLAG" />
                 <set field="showHeadingTertiaryInformation" value="Y" />
                 <set field="prodCatContentTypeId" value="PDP_ADDITIONAL" />
@@ -175,9 +184,14 @@
                 <set field="dialogPurpose" value="largeImage_" global="true" /> 
                 <set field="dialogBoxStyle" value="viewLargerImage" global="true" />
                 <set field="isQuickLook" value="false"/>
+                <set field="addToCartRecurrenceAction" value="addRecurrenceItemToCart"/>
                 <set field="addToCartAction" value="addItemToCart"/>
                 <set field="addToWishListAction" value="addItemToWishList"/>
                 <set field="addMultiItemsToCartAction" value="addMultiItemsToCart"/>
+                <set field="addMultiItemsToWishlistAction" value="addMultiItemsToWishlist"/>
+                <set field="addToCartPlpAction" value="addPlpItemToCartFromPdp"/>
+                <set field="addToWishListPlpAction" value="addPlpItemToWishlistFromPdp"/>
+                <set field="formName" value="addform"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -190,6 +204,12 @@
                                 <platform-specific>
                                     <html>
                                         <html-template location="component://osafe/webapp/osafe/common/entry/js/commonProductDetailJS.ftl" />
+                                    </html>
+                                </platform-specific>
+                                <platform-specific>
+                                    <html>
+                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/commonProductListJS.ftl" />
+                                        <html-template location="component://osafe/webapp/osafe/templates/commonTooltip.ftl"/>
                                     </html>
                                 </platform-specific>
                                 <container id="eCommerceProductDetailContainer">
@@ -213,8 +233,10 @@
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="uiSequenceScreen" value="ManufacturerProductList"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceManufacturerDetail.groovy" />
+                <set field="formName" value="productListForm"/>
+                <set field="addToCartPlpAction" value="addManufacturerItemToCart"/>
+                <set field="addToWishListPlpAction" value="addManufacturerItemToWishlist"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -225,6 +247,11 @@
                         <section>
                             <widgets>
                                 <container id="eCommerceManufacturerContainer">
+                                	<platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonProductListJS.ftl" />
+                                        </html>
+                                    </platform-specific>
                                     <platform-specific>
                                         <html>
                                             <html-template location="component://osafe/webapp/osafe/common/manufacturer/eCommerceManufacturerDetail.ftl" />
@@ -242,9 +269,9 @@
     <screen name="eCommerceRefineByCategory">
         <section>
             <actions>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true" />
+                <property-map resource="OsafeProperties" map-name="OSafeConfig" global="true" />
                 <set field="CategoryFacetTitle" value="${uiLabelMap.FacetNarrowResultsCaption}"/>
-                <set field="facetShowValueCnt" value="${OSafeConfig['facet.category-list.show-value-count']}" type="Integer" default-value="5" />
+                <set field="facetShowValueCnt" value="${OSafeConfig['facetCategoryListShowValueCount']}" type="Integer" default-value="0" />
             </actions>
             <widgets>
                 <container id="eCommerceRefineByCategoryContainer">
@@ -260,9 +287,9 @@
     <screen name="eCommerceRefineByCategoryFacet">
         <section>
             <actions>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true" />
+                <property-map resource="OsafeProperties" map-name="OSafeConfig" global="true" />
                 <set field="CategoryFacetTitle" value="${uiLabelMap.FacetFilterResultsCaption}"/>
-                <set field="facetShowValueCnt" value="${OSafeConfig['facet.product-list.show-value-count']}" type="Integer" default-value="5" />
+                <set field="facetShowValueCnt" value="${OSafeConfig['facetProductListShowValueCount']}" type="Integer" default-value="0" />
             </actions>
             <widgets>
                 <container id="eCommerceCategoryFacetContainer">
@@ -276,22 +303,6 @@
         </section>
     </screen>
 
-    <!--  <screen name="eCommerceProductReview">
-        <section>
-            <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductReview.groovy" />
-            </actions>
-            <widgets>
-                <container id="eCommerceProductReviewContainer">
-                    <platform-specific>
-                        <html>
-                            <html-template location="component://osafe/webapp/osafe/common/eCommerceProductReviews.ftl" />
-                        </html>
-                    </platform-specific>
-                </container>
-            </widgets>
-        </section>
-    </screen>  -->
 	
 	<screen name="eCommerceSubmitRatingsThankyou">
         <section>
@@ -445,7 +456,7 @@
                                     <include-screen name="PTS_LOGIN" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                     <platform-specific>
                                         <html>
-                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceLogin.ftl" />
+                                            <html-template location="component://osafe/webapp/osafe/common/signIn/eCommerceLogin.ftl" />
                                         </html>
                                     </platform-specific>
                                     <include-screen name="PES_LOGIN" location="component://osafe/widget/EcommerceContentScreens.xml" />
@@ -465,6 +476,7 @@
                 <set field="title" from-field="pageTitle" />
                 <set field="fieldLevelErrors" value="Y" />
                 <set field="formAction" value="validateForgotPassword" />
+                <set field="donePage" value="MyAccount" />
                 <set field="formName" value="entry" />
             </actions>
             <widgets>
@@ -482,7 +494,7 @@
                                                 <include-screen name="forgotPasswordForm" location="component://osafe/widget/EntryScreens.xml" />
                                             </html-template-decorator-section>
                                             <html-template-decorator-section name="entryFormButtons">
-                                                <include-screen name="formEntryContinueButton" location="component://osafe/widget/EntryScreens.xml" />
+                                                    <include-screen name="formEntryContinueBackButton" location="component://osafe/widget/EntryScreens.xml" />
                                             </html-template-decorator-section>
                                         </html-template-decorator>
                                     </html>
@@ -544,6 +556,8 @@
                 <set field="confirmH1MapName" value="ConfirmH1MailingList" />
                 <set field="confirmH2MapName" value="ConfirmH2MailingList" />
                 <set field="confirmTextMapName" value="ConfirmTextMailingList" />
+                <!-- For Page Tagging to be generated -->
+                <set field="emailSubscriberPageTagging" value="Y" />
             </actions>
             <widgets>
                 <include-screen name="eCommerceConfirm" />
@@ -558,13 +572,10 @@
                 <set field="pageTitle" value="${uiLabelMap.NewCustomerTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <set field="fieldLevelErrors" value="Y" />
-                <set field="shippingAttnName" value="${uiLabelMap.ShippingAddressDefaultNickNameLabel}" />
-                <set field="isSameAsBilling" value="Y" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
                 <set field="formAction" value="eCommerceCreateNewCustomer" />
                 <set field="formName" value="newuserform" />
                 <set field="loadPca" value="Y" />
-                <set field="useShippingApplies" value="N" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -581,16 +592,14 @@
                                     <html>
                                         <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
                                             <html-template-decorator-section name="entryFormJS">
-                                                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" /></html></platform-specific>
+                                                <platform-specific>
+                                                    <html>
+                                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+                                                     </html>
+                                                 </platform-specific>
                                             </html-template-decorator-section>
                                             <html-template-decorator-section name="entryForm">
-                                                <include-screen name="aboutYouEntryForm" location="component://osafe/widget/EntryScreens.xml" />
-                                                <include-screen name="addressBillingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
-                                                <include-screen name="addressShippingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
-                                                <include-screen name="emailPasswordEntryForm" location="component://osafe/widget/EntryScreens.xml" />
-                                            </html-template-decorator-section>
-                                            <html-template-decorator-section name="entryFormButtons">
-                                                <include-screen name="formEntryContinueButton" location="component://osafe/widget/EntryScreens.xml" />
+                                                <include-screen name="registrationDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml" />
                                             </html-template-decorator-section>
                                             <html-template-decorator-section name="capturePlusJs">
                                                 <include-screen name="capturePlusJs" location="component://osafe/widget/EntryScreens.xml" />
@@ -641,6 +650,8 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.MyAccountTitle}" />
                 <set field="title" from-field="pageTitle" />
+                <!-- For Page Tagging to be generated -->
+                <set field="createAccountPageTagging" value="Y" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -677,6 +688,7 @@
                 <set field="formAction" value="validateUpdateCustomer" />
                 <set field="donePage" value="MyAccount" />
                 <set field="formName" value="newuserform" />
+                <set field="personalDivScreenPrefix" value="myAccountPersonalInfo"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -721,14 +733,45 @@
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="pageTitle" value="${uiLabelMap.ChangeLoginInfoTitle}" />
+                <set field="pageTitle" value="${uiLabelMap.UpdateLoginInfoTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceEditCustomerInfo.groovy" />
+                <set field="backAction" value="MyAccount"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                    <include-screen name="PTS_LOGIN_INFO" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceUserLoginDetail.ftl" />
+                                        </html>
+                                    </platform-specific>
+                                    <include-screen name="PES_LOGIN_INFO" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="eCommerceEditCustomerLogin">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ChangeLoginNameTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceEditCustomerInfo.groovy" />
                 <set field="fieldLevelErrors" value="Y" />
-                <set field="formAction" value="validateCustomerLogin" />
-                <set field="donePage" value="MyAccount" />
-                <set field="formName" value="newuserform" />
-                <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
+                <set field="formAction" value="validateCustomerEmail" />
+                <set field="donePage" value="eCommerceEditLoginInfo" />
+                <set field="formName" value="customerEmailForm" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -751,7 +794,58 @@
                                                     </platform-specific>
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="entryForm">
-                                                    <include-screen name="emailPasswordConfirmEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+                                                    <include-screen name="customerEmailEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="entryFormButtons">
+                                                    <include-screen name="formEntryContinueBackButton" location="component://osafe/widget/EntryScreens.xml" />
+                                                </html-template-decorator-section>
+                                            </html-template-decorator>
+                                        </html>
+                                    </platform-specific>
+                                    <include-screen name="PES_LOGIN_INFO" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="eCommerceEditCustomerPassword">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ChangePasswordTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceEditCustomerInfo.groovy" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="formAction" value="validateCustomerPassword" />
+                <set field="donePage" value="eCommerceEditLoginInfo" />
+                <set field="formName" value="customerPasswordForm" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="eCommerceEditCustomerInfoContainer">
+                                    <include-screen name="PTS_LOGIN_INFO" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                    <platform-specific>
+                                        <html>
+                                            <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                                <html-template-decorator-section name="entryFormJS">
+                                                    <platform-specific>
+                                                        <html>
+                                                            <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+                                                        </html>
+                                                    </platform-specific>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="entryForm">
+                                                    <include-screen name="customerPasswordEntryForm" location="component://osafe/widget/EntryScreens.xml" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="entryFormButtons">
                                                     <include-screen name="formEntryContinueBackButton" location="component://osafe/widget/EntryScreens.xml" />
@@ -794,14 +888,10 @@
                                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePaymentMethods.groovy" />
                             </actions>
                             <widgets>
-                                <container id="eCommerceOrderHistoryContainer">
+                                <container id="eCommercePaymentMethodsContainer">
                                     <include-screen name="PTS_PMT_METHOD_VIEW" location="component://osafe/widget/EcommerceContentScreens.xml" />
-                                    <platform-specific>
-                                        <html>
-                                            <html-template location="component://osafe/webapp/osafe/common/eCommercePaymentMethods.ftl" />
-                                        </html>
-                                     </platform-specific>
-                                     <include-screen name="PES_PMT_METHOD_VIEW" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                    <include-screen name="paymentMethodSummaryDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml"/>
+                                    <include-screen name="PES_PMT_METHOD_VIEW" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                 </container>
                                 <include-screen name="commonConfirmDialog" location="component://osafe/widget/DialogScreens.xml"/>
                             </widgets>
@@ -925,13 +1015,12 @@
                 <set field="pageTitle" value="${uiLabelMap.CustomerAddressBookHeading}" />
                 <set field="title" from-field="pageTitle" />
                 <set field="addressBookInstructions" value="${uiLabelMap.AddressBookInstructionInfo}" />
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/CheckoutShippingAddress.groovy" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceShippingAddress.groovy" />
-                    
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePartyAddress.groovy" />
                 <set field="donePage" value="eCommerceEditAddressBook" />
                 <set field="osafeFormRequestName" value="validateAddressBook" />
                 <set field="osafeDeleteRequestName" value="deleteAddressBook" />
                 <set field="osafeEditRequestName" value="eCommerceUpdateAddressBook" />
+                <set field="setDefaultAddressAction" value="updateDefaultShipAddr" />
 
                 <set field="showSelect" value="N" />
                 <set field="showDelete" value="Y" />
@@ -955,7 +1044,7 @@
                                     <include-screen name="PTS_ADDRESS_BOOK_VIEW" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                     <platform-specific>
                                         <html>
-                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceShippingAddress.ftl" />
+                                            <html-template location="component://osafe/webapp/osafe/common/address/eCommerceShippingAddress.ftl" />
                                         </html>
                                     </platform-specific>
                                     <include-screen name="PES_ADDRESS_BOOK_VIEW" location="component://osafe/widget/EcommerceContentScreens.xml" />
@@ -973,10 +1062,10 @@
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="pageTitle" value="${uiLabelMap.ShippingAddressTitle}" />
-                <set field="title" from-field="pageTitle" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/EditContactMech.groovy" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceEditContactMech.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceAddressPurpose.groovy" />
+                <set field="pageTitle" value="${groovy:if(purposeType.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
+                <set field="title" from-field="pageTitle" />
                 <set field="fieldLevelErrors" value="Y" />
                 <set field="prevButtonVisible" value="N" />
                 <set field="nextButtonVisible" value="N" />
@@ -1026,14 +1115,9 @@
                         <section>
                             <widgets>
                                 <container id="eCommerceOrderHistoryContainer">
-                                    <include-screen name="PTS_ORDER_STATUS" location="component://osafe/widget/EcommerceContentScreens.xml" />
-                                    <platform-specific>
-                                        <html>
-                                            <html-template
-                                                location="component://osafe/webapp/osafe/common/eCommerceOrderHistory.ftl" />
-                                        </html>
-                                    </platform-specific>
-                                    <include-screen name="PES_ORDER_STATUS" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                 <include-screen name="PTS_ORDER_STATUS" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                <include-screen name="orderHistoryDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml"/>
+                                <include-screen name="PES_ORDER_STATUS" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                 </container>
                             </widgets>
                         </section>
@@ -1043,6 +1127,66 @@
         </section>
     </screen>
 
+    <screen name="eCommerceOrderDetail">
+        <section>
+            <actions>
+                <set field="selectedStep" value="confirmation" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.OrderDetailTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="showChangeStoreOption" value="N" />
+                <set field="cartShippingLabel" value="${uiLabelMap.CartFinalShippingAndHandlingCaption}" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderDetail.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="eCommerceOrderDetail">
+                                   <include-screen name="orderDetailDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml"/>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="eCommerceReOrderItems">
+        <section>
+            <actions>
+                <set field="selectedStep" value="confirmation" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.PreviouslyPurchasedProductsTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="backAction" value="eCommerceOrderHistory"/>
+                <set field="previousPurchaseProductsHeading" value="${uiLabelMap.PreviousPurchaseProductsHeading}"/>
+                <set field="addMultiItemsToCartAction" value="addMultiItemsToCart"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceReOrderItems.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="eCommerceReOrder">
+                                   <include-screen name="reorderItemsSummaryDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml"/>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
     <screen name="editContactMech">
         <section>
             <actions>
@@ -1079,7 +1223,6 @@
                 <set field="formAction" value="validateAddressBook" />
                 <set field="formName" value="shippingaddressform" />
                 <set field="fieldPurpose" value="CUSTOMER" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/EditContactMech.groovy" />
             </actions>
             <widgets>
                 <platform-specific>
@@ -1095,54 +1238,12 @@
                             <html-template-decorator-section name="entryForm">
                                 <include-screen name="contactMechEntryForm" location="component://osafe/widget/EntryScreens.xml" />
                             </html-template-decorator-section>
-                            <html-template-decorator-section name="entryFormButtons">
-                                <include-screen name="formEntryContinueBackButton" location="component://osafe/widget/EntryScreens.xml" />
-                            </html-template-decorator-section>
                             <html-template-decorator-section name="capturePlusJs">
                                 <include-screen name="capturePlusJs" location="component://osafe/widget/EntryScreens.xml" />
                             </html-template-decorator-section>
                         </html-template-decorator>
                     </html>
                 </platform-specific>
-            </widgets>
-        </section>
-    </screen>
-
-
-
-    <!-- This screen is part of "Customer Related Information" but is also available 
-        from the Order eCommerceOrderComplete screen -->
-    <screen name="eCommerceOrderStatus">
-        <section>
-            <actions>
-                <set field="selectedStep" value="confirmation" />
-                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="pageTitle" value="${uiLabelMap.OrderStatusTitle}" />
-                <set field="title" from-field="pageTitle" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderStatus.groovy" />
-                <set field="showStatusDetails" value="Y" />
-                <set field="useAvailability" value="N" />
-
-            </actions>
-            <widgets>
-                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
-                    <decorator-section name="title">
-                        <include-screen name="pageTitle" />
-                    </decorator-section>
-                    <decorator-section name="body">
-                        <section>
-                            <widgets>
-                                <container id="eCommerceOrderStatusContainer">
-                                    <platform-specific>
-                                        <html>
-                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceOrderStatus.ftl" />
-                                        </html>
-                                    </platform-specific>
-                                </container>
-                            </widgets>
-                        </section>
-                    </decorator-section>
-                </decorator-screen>
             </widgets>
         </section>
     </screen>
@@ -1190,7 +1291,7 @@
             <widgets>
                 <platform-specific>
                     <html>
-                        <html-template location="component://osafe/webapp/osafe/common/billingAddress.ftl" />
+                        <html-template location="component://osafe/webapp/osafe/common/address/billingAddress.ftl" />
                     </html>
                 </platform-specific>
             </widgets>
@@ -1202,7 +1303,7 @@
             <widgets>
                 <platform-specific>
                     <html>
-                        <html-template location="component://osafe/webapp/osafe/common/shippingAddress.ftl" />
+                        <html-template location="component://osafe/webapp/osafe/common/address/shippingAddress.ftl" />
                     </html>
                 </platform-specific>
             </widgets>
@@ -1211,6 +1312,9 @@
 
     <screen name="paymentInformation">
         <section>
+			<actions>
+                <set field="showAttrClass" value="N"/>
+			</actions>
             <widgets>
                 <platform-specific>
                     <html>
@@ -1245,12 +1349,23 @@
             </widgets>
         </section>
     </screen>
-      <screen name="orderItems">
+    <screen name="orderDetail">
         <section>
             <widgets>
                 <platform-specific>
                     <html>
-                        <html-template location="component://osafe/webapp/osafe/common/orderItems.ftl" />
+                        <html-template location="component://osafe/webapp/osafe/common/order/orderDetail.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="orderItems">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/order/orderItems.ftl" />
                     </html>
                 </platform-specific>
             </widgets>
@@ -1295,6 +1410,17 @@
                         </html>
                     </platform-specific>
                 </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="eCommerceTooltip">
+        <section>
+            <widgets>
+	            <platform-specific>
+	                <html>
+	                    <html-template location="component://osafe/webapp/osafe/templates/commonTooltip.ftl"/>
+	                </html>
+	            </platform-specific>
             </widgets>
         </section>
     </screen>
@@ -1382,7 +1508,7 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ContactUsTitle}" />
                 <set field="title" from-field="pageTitle" />
-                <set field="fieldLevelErrors" value="Y" />
+                <set field="fieldLevelErrors" value="${groovy:if(request.getAttribute('setFieldLevelErrors') == 'N')return '' else return 'Y';}" />
                 <entity-condition list="contactReasons" entity-name="Enumeration">
                     <condition-expr field-name="enumTypeId" operator="equals" value="CONTACT_US_REASON" />
                     <order-by field-name="sequenceId"/>
@@ -1411,9 +1537,6 @@
                                             </html-template-decorator-section>
                                             <html-template-decorator-section name="entryForm">
                                                 <include-screen name="contactUsEntryForm" location="component://osafe/widget/EntryScreens.xml" />
-                                            </html-template-decorator-section>
-                                            <html-template-decorator-section name="entryFormButtons">
-                                                <include-screen name="formEntrySubmitButton" location="component://osafe/widget/EntryScreens.xml" />
                                             </html-template-decorator-section>
                                         </html-template-decorator>
                                     </html>
@@ -1490,7 +1613,7 @@
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceRequestCatalogInfo.groovy" />
                 <set field="pageTitle" value="${uiLabelMap.RequestCatalogTitle}" />
                 <set field="title" from-field="pageTitle" />
-                <set field="fieldLevelErrors" value="Y" />
+                <set field="fieldLevelErrors" value="${groovy:if(request.getAttribute('setFieldLevelErrors') == 'N')return '' else return 'Y';}" />
                 <set field="formAction" value="submitRequestCatalog" />
                 <set field="formName" value="newuserform" />
                 <set field="loadPca" value="Y" />
@@ -1519,9 +1642,6 @@
                                             </html-template-decorator-section>
                                             <html-template-decorator-section name="entryForm">
                                                 <include-screen name="requestCatalogEntryForm" location="component://osafe/widget/EntryScreens.xml" />
-                                            </html-template-decorator-section>
-                                            <html-template-decorator-section name="entryFormButtons">
-                                                <include-screen name="formEntrySubmitButton" location="component://osafe/widget/EntryScreens.xml" />
                                             </html-template-decorator-section>
                                             <html-template-decorator-section name="capturePlusJs">
                                                 <include-screen name="capturePlusJs" location="component://osafe/widget/EntryScreens.xml" />
@@ -1579,20 +1699,10 @@
                                     	</html>
                                     </platform-specific>
                                     <include-screen name="PTS_STORE_LOCATOR" location="component://osafe/widget/EcommerceContentScreens.xml" />
-                                    <platform-specific>
-                                        <html>
-                                            <html-template-decorator  location="component://osafe/webapp/osafe/common/commonGeoLocation.ftl" >
-                                                <html-template-decorator-section name="searchBoxBody">
-                                                    <include-screen name="storeLocatorSearch"/>
-                                                </html-template-decorator-section>
-                                                <html-template-decorator-section name="commonGeoLocationChart">
-                                                    <include-screen name="commonGeoLocationChart" location="component://osafe/widget/CommonScreens.xml"/>
-                                                </html-template-decorator-section>
-                                                <html-template-decorator-section name="listBoxBody">
-                                                    <include-screen name="storeLocatorList"/>
-                                                </html-template-decorator-section>
-                                            </html-template-decorator >
-                                        </html>
+	                                <platform-specific>
+	                                    <html>
+                                			<html-template location="component://osafe/webapp/osafe/common/storeLocator/storeLocator.ftl"/>
+                                    	</html>
                                     </platform-specific>
                                     <include-screen name="PES_STORE_LOCATOR" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                 </container>
@@ -1604,6 +1714,7 @@
         </section>
     </screen>
 
+   
     <screen name="storeLocatorSearch">
         <section>
             <actions>
@@ -1679,6 +1790,102 @@
                         <html-template location="component://osafe/webapp/osafe/common/eCommerceStoreDetail.ftl"/>
                     </html>
                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="EcommerceOrderPDF">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="orderPDFName" value="Order${parameters.orderId}_"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/eCommerceOrderConfirm.groovy" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <xsl-fo><html-template location="component://osafeadmin/webapp/osafeadmin/order/fo/orderListReport.fo.ftl"/></xsl-fo>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="bigfishInfo">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.BigFishInfoTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/bigfishInfo.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="bigfishInfo">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/bigfishInfo.ftl" />
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="emailAFriend">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceEmailAFriend.groovy" />
+                <set field="pageTitle" value="${uiLabelMap.EmailAFriendTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="formAction" value="submitEmailAFriend" />
+                <set field="formName" value="emailAFriend" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <actions>
+                            </actions>
+                            <widgets>
+                                <include-screen name="PTS_EMAIL_A_FRIEND" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                <platform-specific>
+                                    <html>
+                                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                            <html-template-decorator-section name="entryFormJS">
+                                                <platform-specific>
+                                                    <html>
+                                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+                                                    </html>
+                                                </platform-specific>
+                                            </html-template-decorator-section>
+                                            <html-template-decorator-section name="entryForm">
+                                                <include-screen name="emailAFriendEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+                                            </html-template-decorator-section>
+                                        </html-template-decorator>
+                                    </html>
+                                </platform-specific>
+                                <include-screen name="PES_EMAIL_A_FRIEND" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>

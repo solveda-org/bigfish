@@ -1,6 +1,6 @@
-<#if resultList?exists && resultList?has_content>
+<#if feedImportList?exists && feedImportList?has_content>
     <#assign rowClass = "1"/>
-    <#list resultList as feedsImport>
+    <#list feedImportList as feedsImport>
         <#assign hasNext = feedsImport_has_next>
         <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
             <td class="nameCol <#if !feedsImport_has_next?if_exists>lastRow</#if> firstCol" ><a href="<@ofbizUrl>feedsImportDetail?detailScreen=${feedsImport.toolDetail!""}</@ofbizUrl>">${feedsImport.toolType!""}</a></td>

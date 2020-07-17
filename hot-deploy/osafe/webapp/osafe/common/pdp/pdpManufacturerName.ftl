@@ -1,5 +1,7 @@
-<div class="pdpManufacturerName">
-<#if pdpManufacturerProfileName?has_content>
-    <a href="<@ofbizUrl>eCommerceManufacturerDetail?manufacturerPartyId=${manufacturerPartyId}</@ofbizUrl>"><span class="profileName">${pdpManufacturerProfileName!""}</span></a>
-</#if>    
-</div>
+<li class="${request.getAttribute("attributeClass")!}">
+  <#if pdpManufacturerProfileName?has_content>
+    <div>
+      <a href="<@ofbizUrl>eCommerceManufacturerDetail?manufacturerPartyId=${manufacturerPartyId}</@ofbizUrl>"><span>${pdpManufacturerProfileName!""}</span></a>
+    </div>
+  </#if>
+</li>

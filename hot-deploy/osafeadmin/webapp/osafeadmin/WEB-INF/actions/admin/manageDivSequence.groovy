@@ -11,9 +11,12 @@ import javolution.util.FastMap;
 import java.util.Map;
 import java.util.List;
 import java.util.Set;
+import org.ofbiz.base.util.FileUtil;
+import org.ofbiz.base.util.Debug;
 
 XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "osafe-uiSequence-xml-file"), context);
 String searchString = StringUtils.trimToEmpty(parameters.screenType);
+currentMode=context.mode;
 if (UtilValidate.isNotEmpty(searchString))
 {
     screenSearchList = FastList.newInstance();
@@ -21,49 +24,77 @@ if (UtilValidate.isNotEmpty(searchString))
     searchRestrictionMap = FastMap.newInstance();
     searchRestrictionMap.put("screen", "Y");
     screenSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, searchString, true, false);
-    for(Map screenListMap : screenSearchList) {
-        if (UtilValidate.isInteger(screenListMap.value)) {
-            if (UtilValidate.isNotEmpty(screenListMap.value)) {
+    for(Map screenListMap : screenSearchList) 
+	{
+        if (UtilValidate.isInteger(screenListMap.value)) 
+		{
+            if (UtilValidate.isNotEmpty(screenListMap.value)) 
+			{
                 screenListMap.value = Integer.parseInt(screenListMap.value);
-            } else {
+            } 
+			else 
+			{
                 screenListMap.value = 0;
             }
         }
     }
 
-    if (UtilValidate.isNotEmpty(context.PDPTabsScreenType) && searchString.equals(context.PDPTabsScreenType)) {
-        // make group search list sorted by value
-        screenGroupSearchList = FastList.newInstance();
-        processedGroupList = FastList.newInstance();
-        for(Map screenListMap : screenSearchList) {
-            if (!processedGroupList.contains(screenListMap.group)) {
-                searchGroupMapList =  OsafeManageXml.getSearchListFromListMaps(screenSearchList, UtilMisc.toMap("group", "Y"), screenListMap.group, true, false);
-                screenGroupSearchList.addAll( UtilMisc.sortMaps(searchGroupMapList, UtilMisc.toList("value")));
-                processedGroupList.add(screenListMap.group);
-            }
+    // make group search list sorted by value
+    screenGroupSearchList = FastList.newInstance();
+    processedGroupList = FastList.newInstance();
+    for(Map screenListMap : screenSearchList) 
+	{
+        if (!processedGroupList.contains(screenListMap.group)) 
+		{
+            searchGroupMapList =  OsafeManageXml.getSearchListFromListMaps(screenSearchList, UtilMisc.toMap("group", "Y"), screenListMap.group, true, false);
+            screenGroupSearchList.addAll( UtilMisc.sortMaps(searchGroupMapList, UtilMisc.toList("value")));
+            processedGroupList.add(screenListMap.group);
         }
-        // sort group search list sorted by group
-        screenSearchList = screenGroupSearchList;
-        for(Map screenListMap : screenSearchList) {
-            if (UtilValidate.isInteger(screenListMap.group)) {
-                if (UtilValidate.isNotEmpty(screenListMap.group)) {
-                    screenListMap.group = Integer.parseInt(screenListMap.group);
-                } else {
-                    screenListMap.group = 0;
-                }
-            }
-        }
-        screenSearchList = UtilMisc.sortMaps(screenSearchList, UtilMisc.toList("group"));
-    } else {
-        screenSearchList = UtilMisc.sortMaps(screenSearchList, UtilMisc.toList("value"));
     }
+    // sort group search list sorted by group
+    screenSearchList = screenGroupSearchList;
+    for(Map screenListMap : screenSearchList) 
+	{
+        if (UtilValidate.isInteger(screenListMap.group)) 
+		{
+            if (UtilValidate.isNotEmpty(screenListMap.group)) 
+			{
+                screenListMap.group = Integer.parseInt(screenListMap.group);
+            } 
+			else 
+			{
+                screenListMap.group = 0;
+            }
+        }
+    }
+    screenSearchList = UtilMisc.sortMaps(screenSearchList, UtilMisc.toList("group"));
+	
+	if("add".equalsIgnoreCase(currentMode))
+	{
+		emptyAddMap = FastMap.newInstance();
+		screenSearchList.add(emptyAddMap);
+	}
+	
     context.resultScreenList = screenSearchList;
     pagingListSize=screenSearchList.size();
     context.pagingListSize=pagingListSize;
     context.selectedScreen = searchString; 
 } 
-if (UtilValidate.isNotEmpty(context.retriveAll) && context.retriveAll == "Y")
+if (UtilValidate.isNotEmpty(context.retrieveAll) && context.retrieveAll == "Y")
 {
     allScreenSearchList =  OsafeManageXml.getListMapsFromXmlFile(XmlFilePath);
-    context.resultList = allScreenSearchList;
+    context.resultList = UtilMisc.sortMaps(allScreenSearchList, UtilMisc.toList("screen"));
+}
+
+addDivSeqItemKey = parameters.addKey;
+addDivSeqItemScreen = parameters.screen;
+if (UtilValidate.isNotEmpty(addDivSeqItemKey) && UtilValidate.isNotEmpty(searchString)) 
+{
+	tmpDir = FileUtil.getFile("runtime/tmp");
+	uploadedFile = new File(tmpDir, context.uploadedFileName);
+	XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "osafe-uiSequence-xml-file"), context);
+	allScreenSearchList =  OsafeManageXml.getListMapsFromXmlFile(XmlFilePath);
+	context.allScreens = allScreenSearchList;
+	List<Map<Object, Object>> listMaps = OsafeManageXml.getListMapsFromXmlFile(uploadedFile.getAbsolutePath());
+	context.divSeqItemEntry = OsafeManageXml.findByKeyAndScreenFromListMaps(listMaps, "key", addDivSeqItemKey, "screen", searchString);
 }

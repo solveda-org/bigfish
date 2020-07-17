@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+<!-- Gift Card Custom Method -->
+<CustomMethod customMethodId="GIFT_AUTH_ALWAYSAPPR" customMethodTypeId="GIFT_AUTH" customMethodName="alwaysApproveGCProcessor" description="GIFT card always authorize"/>
+<CustomMethod customMethodId="GIFT_AUTH_ALWAYSDECL" customMethodTypeId="GIFT_AUTH" customMethodName="alwaysDeclineGCProcessor" description="GIFT card always decline"/>
+<CustomMethod customMethodId="GIFT_RELEASE_TEST" customMethodTypeId="GIFT_RELEASE" customMethodName="testGCRelease" description="GIFT card test release"/>
+<CustomMethod customMethodId="GIFT_CAPTURE_TEST" customMethodTypeId="GIFT_CAPTURE" customMethodName="testGCCapture" description="GIFT card test Capture"/>
+<CustomMethod customMethodId="GIFT_REFUND_TEST" customMethodTypeId="GIFT_REFUND" customMethodName="testGCRefund" description="GIFT card  testRefund"/>
+
+<!-- Gift Card Payment Setting -->
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="GIFT_CARD" paymentServiceTypeEnumId="PRDS_PAY_AUTH" paymentService="alwaysApproveGCProcessor" paymentCustomMethodId="GIFT_AUTH_ALWAYSAPPR" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="GIFT_CARD" paymentServiceTypeEnumId="PRDS_PAY_REAUTH" paymentService="alwaysApproveGCProcessor" paymentCustomMethodId="GIFT_AUTH_ALWAYSAPPR" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="GIFT_CARD" paymentServiceTypeEnumId="PRDS_PAY_RELEASE" paymentService="testGCRelease" paymentCustomMethodId="GIFT_RELEASE_TEST" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="GIFT_CARD" paymentServiceTypeEnumId="PRDS_PAY_CAPTURE" paymentService="testGCCapture" paymentCustomMethodId="GIFT_CAPTURE_TEST" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+<ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="GIFT_CARD" paymentServiceTypeEnumId="PRDS_PAY_REFUND" paymentService="testGCRefund" paymentCustomMethodId="GIFT_REFUND_TEST" paymentGatewayConfigId="" paymentPropertiesPath="" applyToAllProducts="N" />
+
+</entity-engine-xml>

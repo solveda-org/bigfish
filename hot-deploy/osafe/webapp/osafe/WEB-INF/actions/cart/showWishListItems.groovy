@@ -17,13 +17,15 @@ totalPrice = 0;
 if (UtilValidate.isNotEmpty(wishListId)) 
 { 
     wishList = delegator.findByAndCache("ShoppingListItem", [shoppingListId : wishListId]);
-    wishListSize = wishList.size();
 	for(GenericValue wishListItem : wishList)
 	{
+		//add up total price
 		productId = wishListItem.productId;
 		product = delegator.findOne("Product", UtilMisc.toMap("productId",productId), true);
 		productPrice = dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "userLogin", userLogin));
-		totalPrice = totalPrice + productPrice.basePrice;
+		totalPrice = totalPrice + (productPrice.basePrice * wishListItem.quantity);
+		//add up total number of items in cart
+		wishListSize = wishListSize + wishListItem.quantity;
 	}
 }
 
@@ -36,7 +38,7 @@ if (UtilValidate.isNotEmpty(parameters.add_product_id))
 }
 
 //set previos continue button url 
-nextButtonUrl = "";
+prevButtonUrl = "main";
 continueShoppingLink = Util.getProductStoreParm(request, "CHECKOUT_CONTINUE_SHOPPING_LINK");
 if (UtilValidate.isEmpty(continueShoppingLink))
 {
@@ -46,64 +48,37 @@ if (UtilValidate.isNotEmpty(continueShoppingLink))
 {
 	productId = "";
 	productCategoryId = "";
-	// check passed parameter first if user comes after add to wish list
-	if (UtilValidate.isNotEmpty(parameters.product_id)) 
-	{
-	     productId = parameters.product_id;
-	     parentProduct = delegator.findOne("Product",UtilMisc.toMap("productId",productId), true);
-	 	 if (UtilValidate.isNotEmpty(parentProduct))
-	 	 {
-	     	if (UtilValidate.isNotEmpty(parameters.add_category_id)) 
-	     	{
-	     		productCategoryId = parameters.add_category_id;
-	     	}
-	     	else
-	     	{
-	 	        productCategoryMemberList = parentProduct.getRelatedCache("ProductCategoryMember");
-	            productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
-	     	    productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
-	 	        if(UtilValidate.isNotEmpty(productCategoryMemberList))
-	 	        {
-	 	            productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
-	 	            productCategoryId = productCategoryMember.productCategoryId; 
-	 	        }    
-	     	}
-	 		
-	 	 }
-	}
-	// take 0 index value from shopping cart
-	else if (wishListSize > 0)
-	{
-	    sci = EntityUtil.getFirst(wishList);
-		parentProduct = ProductWorker.getParentProduct(sci.productId, delegator);
-		cartItemProduct="";
-		if (UtilValidate.isNotEmpty(parentProduct))
-		{
-	        productId = parentProduct.productId;
-	        cartItemProduct=parentProduct;
-		}
-		else
-		{
-	        productId = sci.productId;
-	        cartItemProduct= delegator.findByPrimaryKeyCache("Product", [productId : sci.productId]);
-		}
-
-	    productCategoryMemberList = cartItemProduct.getRelatedCache("ProductCategoryMember");
-        productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
- 	    productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
-        if(UtilValidate.isNotEmpty(productCategoryMemberList))
-        {
-            productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
-            productCategoryId = productCategoryMember.productCategoryId; 
-        }
-	 }
 		//set url as per productId and product category id
-	 if (continueShoppingLink.equalsIgnoreCase("PLP") && UtilValidate.isNotEmpty(productCategoryId))
+	 if (continueShoppingLink.equalsIgnoreCase("PLP"))
 	 {
-		 nextButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductList?productCategoryId="+productCategoryId);
-	 } else if (continueShoppingLink.equalsIgnoreCase("PDP") && UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productCategoryId)) 
+		 //retrieve the productCategoryId from the last visited PLP
+		 plpProductCategoryId = session.getAttribute("PLP_PRODUCT_CATEGORY_ID");
+		 if(UtilValidate.isNotEmpty(plpProductCategoryId))
+		 {
+			 productCategoryId = plpProductCategoryId;
+		 }
+		 if (UtilValidate.isNotEmpty(productCategoryId))
+		 {
+			 prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductList?productCategoryId="+productCategoryId);
+		 }
+	 } 
+	 else if (continueShoppingLink.equalsIgnoreCase("PDP")) 
 	 {
-		 nextButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductDetail?productId="+productId+"&productCategoryId="+productCategoryId);
+		 //retrieve the product id and productCategoryId from the last visited PDP
+		 pdpProductId = session.getAttribute("PDP_PRODUCT_ID");
+		 if(UtilValidate.isNotEmpty(pdpProductId))
+		 {
+			 productId = pdpProductId;
+		 }
+		 pdpProductCategoryId = session.getAttribute("PDP_PRODUCT_CATEGORY_ID");
+		 if(UtilValidate.isNotEmpty(pdpProductCategoryId))
+		 {
+			 productCategoryId = pdpProductCategoryId;
+		 }
+		 if (UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productCategoryId))
+		 {
+			 prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductDetail?productId="+productId+"&productCategoryId="+productCategoryId);
+		 }
 	 }
 }
 
@@ -141,9 +116,10 @@ if(UtilValidate.isNotEmpty(productFeatureTypesList))
 
 context.productFeatureTypesMap = productFeatureTypesMap;
 
-context.nextButtonUrl = nextButtonUrl;
+context.prevButtonUrl = prevButtonUrl;
 context.product = product;
 context.shoppingCartTotalQuantity = wishListSize;
+context.shoppingCartSize = wishListSize;
 context.wishListSize = wishListSize;
 context.wishList = wishList;
 context.cartSubTotal = totalPrice;

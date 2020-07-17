@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+    Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+-->
+
+<resource xmlns:xsi="http://www.w3.org/01/XMLSchema-instance">
+
+    <property key="TXT_MESSAGE_USER_ID">
+        <value xml:lang="en">solveda</value>
+        <description>The user name of the SMS Gateway Account.</description>
+    </property>
+    <property key="TXT_MESSAGE_PASSWORD">
+        <value xml:lang="en">solveda2013</value>
+        <description>The user password of the SMS Gateway Account.</description>
+    </property>
+    <property key="TXT_MESSAGE_API_ID">
+        <value xml:lang="en">3414659</value>
+        <description>The SMS Gateway API Id.</description>
+    </property>
+    <property key="TXT_MESSAGE_API_URL">
+        <value xml:lang="en">http://api.clickatell.com/http/sendmsg</value>
+        <description>The Request URL to access the SMS Gateway via API.</description>
+    </property>
+    <property key="TXT_MESSAGE_API_MSG_URL">
+        <value xml:lang="en">http://api.clickatell.com/http/querymsg</value>
+        <description>The Request URL which queries the SMS Gateway via API for the sent status of Txt Messages.</description>
+    </property>
+    <property key="TXT_MESSAGE_VIRTUAL_NUMBER">
+        <value xml:lang="en">13472345789</value>
+        <description>The virtual number Application Txt messages will be sent from.  Must match the virtual number on the SMS Gateway Account.</description>
+    </property>
+    <property key="TXT_MESSAGE_FROM_MO">
+        <value xml:lang="en">1</value>
+        <description>The virtual number prefix.  Default is 1 for all US based numbers.</description>
+    </property>
+
+
+</resource>

@@ -13,6 +13,7 @@
 </#if>
 <#assign chosenShippingMethod= parameters.shipping_method!currentCartShipMeth!/>
 
+<div id="shippingOptionList">
 <#if carrierShipmentMethodList?exists && carrierShipmentMethodList?has_content>
   <#-- When a user first clicks into shopping cart page, this is needed to set the cart to contain the initial first Shipping Method option -->
   <#if (shoppingCart.size() > 0)  && !(chosenShippingMethod?has_content)>
@@ -74,6 +75,12 @@
       </#if>
       <#if store_id?has_content >
         <#assign partyGroup = delegator.findOne("PartyGroup", {"partyId": store_id}, false)! />
+        <#--
+        <#assign partyGroupList = delegator.findByAnd("PartyGroup", {"groupNameLocal": store_id})! />
+        <#if partyGroupList?has_content>
+          <#assign partyGroup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyGroupList) />
+        </#if>
+        -->
       </#if>
       <#if partyGroup?has_content>
         <#assign groupName = partyGroup.groupName!""/>
@@ -82,7 +89,7 @@
       ${uiLabelMap.CommonPickupInStoreLabel} 
       <div id="checkoutStoreSearch">
         ${uiLabelMap.StoreIdCaption}
-        <input type="text" value="" name="storeId">
+        <input type="text" value="" name="storeCode">
         <a href="javascript:submitDetailForm(document.adminCheckoutFORM, 'UCPS');"><span class="refreshIcon"></span></a>	
         <#if store_id?has_content >
           <p id="checkoutStoreName" >${groupName!uiLabelMap.StoreNotFoundLabel!}</p>	
@@ -90,4 +97,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

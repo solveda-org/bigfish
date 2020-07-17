@@ -87,6 +87,7 @@
         <div class="infoValue">       
             <#if mode?has_content>
           		<select name="format" id="format" class="small">
+          		      <option value="">${uiLabelMap.SelectOneLabel}</option>
                       <option value="xml" <#if selectedFormat == "xml" >selected=selected</#if>>XML</option>
                       <option value="html" <#if selectedFormat == "html" >selected=selected</#if>>HTML</option>
 		        </select>
@@ -96,5 +97,5 @@
     </div>
   </#if>
 <#else>
-  ${uiLabelMap.NoDataAvailableInfo}
+   ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

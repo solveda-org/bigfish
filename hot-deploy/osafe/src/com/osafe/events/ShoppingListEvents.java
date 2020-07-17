@@ -1,5 +1,6 @@
 package com.osafe.events;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +12,14 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
+import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.GenericServiceException;
@@ -199,6 +202,17 @@ public class ShoppingListEvents {
                 //addListToCart(delegator, dispatcher, cart, prodCatalogId, autoSaveListId, false, false, false);
                 org.ofbiz.order.shoppinglist.ShoppingListEvents.addListToCart(delegator, dispatcher, cart, prodCatalogId, autoSaveListId, false, false, userLogin != null ? true : false);
                 cart.setLastListRestore(UtilDateTime.nowTimestamp());
+            	/*Now we need to insure features of products added to the cart are updated
+            	 * add product Features
+            	 */
+                
+               	for (Iterator<?> item = cart.iterator(); item.hasNext();) 
+                {
+                	ShoppingCartItem cartItem = (ShoppingCartItem)item.next();
+                	com.osafe.events.ShoppingCartEvents.setProductFeaturesOnCart(cart,cartItem.getProductId());
+                }
+                
+                
             } catch (IllegalArgumentException e) {
                 Debug.logError(e, module);
             }

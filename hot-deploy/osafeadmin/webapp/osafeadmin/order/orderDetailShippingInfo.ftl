@@ -25,13 +25,8 @@
              <div class="infoValue">
                     <#assign postalAddress = orderContactMechValueMap.postalAddress>
                     <#if postalAddress?has_content>
-                        <#if postalAddress.toName?has_content><p>${postalAddress.toName}</p></#if>
-                        <#if postalAddress.attnName?has_content><p>${postalAddress.attnName}</p></#if>
-                        <p>${postalAddress.address1}</p>
-                        <#if postalAddress.address2?has_content><p>${postalAddress.address2}</p></#if>
-                        <p>${postalAddress.city?if_exists}<#if postalAddress.stateProvinceGeoId?has_content>, ${postalAddress.stateProvinceGeoId} </#if>
-                        ${postalAddress.postalCode?if_exists}</p>
-                        ${postalAddress.countryGeoId?if_exists}</p>
+				          ${setRequestAttribute("PostalAddress",postalAddress)}
+				          ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddress")}
                     </#if>
              </div>
 

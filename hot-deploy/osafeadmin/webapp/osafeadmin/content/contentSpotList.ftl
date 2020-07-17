@@ -2,7 +2,7 @@
 <#assign ownerId = context.userLoginId />
 <!-- start contentList.ftl -->
             <tr class="heading">
-                <th class="idCol firstCol">${uiLabelMap.ConetentIdLabel}</th>
+                <th class="idCol firstCol">${uiLabelMap.BigFishContentIdLabel}</th>
                 <#if contentTypeId?exists && libraryContentTypeId?exists && contentTypeId == libraryContentTypeId>
                   <th class="actionCol"></th>
                 </#if>
@@ -134,8 +134,6 @@
                 </#if>
             </#list>
         <#else>
-           <tr>
-               <td colspan="4" class="boxNumber">${uiLabelMap.NoDataAvailableInfo}</td>
-            </tr>
+           ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
         </#if>
 <!-- end promotionsList.ftl -->

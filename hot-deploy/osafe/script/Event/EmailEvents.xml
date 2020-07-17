@@ -5,6 +5,7 @@
 
     <simple-method method-name="sendRegistrationEmail" short-description="send Registration Email" login-required="false">
         <if-not-empty field="createdUserLogin">
+            <set-current-user-login value-field="createdUserLogin"/>
             <get-related-one value-field="createdUserLogin" relation-name="Person" to-value-field="person"/>
             <if-not-empty field="person">
                 <if-empty field="parameters.productStoreId">
@@ -63,6 +64,7 @@
         <set field="bodyParameters.email" from-field="parameters.emailAddress"/>
         <set field="bodyParameters.firstName" from-field="parameters.firstName"/>
         <set field="bodyParameters.lastName" from-field="parameters.lastName"/>
+        <set field="bodyParameters.fullName" from-field="parameters.fullName"/>
         <set field="bodyParameters.address1" from-field="parameters.address1"/>
         <set field="bodyParameters.address2" from-field="parameters.address2"/>
         <set field="bodyParameters.city" from-field="parameters.city"/>
@@ -85,14 +87,43 @@
             <set field="emailParams.emailType" from-field="parameters.emailType"/>
             <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
             <set field="emailParams.userLogin" from-field="systemUserLogin"/>
-            <if-not-empty field="parameters.emailAddressCompany">
-                <set field="emailParams.sendTo" from-field="parameters.emailAddressCompany"/>
-            <else>
-                <set field="emailParams.sendTo" from-field="productStoreEmailSetting.fromAddress"/>
-            </else>
-            </if-not-empty>
-            <call-service service-name="sendMailFromScreen" in-map-name="emailParams"/>
+            <set field="emailParams.sendTo" from-field="parameters.emailAddress"/>
+            <call-service service-name="sendMailFromScreen" in-map-name="emailParams" break-on-error="false">
+            	<results-to-map map-name="sendMailResultMap"/>
+            </call-service>
+            <property-to-field field="nullLabel" resource="OSafeUiLabels" property="NullLabel"/>
+            <set field="emailErrorMessage" value="${sendMailResultMap.emailErrorMessage}"/>
+            <set field="toEmail" from-field="emailParams.sendTo"/>
+            <set field="fromEmail" from-field="productStoreEmailSetting.fromAddress"/>
+            <set field="ccEmail" from-field="productStoreEmailSetting.ccAddress"/>
+            <if-empty field="ccEmail">
+            	<set field="ccEmail" from-field="nullLabel"/>
+            </if-empty>
+            <set field="bccEmail" from-field="productStoreEmailSetting.bccAddress"/>
+            <if-empty field="bccEmail">
+            	<set field="bccEmail" from-field="nullLabel"/>
+            </if-empty>
+            <set field="emailSubject" value="${sendMailResultMap.subjectString}"/>
+            <if-empty field="emailSubject">
+            	<set field="emailSubject" from-field="nullLabel"/>
+            </if-empty>
+            
+            <!-- emailErrorMessage generated from OfBiz -->
+	        <if-not-empty field="emailErrorMessage">
+	        	<set field="setFieldLevelErrors" value="N"/>
+	        	<field-to-request field="setFieldLevelErrors" />
+	        	<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="UnableToSendEmailLabel"/>
+	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="EmailTechnicalDetailsLabel"/>
+	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="SendEmailErrorLabel"/>
+	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="RenderOfbizErrorLabel"/>
+	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	        </if-not-empty>
         </if-not-empty>
+        
+        <check-errors/>
     </simple-method>
     
     <simple-method method-name="sendMailingListEmail" short-description="Send Mailing List Subscription E-mail" login-required="false">
@@ -172,6 +203,73 @@
                 </else>
             </if-not-empty>
         </if-not-empty>
+    </simple-method>
+
+
+    <simple-method method-name="sendEmailAFriendNotification" short-description="send Email A Friend Notification" login-required="false">
+
+        <set field="bodyParameters.productId" from-field="parameters.productId"/>
+        <set field="bodyParameters.sendFrom" value="${parameters.fromFirstName} ${parameters.fromLastName}"/>
+        <set field="bodyParameters.fromEmailAddress" from-field="parameters.fromEmailAddress"/>
+        <set field="bodyParameters.fromFirstName" from-field="parameters.fromFirstName"/>
+        <set field="bodyParameters.fromLastName" from-field="parameters.fromLastName"/>
+        <set field="bodyParameters.toEmailAddress" from-field="parameters.toEmailAddress"/>
+        <set field="bodyParameters.toFirstName" from-field="parameters.toFirstName"/>
+        <set field="bodyParameters.toLastName" from-field="parameters.toLastName"/>
+        <set field="bodyParameters.subject" from-field="parameters.subject"/>
+        <set field="bodyParameters.comment" from-field="parameters.comment"/>
+        <set field="emailType" value="PRDS_TELL_FRIEND"/>
+        <entity-one entity-name="UserLogin" value-field="systemUserLogin" auto-field-map="false">
+            <field-map field-name="userLoginId" value="system"/>
+        </entity-one>
+
+        <if-empty field="parameters.productStoreId">
+            <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                <field field="request" type="javax.servlet.ServletRequest"/>
+            </call-class-method>
+            <set field="parameters.productStoreId" from-field="productStoreId"/>
+        </if-empty>
+
+        <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
+            <field-map field-name="productStoreId" from-field="parameters.productStoreId"/>
+            <field-map field-name="emailType" from-field="emailType"/>
+        </entity-one>
+        <!-- Send email-->
+        <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
+            <set field="emailParams.emailType" from-field="emailType"/>
+            <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+            <set field="emailParams.userLogin" from-field="systemUserLogin"/>
+            <set field="emailParams.sendFrom" from-field="parameters.fromEmailAddress"/>
+            <set field="emailParams.sendTo" from-field="parameters.toEmailAddress"/>
+            <set field="emailParams.subject" from-field="parameters.subject"/>
+            <call-service service-name="sendMailFromScreen" in-map-name="emailParams" break-on-error="false">
+                <results-to-map map-name="sendMailResultMap"/>
+            </call-service>
+            <property-to-field field="nullLabel" resource="OSafeUiLabels" property="NullLabel"/>
+            <set field="emailErrorMessage" value="${sendMailResultMap.emailErrorMessage}"/>
+            <set field="toEmail" from-field="parameters.toEmailAddress"/>
+            <set field="fromEmail" from-field="parameters.fromEmailAddress"/>
+            <set field="ccEmail" from-field="nullLabel"/>
+            <set field="bccEmail" from-field="nullLabel"/>
+            <set field="emailSubject" value="${sendMailResultMap.subjectString}"/>
+            <if-empty field="emailSubject">
+                <set field="emailSubject" from-field="nullLabel"/>
+            </if-empty>
+            
+            <!-- emailErrorMessage generated from OfBiz -->
+            <if-not-empty field="emailErrorMessage">
+                <set field="setFieldLevelErrors" value="N"/>
+                <field-to-request field="setFieldLevelErrors" />
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="SendEmailErrorLabel"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-not-empty>
+        </if-not-empty>
+        
+        <check-errors/>
+
+        <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="EmailAFriendSuccess"/>
+        <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
+        <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
     </simple-method>
 
     <simple-method method-name="clearSendEmailError" short-description="clear email send error" login-required="false">

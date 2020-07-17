@@ -1,1 +1,0 @@
-<div class="cartHeaderItemImage"><span>${uiLabelMap.CartItemImageLabel}</span></div>

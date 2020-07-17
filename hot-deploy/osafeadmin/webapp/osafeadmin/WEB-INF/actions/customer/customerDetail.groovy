@@ -10,6 +10,8 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.GenericValue;
 
 //Get the Cart and Prepare Size
 shoppingCart = ShoppingCartEvents.getCartObject(request);
@@ -20,6 +22,7 @@ context.partyId=partyId;
 if (UtilValidate.isNotEmpty(partyId))
 {
 	context.generalInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","CustomerDetailInfoHeading",["partyId" : partyId], locale )
+	context.customerAttributesInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","CustomerAttributesInfoHeading",["partyId" : partyId], locale )
 }
 if (UtilValidate.isNotEmpty(partyId))
 {
@@ -63,20 +66,12 @@ if (UtilValidate.isNotEmpty(partyId))
     	{
 	        partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
 	
-	        partyBillingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "BILLING_LOCATION"));
-	        partyBillingLocations = EntityUtil.getRelated("PartyContactMech", partyBillingLocations);
-	        partyBillingLocations = EntityUtil.filterByDate(partyBillingLocations,true);
-	        partyBillingLocations = EntityUtil.orderBy(partyBillingLocations, UtilMisc.toList("fromDate DESC"));
-	        if (UtilValidate.isNotEmpty(partyBillingLocations)) 
-	        {
-	        	partyBillingLocation = EntityUtil.getFirst(partyBillingLocations);
-	            context.billingContactMechId = partyBillingLocation.contactMechId;
-	            billingContactMechList = EntityUtil.getRelated("ContactMech",partyBillingLocations);
-	            context.billingContactMechList = billingContactMechList;
-	        }
-	
-	
-	        partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
+	        shippingContactMechList = FastList.newInstance();
+	        addrExpr= FastList.newInstance();
+	        addrExpr.add(EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.EQUALS, "SHIPPING_LOCATION"));
+	        addrExpr.add(EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.EQUALS, "GENERAL_LOCATION"));
+	        addrExpr.add(EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.EQUALS, "BILLING_LOCATION"));
+	        partyShippingLocations = EntityUtil.filterByOr(partyContactMechPurpose,addrExpr);
 	        partyShippingLocations = EntityUtil.getRelated("PartyContactMech", partyShippingLocations);
 	        partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,true);
 	        partyShippingLocations = EntityUtil.orderBy(partyShippingLocations, UtilMisc.toList("fromDate DESC"));
@@ -84,24 +79,20 @@ if (UtilValidate.isNotEmpty(partyId))
 	        {
 	        	partyShippingLocation = EntityUtil.getFirst(partyShippingLocations);
 	            context.shippingContactMechId = partyShippingLocation.contactMechId;
-	            shippingContactMechList = EntityUtil.getRelated("ContactMech",partyShippingLocations);
-	            context.shippingContactMechList = shippingContactMechList;
+	            contactMechList = EntityUtil.getRelated("ContactMech",partyShippingLocations);
+	            for (GenericValue contactMech: contactMechList) 
+	            {
+	                if (!shippingContactMechList.contains(contactMech))
+	                {
+	                	shippingContactMechList.add(contactMech)
+	                }
+
+	            }
+
 	        }
 	
-	        if (UtilValidate.isNotEmpty(context.billingContactMechList))
-			{
-			    billingContactMech = context.billingContactMechList.get(0);
-			    // Moving the billing address to the front of the list
-			    if(UtilValidate.isNotEmpty(context.shippingContactMechList))
-			    {
-			        context.shippingContactMechList.remove(billingContactMech);
-			        context.shippingContactMechList.add(0,billingContactMech);
-			        context.billingContactMechId=billingContactMech.contactMechId;
-			    } else {
-		            context.shippingContactMechList = [billingContactMech];
-			    }
-			}
-	
+			context.resultList= shippingContactMechList;
+			
 	        partyPurposeEmails = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_EMAIL"));
 	        partyPurposeEmails = EntityUtil.getRelated("PartyContactMech", partyPurposeEmails);
 	        partyPurposeEmails = EntityUtil.filterByDate(partyPurposeEmails,true);
@@ -163,6 +154,7 @@ if (UtilValidate.isNotEmpty(partyId))
     	}
 		//Get PARTY ATTRIBUTES
 		partyAttributes = party.getRelated("PartyAttribute");
+		context.customerAttributes = partyAttributes;
 
 	    //IS_DOWNLOADED
 	    partyAttrs = EntityUtil.filterByAnd(partyAttributes, UtilMisc.toMap("attrName", "IS_DOWNLOADED"));
@@ -177,7 +169,14 @@ if (UtilValidate.isNotEmpty(partyId))
 	    {
 	    	partyAttr = EntityUtil.getFirst(partyAttrs);
 	    	context.PARTY_EMAIL_PREFERENCE = partyAttr.attrValue;
-	    }			    	
+	    }
+	    //PARTY_EMAIL_PREFERENCE
+	    partyAttrs = EntityUtil.filterByAnd(partyAttributes, UtilMisc.toMap("attrName", "PARTY_TEXT_PREFERENCE"));
+	    if (UtilValidate.isNotEmpty(partyAttrs))
+	    {
+	    	partyAttr = EntityUtil.getFirst(partyAttrs);
+	    	context.userTextPreference = partyAttr.attrValue;
+	    }
 		
 		
 	}

@@ -2,6 +2,7 @@
     <#assign stateProvinceGeoId = postalAddress.stateProvinceGeoId!"">
     <#assign countryGeoId = postalAddress.countryGeoId!"">
 </#if>
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <!-- address state entry -->
 <#assign  selectedCountry = parameters.get("${fieldPurpose?if_exists}_country")!countryGeoId?if_exists/>
 <#if !selectedCountry?has_content>
@@ -10,15 +11,11 @@
     </#if>
 </#if>
 <#assign  selectedState = parameters.get("${fieldPurpose?if_exists}_state")!stateProvinceGeoId?if_exists/>
-<div class = "addressInfoStateProvince">
+<div class="${request.getAttribute("attributeClass")!}">
     <div class="infoRow" id="${fieldPurpose?if_exists}_STATES">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label>
-				    <span class="required">*</span>
-                    <span class="${fieldPurpose?if_exists}_USA">${uiLabelMap.StateCaption}</span>
-                    <span class="${fieldPurpose?if_exists}_CAN">${uiLabelMap.ProvinceCaption}</span>
-                    <span class="${fieldPurpose?if_exists}_OTHER">${uiLabelMap.StateOrProvinceCaption}</span>
+                <label><#if mandatory == "Y"><span class="required">*</span></#if>${uiLabelMap.StateOrProvinceCaption}
                 </label>
             </div>
             <div class="infoValue">
@@ -39,6 +36,7 @@
                 <#if stateList?has_content>
                     <input type="hidden" name="${fieldPurpose?if_exists}_StateListExist" value="" id="${fieldPurpose?if_exists}_StateListExist"/>
                 </#if>
+                <input type="hidden" id="${fieldPurpose?if_exists}_state_mandatory" name="${fieldPurpose?if_exists}_state_mandatory" value="${mandatory}"/>
             </div>
         </div>
     </div>

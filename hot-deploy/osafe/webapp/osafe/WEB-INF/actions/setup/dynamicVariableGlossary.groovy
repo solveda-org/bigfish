@@ -32,7 +32,7 @@ if (UtilValidate.isNotEmpty(productStore))
  
 }
 
-// Get the Cart and Prepare Size
+//SHOPPING CART INFORMATION
 shoppingCart = ShoppingCartEvents.getCartObject(request);
 if (UtilValidate.isNotEmpty(shoppingCart))
 {
@@ -45,9 +45,41 @@ if (UtilValidate.isNotEmpty(shoppingCart))
    context.CART_TOTAL_SHIP = shoppingCart.getTotalShipping();
    context.CART_TOTAL_TAX = shoppingCart.getTotalSalesTax();
    context.CART_TOTAL_MONEY = shoppingCart.getGrandTotal();
+   context.CART_TOTAL_NET = shoppingCart.getGrandTotal().setScale(2).toString();
 }
 
 
+//USER LOGIN PARTY INFORMATION
+userLogin = session.getAttribute("userLogin");
+if (UtilValidate.isNotEmpty(userLogin))
+{
+    context.put("USER_LOGIN",userLogin);
+    context.put("USER_LOGIN_ID",userLogin.userLoginId);
+    context.put("LOGIN_EMAIL",userLogin.userLoginId);
+    partyId = userLogin.partyId;
+	if (UtilValidate.isNotEmpty(partyId))
+	{
+    	context.put("PARTY_ID",partyId);
+        person=userLogin.getRelatedOneCache("Person");
+        if (UtilValidate.isNotEmpty(person)) 
+        {
+        	context.put("FIRST_NAME",person.firstName);
+        	context.put("LAST_NAME",person.lastName);
+        	context.put("MIDDLE_NAME",person.middleName);
+        	context.put("GENDER",person.gender);
+        	context.put("SUFFIX",person.suffix);
+        	context.put("PERSONAL_TITLE",person.personalTitle);
+        	context.put("NICKNAME",person.nickname);
+        }
+        partyGroup=userLogin.getRelatedOneCache("PartyGroup");
+        if (UtilValidate.isNotEmpty(partyGroup)) 
+        {
+        	context.put("GROUP_NAME",partyGroup.groupName);
+        }
+	}
+}	
+
+//ORDER INFORMATION
 orderId=context.orderId;
 if (UtilValidate.isNotEmpty(orderId)) 
 {
@@ -121,7 +153,7 @@ if (UtilValidate.isNotEmpty(orderId))
 
        //Not Used Yet
        context.ORDER_HELPER=orderReadHelper;
-       context.ORDER_HEADER=orderHeader;
+       context.ORDER=orderHeader;
        context.ORDER_ITEMS=orderItems;
        context.ORDER_ADJUSTMENTS=headerAdjustmentsToShow;
        context.ORDER_SHIP_ADDRESS=shippingAddress;

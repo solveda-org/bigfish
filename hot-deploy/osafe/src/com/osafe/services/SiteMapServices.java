@@ -66,7 +66,7 @@ public class SiteMapServices {
     public static String CATALOG_URL_MOUNT_POINT = "shop";
     public static String SITEMAP_VARIANT_FEATURES = null;
     private static ResourceBundleMapWrapper OSAFE_FRIENDLY_URL = null;
-    private static final ResourceBundle OSAFE_PROP = UtilProperties.getResourceBundle("osafe.properties", Locale.getDefault());
+    private static final ResourceBundle OSAFE_PROP = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
     
     public static Map buildSiteMap(DispatchContext dctx, Map<String, ?> context) 
     {
@@ -77,7 +77,7 @@ public class SiteMapServices {
         String productStoreId = (String) context.get("productStoreId");
         String browseRootProductCategoryId = (String) context.get("browseRootProductCategoryId");
         String siteMapOutputDir = (String) context.get("siteMapOutputDir");
-        CATALOG_URL_MOUNT_POINT=OSAFE_PROP.getString("url.catalog.prefix");
+        CATALOG_URL_MOUNT_POINT=OSAFE_PROP.getString("urlCatalogPrefix");
         OSAFE_FRIENDLY_URL = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("OSafeSeoUrlMap", Locale.getDefault());        	
         
         PRODUCT_DETAIL_URL = (String) context.get("productDetailUrl");
@@ -285,6 +285,11 @@ public class SiteMapServices {
                 parentCategoryContentWrapper = null;
             	
                 workingCategory = (GenericValue) workingCategoryMap.get("ProductCategory");
+                
+                List<GenericValue> productCategoryMembers = workingCategory.getRelatedCache("ProductCategoryMember");
+                // Remove any expired
+                productCategoryMembers = EntityUtil.filterByDate(productCategoryMembers, true);
+                
                 categoryContentWrapper = new CategoryContentWrapper(dispatcher, workingCategory, locale, "text/html");
                 if ("CATALOG_CATEGORY".equals(workingCategory.getString("productCategoryTypeId"))) 
                 {
@@ -295,7 +300,14 @@ public class SiteMapServices {
                         List<Map<String, Object>> relatedCategories = CategoryServices.getRelatedCategories(delegator, productCategoryId, null, true, false, true);
                         if (UtilValidate.isNotEmpty(relatedCategories))
                         {
-                            url = makeCatalogUrl(null,null,null,productCategoryId, null,null);
+                        	if(UtilValidate.isNotEmpty(productCategoryMembers))
+                        	{
+                        		url = makeCatalogUrl(null,null,productCategoryId,null, null,null);
+                        	}
+                        	else
+                        	{
+                        		url = makeCatalogUrl(null,null,null,productCategoryId, null,null);
+                        	}
                         }
                         else
                         {
@@ -321,9 +333,7 @@ public class SiteMapServices {
                     categoryTrail = (List<String>) workingCategoryMap.get("categoryTrail");
                     categoryLevel = categoryTrail.size() - 1;
                     
-                    List<GenericValue> productCategoryMembers = workingCategory.getRelatedCache("ProductCategoryMember");
-                    // Remove any expired
-                    productCategoryMembers = EntityUtil.filterByDate(productCategoryMembers, true);
+                    
                     for (GenericValue productCategoryMember : productCategoryMembers) 
                     {
                         GenericValue product = productCategoryMember.getRelatedOneCache("Product");

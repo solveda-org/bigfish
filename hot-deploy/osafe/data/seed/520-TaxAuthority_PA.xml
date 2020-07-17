@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <TaxAuthority taxAuthGeoId="PA" taxAuthPartyId="PA_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="PA" taxAuthPartyId="PHILADELPHIA_DTF" includeTaxInPrice="N"/>
+</entity-engine-xml>

@@ -1,5 +1,5 @@
-<div class="clpProductListLink">
-<a class="eCommerceProductLink" title="${categoryName}" href="${productCategoryUrl}">
-    ${categoryName}
-</a>
-</div>
+<li class="${request.getAttribute("attributeClass")!}">
+	<div>
+	  <a title="${categoryName}" href="${productCategoryUrl}"><span>${categoryName}</span></a>
+	</div>
+</li>   

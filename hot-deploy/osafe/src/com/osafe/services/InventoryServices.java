@@ -29,6 +29,20 @@ public class InventoryServices {
     public static final String module = OrderServices.class.getName();
 
     public static Map<String, Object> getProductInventoryLevel(String productId, ServletRequest request) {
+    	Delegator delegator = (Delegator)request.getAttribute("delegator");
+    	Map<String, Object> ineventoryLevelMap = new HashMap<String, Object>();
+    	
+		try {
+			List<GenericValue> inventoryProductAttributes =  delegator.findByAndCache("ProductAttribute", UtilMisc.toMap("productId",productId));
+			ineventoryLevelMap = getProductInventoryLevel(inventoryProductAttributes,request);
+			
+		} catch (GenericEntityException ge) {
+		    Debug.logError(ge, ge.getMessage(), module);
+		}
+    	return ineventoryLevelMap;
+    }
+    
+    public static Map<String, Object> getProductInventoryLevel(List<GenericValue> productAttributes, ServletRequest request) {
     	String productStoreId = ProductStoreWorker.getProductStoreId(request);
     	Delegator delegator = (Delegator)request.getAttribute("delegator");
     	Map<String, Object> ineventoryLevelMap = new HashMap<String, Object>();
@@ -45,17 +59,12 @@ public class InventoryServices {
     	    GenericValue totalInventoryProductAttribute = null;
     	    GenericValue whInventoryProductAttribute = null;
     	    
-    		try {
-    			List<GenericValue> inventoryProductAttributes =  delegator.findByAndCache("ProductAttribute", UtilMisc.toMap("productId",productId));
-    			if(UtilValidate.isNotEmpty(inventoryProductAttributes)) {
-    			    List<GenericValue> totalInventoryProductAttributes = EntityUtil.filterByAnd(inventoryProductAttributes, UtilMisc.toMap("attrName", "BF_INVENTORY_TOT"));
-    			    totalInventoryProductAttribute = EntityUtil.getFirst(totalInventoryProductAttributes);
-    			    
-    			    List<GenericValue> whInventoryProductAttributes = EntityUtil.filterByAnd(inventoryProductAttributes, UtilMisc.toMap("attrName", "BF_INVENTORY_WHS"));
-    			    whInventoryProductAttribute = EntityUtil.getFirst(whInventoryProductAttributes);
-    			}
-    		} catch (GenericEntityException ge) {
-    		    Debug.logError(ge, ge.getMessage(), module);
+			if(UtilValidate.isNotEmpty(productAttributes)) {
+			    List<GenericValue> totalInventoryProductAttributes = EntityUtil.filterByAnd(productAttributes, UtilMisc.toMap("attrName", "BF_INVENTORY_TOT"));
+			    totalInventoryProductAttribute = EntityUtil.getFirst(totalInventoryProductAttributes);
+			    
+			    List<GenericValue> whInventoryProductAttributes = EntityUtil.filterByAnd(productAttributes, UtilMisc.toMap("attrName", "BF_INVENTORY_WHS"));
+			    whInventoryProductAttribute = EntityUtil.getFirst(whInventoryProductAttributes);
 			}
     		if(totalInventoryProductAttribute!=null)
     		{
@@ -122,7 +131,7 @@ public class InventoryServices {
     	    BigDecimal newInventoryWarehouseLevel = BigDecimal.ZERO;
     	    
     		try {
-    			List<GenericValue> inventoryProductAttributes =  delegator.findByAnd("ProductAttribute", UtilMisc.toMap("productId",productId));
+    			List<GenericValue> inventoryProductAttributes =  delegator.findByAndCache("ProductAttribute", UtilMisc.toMap("productId",productId));
     			if(UtilValidate.isNotEmpty(inventoryProductAttributes)) {
     			    List<GenericValue> totalInventoryProductAttributes = EntityUtil.filterByAnd(inventoryProductAttributes, UtilMisc.toMap("attrName", "BF_INVENTORY_TOT"));
     			    totalInventoryProductAttribute = EntityUtil.getFirst(totalInventoryProductAttributes);
@@ -187,7 +196,7 @@ public class InventoryServices {
                 Debug.logWarning(e, module);
             }
             
-            if(UtilValidate.isNotEmpty(deliveryOption) && deliveryOption.equals("SHIP_TO")) {
+            if(UtilValidate.isNotEmpty(deliveryOption) && (deliveryOption.equals("SHIP_TO") || deliveryOption.equals("SHIP_TO_MULTI"))) {
         		
                 try {
                 	if(whInventoryProductAttribute != null) {

@@ -97,5 +97,5 @@
 	  </div>
 <#else>
    <div class="header sub"><h2>${scheduledJobRuleBoxHeading!}</h2></div>
-	    ${uiLabelMap.NoDataAvailableInfo}
+   ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

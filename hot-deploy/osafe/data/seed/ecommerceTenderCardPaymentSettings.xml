@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+<!-- Tender Card Custom Method -->
+<CustomMethod customMethodId="TENDER_CARD_AUTH" customMethodTypeId="GIFT_AUTH" customMethodName="tenderCardAuthorize" description="Tender card authorize"/>
+<CustomMethod customMethodId="TENDER_CARD_REAUTH" customMethodTypeId="GIFT_AUTH" customMethodName="tenderCardReAuthorize" description="Tender card re-authorize"/>
+<CustomMethod customMethodId="TENDER_CARD_RELEASE" customMethodTypeId="GIFT_RELEASE" customMethodName="tenderCardRelease" description="Tender card release"/>
+<CustomMethod customMethodId="TENDER_CARD_CAPTURE" customMethodTypeId="GIFT_CAPTURE" customMethodName="tenderCardCapture" description="Tender card Capture"/>
+<CustomMethod customMethodId="TENDER_CARD_REFUND" customMethodTypeId="GIFT_REFUND" customMethodName="tenderCardRefund" description="Tender card Refund"/>
+
+</entity-engine-xml>

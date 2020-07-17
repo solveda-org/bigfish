@@ -1,12 +1,10 @@
-<#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >
-  <div class="cartItemOfferPrice">
-    <#if offerPrice?exists && offerPrice?has_content>
-      <div class="labelText">
-        <label>${uiLabelMap.CartItemOfferPriceCaption}</label>
-      </div>
-      <div class="labelValue">
-        <span class="price"><@ofbizCurrency amount=offerPrice isoCode=currencyUom rounding=globalContext.currencyRounding/></span>
-      </div>
+<li class="${request.getAttribute("attributeClass")!}<#if lineIndex == 0> firstRow</#if>">
+  <div>
+    <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >
+      <label>${uiLabelMap.CartItemOfferPriceCaption}</label>
+      <#if offerPrice?exists && offerPrice?has_content>
+	    <span><@ofbizCurrency amount=offerPrice isoCode=currencyUom rounding=globalContext.currencyRounding/></span>
+      </#if>
     </#if>
   </div>
-</#if>
+</li>

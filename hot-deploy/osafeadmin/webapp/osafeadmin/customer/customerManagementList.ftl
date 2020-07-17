@@ -1,7 +1,7 @@
 <!-- start listBox -->
           <thead>
             <tr class="heading">
-                <th class="idCol firstCol">${uiLabelMap.CustomerNoLabel}</th>
+                <th class="idCol firstCol">${uiLabelMap.CustNoLabel}</th>
                 <th class="nameCol">${uiLabelMap.LastNameLabel}</th>
                 <th class="nameCol">${uiLabelMap.FirstNameLabel}</th>
                 <th class="descCol">${uiLabelMap.UserLoginLabel}</th>
@@ -17,6 +17,7 @@
             <#list resultList as partyRow>
                   <#assign hasNext = partyRow_has_next/>
                   <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
+                  	<#assign userLoginId = "">
                     <td class="idCol <#if !partyRow_has_next>lastRow</#if> firstCol" ><a href="<@ofbizUrl>customerDetail?partyId=${partyRow.partyId}</@ofbizUrl>">${partyRow.partyId}</a></td>
                    <#assign person = delegator.findByPrimaryKey("Person", {"partyId", partyRow.partyId})/>
                    <#assign party = delegator.findByPrimaryKey("Party", {"partyId", partyRow.partyId})/>
@@ -29,7 +30,15 @@
                     <td class="nameCol <#if !partyRow_has_next>lastRow</#if>"><#if person?has_content>${person.firstName!""}</#if></td>
                     <#assign userLogins = partyRow.getRelated("UserLogin")>
                     <#if userLogins?has_content>
-                      <#assign userLoginId = userLogins.get(0).userLoginId>
+                      <#list userLogins as userLogin>
+                          <#if userLogin.enabled?has_content && userLogin.enabled == 'Y'>
+                              <#assign userLoginId = userLogin.userLoginId!"">
+                              <#break>
+                          </#if>
+                      </#list>
+                      <#if !userLoginId?has_content>
+                          <#assign userLoginId = userLogins.get(0).userLoginId>
+                      </#if>
                     <#else>
                       <#assign userLoginId = "">
                     </#if>
@@ -55,44 +64,38 @@
                     </#if>
                     <td class="addrCol <#if !partyRow_has_next>lastRow</#if>">
                     <#if postalAddress?has_content>
-		                ${postalAddress.address1}<br>${postalAddress.city!""} ${postalAddress.stateProvinceGeoId!""}
+                          ${setRequestAttribute("PostalAddress",postalAddress)}
+                          ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_STREET_CITY_STATE")}
+                          ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddress")}
                     </#if>
-                    </td> 
-                     <#assign customerOnly = parameters.roleCustomerId?if_exists/>
-                     <#assign guestOnly = parameters.roleGuestId?if_exists/>
-                     <#assign emailIdOnly = parameters.roleEmailId?if_exists/>
-                     <#assign showAll = parameters.roleall?if_exists/>
-                     <#assign partyRoles = delegator.findByAnd("PartyRole", {"partyId", partyRow.partyId})>
-                     <#if partyRoles?has_content>
-                          <#list partyRoles as partyRole>
-                          <#assign roleType = partyRole.getRelatedOne("RoleType") />
-                          <!-- when showAll is checked OR all the options are checked OR none is checked -->
-                          <#if showAll?has_content || (!customerOnly?has_content && !guestOnly?has_content && !emailIdOnly?has_content) || (customerOnly?has_content && guestOnly?has_content && emailIdOnly?has_content)>
-    	                      <#if roleType.roleTypeId=="GUEST_CUSTOMER">
-    	                        <#assign partyRoleType = roleType.description />
-    	                        <#break>
-    	                      </#if>
-    	                      <#if (roleType.roleTypeId=="CUSTOMER" || roleType.roleTypeId=="EMAIL_SUBSCRIBER")>
-    	                         <#assign partyRoleType = roleType.description />
-    	                       </#if>
-    	                  <!-- when ShowAll is not checked -->
-    	                  <#else>
-                              <#if customerOnly?has_content && (roleType.roleTypeId=="CUSTOMER")>
-                                  <#assign partyRoleType = roleType.description />
-                              </#if>
-                              <#if guestOnly?has_content && (roleType.roleTypeId=="GUEST_CUSTOMER")>
-                                  <#assign partyRoleType = roleType.description />
-                                  <#break>
-                              </#if>
-                              <#if emailIdOnly?has_content && (roleType.roleTypeId=="EMAIL_SUBSCRIBER")>
-                                  <#assign partyRoleType = roleType.description />
-                              </#if>
-                          </#if>
-                          </#list>
-                     <#else>
-                      <#assign partyRoleType = "">
-                     </#if>
+                    </td>
                      
+                    <#assign partyRoles = delegator.findByAnd("PartyRole", {"partyId", partyRow.partyId}) />
+                    <#assign partyRoleTypeIds = Static["org.ofbiz.entity.util.EntityUtil"].getFieldListFromEntityList(partyRoles, "roleTypeId", true) />
+                    
+                    <#if partyRoles?has_content>
+                        <#list partyRoles as partyRole>
+                            <#if partyRole.roleTypeId == "GUEST_CUSTOMER">
+                                <#if roleTypeIds?has_content && roleTypeIds.contains("GUEST_CUSTOMER")>
+                                    <#assign partyRoleType = roleTypesDescMap.get("GUEST_CUSTOMER")! />
+                                    <#break>
+                                </#if>
+                            <#else>
+                                <#if (roleTypeIds?has_content && roleTypeIds.contains(partyRole.roleTypeId))>
+                                    <#assign partyRoleType = roleTypesDescMap.get(partyRole.roleTypeId)! />
+                                <#elseif !roleTypeIds?has_content>
+                                    <#if partyRoleTypeIds?has_content && partyRoleTypeIds.contains("CUSTOMER")>
+                                        <#assign partyRoleType = roleTypesDescMap.get("CUSTOMER")! />
+                                    <#else>
+                                        <#assign partyRoleType = roleTypesDescMap.get(partyRole.roleTypeId)! />
+                                    </#if>
+                                    <#break>
+                                </#if>
+                            </#if>
+                        </#list>
+                    <#else>
+                        <#assign partyRoleType = "">
+                    </#if> 
 		              
                     <td class="typeCol <#if !partyRow_has_next>lastRow</#if>">${partyRoleType?if_exists}</td>
                     <td class="statusCol <#if !partyRow_has_next>lastRow</#if>">

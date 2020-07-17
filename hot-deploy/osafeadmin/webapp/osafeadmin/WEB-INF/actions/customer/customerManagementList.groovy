@@ -8,6 +8,11 @@ import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.UtilMisc;
 
 session = context.session;
 roleId = StringUtils.trimToEmpty(parameters.roleId);
@@ -53,7 +58,6 @@ svcCtx.put("VIEW_INDEX", "" + viewIndex);
 svcCtx.put("VIEW_SIZE", ""+ viewSize);
 svcCtx.put("lookupFlag", "Y");
 svcCtx.put("showAll", "N");
-svcCtx.put("roleTypeId", "ANY");
 svcCtx.put("partyTypeId", "ANY");
 svcCtx.put("statusId", "ANY");
 svcCtx.put("extInfo", "N");
@@ -72,6 +76,40 @@ if (UtilValidate.isNotEmpty(partyUserLoginId))
  {
     svcCtx.put("userLoginId", partyUserLoginId);
  }
+
+List<String> customerRoleTypeIds = FastList.newInstance();
+List<String> roleTypeIds = FastList.newInstance();
+
+customerRoleIncSearch = globalContext.get("CUSTOMER_ROLE_INC_SEARCH");
+
+roleTypes = session.getAttribute("roleTypes");
+if(UtilValidate.isEmpty(roleTypes))
+{
+	if(UtilValidate.isNotEmpty(customerRoleIncSearch))
+	{
+		customerRoleIncSearchList = StringUtil.split(customerRoleIncSearch, ",");
+	    for (String customerRoleTypeId : customerRoleIncSearchList) 
+	    {
+	        customerRoleTypeIds.add(customerRoleTypeId.trim());
+	    }
+	}
+	
+	roleTypes = delegator.findList("RoleType", EntityCondition.makeCondition("roleTypeId", EntityOperator.IN, customerRoleTypeIds), null, null, null, false);
+	if(UtilValidate.isNotEmpty(roleTypes))
+	{
+		session.setAttribute("roleTypes",roleTypes);
+	}
+}
+
+for(GenericValue roleType : roleTypes)
+{
+	context.put('role'+roleType.description.toLowerCase(), StringUtils.trimToEmpty(parameters.get('role'+roleType.description.toLowerCase())));
+    if(UtilValidate.isNotEmpty(context.get('role'+roleType.description.toLowerCase())))
+    { 
+    	roleTypeIds.add(roleType.roleTypeId);
+    }
+}
+
 
 if (UtilValidate.isNotEmpty(partyName))
  {
@@ -96,7 +134,7 @@ if (UtilValidate.isNotEmpty(partyName))
      }
     else
      {
-             svcCtx.put("lastName",partyName);
+             svcCtx.put("personName",partyName);
      }
  }
 
@@ -115,43 +153,21 @@ if (UtilValidate.isNotEmpty(statusDisabled) && UtilValidate.isEmpty(statusEnable
     svcCtx.put("statusId", "PARTY_DISABLED");
 }
 
-List<String> roleTypes = FastList.newInstance();
-if (UtilValidate.isEmpty(roleAll))
+if ((UtilValidate.isEmpty(roleAll)) || (UtilValidate.isNotEmpty(roleAll) && UtilValidate.isEmpty(roleTypeIds)))
 {
-    if (UtilValidate.isNotEmpty(roleCustomerId))
-    {
-        roleTypes.add("CUSTOMER");
-    }
-    
-    if (UtilValidate.isNotEmpty(roleEmailId))
-    {
-        roleTypes.add("EMAIL_SUBSCRIBER");
-    }
-    
-    if (UtilValidate.isNotEmpty(roleGuestId))
-    {
-        roleTypes.add("GUEST_CUSTOMER");
-    }
-    if (roleTypes.size() > 0)
-    {
-        svcCtx.put("roleTypeIds", roleTypes);
-    }
-    else if ((roleTypes.size() == 0))
-    { 
-        roleTypes.add("CUSTOMER");
-        roleTypes.add("EMAIL_SUBSCRIBER");
-        roleTypes.add("GUEST_CUSTOMER");
-        svcCtx.put("roleTypeIds", roleTypes);    
-    }
-}
-else
-{
-    roleTypes.add("CUSTOMER");
-    roleTypes.add("EMAIL_SUBSCRIBER");
-    roleTypes.add("GUEST_CUSTOMER");
-    svcCtx.put("roleTypeIds", roleTypes);    
+	if(UtilValidate.isNotEmpty(roleTypes))
+	{
+		customerRoleTypeIds = EntityUtil.getFieldListFromEntityList(roleTypes, "roleTypeId", true); 
+	}
+	svcCtx.put("roleTypeIds", customerRoleTypeIds);
+	context.roleTypeIds = customerRoleTypeIds;
 }
 
+if(UtilValidate.isNotEmpty(roleTypeIds))
+{
+	svcCtx.put("roleTypeIds", roleTypeIds);
+	context.roleTypeIds = roleTypeIds;
+}
 
 if(UtilValidate.isEmpty(parameters.downloadnew) & UtilValidate.isNotEmpty(parameters.downloadloaded)) 
 {
@@ -161,6 +177,15 @@ if(UtilValidate.isNotEmpty(parameters.downloadnew) & UtilValidate.isEmpty(parame
 {
     svcCtx.put("isDownloaded", "N");
 }
+
+Map roleTypesDescMap = FastMap.newInstance();
+List<GenericValue> roleTypesDesc = delegator.findByAnd("RoleType", UtilMisc.toMap());
+for(GenericValue roleTypeDesc : roleTypesDesc)
+{
+	roleTypesDescMap.put(roleTypeDesc.getString("roleTypeId"), roleTypeDesc.getString("description"));
+}
+
+context.roleTypesDescMap = roleTypesDescMap;
 
 Map<String, Object> svcRes;
 

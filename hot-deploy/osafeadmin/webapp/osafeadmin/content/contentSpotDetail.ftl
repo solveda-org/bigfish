@@ -13,6 +13,10 @@
         <#assign createdDate = content.createdDate!"" />
         <#assign lastModifiedDate = content.lastModifiedDate!"" />
     </#if> 
+    <#if mode == "add">
+    	<input type="hidden" name="productCategoryId" value="${parameters.productCategoryId!""}" />
+    	<input type="hidden" name="prodCatContentTypeId" value="${parameters.prodCatContentTypeId!""}" />
+    </#if>
     <input type="hidden" name="contentTypeId" value="${contentTypeId!content.contentTypeId!""}" />
        <#assign statusId = statusId!"CTNT_PUBLISHED">
        <#assign statusDesc = statusDesc!"Active">
@@ -21,19 +25,29 @@
            <#assign createdDate = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
        </#if>
        <input type="hidden" name="createdDate" value="${createdDate}" />
-		<div class="infoRow">
+		
 		<#-- ==== Content ID === -->
-         <div class="infoEntry">
-             <div class="infoCaption"><label>${uiLabelMap.ContentIdCaption}</label></div>
-                   <#-- ===== Content ID ==== -->
-               <div class="infoValue">
-                   <#if mode?has_content && mode == "add">
-                       <input name="contentId" type="text" id="contentId" value="${parameters.contentId?default("")}"/>
-                   <#elseif mode?has_content && mode == "edit">
-                       <input type="hidden" name="contentId" value="${contentId!""}" />${bfContentId!""}
-                   </#if>
-               </div>
-         </div>
+		<#-- showBFContentId and showBFContentIdInput are for special case where BF content ID input is not displayed on Product Category Content detail screen. The system will generate a Content ID in this case -->
+		<#if !showBFContentIdInput?exists || (showBFContentIdInput?has_content && showBFContentIdInput != "N")>
+		  <div class="infoRow">
+            <div class="infoEntry">
+              <#if !showBFContentId?exists || (showBFContentId?has_content && showBFContentId != "N")>
+                <div class="infoCaption"><label>${uiLabelMap.BigFishContentIdCaption}</label></div>
+              <#else>
+                <div class="infoCaption"><label>${uiLabelMap.ContentIdCaption}</label></div>
+              </#if>
+              <#-- ===== Content ID ==== -->
+              <div class="infoValue">
+              	<#if mode?has_content && mode == "add">
+                  <input name="contentId" type="text" id="contentId" value="${parameters.contentId?default("")}"/>
+                <#elseif mode == "edit">
+                  <input type="hidden" name="contentId" value="${contentId!""}" />${bfContentId!""}
+                </#if>
+              </div>
+            </div>
+          </div>
+        </#if>
+          
 		<#-- ==== Spot Name === -->
 		  <div class="infoRow">
             <div class="infoEntry">
@@ -95,7 +109,7 @@
 
    		<#-- ====== Active Date ==== -->
 		<div class="infoRow">
-	   		<div class="infoEntry">
+		    <div class="infoEntry">
 	      		<div class="infoCaption">
 	      			<label>${uiLabelMap.ActiveDateCaption}</label>
 	       		</div>
@@ -110,5 +124,5 @@
 	   		</div>
 	    </div>
 <#else>
-	${uiLabelMap.NoDataAvailableInfo}
+	${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

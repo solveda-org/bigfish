@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-
-import com.osafe.services.ImportServices;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.util.EntityUtil;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -18,68 +21,37 @@ public class OsafeProductLoaderHelper {
 
     public static final String module = OsafeAdminUtil.class.getName();
     
-    public static List getProductXLSDataList(Sheet s) {
-        List dataRows = buildDataRows(ImportServices.buildProductHeader(),s);
-        List produtcXLSList = FastList.newInstance();
-        for (int i=0 ; i < dataRows.size() ; i++) {
+    public static List getDataList(List dataRows) 
+    {
+        List dataList = FastList.newInstance();
+        for (int i=0 ; i < dataRows.size() ; i++) 
+        {
             Map mRow = (Map)dataRows.get(i);
-            produtcXLSList.add(mRow);
+            dataList.add(mRow);
         }
-        return produtcXLSList;
-    }
-    public static List getProductCategoryXLSDataList(Sheet s) {
-        List dataRows = buildDataRows(ImportServices.buildCategoryHeader(),s);
-        List productCategoryXLSList = FastList.newInstance();
-        for (int i=0 ; i < dataRows.size() ; i++) {
-            Map mRow = (Map)dataRows.get(i);
-            productCategoryXLSList.add(mRow);
-        }
-        return productCategoryXLSList;
-    }
-    public static List getProductAssocXLSDataList(Sheet s) {
-        List dataRows = buildDataRows(ImportServices.buildProductAssocHeader(),s);
-        List productAssocXLSList = FastList.newInstance();
-        for (int i=0 ; i < dataRows.size() ; i++) {
-            Map mRow = (Map)dataRows.get(i);
-            productAssocXLSList.add(mRow);
-        }
-        return productAssocXLSList;
+        return dataList;
     }
     
-    public static List getProductFeatureSwatchXLSDataList(Sheet s) {
-        List dataRows = buildDataRows(ImportServices.buildProductFeatureSwatchHeader(),s);
-        List productFeatureSwatchXLSList = FastList.newInstance();
-        for (int i=0 ; i < dataRows.size() ; i++) {
-            Map mRow = (Map)dataRows.get(i);
-            productFeatureSwatchXLSList.add(mRow);
-        }
-        return productFeatureSwatchXLSList;
-    }
-        
-    public static List getManufacturerXLSDataList(Sheet s) {
-        List dataRows = buildDataRows(ImportServices.buildManufacturerHeader(),s);
-        List ManufacturerXLSList = FastList.newInstance();
-        for (int i=0 ; i < dataRows.size() ; i++) {
-            Map mRow = (Map)dataRows.get(i);
-            ManufacturerXLSList.add(mRow);
-        }
-        return ManufacturerXLSList;
-    }
-    
-    public static List buildDataRows(List headerCols,Sheet s) {
+    public static List buildDataRows(List headerCols,Sheet s) 
+    {
 		List dataRows = FastList.newInstance();
-		try {
-            for (int rowCount = 1 ; rowCount < s.getRows() ; rowCount++) {
+		try 
+		{
+            for (int rowCount = 1 ; rowCount < s.getRows() ; rowCount++) 
+            {
             	Cell[] row = s.getRow(rowCount);
                 if (row.length > 0) 
                 {
             	    Map mRows = FastMap.newInstance();
-                    for (int colCount = 0; colCount < headerCols.size(); colCount++) {
+                    for (int colCount = 0; colCount < headerCols.size(); colCount++) 
+                    {
                 	    String colContent=null;
-                        try {
+                        try 
+                        {
                 		    colContent=row[colCount].getContents();
                 	    }
-                	    catch (Exception e) {
+                	    catch (Exception e) 
+                	    {
                 		    colContent="";
                 	    }
                         mRows.put(headerCols.get(colCount),StringUtil.replaceString(colContent,"\"","'"));
@@ -90,30 +62,61 @@ public class OsafeProductLoaderHelper {
     	}
       	catch (Exception e) {}
       	return dataRows;
-        }
+    }
     
-        private static Map buildFeatureMap(Map featureTypeMap,String parseFeatureType) 
-        {
-	    	if (UtilValidate.isNotEmpty(parseFeatureType))
-	    	{
-	        	int iFeatIdx = parseFeatureType.indexOf(':');
-	        	if (iFeatIdx > -1)
-	        	{
-	            	String featureType = parseFeatureType.substring(0,iFeatIdx).trim();
-	            	String sFeatures = parseFeatureType.substring(iFeatIdx +1);
-	                String[] featureTokens = sFeatures.split(",");
-	            	Map mFeatureMap = FastMap.newInstance();
-	                for (int f=0;f < featureTokens.length;f++)
-	                {
-	                	mFeatureMap.put(""+featureTokens[f].trim(),""+featureTokens[f].trim());
-	                	
-	                }
-	        		featureTypeMap.put(featureType, mFeatureMap);
-	        	}
-	    		
-	    	}
-	    	return featureTypeMap;
+    
+    static Map featureTypeIdMap = FastMap.newInstance();
+    public static Map buildFeatureMap(Map featureTypeMap,String parseFeatureType, Delegator delegator) 
+    {
+    	if (UtilValidate.isNotEmpty(parseFeatureType))
+    	{
+        	int iFeatIdx = parseFeatureType.indexOf(':');
+        	if (iFeatIdx > -1)
+        	{
+            	String featureType = parseFeatureType.substring(0,iFeatIdx).trim();
+            	String sFeatures = parseFeatureType.substring(iFeatIdx +1);
+                String[] featureTokens = sFeatures.split(",");
+            	Map mFeatureMap = FastMap.newInstance();
+                for (int f=0;f < featureTokens.length;f++)
+                {
+                	String featureId = ""; 
+                	try 
+                	{
+                		String featureTypeKey = StringUtil.removeSpaces(featureType).toUpperCase()+"~"+featureTokens[f].trim();
+                		if(featureTypeIdMap.containsKey(featureTypeKey))
+                		{
+                			featureId = (String) featureTypeIdMap.get(featureTypeKey); 
+                		}
+                		else
+                		{
+                			List productFeatureList = delegator.findByAnd("ProductFeature", UtilMisc.toMap("productFeatureTypeId", StringUtil.removeSpaces(featureType).toUpperCase(), "productFeatureCategoryId", StringUtil.removeSpaces(featureType).toUpperCase(), "description", featureTokens[f].trim()));
+                			if(UtilValidate.isNotEmpty(productFeatureList))
+                			{
+                				GenericValue productFeature = EntityUtil.getFirst(productFeatureList);
+        						featureId = productFeature.getString("productFeatureId");
+                			}
+                			else
+                			{
+                				featureId = delegator.getNextSeqId("ProductFeature");
+                			}
+                		}
+                		featureTypeIdMap.put(featureTypeKey, featureId);
+					} catch (GenericEntityException e) 
+					{
+						e.printStackTrace();
+					}
+                	mFeatureMap.put(""+featureId,""+featureTokens[f].trim());
+                }
+        		featureTypeMap.put(featureType, mFeatureMap);
+        	}
+    		
+    	}
+    	return featureTypeMap;
+    	    	
         }
     }
+
+    
+
 
 

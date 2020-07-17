@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
     <Geo geoId="ES-AN" geoTypeId="REGION" geoName="Andaluc&#237;a" geoCode="AN" abbreviation="AN" lastUpdatedStamp="2011-07-19 14:36:36.343" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.38" createdTxStamp="2008-05-07 11:45:36.38"/>
     <Geo geoId="ES-AR" geoTypeId="REGION" geoName="Arag&#243;n" geoCode="AR" abbreviation="AR" lastUpdatedStamp="2011-07-19 14:36:36.377" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.38" createdTxStamp="2008-05-07 11:45:36.38"/>
     <Geo geoId="ES-AS" geoTypeId="REGION" geoName="Oviedo" geoCode="O" abbreviation="O" lastUpdatedStamp="2011-07-19 14:36:36.407" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.383" createdTxStamp="2008-05-07 11:45:36.38"/>
@@ -15,3 +17,4 @@
     <Geo geoId="ES-NAV" geoTypeId="REGION" geoName="Navarra" geoCode="NA" abbreviation="NA" lastUpdatedStamp="2011-07-19 14:36:37.5" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.397" createdTxStamp="2008-05-07 11:45:36.38"/>
     <Geo geoId="ES-PV" geoTypeId="REGION" geoName="Pa&#237;s Vasco" geoCode="PV" abbreviation="PV" lastUpdatedStamp="2011-07-19 14:36:37.673" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.397" createdTxStamp="2008-05-07 11:45:36.38"/>
     <Geo geoId="ES-VC" geoTypeId="REGION" geoName="Comunidad Valenciana" geoCode="VC" abbreviation="VC" lastUpdatedStamp="2011-07-19 14:36:38.017" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.397" createdTxStamp="2008-05-07 11:45:36.38"/>
+</entity-engine-xml>

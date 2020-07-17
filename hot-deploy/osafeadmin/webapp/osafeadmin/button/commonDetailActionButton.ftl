@@ -22,16 +22,16 @@
     <#if execAction?exists && execAction?has_content>
         <a href="<#if !execInNewTab?has_content>javascript:submitDetailForm(document.${detailFormName!""}, 'EX');<#else><@ofbizUrl>${execAction}</@ofbizUrl></#if>" class="buttontext standardBtn action" <#if execInNewTab?has_content>target="_${execInNewTab!}"</#if>>${execActionBtn!"${uiLabelMap.execActionBtn}"}</a>
     </#if>
-    <!-- displays Action button only if certain conditions are satisfied -->
+    <#-- displays Action button only if certain conditions are satisfied -->
     <#assign showButton = false>
-    <!-- for scheduled jobs: 'schedJob' is from scheduledJobDetail.groovy -->
+    <#-- for scheduled jobs: 'schedJob' is from scheduledJobDetail.groovy -->
     <#if schedJob?has_content && (schedJob.statusId="SERVICE_PENDING" || schedJob.statusId="SERVICE_QUEUED" || schedJob.statusId="SERVICE_RUNNING")>
     	<#assign showButton = true>
     </#if>
     <#if conditionedExecAction?exists && conditionedExecAction?has_content && (showButton=true)>
         <a href="<#if !execInNewTab?has_content>javascript:submitDetailForm(document.${detailFormName!""}, 'CEX');<#else><@ofbizUrl>${conditionedExecAction}</@ofbizUrl></#if>" class="buttontext standardBtn action" <#if execInNewTab?has_content>target="_${execInNewTab!}"</#if>>${conditionedExecActionBtn!"${uiLabelMap.execActionBtn}"}</a>
     </#if>
-    <!-- end of conditioned exec button-->
+    <#-- end of conditioned exec button-->
     <#if execCacheAction?exists && execCacheAction?has_content>
         <a href="<#if !execCacheInNewTab?has_content>javascript:submitDetailForm(document.${detailFormName!""}, 'EXC');<#else><@ofbizUrl>${execCacheAction}</@ofbizUrl></#if>" class="buttontext standardBtn action" <#if execCacheInNewTab?has_content>target="_${execCacheInNewTab!}"</#if>>${execCacheActionBtn!"${uiLabelMap.execCacheActionBtn}"}</a>
     </#if>

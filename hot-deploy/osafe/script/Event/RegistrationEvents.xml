@@ -9,7 +9,12 @@
         <call-object-method  obj-field="shoppingCart" method-name="shippingApplies" ret-field="shippingApplies"/>
 
         <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
+        <if-compare operator="equals" value="Y" field="parameters.PARTY_TEXT_PREFERENCE">
+            <set field="parameters.PHONE_MOBILE_MANDATORY" value="Y" />
+        </if-compare>
+        
         <call-simple-method method-name="UserLoginValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <call-simple-method method-name="PersonalBillingAttributeInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         
         <log level="info" message="Creating new customer, newUserLogin=${newUserLogin}"/>
@@ -17,21 +22,43 @@
         <set field="parameters.roleTypeId" value="CUSTOMER"/>
         <!-- Create the PartyRole -->
         <set field="partyRoleContext.roleTypeId" from-field="parameters.roleTypeId"/>
-
-        <call-simple-method method-name="validateBillingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-        <if-compare operator="equals" value="true" field="shippingApplies">
-            <if-empty field="parameters.isSameAsBilling">
-	            <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-	        <else>
-	            <map-to-map map="addressContext" to-map="shippingAddressContext"/>
-	            <property-to-field field="shippingAddressContext.attnName" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
-	        </else>
-	        </if-empty>
-        <else>
-            <map-to-map map="addressContext" to-map="shippingAddressContext"/>
-            <property-to-field field="shippingAddressContext.attnName" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
-        </else>
-        </if-compare>
+        
+        <!-- DETERMINE BILLING ADDRESS -->
+        <if-not-empty field="parameters.BILLING_USE_SCREEN">
+        	<call-simple-method method-name="validateBillingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        	<else>
+        		<if-not-empty field="parameters.PERSONAL_USE_SCREEN">
+	        		<!-- If BILLING DIVs are hidden, then use the Address(BILLING) DIVs inside of Personal Info -->
+	        		<call-simple-method method-name="validatePersonalInfoBillingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+	        		<else>
+	        			<!-- Use Shipping Address Divs for Billing -->
+	        			<if-not-empty field="parameters.SHIPPING_USE_SCREEN">
+	        				<call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+	        				<map-to-map map="shippingAddressContext" to-map="billingAddressContext"/>
+	        			</if-not-empty>
+	        		</else>
+        		</if-not-empty>
+        	</else>
+        </if-not-empty>
+         
+        <!-- If SHIPPING DIVs are hidden, then use the Address(BILLING) DIVs inside of Personal Info -->
+       	<if-not-empty field="parameters.SHIPPING_USE_SCREEN">
+        	<set field="isSameAsBilling" from-field="parameters.isSameAsBilling"/>
+	        <if-compare operator="equals" value="Y" field="isSameAsBilling"> 
+	        	<map-to-map map="billingAddressContext" to-map="shippingAddressContext"/>
+	        	<clear-field field="shippingAddressContext.attnName"/>
+	        	<property-to-field field="defaultShippingNickname" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
+	        	<set field="shippingAddressContext.attnName" from-field="defaultShippingNickname"/>
+	        	<else>
+	        		<call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+	        	</else>
+	        </if-compare>
+        	<else>
+        		<map-to-map map="billingAddressContext" to-map="shippingAddressContext"/>
+        		<clear-field field="shippingAddressContext.attnName"/>
+        	</else>
+        </if-not-empty>
+        
         <!-- Create the email address -->
 
         <!-- Check for required E-Mail -->
@@ -88,13 +115,14 @@
             <result-to-field field="createdUserLogin" result-name="newUserLogin"/>
         </call-service>
         <set-current-user-login value-field="createdUserLogin"/>
+        <field-to-session field="createdUserLogin" session-name="NEW_USER_LOGIN"/>
 
         <!-- now that we have the partyId, put it where it needs to go... -->
         <set from-field="tempMap.partyId" field="partyDataSource.partyId"/>
         <set from-field="tempMap.partyId" field="userLoginContext.partyId"/>
         <set from-field="tempMap.partyId" field="personContext.partyId"/>
         <set from-field="tempMap.partyId" field="partyRoleContext.partyId"/>
-        <set from-field="tempMap.partyId" field="addressContext.partyId"/>
+        <set from-field="tempMap.partyId" field="billingAddressContext.partyId"/>
         <set from-field="tempMap.partyId" field="shippingAddressContext.partyId"/>
         <set from-field="tempMap.partyId" field="homePhoneContext.partyId"/>
         <set from-field="tempMap.partyId" field="workPhoneContext.partyId"/>
@@ -107,14 +135,15 @@
     
         <call-service service-name="createPartyRole" in-map-name="partyRoleContext" include-user-login="true"/>
 
-        <!-- shipping address -->
-        <call-service service-name="createPartyPostalAddress" in-map-name="addressContext">
+        <!-- billing address -->
+        <call-service service-name="createPartyPostalAddress" in-map-name="billingAddressContext">
             <result-to-field result-name="contactMechId" field="addressPurposeContext.contactMechId"/>
         </call-service>
 
-            <call-service service-name="createPartyPostalAddress" in-map-name="shippingAddressContext">
-                <result-to-field result-name="contactMechId" field="shippingAddressPurposeContext.contactMechId"/>
-            </call-service>
+        <!-- shipping address -->
+        <call-service service-name="createPartyPostalAddress" in-map-name="shippingAddressContext">
+            <result-to-field result-name="contactMechId" field="shippingAddressPurposeContext.contactMechId"/>
+        </call-service>
 
          <set field="shippingAddressPurposeContext.partyId" from-field="tempMap.partyId"/>
          <!-- create the shipping location -->
@@ -231,9 +260,41 @@
         <set field="createProductStoreRoleMap.userLogin" from-field="userLogin"/>
         <set field="createProductStoreRoleMap.partyId" from-field="tempMap.partyId"/>
         <set field="createProductStoreRoleMap.roleTypeId" from-field="parameters.roleTypeId"/>
-        <set field="createProductStoreRoleMap.productStoreId" from-field="parameters.emailProductStoreId"/>
+        <set field="createProductStoreRoleMap.productStoreId" from-field="parameters.productStoreId"/>
         <call-service service-name="createProductStoreRole" in-map-name="createProductStoreRoleMap"/>
-
+        
+        <!-- Get Company (Pay To Party) email address -->
+        <entity-one entity-name="ProductStore" value-field="productStore"/>
+        <if-not-empty field="productStore">
+        	<set field="getPartyEmailMap.partyId" from-field="productStore.payToPartyId"/>
+        </if-not-empty>
+        <entity-one entity-name="UserLogin" value-field="systemUserLogin" auto-field-map="false">
+            <field-map field-name="userLoginId" value="system"/>
+        </entity-one>
+        <set-current-user-login value-field="systemUserLogin"/>
+        <set field="getPartyEmailMap.userLogin" from-field="systemUserLogin"/>
+        <call-service service-name="getPartyEmail" in-map-name="getPartyEmailMap">
+            <result-to-field result-name="emailAddress" field="emailAddressCompany"/>
+        </call-service>
+        <set field="registrationEventContext.emailAddressCompany" from-field="emailAddressCompany"/>
+        
+         <!-- Create Communication Event-->
+        <map-to-map map="registrationEventContext" to-map="parameters"/>
+        <set-service-fields service-name="createCommunicationEventWithoutPermission" map="parameters" to-map="createComEventMap"/>
+        <set field="createComEventMap.communicationEventTypeId" value="EMAIL_COMMUNICATION"/>
+        <set field="createComEventMap.userLogin" from-field="systemUserLogin"/>
+        <set field="createComEventMap.partyIdTo" from-field="tempMap.partyId"/>
+        <set field="createComEventMap.contactMechTypeId" value="EMAIL_ADDRESS"/>
+        <set field="createComEventMap.contactMechIdTo" from-field="emailPurposeContext.contactMechId"/>
+        <set field="createComEventMap.roleTypeIdTo" from-field="parameters.roleTypeId"/>
+        <set field="createComEventMap.reasonEnumId" value="PRDS_CUST_REGISTER"/>
+		<set field="createComEventMap.fromString" from-field="emailAddressCompany"/>
+        <if-not-empty field="emailContext.emailAddress">
+           <set field="createComEventMap.toString" from-field="emailContext.emailAddress"/>
+        </if-not-empty>
+        <set field="createComEventMap.subject" value="Customer Registration"/>
+        <call-service service-name="createCommunicationEventWithoutPermission" in-map-name="createComEventMap"/>
+        
         <!-- send off the registration email -->
         <call-simple-method method-name="sendRegistrationEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
 
@@ -843,6 +904,7 @@
                 ]]>
             </call-bsh>
             <set field="parameters.userLogin" from-field="userLogin"/>
+            <field-to-session field="userLogin.userLoginId" session-name="USER_LOGIN_EMAIL"/>
         <else>
             <if>
                 <condition>
@@ -866,6 +928,7 @@
                         <field-to-session field="updatedUserLogin" session-name="userLogin"/>
                     </if-compare>
                     <session-to-field field="userLogin"/>
+                    <field-to-session field="userLogin.userLoginId" session-name="USER_LOGIN_EMAIL"/>
               </then>
            </if>
         </else>
@@ -887,6 +950,7 @@
         </else>
         </if-empty>
         <field-to-request field="userLogin" request-name="userLogin"/>
+        <field-to-session field="userLogin.userLoginId" session-name="USER_LOGIN_EMAIL"/>
         <log level="info" message="userLogin is ${userLogin}"/>
     </simple-method>
 
@@ -1102,6 +1166,7 @@
             <set field="loggedInUser.disabledDateTime" from-field="disabledDateTime"/>
             <set field="loggedInUser.enabled" value="N"/>
             <store-value value-field="loggedInUser"/>
+            <field-to-session field="newUserLogin.userLoginId" session-name="USER_LOGIN_EMAIL"/>
         </if-compare-field>
     </simple-method>
 

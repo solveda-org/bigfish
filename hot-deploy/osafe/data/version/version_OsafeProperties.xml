@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+        To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+        Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+    --><resource xmlns:xsi="http://www.w3.org/01/XMLSchema-instance">
+<!-- *************************************** -->
+<!-- Solr -->
+<!-- *************************************** -->
+    <property key="solrSearchServer">
+        <value xml:lang="en">http://@solr.search.server@:@solr.search.port@/solr</value>
+    </property>
+    <property key="solrIndexServer">
+        <value xml:lang="en">http://@solr.index.server@:@solr.index.port@/solr</value>
+    </property>
+    <property key="solrProductIndexFile">
+        <value xml:lang="en">${sys:getProperty('ofbiz.home')}/hot-deploy/solr/import/productsToIndex.csv</value>
+    </property>
+    <property key="productCategoryFacetDescription">
+        <value xml:lang="en">Category</value>
+    </property>
+    <property key="productCategoryFacetCatListDescription">
+        <value xml:lang="en">Refine by Category</value>
+    </property>
+    <property key="solrSchemaXmlFile">
+        <value xml:lang="en">${sys:getProperty('ofbiz.home')}/hot-deploy/solr/conf/schema.xml</value>
+    </property>
+    <property key="solrSchemaConstantFieldXmlFile">
+        <value xml:lang="en">${sys:getProperty('ofbiz.home')}/hot-deploy/solr/conf/schema-ConstantField.xml</value>
+    </property>
+<!-- *************************************** -->
+<!-- App Path -->
+<!-- *************************************** -->
+    <property key="osafeAppPath">
+        <value xml:lang="en">/@localDispatcherName@/control</value>
+    </property>
+    <property key="urlCatalogPrefix">
+        <value xml:lang="en">@url.catalog.prefix@</value>
+    </property>
+<!-- *************************************** -->
+<!-- Store Settings -->
+<!-- *************************************** -->
+    <property key="storeStorePrefix">
+        <value xml:lang="en">@store.storePrefix@</value>
+    </property>
+    <property key="storeWebSiteId">
+        <value xml:lang="en">@store.webSiteId@</value>
+    </property>
+    <property key="storeProductStoreId">
+        <value xml:lang="en">@store.productStoreId@</value>
+    </property>
+    <property key="storeProductCategoryRootId">
+        <value xml:lang="en">@store.productCategoryRootId@</value>
+    </property>
+<!-- *************************************** -->
+<!-- PDP -->
+<!-- *************************************** -->
+    <property key="showSavingPercentAbove">
+        <value xml:lang="en">5</value>
+    </property>
+<!-- *************************************** -->
+<!-- Abandoned Cart -->
+<!-- *************************************** -->
+    <property key="abandonCartEmailIntervalHours">
+        <value xml:lang="en">48</value>
+    </property>
+    <property key="abandonCartEmailEmailCount">
+        <value xml:lang="en">1</value>
+    </property>
+<!-- *************************************** -->
+<!-- Social Media Links -->
+<!-- *************************************** -->
+    <property key="urlFacebook">
+        <value xml:lang="en">http://www.facebook.com/bigfish</value>
+    </property>
+    <property key="urlTwitter">
+        <value xml:lang="en">http://www.twitter.com/bigfish</value>
+    </property>
+    <property key="urlYoutube">
+        <value xml:lang="en">http://www.youtube.com/bigfish</value>
+    </property>
+    <property key="urlWikipedia">
+        <value xml:lang="en">http://en.wikipedia.org/wiki/bigfish</value>
+    </property>
+<!-- *************************************** -->
+<!-- Social Media Share Links -->
+<!-- *************************************** -->
+    <property key="urlSocialMediaShare">
+        <value xml:lang="en">true</value>
+    </property>
+    <property key="urlFacebookShare">
+        <value xml:lang="en">http://www.facebook.com/sharer.php?u=</value>
+    </property>
+    <property key="urlTwitterShare">
+        <value xml:lang="en">http://www.twitter.com/?status=</value>
+    </property>
+<!-- *************************************** -->
+<!-- Google Map key (by domain, see http://code.google.com/intl/en/apis/maps/signup.html, note that it works for http://localhost) -->
+<!-- *************************************** -->
+    <property key="googleSiteVerification">
+        <value xml:lang="en">ABQIAAAAtt0d8djaYFkk8N5LJVcDSBQN-clGH2vvMMwJjYtcwF78UzZgEBTN70S6uIgRoAtXRkADNoesbw5etg</value>
+    </property>
+    <property key="googleTracker">
+        <value xml:lang="en">UA-21734186-1</value>
+    </property>
+    <property key="googleGeoptRequestUrl">
+        <value xml:lang="en">http://maps.googleapis.com/maps/api/geocode/xml?sensor=false</value>
+    </property>
+<!-- *************************************** -->
+<!-- Facets -->
+<!-- *************************************** -->
+    <property key="facetProductListShowValueCount">
+        <value xml:lang="en">0</value>
+    </property>
+    <property key="facetCategoryListShowValueCount">
+        <value xml:lang="en">0</value>
+    </property>
+<!-- *************************************** -->
+<!-- Customer Rating -->
+<!-- *************************************** -->
+    <property key="customerRatingStart">
+        <value xml:lang="en">4</value>
+    </property>
+    <property key="customerRatingEnd">
+        <value xml:lang="en">1</value>
+    </property>
+    <property key="customerRatingMax">
+        <value xml:lang="en">5</value>
+    </property>
+<!-- *************************************** -->
+<!-- Emails -->
+<!-- *************************************** -->
+    <property key="clientLogoPath">
+        <value xml:lang="en">/osafe_theme/images/logo/siteLogo.gif</value>
+    </property>
+    <property key="emailFontFamily">
+        <value xml:lang="en">'Calibri', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif</value>
+    </property>
+    <property key="emailTableWidth">
+        <value xml:lang="en">350px</value>
+    </property>
+    <property key="emailTableHeadingColor">
+        <value xml:lang="en">#FFFFCC</value>
+    </property>
+    <property key="emailTableHeadingFontSize">
+        <value xml:lang="en">22px</value>
+    </property>
+<!-- *************************************** -->
+<!-- Image Paths -->
+<!-- *************************************** -->
+    <property key="productReviewImagesPath">
+        <value xml:lang="en">/osafe_theme/images/productReview/</value>
+    </property>
+    <property key="productReviewFacetIconName">
+        <value xml:lang="en">rating.gif</value>
+    </property>
+    <property key="productImagesPath">
+        <value xml:lang="en">@product.images.path@</value>
+    </property>
+    <property key="productCategoryImagesPath">
+        <value xml:lang="en">@productCategory.images.path@</value>
+    </property>
+    <property key="manufacturerImagesPath">
+        <value xml:lang="en">@manufacturer.images.path@</value>
+    </property>
+    <property key="osafeThemeServer">
+        <value xml:lang="en">${sys:getProperty('ofbiz.home')}/themes/osafe_theme/webapp</value>
+    </property>
+<!-- *************************************** -->
+<!-- Media Content -->
+<!-- *************************************** -->
+    <property key="userContentImagePath">
+        <value xml:lang="en">/osafe_theme/images/user_content/</value>
+    </property>
+<!-- *************************************** -->
+<!-- ecommerce UI Sequence File -->
+<!-- *************************************** -->
+    <property key="ecommerceUiSequenceXmlFile">
+        <value xml:lang="en">${sys:getProperty('ofbiz.home')}/hot-deploy/osafe/config/OSafeUiSequence.xml</value>
+    </property>
+<!-- *************************************** -->
+<!-- PDP Alternate Images -->
+<!-- *************************************** -->
+    <property key="pdpAlternateImages">
+        <value xml:lang="en">10</value>
+    </property>
+<!-- *************************************** -->
+<!-- PLP SORT OPTIONS -->
+<!-- Format (SORT_OPTION=SORT_VALUE-ORDER(asc,desc),SORT_LABEL) -->
+<!-- *************************************** -->
+    <property key="HIGHEST_RATING">
+        <value xml:lang="en">customerRating-desc|HighestRatingLabel</value>
+    </property>
+    <property key="MOST_POPULAR">
+        <value xml:lang="en">sequenceNum|MostPopularLabel</value>
+    </property>
+    <property key="NAME_ASCENDING">
+        <value xml:lang="en">name-asc|NameAscendingLabel</value>
+    </property>
+    <property key="NAME_DESCENDING">
+        <value xml:lang="en">name-desc|NameDescendingLabel</value>
+    </property>
+    <property key="HIGHEST_PRICE">
+        <value xml:lang="en">price-desc|HighestPriceLabel</value>
+    </property>
+    <property key="LOWEST_PRICE">
+        <value xml:lang="en">price-asc|LowestPriceLabel</value>
+    </property>
+    <property key="MOST_VIEWED">
+        <value xml:lang="en">totalTimesViewed-desc|MostViewedLabel</value>
+    </property>
+    <property key="BEST_SELLING">
+        <value xml:lang="en">totalQuantityOrdered-desc|BestSellingLabel</value>
+    </property>
+    <property key="RECENT_INTRO">
+        <value xml:lang="en">introductionDate-desc|RecentlyIntroducedLabel</value>
+    </property>
+<!-- *************************************** -->
+<!-- Version File Paths -->
+<!-- *************************************** -->
+    <property key="bigfishVersionFilesPath">
+        <value xml:lang="en">${sys:getProperty('ofbiz.home')}/hot-deploy/osafe/data/version</value>
+    </property>
+    <property key="bigfishDeploymentPropertyFile">
+        <value xml:lang="en">${sys:getProperty('ofbiz.home')}/hot-deploy/osafe/config/client-deployment.properties</value>
+    </property>
+<!-- *************************************** -->
+<!-- Import/Export Directories -->
+<!-- *************************************** -->
+    <property key="importDir">
+        <value xml:lang="en">[ofbiz.home]/hot-deploy/osafe/import/</value>
+    </property>
+    <property key="exportDir">
+        <value xml:lang="en">[ofbiz.home]/hot-deploy/osafe/import/len/export/</value>
+    </property>
+<!-- *************************************** -->
+<!-- IImport Excel Sheet Tab Name mapping with Entity name -->
+<!-- *************************************** -->
+    <property key="importXlsProdCatalog">
+        <value xml:lang="en">Prod Catalog</value>
+    </property>
+    <property key="importXlsProductStoreCatalog">
+        <value xml:lang="en">Product Store Catalog</value>
+    </property>
+    <property key="importXlsProductCategory">
+        <value xml:lang="en">Product Category</value>
+    </property>
+    <property key="importXlsProdCatalogCategory">
+        <value xml:lang="en">Prod Catalog Category</value>
+    </property>
+    <property key="importXlsProductCategoryRollup">
+        <value xml:lang="en">Product Category Rollup</value>
+    </property>
+    <property key="importXlsProductFeatureCategory">
+        <value xml:lang="en">Product Feature Category</value>
+    </property>
+    <property key="importXlsProductFeatureCategoryAppl">
+        <value xml:lang="en">Product Feature Category Appl</value>
+    </property>
+    <property key="importXlsProductFeature">
+        <value xml:lang="en">Product Feature</value>
+    </property>
+    <property key="importXlsProduct">
+        <value xml:lang="en">Product</value>
+    </property>
+    <property key="importXlsProductAssoc">
+        <value xml:lang="en">Product Assoc</value>
+    </property>
+    <property key="importXlsProductFeatureAppl">
+        <value xml:lang="en">Product Feature Appl</value>
+    </property>
+    <property key="importXlsProductPrice">
+        <value xml:lang="en">Product Price</value>
+    </property>
+    <property key="importXlsProductCategory">
+        <value xml:lang="en">Product Category</value>
+    </property>
+    <property key="importXlsContent">
+        <value xml:lang="en">Content</value>
+    </property>
+    <property key="importXlsDataResource">
+        <value xml:lang="en">Data Resource</value>
+    </property>
+    <property key="importXlsProductContent">
+        <value xml:lang="en">Product Content</value>
+    </property>
+    <property key="importXlsElectronicText">
+        <value xml:lang="en">Electronic Text</value>
+    </property>
+    <property key="importXlsProductFeatureGroup">
+        <value xml:lang="en">Product Feature Group</value>
+    </property>
+    <property key="importXlsProductFeatureGroupAppl">
+        <value xml:lang="en">Product Feature Group Appl</value>
+    </property>
+    <property key="importXlsProductFeatureCatGrpAppl">
+        <value xml:lang="en">Product Feature Cat Grp Appl</value>
+    </property>
+    <property key="importXlsParty">
+        <value xml:lang="en">Party</value>
+    </property>
+    <property key="importXlsPerson">
+        <value xml:lang="en">Person</value>
+    </property>
+    <property key="importXlsPartyGroup">
+        <value xml:lang="en">Party Group</value>
+    </property>
+    <property key="importXlsPartyRole">
+        <value xml:lang="en">Party Role</value>
+    </property>
+    <property key="importXlsContactMech">
+        <value xml:lang="en">Contact Mech</value>
+    </property>
+    <property key="importXlsPartyContactMech">
+        <value xml:lang="en">Party Contact Mech</value>
+    </property>
+    <property key="importXlsPartyContactMechPurpose">
+        <value xml:lang="en">Party Contact Mech Purpose</value>
+    </property>
+    <property key="importXlsPostalAddress">
+        <value xml:lang="en">Postal Address</value>
+    </property>
+    <property key="importXlsTelecomNumber">
+        <value xml:lang="en">Telecom Number</value>
+    </property>
+    <property key="importXlsProductStore">
+        <value xml:lang="en">Product Store</value>
+    </property>
+    <property key="importXlsProductStoreEmailSetting">
+        <value xml:lang="en">Product Store Email Setting</value>
+    </property>
+    <property key="importXlsProductStoreRole">
+        <value xml:lang="en">Product Store Role</value>
+    </property>
+    <property key="importXlsWebSite">
+        <value xml:lang="en">Web Site</value>
+    </property>
+    <property key="importXlsCarrierShipmentMethod">
+        <value xml:lang="en">Carrier Shipment Method</value>
+    </property>
+    <property key="importXlsProductStoreShipmentMeth">
+        <value xml:lang="en">Product Store Shipment Meth</value>
+    </property>
+    <property key="importXlsShipmentCostEstimate">
+        <value xml:lang="en">Shipment Cost Estimate</value>
+    </property>
+    <property key="importXlsProductStorePaymentSetting">
+        <value xml:lang="en">Product Store Payment Setting</value>
+    </property>
+</resource>

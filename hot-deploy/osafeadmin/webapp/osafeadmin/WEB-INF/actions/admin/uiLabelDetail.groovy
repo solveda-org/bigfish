@@ -10,7 +10,6 @@ import org.ofbiz.base.util.FileUtil;
 
 uiLabelKey = parameters.key;
 if (UtilValidate.isNotEmpty(uiLabelKey)) {
-    XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-UiLabel-xml-file"), context);
     context.uiLabelEntry = OsafeManageXml.findByKeyFromXmlFile(XmlFilePath, "key", uiLabelKey);
 }
 addUiLabelKey = parameters.addKey;

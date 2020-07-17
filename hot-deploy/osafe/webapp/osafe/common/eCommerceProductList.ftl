@@ -1,3 +1,13 @@
+<#-- These hidden inputs are used when using addToCart and addToWishlist from PLP -->
+<form method="post" name="${formName!'productListForm'}" id="productListForm">
+  <input type="hidden" name="plp_qty" id="plp_qty" value=""/>
+  <input type="hidden" name="plp_add_product_id" id="plp_add_product_id" value=""/>
+  <input type="hidden" name="plp_add_category_id" id="plp_add_category_id" value=""/> 
+  <input type="hidden" name="productListFormSearchText" id="productListFormSearchText" value="${productListFormSearchText!""}"/> 
+  <#-- flag to display success message -->
+  <input type="hidden" name="showSuccess" id="showSuccess" value="Y"/> 
+</form>
+  
 <#-- variable setup and worker calls -->
 <#if (requestAttributes.documentList)?exists><#assign documentList = requestAttributes.documentList></#if>
 <#if (requestAttributes.pageSize)?exists><#assign pageSize = requestAttributes.pageSize!10></#if>
@@ -45,6 +55,9 @@
 
 
 <h1>${StringUtil.wrapString(categoryName!pageTitle!"")}</h1>
+<#if pageSubTitle?exists && pageSubTitle?has_content>
+ <h3>${StringUtil.wrapString(pageSubTitle!"")}</h3>
+</#if>
 
   <#if pageTopContentId?has_content>
       <div id="eCommercePlpEspot_${categoryId}" class="plpEspot">
@@ -52,7 +65,7 @@
       </div>
   </#if>
 
-<div class="resultListContainer">
+
   <#if !pageSize?exists>
         <#assign pageSize =10/>
   </#if>
@@ -95,23 +108,19 @@
        
        <!-- PLP page parent DIV STARTS-->
          <div id="eCommerceProductList">
+          <div class="boxList productList">
             <#list documentList as document>
-              ${setRequestAttribute("plpItem",document)}
-                      <#assign productId = document.productId!"">
-                 <!-- DIV for Displaying PLP item STARTS here -->
-                      <div class="eCommerceListItem productListItem">
-                        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#plpDivSequence")}
-                      </div>
-                 <!-- DIV for Displaying PLP item ENDS here -->     
+                ${setRequestAttribute("plpItem",document)}
+                <#assign productId = document.productId!"">
+                ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#plpDivSequence")}
             </#list>
-            <div class="spacer"></div>
-         </div>
+          </div>
+        </div>
        <!-- PLP page parent DIV ENDS -->
         </#if>
         <#if (numFound?has_content && (numFound gt 1))>
           ${screens.render("component://osafe/widget/EcommerceScreens.xml#plpPagingControlsBottom")}
         </#if>
-</div>
 <!-- The section is displayed when there are no products for a particular filter. -->
 <#if (facetGroups?has_content && (facetGroups.size() gt 0) && !(documentList?has_content))>
     <div class="facetNavNoResultMsg">

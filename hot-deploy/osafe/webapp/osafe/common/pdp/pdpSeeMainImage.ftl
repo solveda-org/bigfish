@@ -1,8 +1,10 @@
-<div class="pdpSeeMainImage">
-<div id="seeMainImage">
-    <a href="javascript:void(0);" onclick="javascript:replaceDetailImage('${productLargeImageUrl?if_exists}','${productDetailImageUrl!""}');"><span>${uiLabelMap.SeeMainImageLabel}</span></a>
-</div>
-</div>
+<li class="${request.getAttribute("attributeClass")!}">
+  <div>
+    <div id="js_seeMainImage">
+      <a href="javascript:void(0);" onclick="javascript:replaceDetailImage('${productLargeImageUrl?if_exists}','${productDetailImageUrl!""}');"><span>${uiLabelMap.SeeMainImageLabel}</span></a>
+    </div>
+  </div>
+</li>
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
     <#assign variantProdCtntWrapper = productVariantContentWrapperMap.get('${key}')/>
@@ -20,7 +22,7 @@
         </#if>
     </#if>
     <#if productLargeImageUrl?has_content && productLargeImageUrl!=''>
-      <div id="seeMainImage_${key}" style="display:none">
+      <div id="js_seeMainImage_${key}" style="display:none">
         <a href="javascript:replaceDetailImage('${productLargeImageUrl?if_exists}','${productDetailImageUrl!""}');"><span>${uiLabelMap.SeeMainImageLabel}</span></a>
       </div>
     </#if>  

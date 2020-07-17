@@ -39,7 +39,7 @@ shoppingCartSubTotal = cart.getSubTotal();
 
 orderAdjustments = cart.makeAllAdjustments();
 
-shoppingCartSize = cart?.size() ?: 0;
+shoppingCartSize = cart.getTotalQuantity();
 
 shippingApplies = shoppingCart.shippingApplies();
 
@@ -136,5 +136,6 @@ context.shoppingCartSubTotal = shoppingCartSubTotal;
 context.cartSubTotal = shoppingCartSubTotal;
 //cart size
 context.shoppingCartTotalQuantity = shoppingCartSize;
+context.shoppingCartSize = shoppingCartSize;
 
 context.shippingApplies = shippingApplies;

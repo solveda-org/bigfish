@@ -6,7 +6,7 @@
         <section>
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
-                <property-map resource="OSafeUiLabels" map-name="eCommerceUiLabel" global="true" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
                 <set field="title" from-field="pageTitle"/>
                 <set field="submitFormAction" value="validateCheckout"/>
@@ -14,6 +14,29 @@
                 <set field="helperFileName" value ="adminCheckoutHelp.htm"/>
                 <set field="detailFormName" value="adminCheckoutFORM"/>
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminCheckout.groovy"/>
+                
+                <set field="salesChannelBoxHeading" value="${uiLabelMap.SalesChannelBoxHeading}"/>
+                <set field="shoppingCartBoxHeading" value="${uiLabelMap.ShoppingCartHeading}"/>
+                <set field="customerInformationBoxHeading" value="${uiLabelMap.CustomerDetailInfoHeading}"/>
+                <set field="billingAddressBoxHeading" value="${uiLabelMap.BillingAddressHeading}"/>
+                <set field="shippingAddressBoxHeading" value="${uiLabelMap.ShippingAddressHeading}"/>
+                <set field="shippingOptionBoxHeading" value="${uiLabelMap.ShippingOptionHeading}"/>
+                <set field="shippingInstructionBoxHeading" value="${uiLabelMap.ShippingInstructionHeading}"/>
+                <set field="promotionOptionBoxHeading" value="${uiLabelMap.PromotionOptionHeading}"/>
+                <set field="loyaltyPointsOptionBoxHeading" value="${uiLabelMap.LoyaltyPointsOptionHeading}"/>
+                <set field="giftCardOptionBoxHeading" value="${uiLabelMap.GiftCardOptionHeading}"/>
+                <set field="orderAdjustmentOptionBoxHeading" value="${uiLabelMap.OrderAdjustmentOptionHeading}"/>
+                <set field="shoppingCartBoxHeading" value="${uiLabelMap.ShoppingCartHeading}"/>
+                <set field="paymentOptionBoxHeading" value="${uiLabelMap.PaymentOptionHeading}"/>
+                <set field="addGiftCardNumberRequest" value="adminAddGiftCardNumber"/>
+                <set field="removeGiftCardNumberRequest" value="adminRemoveGiftCardNumber"/>
+                <set field="addOrderAdjustmentRequest" value="adminValidateOrderAdjustment"/>
+                
+                <set field="addLoyaltyPointsRequest" value="adminValidateLoyaltyPoints"/>
+                <set field="removeLoyaltyPointsRequest" value="adminRemoveLoyaltyPoints"/>
+                <set field="updateLoyaltyPointsRequest" value="adminValidateUpdateLoyaltyPoints"/>
+                <!-- <set field="refreshLoyaltyPointsRequest" value="singlePageRefreshLoyaltyPoints"/> -->
+                
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -47,11 +70,23 @@
                                         <html-template-decorator-section name="shippingOptionBoxBody">
                                              <include-screen name="shippingOption"/>
                                         </html-template-decorator-section>
+                                        <html-template-decorator-section name="shippingInstructionBoxBody">
+                                             <include-screen name="shippingInstruction"/>
+                                        </html-template-decorator-section>
                                         <html-template-decorator-section name="promotionOptionBoxBody">
                                              <include-screen name="promotionOption"/>
                                         </html-template-decorator-section>
+                                        <html-template-decorator-section name="loyaltyPointsOptionBoxBody">
+                                             <include-screen name="loyaltyPointsOption"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="orderAdjustmentOptionBoxBody">
+                                             <include-screen name="orderAdjustmentOption"/>
+                                        </html-template-decorator-section>
                                         <html-template-decorator-section name="shoppingCartBottomBoxBody">
                                              <include-screen name="shoppingCartBottom"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="giftCardOptionBoxBody">
+                                             <include-screen name="giftCardOption"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="paymentOptionBoxBody">
                                              <include-screen name="paymentOption"/>
@@ -89,7 +124,7 @@
             <widgets>
                 <platform-specific>
                     <html>
-                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/saleschannel.ftl"/>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/salesChannel.ftl"/>
                     </html>
                 </platform-specific>
             </widgets>
@@ -101,6 +136,8 @@
             <actions>
             	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
+                <set field="cartSection" value="TOP"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminCheckout.groovy"/>
             </actions>
             <widgets>
             <container id="shoppingCartContainer">
@@ -119,12 +156,14 @@
             <actions>
             	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
+                <set field="cartSection" value="BOTTOM"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminCheckout.groovy"/>
             </actions>
             <widgets>
             <container id="shoppingCartBottomContainer">
                 <platform-specific>
                     <html>
-                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/shoppingCartBottom.ftl"/>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/shoppingCart.ftl"/>
                     </html>
                 </platform-specific>
             </container>
@@ -177,6 +216,8 @@
     <screen name="shippingOption">
         <section>
             <actions>
+              <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+              <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminCheckout.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -187,12 +228,25 @@
             </widgets>
         </section>
     </screen>
+    
+    <screen name="shippingInstruction">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/shippingInstruction.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
 
     <screen name="promotionOption">
         <section>
             <actions>
             	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
             </actions>
             <widgets>
 	            <container id="promoCodeContainer">
@@ -206,9 +260,61 @@
         </section>
     </screen>
     
+    <screen name="loyaltyPointsOption">
+        <section>
+            <actions>
+            	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+            </actions>
+            <widgets>
+	            <container id="loyaltyPointsContainer">
+	                <platform-specific>
+	                    <html>
+	                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/loyaltyPointsOption.ftl"/>
+	                    </html>
+	                </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="orderAdjustmentOption">
+        <section>
+            <actions>
+            	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+            </actions>
+            <widgets>
+	            <container id="orderAdjustmentContainer">
+	                <platform-specific>
+	                    <html>
+	                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/orderAdjustmentOption.ftl"/>
+	                    </html>
+	                </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="giftCardOption">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+            </actions>
+            <widgets>
+                <container id="giftCardContainer">
+                    <platform-specific>
+                        <html>
+                          <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/giftCardOption.ftl"/>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="paymentOption">
         <section>
             <actions>
+            	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
             </actions>
             <widgets>
                 <platform-specific>
@@ -228,6 +334,44 @@
 	                        <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/enteredPromoCode.ftl" />
 	                    </html>
 	                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="enteredGiftCard">
+        <section>
+            <widgets>
+            	<container id="enteredGiftCardContainter">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/enteredGiftCard.ftl" />
+                        </html>
+                    </platform-specific>
+            	</container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="enteredOrderAdjustment">
+        <section>
+            <widgets>
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/enteredOrderAdjustment.ftl" />
+                        </html>
+                    </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="enteredLoyaltyPoints">
+        <section>
+            <widgets>
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/enteredLoyaltyPoints.ftl" />
+                        </html>
+                    </platform-specific>
             </widgets>
         </section>
     </screen>
@@ -338,5 +482,97 @@
             </widgets>
         </section>
     </screen>
+    
+    <screen name="adminGiftMessageDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-map resource="OSafeUiLabels" map-name="eCommerceUiLabel" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.GiftMessageTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="submitFormAction" value="adminSetGiftMessage"/>
+                <set field="submitFormActionBtn" value="${uiLabelMap.SaveBtn}"/>
+                <set field="helperFileName" value ="adminGiftMessageHelp.htm"/>
+                <set field="detailFormName" value="adminGiftMessageFORM"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminGiftMessage.groovy"/>
+                
+                <set field="shoppingCartItemBoxHeading" value="${uiLabelMap.ShoppingCartItemHeading}"/>
+                <set field="giftMessageBoxHeading" value="${uiLabelMap.GiftMessageBoxHeading}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                      </actions>
+                      <widgets>
+                        <container id="adminGiftMessageDetail" style="commonDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonCheckout.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="shoppingCartItemBoxBody">
+                                             <include-screen name="shoppingCartItem"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="giftMessageBoxBody">
+                                             <include-screen name="giftMessage"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="footerBoxBody">
+                                            <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                        <container>
+                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="shoppingCartItem">
+        <section>
+            <actions>
+            	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+            </actions>
+            <widgets>
+            <container id="shoppingCartContainer">
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/shoppingCartItem.ftl"/>
+                    </html>
+                </platform-specific>
+            </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="giftMessage">
+        <section>
+            <actions>
+            	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+            </actions>
+            <widgets>
+            <container id="giftMessage">
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/giftMessage.ftl"/>
+                    </html>
+                </platform-specific>
+            </container>
+            </widgets>
+        </section>
+    </screen>
+    
     
 </screens>

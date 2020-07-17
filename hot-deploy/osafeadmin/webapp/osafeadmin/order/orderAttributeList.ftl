@@ -3,10 +3,10 @@
     <th class="nameCol">${uiLabelMap.AttributeNameLabel}</th>
     <th class="nameCol">${uiLabelMap.AttributeValueLabel}</th>
   </tr>
-  <#assign attributeList = delegator.findByAnd("OrderAttribute", {"orderId" : orderHeader.orderId!})/>
-  <#if attributeList?exists && attributeList?has_content>
+  <#assign resultList = delegator.findByAnd("OrderAttribute", {"orderId" : orderHeader.orderId!})/>
+  <#if resultList?exists && resultList?has_content>
     <#assign rowClass = "1"/>
-    <#list attributeList as attribute>
+    <#list resultList as attribute>
       <#assign hasNext = attribute_has_next>
       <!-- format dates -->
       <#if attribute.attrName = "DATETIME_DOWNLOADED">
@@ -26,6 +26,6 @@
       </#if>
     </#list>
   <#else>
-    <tr><td class="boxNumber" colspan="5">${uiLabelMap.NoDataAvailableInfo}</td></tr>
+        ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
   </#if>
 </table>

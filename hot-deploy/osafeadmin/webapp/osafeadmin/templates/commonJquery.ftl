@@ -128,4 +128,20 @@
         var contextIconBox = jQuery(elm).find('div.'+nextDiv+':first');
         jQuery(contextIconBox).hide();
     }
+    
+    function setMaxLength(textArea)
+    {
+	        var maxchar = jQuery(textArea).attr('maxlength');
+            var curLen = jQuery(textArea).val().length;
+            var regCharLen = lineBreakCount(jQuery(textArea).val());
+            jQuery(textArea).keyup(function() {
+                var cnt = jQuery(this).val().length;
+                var regCharLen = lineBreakCount(jQuery(this).val());
+                var remainingchar = maxchar - (cnt + regCharLen);
+                if(remainingchar < 0){
+                    jQuery(this).val(jQuery(this).val().slice(0, (maxchar-regCharLen)));
+                } else{
+                }
+            });
+    }
 </script>

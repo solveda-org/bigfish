@@ -39,6 +39,7 @@ session = context.session;
 statusId = StringUtils.trimToEmpty(parameters.statusId);
 productPromoCodeId = StringUtils.trimToEmpty(parameters.productPromoCodeId);
 productStoreall = StringUtils.trimToEmpty(parameters.productStoreall);
+productId = StringUtils.trimToEmpty(parameters.productId);
 
 List infoMsgList = FastList.newInstance();
 Boolean isValidDate = true;
@@ -178,6 +179,11 @@ if(UtilValidate.isNotEmpty(orderDateFrom))
 if(UtilValidate.isNotEmpty(productPromoCodeId))
 {
     svcCtx.put("productPromoCodeId", productPromoCodeId);
+}
+
+if(UtilValidate.isNotEmpty(productId))
+{
+    svcCtx.put("productId", productId);
 }
 
 if(UtilValidate.isNotEmpty(orderDateTo))

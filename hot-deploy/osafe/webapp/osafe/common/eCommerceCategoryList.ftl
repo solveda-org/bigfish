@@ -38,25 +38,21 @@
   </div>
 </#if>
 
-<#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CLP_HIDE_SUB_CATEGORIES")>
-  <div class="resultCategoryListContainer">
-    <#if facetCatList?has_content>
-      <div id="eCommerceCategoryList">
-        <#assign facet = facetCatList[0] >
-        <#if facet.refinementValues?has_content>
-          <#list facet.refinementValues as category>
-           ${setRequestAttribute("clpItem",category)}
-            <!-- DIV for Displaying Product Categories STARTS here -->
-            <div class="eCommerceListItem categoryListItem">
-              ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#clpDivSequence")}
-            </div>
-            <!-- DIV for Displaying Product Categories ENDS here -->
-          </#list>
-        </#if>
-      </div>
-    </#if>
-  </div>
-</#if>
+  <#if facetCatList?has_content>
+    <div id="eCommerceCategoryList">
+     <div class="boxList categoryList">
+      <#assign facet = facetCatList[0] >
+      <#if facet.refinementValues?has_content>
+        <#list facet.refinementValues as category>
+         ${setRequestAttribute("clpItem",category)}
+          <!-- DIV for Displaying Product Categories STARTS here -->
+            ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#clpDivSequence")}
+          <!-- DIV for Displaying Product Categories ENDS here -->
+        </#list>
+      </#if>
+    </div>
+  </#if>
+
 <#if pageEndContentId?has_content>
   <div id="eCommercePlpEspot_${categoryId}" class="plpEspot endContent">
     <@renderContentAsText contentId="${pageEndContentId}" ignoreTemplate="true"/>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+<!-- SagePay Payment Custom Method -->
+<CustomMethod customMethodId="CC_AUTH_SGPAYTKN" customMethodTypeId="CC_AUTH" customMethodName="sagepaytokenCCAuth" description="SagePay token authorize"/>
+<CustomMethod customMethodId="CC_CAPTURE_SGPAYTKN" customMethodTypeId="CC_CAPTURE" customMethodName="sagepaytokenCCCapture" description="SagePay token capture"/>
+<CustomMethod customMethodId="CC_REFUND_SGPAYTKN" customMethodTypeId="CC_REFUND" customMethodName="sagepaytokenCCRefund" description="SagePay token refund"/>
+<CustomMethod customMethodId="CC_RELEASE_SGPAYTKN" customMethodTypeId="CC_RELEASE" customMethodName="sagepaytokenCCRelease" description="SagePay token release"/>
+<CustomMethod customMethodId="CC_CAPTURE_FAIL" customMethodTypeId="CC_CAPTURE" customMethodName="alwaysFailCCProcessor" description="CC Test capture fail"/>
+
+<!-- EBS Payment Custom Method -->
+<CustomMethod customMethodId="EBS_AUTH" customMethodTypeId="EBS_AUTH" customMethodName="ebsAuthProcessor" description="EBS payment authorize"/>
+<CustomMethod customMethodId="EBS_RELEASE" customMethodTypeId="EBS_RELEASE" customMethodName="ebsRelease" description="EBS Order Release"/>
+<CustomMethod customMethodId="EBS_CAPTURE" customMethodTypeId="EBS_CAPTURE" customMethodName="ebsCapture" description="EBS payment capture"/>
+<CustomMethod customMethodId="EBS_REFUND" customMethodTypeId="EBS_REFUND" customMethodName="ebsRefund" description="EBS payment refund"/>
+<CustomMethod customMethodId="EBS_CAPTURE_FAIL" customMethodTypeId="EBS_CAPTURE" customMethodName="alwaysFailCCProcessor" description="EBS Test capture fail"/>
+
+<!-- PayNetz Payment Custom Method -->
+<CustomMethod customMethodId="PAYNETZ_AUTH" customMethodTypeId="PAYNETZ_AUTH" customMethodName="payNetzAuthProcessor" description="PAYNETZ payment authorize"/>
+<CustomMethod customMethodId="PAYNETZ_RELEASE" customMethodTypeId="PAYNETZ_RELEASE" customMethodName="payNetzRelease" description="PAYNETZ Order Release"/>
+<CustomMethod customMethodId="PAYNETZ_CAPTURE" customMethodTypeId="PAYNETZ_CAPTURE" customMethodName="payNetzCapture" description="PAYNETZ payment capture"/>
+<CustomMethod customMethodId="PAYNETZ_REFUND" customMethodTypeId="PAYNETZ_REFUND" customMethodName="payNetzRefund" description="PAYNETZ payment refund"/>
+<CustomMethod customMethodId="PAYNETZ_CAPTURE_FAIL" customMethodTypeId="PAYNETZ_CAPTURE" customMethodName="alwaysFailCCProcessor" description="PAYNETZ Test capture fail"/>
+
+<!-- Gift Card Custom Method -->
+<CustomMethod customMethodId="GIFT_CAPTURE_FAIL" customMethodTypeId="GIFT_CAPTURE" customMethodName="alwaysFailCCProcessor" description="GIFT card test Capture fail"/>
+
+<!-- Pay Pal Custom Method -->
+<CustomMethod customMethodId="PAYPAL_CAPTURE_FAIL" customMethodTypeId="PAYPAL_CAPTURE" customMethodName="alwaysFailCCProcessor" description="PayPal Test capture fail"/>
+
+</entity-engine-xml>

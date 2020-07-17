@@ -7,9 +7,9 @@ import org.ofbiz.entity.GenericValue;
 if (UtilValidate.isNotEmpty(context.enumTypeId)) 
 {
     enumTypeList = delegator.findByAnd("Enumeration", [enumTypeId : context.enumTypeId], ["sequenceId"]);
+	processEnumTypes = FastList.newInstance();
     if(UtilValidate.isNotEmpty(enumTypeList))
     {
-        processEnumTypes = FastList.newInstance();
         for (GenericValue enumType :  enumTypeList) 
         {
             if(UtilValidate.isNotEmpty(enumType.sequenceId) && (enumType.sequenceId instanceof String) && (UtilValidate.isInteger(enumType.sequenceId)))

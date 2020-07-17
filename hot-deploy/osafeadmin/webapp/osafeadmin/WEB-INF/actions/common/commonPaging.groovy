@@ -6,7 +6,7 @@ import org.ofbiz.base.util.UtilValidate;
 import com.osafe.util.OsafeAdminUtil;
 
  // set the page parameters
-if(pagingListSize && pagingList) 
+if(UtilValidate.isNotEmpty(pagingListSize) && UtilValidate.isNotEmpty(pagingList))
 {
     viewIndex = Integer.valueOf(parameters.viewIndex  ?: 1);
     context.viewIndex= viewIndex;

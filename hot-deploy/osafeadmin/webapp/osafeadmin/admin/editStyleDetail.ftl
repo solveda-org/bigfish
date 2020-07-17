@@ -27,11 +27,5 @@
       </div>
     </#if>
   <#else>
-      <div class="infoRow">
-          <div class="infoEntry long">
-              <div class="infoValue withOutCaption">
-                  ${uiLabelMap.NoDataAvailableInfo}
-              </div>
-          </div>
-      </div>
+      ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
   </#if>

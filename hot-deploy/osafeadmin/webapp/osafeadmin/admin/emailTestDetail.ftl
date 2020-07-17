@@ -38,6 +38,10 @@
           </div>
           <div class="infoValue">
               <input class="medium" name="customerId" type="text" id="customerId" maxlength="20" value="${parameters.customerId!""}"/>
+              <input type="hidden" name="customerName" id="customerName" value=""/>
+          </div>
+          <div class="infoIcon">
+            <a href="javascript:openLookup(document.${detailFormName!}.customerId,document.${detailFormName!}.customerName,'lookupCustomer','500','700','center','true');" " onMouseover="showTooltip(event,'${uiLabelMap.ChangeCustomerInfo!""}');" onMouseout="hideTooltip()"><span class="previewIcon"></span></a>
           </div>
         </div>
       </div>
@@ -94,5 +98,5 @@
         </div>
       </div>
   <#else>
-      ${uiLabelMap.NoDataAvailableInfo}
+     ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
   </#if>

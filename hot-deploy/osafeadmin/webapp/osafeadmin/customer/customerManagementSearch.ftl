@@ -44,10 +44,20 @@
 	      <div class="entry long">
 	          <label>${uiLabelMap.CustomerRoleCaption}</label>
 	          <div class="entryInput checkbox medium">
-	                    <input type="checkbox" class="checkBoxEntry" name="roleall" id="roleall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','role')" <#if parameters.roleall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.AllLabel}
+	              <input type="checkbox" class="checkBoxEntry" name="roleall" id="roleall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','role')" <#if parameters.roleall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.AllLabel}
+	              <#assign roleTypes = sessionAttributes.roleTypes?if_exists>
+	              <#list roleTypes as roleType>
+	                  <#if roleType.description?has_content>
+	                      <#assign description = roleType.description?lower_case />
+	                  </#if>
+	                  <input type="checkbox" class="checkBoxEntry" name="role${description!}" id="role${description!}" value="Y" <#if parameters.get('role${description!}')?has_content || context.get('role${description!}')?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${roleType.description!}
+	              </#list>
+	              <#-- 
+	                    
 	                    <input type="checkbox" class="checkBoxEntry" name="roleCustomerId" id="roleCustomerId" value="Y" <#if parameters.roleCustomerId?has_content || roleCustomerId?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.CustomerCaption}
 	                    <input type="checkbox" class="checkBoxEntry" name="roleEmailId" id="roleEmailId" value="Y" <#if parameters.roleEmailId?has_content || roleEmailId?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.EmailSubscriberCaption}
 	                    <input type="checkbox" class="checkBoxEntry" name="roleGuestId" id="roleGuestId" value="Y" <#if parameters.roleGuestId?has_content || roleGuestId?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.GuestCaption}
+	               -->
 	          </div>
 	     </div>
      </div>

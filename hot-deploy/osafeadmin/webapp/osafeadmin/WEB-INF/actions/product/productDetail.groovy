@@ -153,7 +153,7 @@ if (UtilValidate.isNotEmpty(parameters.productId))
     	EntityOperator.AND);
 
     	prodCatList = delegator.findList("ProductCategoryAndMember", ecl, null, null, null, false);
-    	context.productCategory = EntityUtil.getFirst(prodCatList);
+		context.prodCatList = EntityUtil.filterByDate(prodCatList,true);
     }
     
     context.productDetailHeading = productDetailHeading;

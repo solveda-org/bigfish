@@ -45,9 +45,7 @@
                 </#if>
             </#list>
         <#else>
-                <tr>
-                    <td colspan="3" class="boxNumber">${uiLabelMap.NoDataAvailableInfo}</td>
-                </tr>
+            ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}        
         </#if>
         </table>
     </div>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+    Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+-->
+
+<resource xmlns:xsi="http://www.w3.org/01/XMLSchema-instance">
+
+    <property key="TXT_MESSAGE_USER_ID">
+        <value xml:lang="en">tpgwholesale</value>
+        <description>The user name of the SMS Gateway Account.</description>
+    </property>
+    <property key="TXT_MESSAGE_PASSWORD">
+        <value xml:lang="en">123456</value>
+        <description>The user password of the SMS Gateway Account.</description>
+    </property>
+    <property key="TXT_MESSAGE_API_ID">
+        <value xml:lang="en">090000</value>
+        <description>The SMS Gateway sender Id.</description>
+    </property>
+    <property key="TXT_MESSAGE_API_URL">
+        <value xml:lang="en">http://www.smsjust.com/blank/sms/user/urlsms.php</value>
+        <description>The Request URL to access the SMS Gateway via API.</description>
+    </property>
+
+</resource>

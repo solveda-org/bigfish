@@ -1,6 +1,7 @@
 <#if product?has_content>
 <div class="linkButton">
   <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(product, request)!""/>
+  <#assign shoppingCart = Static["org.ofbiz.order.shoppingcart.ShoppingCartEvents"].getCartObject(request)! />
   <#if !showDetailLink?has_content>
       <#assign showDetailLink = "true"/>
   </#if>
@@ -126,7 +127,7 @@
   </#if>
   <#if showCartLink == 'true'>
     <#if (product.productTypeId?if_exists == 'FINISHED_GOOD') && (product.isVirtual?if_exists == 'N')>
-      <#assign inventoryMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"INVENTORY_METHOD")!/>
+      <#assign inventoryMethod = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"INVENTORY_METHOD")!/>
       <#assign notIntroduced = false />
       <#if product.introductionDate?has_content>
         <#assign introDate = product.introductionDate! />
@@ -148,7 +149,7 @@
       <#else>
         <!-- If inventory method is BigFish then check how many items are in stock -->
         <#if inventoryMethod?has_content && inventoryMethod.toUpperCase() == "BIGFISH" >
-          <#assign inventoryOutOfStockTo = Static["com.osafe.util.Util"].getProductStoreParm(request,"INVENTORY_OUT_OF_STOCK_TO")!/>
+          <#assign inventoryOutOfStockTo = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"INVENTORY_OUT_OF_STOCK_TO")!/>
           <#assign bfProductAllAttributes = product.getRelated("ProductAttribute") />
           <#if bfProductAllAttributes?has_content>
             <#assign bfTotalInventoryProductAttributes = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(bfProductAllAttributes,Static["org.ofbiz.base.util.UtilMisc"].toMap('attrName','BF_INVENTORY_TOT'))/> 
@@ -159,12 +160,40 @@
             <#assign bfTotalInventory = bfTotalInventoryProductAttribute.attrValue!>
           </#if>
           <#if bfTotalInventory?has_content && inventoryOutOfStockTo?has_content && (bfTotalInventory?number > inventoryOutOfStockTo?number)>
-            <a href="<@ofbizUrl>${addToCartAction}?productId=${product.productId?if_exists}&add_product_id=${product.productId?if_exists}&addToCartFrom=${addToCartFrom?if_exists}<#if (product.isVariant?if_exists == 'Y') >&prod_type=Variant<#elseif (product.isVariant?if_exists == 'N')>&prod_type=FinishedGood</#if></@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a> 
+            <#assign pdpMaxQty = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"PDP_QTY_MAX")!"99"/>
+            <#assign pdpMaxQtyNum = pdpMaxQty?number />
+            <#assign qtyInCart = 0?number />
+            <#if shoppingCart?has_content>
+              <#list shoppingCart.items() as cartLine>
+                  <#if cartLine.getProductId() == product.productId>
+                      <#assign qtyInCart = cartLine.getQuantity() />
+                  </#if>
+              </#list>
+            </#if>
+            <#if ((qtyInCart+1) > pdpMaxQtyNum)>
+              <a href="javascript:void(0);javascript:alert('${eCommerceUiLabel.PDPMaxQtyError}');" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
+            <#else>
+              <a href="<@ofbizUrl>${addToCartAction}?productId=${product.productId?if_exists}&add_product_id=${product.productId?if_exists}&addToCartFrom=${addToCartFrom?if_exists}<#if (product.isVariant?if_exists == 'Y') >&prod_type=Variant<#elseif (product.isVariant?if_exists == 'N')>&prod_type=FinishedGood</#if></@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
+            </#if> 
           <#else>
             <a href="javascript:void(0);javascript:alert('${uiLabelMap.OutOfStockAddToCartError}');" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
           </#if>
         <#else>
-          <a href="<@ofbizUrl>${addToCartAction}?productId=${product.productId?if_exists}&add_product_id=${product.productId?if_exists}&addToCartFrom=${addToCartFrom?if_exists}<#if (product.isVariant?if_exists == 'Y') >&prod_type=Variant<#elseif (product.isVariant?if_exists == 'N')>&prod_type=FinishedGood</#if></@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a> 
+          <#assign pdpMaxQty = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"PDP_QTY_MAX")!"99"/>
+          <#assign pdpMaxQtyNum = pdpMaxQty?number />
+          <#assign qtyInCart = 0?number />
+          <#if shoppingCart?has_content>
+              <#list shoppingCart.items() as cartLine>
+                  <#if cartLine.getProductId() == product.productId>
+                      <#assign qtyInCart = cartLine.getQuantity() />
+                  </#if>
+              </#list>
+          </#if>
+          <#if ((qtyInCart+1) > pdpMaxQtyNum)>
+              <a href="javascript:void(0);javascript:alert('${eCommerceUiLabel.PDPMaxQtyError}');" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
+          <#else>
+              <a href="<@ofbizUrl>${addToCartAction}?productId=${product.productId?if_exists}&add_product_id=${product.productId?if_exists}&addToCartFrom=${addToCartFrom?if_exists}<#if (product.isVariant?if_exists == 'Y') >&prod_type=Variant<#elseif (product.isVariant?if_exists == 'N')>&prod_type=FinishedGood</#if></@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
+          </#if>
         </#if>
       </#if>
     <#else>

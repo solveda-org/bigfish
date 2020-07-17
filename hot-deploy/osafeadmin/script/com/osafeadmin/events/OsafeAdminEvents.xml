@@ -7,7 +7,7 @@
         <set field="address" value=""/>
         <if-empty field="parameters.address1">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress1Error"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="address1" list="error_list"/>
             <else>
                 <string-append string="${parameters.address1}, " field="address"/>
             </else>
@@ -20,7 +20,7 @@
         </if-not-empty>
         <if-empty field="parameters.city">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCityError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="city" list="error_list"/>
             <else>
                 <string-append string="${parameters.city}, " field="address"/>
             </else>
@@ -45,7 +45,7 @@
             <then>
                 <if-empty field="parameters.stateProvinceGeoId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="stateProvinceGeoId" list="error_list"/>
                 </if-empty>
             </then>
         </if>
@@ -76,7 +76,7 @@
             </condition>
             <then>
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GetGeoCodeError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="latitude" list="error_list"/>
             </then>
             <else>
                 <field-to-request field="latitude"/>
@@ -196,7 +196,7 @@
     <simple-method method-name="checkHomeSpotContent" short-description="Check Home Spot Content" login-required="true">
         <if-empty field="parameters.contentId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePageSpotSelectError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="contentId" list="error_list"/>
         </if-empty>
         <check-errors/>
     </simple-method>
@@ -252,6 +252,21 @@
     </simple-method>
 
     <simple-method method-name="createCategoryTextContent" short-description="create category text content" login-required="true">
+    	<if-empty field="parameters.contentName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotNameError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="contentName" list="error_list"/>
+        </if-empty>
+    	<if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionContentError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.textData">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotContentError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
+        </if-empty>
+    	
+    	<check-errors/>
+    	
          <set-service-fields service-name="createCategoryTextContent" to-map="createCategoryTextContentCtx" map="parameters"/>
          <call-service service-name="createCategoryTextContent" in-map-name="createCategoryTextContentCtx">
              <result-to-request result-name="contentId" />

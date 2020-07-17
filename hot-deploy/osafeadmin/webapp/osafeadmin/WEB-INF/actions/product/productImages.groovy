@@ -9,6 +9,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.product.product.ProductWorker;
 import org.apache.commons.lang.StringUtils;
 
+osafeProperties = UtilProperties.getResourceBundleMap("OsafeProperties.xml", locale);
 if (UtilValidate.isNotEmpty(parameters.productId)) 
 {
 
@@ -34,7 +35,7 @@ if (UtilValidate.isNotEmpty(parameters.productId))
         context.productContentWrapper = productContentWrapper;
     }
     try {
-      totAltImg = Integer.parseInt(UtilProperties.getPropertyValue("osafe", "pdp-alternate-images"));
+      totAltImg = Integer.parseInt(osafeProperties.pdpAlternateImages);
     }
     catch(NumberFormatException nfe) {
     	Debug.logError(nfe, nfe.getMessage(),"");

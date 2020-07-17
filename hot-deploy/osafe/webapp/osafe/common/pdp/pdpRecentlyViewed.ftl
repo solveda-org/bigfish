@@ -1,7 +1,8 @@
-<#-- variable setup and worker calls -->
-<#assign maxRecentlyViewedProducts = pdpRecentViewedMax/>
-<#if sessionAttributes.lastViewedProducts?exists && sessionAttributes.lastViewedProducts?has_content>
- <div class="pdpRecentlyViewed">
+<li class="${request.getAttribute("attributeClass")!}">
+  <#-- variable setup and worker calls -->
+  <#assign maxRecentlyViewedProducts = pdpRecentViewedMax/>
+  <#if sessionAttributes.lastViewedProducts?exists && sessionAttributes.lastViewedProducts?has_content>
+    <div class="js_pdpRecentlyViewed">
        <#assign plpFacetGroupVariantSwatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_SWATCH_IMG")!""/>
        <#assign plpFacetGroupVariantSticky =  Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_PDP_MATCH")!""/>
        <#assign facetGroupMatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_GROUP_VARIANT_MATCH")!""/>
@@ -45,19 +46,20 @@
           </#list>
        </#if>
        
-  <#assign count = 1/>
-  <h2>${uiLabelMap.RecentlyViewedProductHeading}</h2>
-  <#list sessionAttributes.lastViewedProducts as productId>
-    ${setRequestAttribute("plpItemId",productId)}
-    <!-- DIV for Displaying Recommended productss STARTS here -->
-    <div class="eCommerceListItem eCommerceRecentlyViewedProduct">
-      ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPRecentDivSequence")}
+       <#assign count = 1/>
+       <h2>${uiLabelMap.RecentlyViewedProductHeading}</h2>
+       <div class="boxList productList">
+         <#list sessionAttributes.lastViewedProducts as productId>
+           ${setRequestAttribute("plpItemId",productId)}
+           <!-- DIV for Displaying Recommended productss STARTS here -->
+           ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPRecentDivSequence")}
+          <#if count == maxRecentlyViewedProducts?number>
+            <#break>
+          </#if>
+          <#assign count = count+1/>
+          <!-- DIV for Displaying PLP item ENDS here -->     
+        </#list>
+       </div>
     </div>
-    <#if count == maxRecentlyViewedProducts?number>
-       <#break>
-    </#if>
-    <#assign count = count+1/>
-    <!-- DIV for Displaying PLP item ENDS here -->     
-  </#list>
- </div>
-</#if>
+  </#if>
+</li>

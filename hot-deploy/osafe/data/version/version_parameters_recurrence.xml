@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+    Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+-->
+
+<resource xmlns:xsi="http://www.w3.org/01/XMLSchema-instance">
+
+    <property key="FREQUENCY">
+        <value xml:lang="en">30</value>
+        <description>Determines the frequency in days when placing a recurring order</description>
+    </property>
+
+    <property key="FREQUENCY_2">
+        <value xml:lang="en">30</value>
+        <description>Determines the frequency in days when placing a recurring order</description>
+    </property>
+
+</resource>

@@ -30,6 +30,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.webapp.control.LoginWorker;
+import com.osafe.util.Util;
 
 /**
  * LoginEvents - Events for UserLogin and Security handling.
@@ -158,7 +159,12 @@ public class LoginEvents {
             }
             if (useEncryption) {
                 // password encrypted, can't send, generate new password and email to user
-                passwordToSend = RandomStringUtils.randomAlphanumeric(Integer.parseInt(UtilProperties.getPropertyValue("security", "password.length.min", "5")));
+            	String regPwdMinChar = Util.getProductStoreParm(request, "REG_PWD_MIN_CHAR");  
+            	if(UtilValidate.isEmpty(regPwdMinChar))
+            	{
+            		regPwdMinChar = "6"; //default value
+            	}
+                passwordToSend = RandomStringUtils.randomAlphanumeric(Integer.parseInt(regPwdMinChar));
                 supposedUserLogin.set("currentPassword", HashCrypt.getDigestHash(passwordToSend, LoginServices.getHashType()));
                 supposedUserLogin.set("passwordHint", "Auto-Generated Password");
                 if ("true".equals(UtilProperties.getPropertyValue("security.properties", "password.email_password.require_password_change"))){

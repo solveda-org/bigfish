@@ -6,10 +6,10 @@
     <th class="dateCol">${uiLabelMap.TimeLabel}</th>
     <th class="noteCol">${uiLabelMap.NoteLabel}</th>
   </tr>
-  <#assign noteList = delegator.findByAnd("PartyNoteView", {"targetPartyId" : party.partyId!})/>
-  <#if noteList?exists && noteList?has_content>
+  <#assign resultList = delegator.findByAnd("PartyNoteView", {"targetPartyId" : party.partyId!})/>
+  <#if resultList?exists && resultList?has_content>
     <#assign rowClass = "1"/>
-    <#list noteList as note>
+    <#list resultList as note>
       <#assign hasNext = note_has_next>
       <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
         <td class="idCol <#if !note_has_next?if_exists>lastRow</#if> firstCol" ><a href="<@ofbizUrl>customerNoteDetail?noteId=${note.noteId?if_exists}&partyId=${party.partyId!}</@ofbizUrl>">${note.noteId?if_exists}</a></td>
@@ -29,6 +29,6 @@
       </#if>
     </#list>
   <#else>
-    <tr><td class="boxNumber" colspan="5">${uiLabelMap.NoDataAvailableInfo}</td></tr>
+       ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
   </#if>
 </table>

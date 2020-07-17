@@ -10,10 +10,7 @@
             <field-map field-name="partyId" from-field="parameters.partyId"/>
         </entity-one>
         <if-compare operator="equals" value="Y" field="partyAttributeValue.attrValue">
-        	<set field="parameters.PHONE_MOBILE_REQUIRED" value="true" />
-        <else>
-        	<set field="parameters.PHONE_MOBILE_REQUIRED" value="false" />
-        </else>
+        	<set field="parameters.PHONE_MOBILE_MANDATORY" value="Y" />
         </if-compare>
         <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
          <check-errors/>
@@ -38,34 +35,29 @@
 
         <!-- update phone contact -->
         <!-- home phone -->
-        <if>
-           <condition>
-              <or>
-                <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
-                <not><if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"></if-empty></not>
-              </or>
-           </condition>
-                <then>
-                    <if-not-empty field="parameters.homePhoneContactMechId">
-                        <set field="homePhoneContext.contactMechId" from-field="parameters.homePhoneContactMechId"/>
-                        <call-service service-name="updatePartyTelecomNumber" in-map-name="homePhoneContext">
-                            <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
-                        </call-service>
-                        <else>
-                            <call-service service-name="createPartyTelecomNumber" in-map-name="homePhoneContext">
-                                <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
-                            </call-service>
-                            <set from-field="userLogin.partyId" field="homePhonePurposeContext.partyId"/>
-                            <set from-field="homePhoneContext.contactMechId" field="homePhonePurposeContext.contactMechId"/>
+        <if-not-empty field="parameters.homePhoneContactMechId">
+            <set field="homePhoneContext.contactMechId" from-field="parameters.homePhoneContactMechId"/>
+            <if-not-empty field="homePhoneContext.contactNumber">
+			    <call-service service-name="updatePartyTelecomNumber" in-map-name="homePhoneContext">
+                    <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
+                </call-service>
+			<else>
+			    <call-service service-name="deletePartyContactMech" in-map-name="homePhoneContext"/>
+			</else>
+			</if-not-empty>
+        <else>
+            <call-service service-name="createPartyTelecomNumber" in-map-name="homePhoneContext">
+                <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
+            </call-service>
+            <set from-field="userLogin.partyId" field="homePhonePurposeContext.partyId"/>
+            <set from-field="homePhoneContext.contactMechId" field="homePhonePurposeContext.contactMechId"/>
             
-                            <set value="PHONE_HOME" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
-                            <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
-                            <set value="PRIMARY_PHONE" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
-                            <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
-                        </else>
-                    </if-not-empty>
-               </then>
-            </if>  
+            <set value="PHONE_HOME" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+            <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+            <set value="PRIMARY_PHONE" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+            <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+        </else>
+        </if-not-empty>
             
         <!-- work phone -->
         <if-not-empty field="parameters.workPhoneContactMechId">
@@ -115,46 +107,15 @@
             </if-not-empty>
         </else>
         </if-not-empty>
-
-        <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="UserProfileUpdatedSuccess"/>
-        <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
-        <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
-    </simple-method>
-    
-    <simple-method method-name="updateCustomerLogin" short-description="Update Customer Login Information" login-required="true">
-        <if-empty field="parameters.partyId"><add-error><fail-message message="No partyId passed, cannot Update Customer"/></add-error></if-empty>
         
-        <call-simple-method method-name="validateLoginInfo" xml-resource="component://osafe/script/Validation/UserProfile.xml" />
-        
-        <!-- mobile phone -->
-        <if-not-empty field="parameters.mobilePhoneContactMechId">
-            <set field="mobilePhoneContext.contactMechId" from-field="parameters.mobilePhoneContactMechId"/>
-            <if-not-empty field="mobilePhoneContext.contactNumber">
-                <call-service service-name="updatePartyTelecomNumber" in-map-name="mobilePhoneContext">
-                    <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
-                </call-service>
-            <else>
-                <call-service service-name="deletePartyContactMech" in-map-name="mobilePhoneContext"/>
-            </else>
-            </if-not-empty>
-        <else>
-            <if-not-empty field="mobilePhoneContext.contactNumber">
-                <call-service service-name="createPartyTelecomNumber" in-map-name="mobilePhoneContext">
-                    <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
-                </call-service>
-                <set from-field="userLogin.partyId" field="mobilePhonePurposeContext.partyId"/>
-                <set from-field="mobilePhoneContext.contactMechId" field="mobilePhonePurposeContext.contactMechId"/>
-                <set value="PHONE_MOBILE" field="mobilePhonePurposeContext.contactMechPurposeTypeId"/>
-                <call-service service-name="createPartyContactMechPurpose" in-map-name="mobilePhonePurposeContext"/>
-            </if-not-empty>
-        </else>
-        </if-not-empty>
-        
-        <!-- Update user's email address -->
         <if-not-empty field="parameters.emailAddressContactMechId">
+            <entity-one value-field="contactMech" entity-name="ContactMech">
+                <field-map field-name="contactMechId" from-field="parameters.emailAddressContactMechId"/>
+            </entity-one>
+            
             <set field="emailAddressContext.partyId" from-field="parameters.partyId"/>
             <set field="emailAddressContext.contactMechId" from-field="parameters.emailAddressContactMechId"/>
-            <set field="emailAddressContext.emailAddress" from-field="parameters.CUSTOMER_EMAIL"/>
+            <set field="emailAddressContext.emailAddress" from-field="contactMech.infoString"/>
             <if-not-empty field="parameters.CUSTOMER_EMAIL_ALLOW_SOL">
                <set field="emailAddressContext.allowSolicitation" from-field="parameters.CUSTOMER_EMAIL_ALLOW_SOL"/>
             <else>
@@ -163,35 +124,7 @@
             </if-not-empty>
             <call-service service-name="updatePartyEmailAddress" in-map-name="emailAddressContext"></call-service>
         </if-not-empty>
-        <!-- Update user's passord  -->
-        <property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
-        <property-to-field resource="security" property="password.lowercase" default="false" field="password_lowercase"/>
-        <!-- if username and/or password should be lowercased, do that now -->
-        <if-compare field="username_lowercase" operator="equals" value="true">
-            <call-object-method obj-field="parameters.USERNAME" method-name="toLowerCase" ret-field="parameters.USERNAME"/>
-        </if-compare>
-        <if-compare field="password_lowercase" operator="equals" value="true">
-            <call-object-method obj-field="parameters.PASSWORD" method-name="toLowerCase" ret-field="parameters.PASSWORD"/>
-            <call-object-method obj-field="parameters.CONFIRM_PASSWORD" method-name="toLowerCase" ret-field="parameters.CONFIRM_PASSWORD"/>
-            <call-object-method obj-field="parameters.OLD_PASSWORD" method-name="toLowerCase" ret-field="parameters.OLD_PASSWORD"/>
-        </if-compare>
-        <if-not-empty field="parameters.PASSWORD">
-            <call-map-processor in-map-name="parameters" out-map-name="updatePasswordContext">
-                <simple-map-processor name="newPassword">
-                    <process field="USERNAME"><copy to-field="userLoginId"/></process>
-                    <process field="PASSWORD"><copy to-field="newPassword"/></process>
-                    <process field="OLD_PASSWORD">
-                        <copy to-field="currentPassword"/>
-                    </process>
-                    <process field="CONFIRM_PASSWORD">
-                        <compare-field operator="equals" field="PASSWORD"><fail-property resource="OSafeUiLabels" property="PasswordMatchError"/></compare-field>
-                        <!-- This is checked below in the checkNewPassword method in the bsh block: <not-empty><fail-message message="You must enter your password twice"/></not-empty> -->
-                        <copy to-field="newPasswordVerify"/>
-                    </process>
-                </simple-map-processor>
-            </call-map-processor>
-           <call-service service-name="updatePassword" in-map-name="updatePasswordContext"></call-service>
-        </if-not-empty>
+        
         <if-not-empty field="parameters.PARTY_EMAIL_PREFERENCE">
             <entity-one value-field="partyAttributeExists" entity-name="PartyAttribute">
                 <field-map field-name="attrName" value="PARTY_EMAIL_PREFERENCE"/>
@@ -228,75 +161,184 @@
             </if-not-empty>
         </if-not-empty>
         
+        <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="UserProfileUpdatedSuccess"/>
+        <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
+        <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
+    </simple-method>
+    
+    <simple-method method-name="updateCustomerEmail" short-description="Update Customer Email Information" login-required="true">
+        <if-empty field="parameters.partyId"><add-error><fail-message message="No partyId passed, cannot Update Customer"/></add-error></if-empty>
+        
+        <call-simple-method method-name="validateEmailInfo" xml-resource="component://osafe/script/Validation/UserProfile.xml" />
+        <check-errors/>
+        
+        <!-- Update user's email address -->
+        <if-not-empty field="parameters.emailAddressContactMechId">
+            <set field="emailAddressContext.partyId" from-field="parameters.partyId"/>
+            <set field="emailAddressContext.contactMechId" from-field="parameters.emailAddressContactMechId"/>
+            <set field="emailAddressContext.emailAddress" from-field="parameters.CUSTOMER_EMAIL_NEW"/>
+            <call-service service-name="updatePartyEmailAddress" in-map-name="emailAddressContext"></call-service>
+        </if-not-empty>
+        
+        <set field="updateUserLoginIdCtx.userLoginId" from-field="parameters.CUSTOMER_EMAIL_NEW"/>
+        <call-service service-name="updateUserLoginId" in-map-name="updateUserLoginIdCtx">
+            <result-to-session result-name="newUserLogin" session-name="userLogin"/>
+        </call-service>
+        
         <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="UserLoginUpdatedSuccess"/>
         <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
         <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
     </simple-method>
-     <simple-method method-name="createUpdatePartyAttributes" short-description="Update Party Attributes" login-required="false" >
-
+    
+    <simple-method method-name="updateCustomerPassword" short-description="Update Customer Password Information" login-required="true">
+        <if-empty field="parameters.partyId"><add-error><fail-message message="No partyId passed, cannot Update Customer"/></add-error></if-empty>
+        
+        <call-simple-method method-name="validatePasswordInfo" xml-resource="component://osafe/script/Validation/UserProfile.xml" />
+        <check-errors/>
+        
+        <!-- Update user's passord  -->
+        <property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
+        <property-to-field resource="security" property="password.lowercase" default="false" field="password_lowercase"/>
+        <!-- if username and/or password should be lowercased, do that now -->
+        <if-compare field="username_lowercase" operator="equals" value="true">
+            <call-object-method obj-field="parameters.USERNAME" method-name="toLowerCase" ret-field="parameters.USERNAME"/>
+        </if-compare>
+        <if-compare field="password_lowercase" operator="equals" value="true">
+            <call-object-method obj-field="parameters.PASSWORD" method-name="toLowerCase" ret-field="parameters.PASSWORD"/>
+            <call-object-method obj-field="parameters.CONFIRM_PASSWORD" method-name="toLowerCase" ret-field="parameters.CONFIRM_PASSWORD"/>
+            <call-object-method obj-field="parameters.OLD_PASSWORD" method-name="toLowerCase" ret-field="parameters.OLD_PASSWORD"/>
+        </if-compare>
+        <if-not-empty field="parameters.PASSWORD">
+            <call-map-processor in-map-name="parameters" out-map-name="updatePasswordContext">
+                <simple-map-processor name="newPassword">
+                    <process field="USERNAME"><copy to-field="userLoginId"/></process>
+                    <process field="PASSWORD"><copy to-field="newPassword"/></process>
+                    <process field="OLD_PASSWORD">
+                        <copy to-field="currentPassword"/>
+                    </process>
+                    <process field="CONFIRM_PASSWORD">
+                        <compare-field operator="equals" field="PASSWORD"><fail-property resource="OSafeUiLabels" property="PasswordMatchError"/></compare-field>
+                        <!-- This is checked below in the checkNewPassword method in the bsh block: <not-empty><fail-message message="You must enter your password twice"/></not-empty> -->
+                        <copy to-field="newPasswordVerify"/>
+                    </process>
+                </simple-map-processor>
+            </call-map-processor>
+           <call-service service-name="updatePassword" in-map-name="updatePasswordContext"></call-service>
+        </if-not-empty>
+        
+        <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="UserLoginUpdatedSuccess"/>
+        <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
+        <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
+    </simple-method>
+    
+    <simple-method method-name="createUpdatePartyAttributes" short-description="Update Party Attributes" login-required="false" >
             <!-- Create/Update USER Gender -->
-            <if-compare-field field="parameters.USER_GENDER" operator="not-equals" to-field="nullValue">
-                <set field="createUpdateGenderCtx.partyId" from-field="parameters.partyId"/>
-                <set field="createUpdateGenderCtx.attrName" value="GENDER"/>
-                <set field="createUpdateGenderCtx.attrValue" from-field="parameters.USER_GENDER"/>
-                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateGenderCtx"/>
-            </if-compare-field>
-
+        <set field="genderStr" value="USER_GENDER"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasGenderInput">
+	        <field field="genderStr" type="Object"/>
+	    </call-object-method>
+        <if-compare field="hasGenderInput" operator="equals" value="true" type="Boolean">
+            <set field="createUpdateGenderCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateGenderCtx.attrName" value="GENDER"/>
+            <set field="createUpdateGenderCtx.attrValue" from-field="parameters.USER_GENDER" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateGenderCtx"/>
+        </if-compare>
+        
             <!-- Create/Update USER Title -->
-            <if-compare-field field="parameters.USER_TITLE" operator="not-equals" to-field="nullValue">
-                <set field="createUpdateTitleCtx.partyId" from-field="parameters.partyId"/>
-                <set field="createUpdateTitleCtx.attrName" value="TITLE"/>
-                <set field="createUpdateTitleCtx.attrValue" from-field="parameters.USER_TITLE"/>
-                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateTitleCtx"/>
-            </if-compare-field>
+        <set field="titleStr" value="USER_TITLE"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasTitleInput">
+	        <field field="titleStr" type="Object"/>
+	    </call-object-method>
+	    <if-compare field="hasTitleInput" operator="equals" value="true" type="Boolean">
+            <set field="createUpdateTitleCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateTitleCtx.attrName" value="TITLE"/>
+            <set field="createUpdateTitleCtx.attrValue" from-field="parameters.USER_TITLE" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateTitleCtx"/>
+        </if-compare>
 
+        <set field="dobShortUkStr" value="dobShortMonthUk"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobShortUkInput">
+	        <field field="dobShortUkStr" type="Object"/>
+	    </call-object-method>
+	    <if-compare field="hasDobShortUkInput" operator="equals" value="true" type="Boolean">
             <!-- Create/Update USER DOB (DDMM) -->
-            <if-compare-field field="DOB_DDMM" operator="not-equals" to-field="nullValue">
-                <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
-                <set field="createUpdateDOBShortCtx.attrName" value="DOB_DDMM"/>
-                <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_DDMM"/>
-                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
-            </if-compare-field>
-
-            <!-- Create/Update USER DOB (DDMMYYYY) -->
-            <if-compare-field field="DOB_DDMMYYYY" operator="not-equals" to-field="nullValue">
-                <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
-                <set field="createUpdateDOBLongCtx.attrName" value="DOB_DDMMYYYY"/>
-                <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_DDMMYYYY"/>
-                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
-            </if-compare-field>
-
+            <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateDOBShortCtx.attrName" value="DOB_DDMM"/>
+            <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_DDMM" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
+        </if-compare>
+        
+        <!-- Create/Update USER DOB (DDMMYYYY) -->
+        <set field="dobLongUkStr" value="dobLongMonthUk"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobLongUkInput">
+	        <field field="dobLongUkStr" type="Object"/>
+	    </call-object-method>
+	    <if-compare field="hasDobLongUkInput" operator="equals" value="true" type="Boolean">
+            <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateDOBLongCtx.attrName" value="DOB_DDMMYYYY"/>
+            <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_DDMMYYYY" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
+        </if-compare>
+        
+        <set field="dobShortUsStr" value="dobShortMonthUs"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobShortUsInput">
+	        <field field="dobShortUsStr" type="Object"/>
+	    </call-object-method>
+	    <if-compare field="hasDobShortUsInput" operator="equals" value="true" type="Boolean">
             <!-- Create/Update USER DOB (MMDD) -->
-            <if-compare-field field="DOB_MMDD" operator="not-equals" to-field="nullValue">
-                <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
-                <set field="createUpdateDOBShortCtx.attrName" value="DOB_MMDD"/>
-                <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_MMDD"/>
-                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
-            </if-compare-field>
-
+            <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateDOBShortCtx.attrName" value="DOB_MMDD"/>
+            <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_MMDD" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
+        </if-compare>
+        
             <!-- Create/Update USER DOB (MMDDYYYY) -->
-            <if-compare-field field="DOB_MMDDYYYY" operator="not-equals" to-field="nullValue">
-                <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
-                <set field="createUpdateDOBLongCtx.attrName" value="DOB_MMDDYYYY"/>
-                <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_MMDDYYYY"/>
-                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
-            </if-compare-field>
+        <set field="dobLongUsStr" value="dobLongMonthUs"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobLongUsInput">
+	        <field field="dobLongUsStr" type="Object"/>
+	    </call-object-method>
+	    <if-compare field="hasDobLongUsInput" operator="equals" value="true" type="Boolean">
+            <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateDOBLongCtx.attrName" value="DOB_MMDDYYYY"/>
+            <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_MMDDYYYY" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
+        </if-compare>
+            
+            <!-- Create/Update LOYALTY POINT ID -->
+        <set field="loyaltyPointStr" value="USER_LOYALTY_POINT_ID"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasLoyaltyPointInput">
+	        <field field="loyaltyPointStr" type="Object"/>
+	    </call-object-method>
+	    <if-compare field="hasLoyaltyPointInput" operator="equals" value="true" type="Boolean">
+            <set field="createUpdateLoyaltyPointCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateLoyaltyPointCtx.attrName" value="LOYALTY_POINT_ID"/>
+            <set field="createUpdateLoyaltyPointCtx.attrValue" from-field="parameters.USER_LOYALTY_POINT_ID" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateLoyaltyPointCtx"/>
+        </if-compare>
 
             <!-- Create/Update email preference -->
-            <if-compare-field field="parameters.PARTY_EMAIL_PREFERENCE" operator="not-equals" to-field="nullValue">
-                <set field="createUpdateEmailPreferenceCtx.partyId" from-field="parameters.partyId"/>
-                <set field="createUpdateEmailPreferenceCtx.attrName" value="PARTY_EMAIL_PREFERENCE"/>
-                <set field="createUpdateEmailPreferenceCtx.attrValue" from-field="parameters.PARTY_EMAIL_PREFERENCE"/>
-                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateEmailPreferenceCtx"/>
-            </if-compare-field>
+        <set field="emailPrefStr" value="PARTY_EMAIL_PREFERENCE"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasEmailPrefInput">
+	        <field field="emailPrefStr" type="Object"/>
+	    </call-object-method>
+	    <if-compare field="hasEmailPrefInput" operator="equals" value="true" type="Boolean">
+            <set field="createUpdateEmailPreferenceCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateEmailPreferenceCtx.attrName" value="PARTY_EMAIL_PREFERENCE"/>
+            <set field="createUpdateEmailPreferenceCtx.attrValue" from-field="parameters.PARTY_EMAIL_PREFERENCE" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateEmailPreferenceCtx"/>
+        </if-compare>
             
             <!-- Create/Update Text preference -->
-            <if-compare-field field="parameters.PARTY_TEXT_PREFERENCE" operator="not-equals" to-field="nullValue">
-                <set field="createUpdateTextPreferenceCtx.partyId" from-field="parameters.partyId"/>
-                <set field="createUpdateTextPreferenceCtx.attrName" value="PARTY_TEXT_PREFERENCE"/>
-                <set field="createUpdateTextPreferenceCtx.attrValue" from-field="parameters.PARTY_TEXT_PREFERENCE"/>
-                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateTextPreferenceCtx"/>
-            </if-compare-field>
+        <set field="textPrefStr" value="PARTY_TEXT_PREFERENCE"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasTextPrefInput">
+	        <field field="textPrefStr" type="Object"/>
+	    </call-object-method>
+	    <if-compare field="hasTextPrefInput" operator="equals" value="true" type="Boolean">
+            <set field="createUpdateTextPreferenceCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateTextPreferenceCtx.attrName" value="PARTY_TEXT_PREFERENCE"/>
+            <set field="createUpdateTextPreferenceCtx.attrValue" from-field="parameters.PARTY_TEXT_PREFERENCE" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateTextPreferenceCtx"/>
+        </if-compare>
 
             <!-- Create IS_DOWNLOADED if not exist -->
             <entity-one entity-name="PartyAttribute" value-field="partyAttribute">
@@ -311,10 +353,7 @@
             </if-empty>
             
             <!-- Create/Update Party Custom Attribute -->
-            <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="XmlFileStr">
-                <string value="osafe.properties"/>
-                <string value="ecommerce-UiSequence-xml-file"/>
-            </call-class-method>
+            <property-to-field resource="OsafeProperties" property="ecommerceUiSequenceXmlFile" field="XmlFileStr"/>
             <set field="XmlFilePath" value="${groovy: org.ofbiz.base.util.string.FlexibleStringExpander.expandString(XmlFileStr, context)}" type="String"/>
             
             <set field="searchRestrictionMap" type="NewMap"/>
@@ -322,17 +361,20 @@
             <set field="searchIgnoreCase" value="true" type="Boolean"/>
             <set field="searchPartial" value="false" type="Boolean"/>
             <set field="useCache" value="true" type="Boolean"/>
+            <set field="uiSequenceScreen" value="PersonalInfo" type="String"/>
+            
             <call-class-method class-name="com.osafe.services.OsafeManageXml" method-name="getSearchListFromXmlFile" ret-field="uiSequenceSearchList">
                 <field field="XmlFilePath" type="String"/>
                 <field field="searchRestrictionMap" type="Map"/>
-                <string value="PersonalInfo"/>
+                <field field="uiSequenceScreen" type="String"/>
                 <field field="searchIgnoreCase"  type="boolean" />
                 <field field="searchPartial"  type="boolean" />
                 <field field="useCache"  type="boolean" />
             </call-class-method>
+            
             <set field="partyCustomAttributeActive" value="false"/>
             <iterate entry="uiSequenceSearchScreen" list="uiSequenceSearchList">
-                <if-compare operator="equals" value="customAttributes" field="uiSequenceSearchScreen.key">
+                <if-compare operator="equals" value="personalInfoCustomAttributes" field="uiSequenceSearchScreen.key">
                     <if-compare operator="not-equals" value="0" field="uiSequenceSearchScreen.value">
                         <set field="partyCustomAttributeActive" value="true"/>
                     </if-compare>
@@ -340,8 +382,12 @@
             </iterate> 
             
             <if-compare operator="equals" value="true" field="partyCustomAttributeActive">
-                <call-class-method class-name="com.osafe.services.CustomPartyAttributeServices" method-name="getPartyCustomAttributeList" ret-field="customPartyAttributeList">
-                </call-class-method>
+            
+                <set field="getPartyCustomAttributeListCtx" type="NewMap"/>
+                <set field="getPartyCustomAttributeListCtx.useCache" value="true" type="String"/>
+                <call-service service-name="getPartyCustomAttributeList" in-map-name="getPartyCustomAttributeListCtx">
+                    <result-to-field result-name="customPartyAttributeList" field="customPartyAttributeList"/>
+                </call-service>
                 
 	            <iterate entry="customPartyAttribute" list="customPartyAttributeList">
 	                <set field ="attrValueStr" value="" />
@@ -385,6 +431,7 @@
 		                    <if-compare operator="equals" value="DATE_MMDD" field="customPartyAttribute.Type"/>
 		                </condition>
                     <then>
+                        <clear-field field="shortDateString"/>
                         <if-not-empty field="parameters.${customPartyAttribute.AttrName}_MM">
 			                <if-not-empty field="parameters.${customPartyAttribute.AttrName}_DD">
 			                    <set field="shortMonth" from-field="parameters.${customPartyAttribute.AttrName}_MM"/>
@@ -402,6 +449,7 @@
 		                    <if-compare operator="equals" value="DATE_MMDDYYYY" field="customPartyAttribute.Type"/>
 		                </condition>
                     <then>
+                        <clear-field field="dateString"/>
                         <if-not-empty field="parameters.${customPartyAttribute.AttrName}_MM">
 			                <if-not-empty field="parameters.${customPartyAttribute.AttrName}_DD">
 			                    <if-not-empty field="parameters.${customPartyAttribute.AttrName}_YYYY">
@@ -424,6 +472,7 @@
 		                    <if-compare operator="equals" value="DATE_DDMM" field="customPartyAttribute.Type"/>
 		                </condition>
                     <then>
+                        <clear-field field="shortDateString"/>
                         <if-not-empty field="parameters.${customPartyAttribute.AttrName}_DD">
 			                <if-not-empty field="parameters.${customPartyAttribute.AttrName}_MM">
 			                    <set field="shortDay" from-field="parameters.${customPartyAttribute.AttrName}_DD"/>
@@ -441,6 +490,7 @@
 		                    <if-compare operator="equals" value="DATE_DDMMYYYY" field="customPartyAttribute.Type"/>
 		                </condition>
                     <then>
+                        <clear-field field="dateString"/>
                         <if-not-empty field="parameters.${customPartyAttribute.AttrName}_DD">
 			                <if-not-empty field="parameters.${customPartyAttribute.AttrName}_MM">
 			                    <if-not-empty field="parameters.${customPartyAttribute.AttrName}_YYYY">
@@ -465,7 +515,7 @@
 	                    
                         <set field="createUpdateCustomPartyAttributeCtx.partyId" from-field="parameters.partyId"/>
                         <set field="createUpdateCustomPartyAttributeCtx.attrName" value="${customPartyAttribute.AttrName}"/>
-                        <set field="createUpdateCustomPartyAttributeCtx.attrValue" from-field="attrValueStr"/>
+                        <set field="createUpdateCustomPartyAttributeCtx.attrValue" from-field="attrValueStr" set-if-null="true"/>
                         <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateCustomPartyAttributeCtx"/>
                         <clear-field field="createUpdateCustomPartyAttributeCtx"/>
 	            </iterate>

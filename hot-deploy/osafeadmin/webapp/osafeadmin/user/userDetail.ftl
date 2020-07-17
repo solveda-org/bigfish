@@ -1,10 +1,10 @@
 <#if mode?has_content>
 	<#if userInfo?exists && userInfo?has_content>
 		<#assign passwordHint = userInfo.passwordHint!"" />
-		<#assign isSystem = userInfo.isSystem!"" />
-		<#assign enabled = userInfo.enabled!"" />
-		<#assign hasLoggedOut = userInfo.hasLoggedOut!"" />
-		<#assign requirePasswordChange = userInfo.requirePasswordChange!"" />
+		<#assign isSystem = userInfo.isSystem!"N" />
+		<#assign enabled = userInfo.enabled!"Y" />
+		<#assign hasLoggedOut = userInfo.hasLoggedOut!"Y" />
+		<#assign requirePasswordChange = userInfo.requirePasswordChange!"N" />
 		<#assign disabledDateTime = userInfo.disabledDateTime!"" />
 		<#assign successiveFailedLogins = userInfo.successiveFailedLogins!"" />	
 	</#if>
@@ -75,9 +75,8 @@
 		    </div>
 		    <div class="infoValue">
 		      <div class="entry checkbox short">
-                     <input class="checkBoxEntry" type="radio" name="isSystem"  value="Y" <#if parameters.isSystem?exists && parameters.isSystem?string == "Y">checked<#elseif isSystem?exists && isSystem?string == "Y">checked</#if>  disabled/>${uiLabelMap.YesLabel}
-                     <input class="checkBoxEntry" type="radio" name="isSystem" value="N" <#if  parameters.isSystem?exists && parameters.isSystem?string == "N">checked<#elseif isSystem?exists && isSystem?string == "N">checked</#if> <#if mode = 'add'>checked</#if>  disabled/>${uiLabelMap.NoLabel}
-                     <input type='hidden' name='isSystem' value='${isSystem!}'/>
+                     <input class="checkBoxEntry" type="radio" name="isSystem"  value="Y" <#if isSystem?exists && isSystem?string == "Y">checked</#if>  disabled/>${uiLabelMap.YesLabel}
+                     <input class="checkBoxEntry" type="radio" name="isSystem" value="N" <#if isSystem?exists && isSystem?string == "N">checked</#if> <#if mode = 'add'>checked</#if>  disabled/>${uiLabelMap.NoLabel}
               </div>
 		    </div>
 		  </div>
@@ -90,8 +89,8 @@
 		    </div>
 		    <div class="infoValue">
 		      <div class="entry checkbox short">
-                     <input class="checkBoxEntry" type="radio" name="hasLoggedOut"  value="Y" <#if hasLoggedOut?exists && hasLoggedOut?string == "Y">checked="checked"</#if> disabled='disabled' />${uiLabelMap.YesLabel}
-                     <input class="checkBoxEntry" type="radio" name="hasLoggedOut" value="N" <#if  hasLoggedOut?exists && hasLoggedOut?string == "N">checked="checked"</#if> disabled='disabled' />${uiLabelMap.NoLabel}
+                     <input class="checkBoxEntry" type="radio" name="hasLoggedOut"  value="Y" <#if hasLoggedOut?exists && hasLoggedOut?string == "Y">checked</#if> disabled/>${uiLabelMap.YesLabel}
+                     <input class="checkBoxEntry" type="radio" name="hasLoggedOut" value="N" <#if  hasLoggedOut?exists && hasLoggedOut?string == "N">checked</#if> disabled/>${uiLabelMap.NoLabel}
               </div>
 		    </div>
 		  </div>
@@ -208,5 +207,5 @@
 	  </#if> 
  
 <#else>
-  		${uiLabelMap.NoDataAvailableInfo}
+  	 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

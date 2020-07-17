@@ -1,3 +1,5 @@
+${sections.render('commonLookupJS')?if_exists}
+<span class="dialogClose" id="lookupCloseButton" ></span>
 <div class="selectorHeader"><h2>${searchBoxHeading?if_exists}</h2></div>
 <div class="selectorSearchBox">
   <div class="boxBody">

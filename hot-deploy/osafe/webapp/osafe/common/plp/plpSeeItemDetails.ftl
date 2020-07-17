@@ -1,3 +1,5 @@
-<div class="plpSeeItemDetails">
-  <a class="seeItemDetail pdpUrl" title="${plpProductName!""}" href="${plpProductFriendlyUrl!""}"><span>${uiLabelMap.SeeItemDetailsLabel}</span></a>
-</div>
+<li class="${request.getAttribute("attributeClass")!}">
+ <div>
+   <a class="js_seeItemDetail pdpUrl" title="${plpProductName!""}" href="${plpProductFriendlyUrl!""}"><span>${uiLabelMap.SeeItemDetailsLabel}</span></a>
+ </div>
+</li>   

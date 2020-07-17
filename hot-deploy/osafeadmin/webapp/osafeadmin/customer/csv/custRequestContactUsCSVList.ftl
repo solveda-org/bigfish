@@ -52,6 +52,6 @@
         <#if productStore?has_content>
            <#assign storeName=productStore.storeName!""/>
         </#if>
-        ${StringUtil.wrapString(custRequest.custRequestId?if_exists)},${storeName!},${custRequest.custRequestDate!},${lname!},${fname!},${contactUsReason!},${email!},${phone!},${orderNo!},${comment!},${exported!},${downloadedDate!}
+        ${storeName!},${StringUtil.wrapString(custRequest.custRequestId?if_exists)},${custRequest.custRequestDate!},${lname!},${fname!},${contactUsReason!},${email!},${phone!},${orderNo!},${comment!},${exported!},${downloadedDate!}
   </#list>
 </#if>

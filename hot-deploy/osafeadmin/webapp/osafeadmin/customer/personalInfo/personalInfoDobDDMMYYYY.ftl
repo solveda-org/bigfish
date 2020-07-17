@@ -1,20 +1,21 @@
 <#if partyId?exists && partyId?has_content>
-    <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyId, "attrName" : "DOB_DDMMYYYY"}, true)?if_exists />
+    <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyId, "attrName" : "DOB_DDMMYYYY"}, false)?if_exists />
     <#if partyAttribute?has_content>
       <#assign DOB_DDMMYYYY = partyAttribute.attrValue!"">
       <#if DOB_DDMMYYYY?has_content && (DOB_DDMMYYYY?length gt 9)>
           <#assign dobDay = DOB_DDMMYYYY.substring(0, 2) />
           <#assign dobMonth = DOB_DDMMYYYY.substring(3,5) />
-          <#assign dobYear = DOB_DDMMYYYY.substring(6,10) />
+          <#assign dobYear = DOB_DDMMYYYY.substring(6) />
       </#if>
     </#if>
 </#if>
 
-<div class = "personalInfoDateOfBirthDDMMYYYY">
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
     <div class="infoRow">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label for="dobLongDayUk"><span class="required">*</span>${uiLabelMap.DOB_Caption}</label>
+                <label for="dobLongDayUk"><#if mandatory == "Y"><span class="required">*</span></#if>${uiLabelMap.DOB_Caption}</label>
             </div>
             <div class="infoValue">
               <select id="dobLongDayUk" name="dobLongDayUk" class="dobDay">
@@ -41,6 +42,7 @@
                   <option value="">${uiLabelMap.DOB_Year}</option>
                   ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ddYears")}
               </select>
+              <input type="hidden" name="DOB_DDMMYYYY_MANDATORY" value="${mandatory}"/>
             </div>
         </div>
     </div>

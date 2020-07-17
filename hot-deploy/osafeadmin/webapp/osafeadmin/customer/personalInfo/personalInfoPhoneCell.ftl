@@ -18,11 +18,12 @@
     </#if>
 </#if>
 
-<div class ="personalInfoPhoneCell">
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
     <div class="infoRow">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label>${uiLabelMap.CellPhoneCaption}</label>
+                <label><#if mandatory == "Y"><span class="required">*</span></#if>${uiLabelMap.CellPhoneCaption}</label>
             </div>
             <div class="infoValue">
                 <input type="hidden" name="mobilePhoneContactMechId" value="${telecomMobileNoContactMechId!}" />
@@ -35,6 +36,7 @@
                 <span style="display:none" class="USER_OTHER">
                     <input type="text" class="address" id="phoneMobileContactOther" name="phoneMobileContactOther" value="${parameters.phoneMobileContactOther!contactNumberMobile!""}" />
                 </span>
+                <input type="hidden" id="phoneMobile_mandatory" name="phoneMobile_mandatory" value="${mandatory}"/>
             </div>
         </div>
     </div>

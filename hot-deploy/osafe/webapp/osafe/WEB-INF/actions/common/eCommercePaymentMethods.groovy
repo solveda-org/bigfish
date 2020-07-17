@@ -6,20 +6,45 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import com.osafe.util.Util;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.product.store.ProductStoreWorker;
+import org.ofbiz.order.shoppingcart.ShoppingCart;
 
 userLogin = session.getAttribute("userLogin");
 context.userLogin = userLogin;
 savedPaymentMethodValueMaps = FastList.newInstance();
 partyId = null;
+partyProfileDefault = null;
+productStoreId = "";
+if(UtilValidate.isEmpty(productStoreId))
+{
+	productStoreId = ProductStoreWorker.getProductStoreId(request);
+	productStore = ProductStoreWorker.getProductStore(request);
+	if(UtilValidate.isNotEmpty(productStore))
+	{
+		context.productStore = productStore;
+	}
+}
+ShoppingCart shoppingCart = session.getAttribute("shoppingCart");
+//Get currency
+currencyUom = Util.getProductStoreParm(request,"CURRENCY_UOM_DEFAULT");
+if(UtilValidate.isEmpty(currencyUom))
+{
+	currencyUom = shoppingCart.getCurrency();
+}
+context.currencyUom = currencyUom;
+if(UtilValidate.isNotEmpty(userLogin))
+{
+    partyId = userLogin.partyId;
+}
+if(UtilValidate.isNotEmpty(partyId))
+{
+	partyProfileDefault = delegator.findOne("PartyProfileDefault", UtilMisc.toMap("partyId", partyId, "productStoreId", productStoreId), true);
+}
 if(Util.isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS"))
 {
-    if(UtilValidate.isNotEmpty(userLogin))
-    {
-        partyId = userLogin.partyId;
-    }
     if(UtilValidate.isNotEmpty(partyId))
     {
-        paymentMethods = delegator.findByAndCache("PaymentMethod", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("-lastUpdatedStamp"));
+        paymentMethods = delegator.findByAndCache("PaymentMethod", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("lastUpdatedStamp"));
         paymentMethodValueMaps = FastList.newInstance();
         if(UtilValidate.isNotEmpty(paymentMethods))
         {
@@ -44,3 +69,4 @@ if(Util.isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS"))
     }
     context.savedPaymentMethodValueMaps = savedPaymentMethodValueMaps;
 }
+context.partyProfileDefault = partyProfileDefault;

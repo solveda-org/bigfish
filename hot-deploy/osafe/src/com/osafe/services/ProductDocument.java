@@ -2,6 +2,8 @@ package com.osafe.services;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,12 +43,14 @@ public class ProductDocument implements Serializable {
 
     private BigDecimal listPrice;
     private BigDecimal price;
+    private BigDecimal recurrencePrice;
     private BigDecimal customerRating;
     private Double totalQuantityOrdered;
 	private List<String> productFeatureTypes;
     private Map<String, List<String>> productFeatures;
 
     private String productFacilityIds;
+    private String introductionDate;
 
     public ProductDocument() {
         super();
@@ -262,6 +266,13 @@ public class ProductDocument implements Serializable {
         this.price = price;
     }
 
+    public BigDecimal getRecurrencePrice() {
+        return recurrencePrice;
+    }
+
+    public void setRecurrencePrice(BigDecimal recurrencePrice) {
+        this.recurrencePrice = recurrencePrice;
+    }
     public BigDecimal getCustomerRating() {
         return customerRating;
     }
@@ -309,5 +320,13 @@ public class ProductDocument implements Serializable {
 
     public void setProductFacilityIds(String productFacilityIds) {
         this.productFacilityIds = productFacilityIds;
+    }
+    
+    public String getIntroductionDate() {
+        return introductionDate;
+    }
+
+    public void setIntroductionDate(String introductionDate) {
+        this.introductionDate = introductionDate;
     }
 }

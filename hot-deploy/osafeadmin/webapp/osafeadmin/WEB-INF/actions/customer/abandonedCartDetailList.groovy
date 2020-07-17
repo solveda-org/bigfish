@@ -34,17 +34,18 @@ messageMap.put("partyId", partyId);
 
 context.detailInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","CustomerDetailInfoHeading",messageMap, locale )
 
-
+List contentList = FastList.newInstance();
 if (UtilValidate.isNotEmpty(shoppingListId))
 {
    mainCond = EntityCondition.makeCondition("shoppingListId", EntityOperator.EQUALS, shoppingListId);
+   contentList = delegator.findList("ShoppingListItem",mainCond, null, orderBy, null, false);
+   context.resultList = contentList;
 }
 
 orderBy = ["shoppingListItemSeqId ASC"];
 
-List contentList = FastList.newInstance();
+
 context.userLoginId = userLogin.userLoginId;
 
-contentList = delegator.findList("ShoppingListItem",mainCond, null, orderBy, null, false);
-context.resultList = contentList;
+
 

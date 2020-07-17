@@ -15,6 +15,7 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -243,6 +244,71 @@ public class Util {
 
         return "success";
     }
+    
+    public static String checkDateOfBirth(String day, String month, String year, String format, String required) 
+    {
+    	
+        if(UtilValidate.isEmpty(format))
+        {
+        	format = "MMDDYYYY";
+        }
+        if(UtilValidate.isEmpty(required))
+        {
+        	required = "N";
+        }
+        
+        if(format.equalsIgnoreCase("MMDD") || format.equalsIgnoreCase("DDMM"))
+        {
+                if (UtilValidate.isEmpty(month) && UtilValidate.isEmpty(day)) 
+                {
+                	if (Boolean.parseBoolean(required) || "Y".equalsIgnoreCase(required) || "YES".equalsIgnoreCase(required)) 
+                	{
+                        return "missing";
+                    }
+                }
+                else if(UtilValidate.isEmpty(month) && UtilValidate.isNotEmpty(day))
+                {
+                    return "invalid";
+                }
+                else if(UtilValidate.isNotEmpty(month) && UtilValidate.isEmpty(day))
+                {
+                    return "invalid";
+                }
+        }
+        else if(format.equalsIgnoreCase("MMDDYYYY") || format.equalsIgnoreCase("DDMMYYYY"))
+        {
+            if (UtilValidate.isEmpty(month) && UtilValidate.isEmpty(day) && UtilValidate.isEmpty(year)) 
+            {
+            	if (Boolean.parseBoolean(required) || "Y".equalsIgnoreCase(required) || "YES".equalsIgnoreCase(required)) 
+            	{
+                    return "missing";
+                }
+            }
+            else if(UtilValidate.isNotEmpty(day) && (UtilValidate.isEmpty(month) || UtilValidate.isEmpty(year)))
+            {
+                return "invalid";
+            }
+            else if(UtilValidate.isNotEmpty(month) && (UtilValidate.isEmpty(day) || UtilValidate.isEmpty(year)))
+            {
+                return "invalid";
+            }
+            else if(UtilValidate.isNotEmpty(year) && (UtilValidate.isEmpty(day) || UtilValidate.isEmpty(month)))
+            {
+                return "invalid";
+            }
+        }
+
+    	if (UtilValidate.isNotEmpty(month) && UtilValidate.isNotEmpty(day) && UtilValidate.isNotEmpty(year)) 
+    	{
+            String dobDateString = month.concat("/").concat(day).concat("/").concat(year);
+            if(UtilValidate.isNotEmpty(dobDateString) && !UtilValidate.isDate(dobDateString))
+            {
+            	return "invalid";
+            }
+        }
+
+        return "success";
+    }
 
     @Deprecated
     public static boolean isDateTime(String dateStr) {
@@ -250,18 +316,24 @@ public class Util {
         return isDateTime(dateStr, entryDateFormat);
     }
 
-    public static boolean isDateTime(String dateStr, String format) {
-        if (UtilValidate.isEmpty(dateStr) || UtilValidate.isEmpty(format) ) {
+    public static boolean isDateTime(String dateStr, String format) 
+    {
+        if (UtilValidate.isEmpty(dateStr) || UtilValidate.isEmpty(format) ) 
+        {
             return false;
         }
         boolean isValid = false;
 
-        try {
-            Object convertedDate = ObjectType.simpleTypeConvert(dateStr, "Timestamp", format, null);
-            if (convertedDate != null) {
-                isValid = true;
-            }
-        } catch (GeneralException e) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+		sdf.setLenient(false);
+		
+        try 
+        {
+        	Date date = sdf.parse(dateStr);
+            isValid = true;
+        } 
+        catch (Exception e) 
+        {
             isValid = false;
         }
         return isValid;
@@ -370,18 +442,30 @@ public class Util {
      */
 
     public static String getProductStoreParm(Delegator delegator, String productStoreId, String parmKey) {
-        if (productStoreId == null) 
+        if (UtilValidate.isEmpty(productStoreId) || UtilValidate.isEmpty(parmKey)) 
         {
             return null;
         }
         String parmValue = null;
         GenericValue xProductStoreParam = null;
-        try {
+        try 
+        {
             xProductStoreParam = delegator.findOne("XProductStoreParm", UtilMisc.toMap("productStoreId", productStoreId, "parmKey", parmKey), true);
-            if (UtilValidate.isNotEmpty(xProductStoreParam)) {
+            if (UtilValidate.isNotEmpty(xProductStoreParam)) 
+            {
                 parmValue = xProductStoreParam.getString("parmValue");
+                if (UtilValidate.isNotEmpty(parmValue)) 
+                {
+                	parmValue = parmValue.trim();
+                }
+                else
+                {
+                	parmValue="";
+                }
             }
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             Debug.logError(e, e.getMessage(), module);
         }
         return parmValue;
@@ -440,8 +524,18 @@ public class Util {
                           Iterator parmIter = lProductStoreParam.iterator();
                            while (parmIter.hasNext()) 
                            {
-                                GenericValue prodStoreParm = (GenericValue) parmIter.next();
-                                mProductStoreParm.put(prodStoreParm.getString("parmKey"),prodStoreParm.getString("parmValue"));
+                               GenericValue prodStoreParm = (GenericValue) parmIter.next();
+                               String parmValue = prodStoreParm.getString("parmValue");
+                               if (UtilValidate.isNotEmpty(parmValue))
+                               {
+                                   parmValue = parmValue.trim();
+                               }
+                               else
+                               {
+                            	   parmValue="";
+                               }
+                               
+                               mProductStoreParm.put(prodStoreParm.getString("parmKey"),parmValue);
                            }
                     }
                     
@@ -464,7 +558,7 @@ public class Util {
          {
              return false;
          }
-         if ("TRUE".equals(parmValue.toUpperCase()))
+         if ("TRUE".equals(parmValue.trim().toUpperCase()))
          {
              return true;
          }
@@ -720,5 +814,74 @@ public class Util {
         list.clear();
         list.addAll(set);
     }
+    
+    /** String with in the given limit
+     * @param String that need to refactor
+     * @param String length
+     * @return A String with in the given limit
+     */
+    public static String formatToolTipText(String toolTiptext, String length) 
+    {
+        return formatToolTipText(toolTiptext, length, true);
+    }
+    /** String with in the given limit
+     * @param String that need to refactor
+     * @param String length
+     * @param boolean renderhtmlTag
+     * @return A String with in the given limit
+     */
+    public static String formatToolTipText(String toolTiptext, String length, boolean renderhtmlTag) 
+    {
+        if (toolTiptext == null) 
+        {
+            return "";
+        }
+        int maxLength = 400;
+        if (isNumber(length)) 
+        {
+            maxLength = Integer.parseInt(length);
+        }
+        if (toolTiptext.length() > maxLength) 
+        {
+            if (toolTiptext.charAt(maxLength) == ' ') 
+            {
+                toolTiptext = toolTiptext.substring(0, maxLength);
+            } 
+            else 
+            {
+                try 
+                {
+                    toolTiptext = toolTiptext.substring(0, toolTiptext.lastIndexOf(" ", maxLength));
+                } 
+                catch (Exception e) 
+                {
+                    toolTiptext = toolTiptext.substring(0, maxLength);
+                }
+            }
+            toolTiptext = toolTiptext.concat("...");
+        }
+        if (renderhtmlTag) 
+        {
+            toolTiptext = toolTiptext.replaceAll("(\r\n|\r|\n|\n\r)", "<br>");
+        } 
+        else 
+        {
+            toolTiptext = toolTiptext.replaceAll("(\r\n|\r|\n|\n\r)", " ");
+        }
+        toolTiptext = (toolTiptext.replace("\"","&quot")).replace("\'", "\\'");
+        return StringUtil.wrapString(toolTiptext).toString();
+    }
+
+    public static String formatSimpleText(String text) 
+    {
+        if (text == null) 
+        {
+            return "";
+        }
+        text = text.replaceAll("(\r\n|\r|\n|\n\r)", " ");
+        text = (text.replace("\"","\\\"")).replace("\'", "\\'");
+        return StringUtil.wrapString(text).toString();
+    }
+    
 }
 

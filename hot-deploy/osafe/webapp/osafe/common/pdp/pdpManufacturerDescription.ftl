@@ -1,3 +1,7 @@
-<div class="pdpManufacturerDescription">
-    <p class="profileDescription">${pdpManufacturerDescription!""}</p>
-</div>
+<li class="${request.getAttribute("attributeClass")!}">
+  <#if pdpManufacturerDescription?has_content>
+    <div>
+      <p>${pdpManufacturerDescription!""}</p>
+    </div>
+  </#if>
+</li>

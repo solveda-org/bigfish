@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="PA" toTaxAuthPartyId="PA_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="PA" toTaxAuthPartyId="PHILADELPHIA_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+</entity-engine-xml>

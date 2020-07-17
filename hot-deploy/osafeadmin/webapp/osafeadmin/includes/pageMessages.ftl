@@ -59,11 +59,13 @@ under the License.
         <span class="errorImageIcon errorImage"></span>
          <p class="errorMessage">${uiLabelMap.FollowingErrorsOccurredError}</p>
         <#if errorMessage?has_content>
-          <p class="errorMessage">${errorMessage}</p>
+          <p class="errorMessage">${StringUtil.wrapString(errorMessage)}</p>
         </#if>
         <#if errorMessageList?has_content>
           <#list errorMessageList as errorMsg>
-            <p class="errorMessage">${errorMsg}</p>
+            <#if errorMsg?has_content && errorMsg!="">
+              <p class="errorMessage">${StringUtil.wrapString(errorMsg)}</p>
+            </#if>
           </#list>
         </#if>
       </div>

@@ -14,12 +14,18 @@ import javolution.util.FastMap;
 import org.ofbiz.accounting.payment.*;
 import org.ofbiz.order.order.*;
 import org.ofbiz.product.catalog.*;
+import com.osafe.util.Util;
+import java.math.BigDecimal;
 
 //String showThankYouStatus = parameters.showThankYouStatus;
 String showThankYouStatus = context.showThankYouStatus;
 if (UtilValidate.isEmpty(showThankYouStatus))
 {
     context.showThankYouStatus ="N"
+}
+if("Y".equals (showThankYouStatus))
+{
+	context.OrderCompleteInfoMapped = UtilProperties.getMessage("OSafeUiLabels","OrderCompleteInfo", locale )
 }
 
 orderId = parameters.orderId;
@@ -30,6 +36,9 @@ currencyUomId = "";
 roleTypeId = "PLACING_CUSTOMER";
 context.roleTypeId = roleTypeId;
 chosenShippingMethodDescription="";
+shippingInstructions = "";
+ordersList = FastList.newInstance();
+
 if (UtilValidate.isNotEmpty(orderId)) 
 {
    orderHeader = delegator.findOne("OrderHeader", [orderId : orderId], false);
@@ -108,6 +117,7 @@ if (UtilValidate.isNotEmpty(orderHeader))
     productStore = orderHeader.getRelatedOneCache("ProductStore");
     orderReadHelper = new OrderReadHelper(orderHeader);
     orderItems = orderReadHelper.getOrderItems();
+	orderItemsTotalQty = orderReadHelper.getTotalOrderItemsQuantity();
     orderAdjustments = orderReadHelper.getAdjustments();
     orderHeaderAdjustments = orderReadHelper.getOrderHeaderAdjustments();
     orderSubTotal = orderReadHelper.getOrderItemsSubTotal();
@@ -121,6 +131,10 @@ if (UtilValidate.isNotEmpty(orderHeader))
     orderTaxTotal = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, true, false);
     orderTaxTotal = orderTaxTotal.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, true, false));
 
+    orderGrandTotal = OrderReadHelper.getOrderGrandTotal(orderItems, orderAdjustments);
+
+    
+    
     placingCustomerOrderRoles = delegator.findByAndCache("OrderRole", [orderId : orderId, roleTypeId : roleTypeId]);
     placingCustomerOrderRole = EntityUtil.getFirst(placingCustomerOrderRoles);
     placingCustomerPerson = placingCustomerOrderRole == null ? null : delegator.findByPrimaryKeyCache("Person", [partyId : placingCustomerOrderRole.partyId]);
@@ -207,13 +221,269 @@ if (UtilValidate.isNotEmpty(orderHeader))
 			}
 		}
 	}
-	context.offerPriceVisible = offerPriceVisible;
 	
+	//set store pickup to Y if a store location is set
+	shoppingCartStoreId = "";
+	String isStorePickUp = context.isStorePickUp;
+	orderAttrPickupStore = delegator.findOne("OrderAttribute", ["orderId" : orderId, "attrName" : "STORE_LOCATION"], true);
+	if (UtilValidate.isNotEmpty(orderAttrPickupStore))
+	{
+		storeId = orderAttrPickupStore.attrValue;
+		isStorePickUp = "Y";
+		shoppingCartStoreId = storeId;
+	}
+
+    appliedTaxList = FastList.newInstance();
+	List orderShipTaxAdjustments = FastList.newInstance();
+	BigDecimal totalTaxPercent = BigDecimal.ZERO;
+	if(UtilValidate.isNotEmpty(orderAdjustments) && orderAdjustments.size() > 0)
+	{
+		orderShipTaxAdjustments = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SALES_TAX"));
+		
+		for (GenericValue orderTaxAdjustment : orderShipTaxAdjustments)
+		{
+			amount = 0;
+			taxAuthorityRateSeqId = orderTaxAdjustment.taxAuthorityRateSeqId;
+			if(UtilValidate.isNotEmpty(taxAuthorityRateSeqId))
+			{
+				//check if this taxAuthorityRateSeqId is already in the list
+				alreadyInList = "N";
+				for(Map taxInfoMap : appliedTaxList)
+				{
+					taxAuthorityRateSeqIdInMap = taxInfoMap.get("taxAuthorityRateSeqId");
+					if(UtilValidate.isNotEmpty(taxAuthorityRateSeqIdInMap) && taxAuthorityRateSeqIdInMap.equals(taxAuthorityRateSeqId))
+					{
+						amount = taxInfoMap.get("amount") + orderTaxAdjustment.amount;
+						taxInfoMap.put("amount", amount);
+						alreadyInList = "Y";
+						break;
+					}
+				}
+				if(("N").equals(alreadyInList))
+				{
+					taxInfo = FastMap.newInstance();
+					taxInfo.put("taxAuthorityRateSeqId", taxAuthorityRateSeqId);
+					taxInfo.put("amount", orderTaxAdjustment.amount);
+					taxAdjSourceBD = new BigDecimal(orderTaxAdjustment.sourcePercentage);
+					taxAdjSourceStr = taxAdjSourceBD.setScale(2).toString();
+					taxInfo.put("sourcePercentage", taxAdjSourceStr);
+					taxInfo.put("description", orderTaxAdjustment.comments);
+					appliedTaxList.add(taxInfo);
+					totalTaxPercent = totalTaxPercent.add(taxAdjSourceBD);
+				}
+			}
+		}
+	}
+	
+	//get Adjustment Info
+	appliedPromoList = FastList.newInstance();
+	appliedLoyaltyPointsList = FastList.newInstance();
+	if(UtilValidate.isNotEmpty(orderHeaderAdjustments) && orderHeaderAdjustments.size() > 0)
+	{
+		adjustments = orderHeaderAdjustments;
+		for (GenericValue cartAdjustment : adjustments)
+		{
+			promoInfo = FastMap.newInstance();
+			promoInfo.put("cartAdjustment", cartAdjustment);
+			promoCodeText = "";
+			adjustmentType = cartAdjustment.getRelatedOneCache("OrderAdjustmentType");
+			adjustmentTypeDesc = adjustmentType.get("description",locale);
+			//loyalty points
+			if(adjustmentType.orderAdjustmentTypeId.equals("LOYALTY_POINTS"))
+			{
+				loyaltyPointsInfo = FastMap.newInstance();
+				loyaltyPointsInfo.put("cartAdjustment", cartAdjustment);
+				loyaltyPointsInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
+				appliedLoyaltyPointsList.add(loyaltyPointsInfo);
+			}
+			productPromo = cartAdjustment.getRelatedOneCache("ProductPromo");
+			if(UtilValidate.isNotEmpty(productPromo))
+			{
+				promoInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
+				promoText = productPromo.promoText;
+				promoInfo.put("promoText", promoText);
+				productPromoCode = productPromo.getRelatedCache("ProductPromoCode");
+				if(UtilValidate.isNotEmpty(productPromoCode))
+				{
+					promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
+					if(UtilValidate.isNotEmpty(promoCodesEntered))
+					{
+						for (GenericValue promoCodeEntered : promoCodesEntered)
+						{
+							if(UtilValidate.isNotEmpty(promoCodeEntered))
+							{
+								for (GenericValue promoCode : productPromoCode)
+								{
+									promoCodeEnteredId = promoCodeEntered;
+									promoCodeId = promoCode.productPromoCodeId;
+									if(UtilValidate.isNotEmpty(promoCodeEnteredId))
+									{
+										if(promoCodeId == promoCodeEnteredId)
+										{
+											promoCodeText = promoCode.productPromoCodeId;
+											promoInfo.put("promoCodeText", promoCodeText);
+										}
+									}
+								}
+							}
+						}
+						
+					}
+				}
+				appliedPromoList.add(promoInfo);
+			}
+		}
+	}
+	
+	//get shipping method
+	selectedStoreId = "";
+	if(UtilValidate.isNotEmpty(orderItemShipGroups))
+	{
+		for(GenericValue shipGroup : orderItemShipGroups)
+		{
+			shippingInstructions = shipGroup.shippingInstructions;
+			if(UtilValidate.isNotEmpty(orderHeader))
+			{
+				orderAttrPickupStoreList = orderHeader.getRelatedByAnd("OrderAttribute", UtilMisc.toMap("attrName", "STORE_LOCATION"));
+				if(UtilValidate.isNotEmpty(orderAttrPickupStoreList))
+				{
+					orderAttrPickupStore = EntityUtil.getFirst(orderAttrPickupStoreList);
+					selectedStoreId = orderAttrPickupStore.attrValue;
+					chosenShippingMethodDescription = uiLabelMap.StorePickupLabel;
+				}
+				if(UtilValidate.isEmpty(selectedStoreId))
+				{
+					shipmentMethodType = shipGroup.getRelatedOneCache("ShipmentMethodType");
+					carrierPartyId = shipGroup.carrierPartyId;
+					if(UtilValidate.isNotEmpty(shipmentMethodType))
+					{
+						carrier =  delegator.findByPrimaryKeyCache("PartyGroup", UtilMisc.toMap("partyId", shipGroup.carrierPartyId));
+						if(UtilValidate.isNotEmpty(carrier))
+						{
+							if(UtilValidate.isNotEmpty(carrier.groupName))
+							{
+								chosenShippingMethodDescription = carrier.groupName + " " + shipmentMethodType.description;
+							}
+							else
+							{
+								chosenShippingMethodDescription = carrier.partyId + " " + shipmentMethodType.description;
+							}
+							
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	//set orderList for printPDF
+	ordersList.add(orderHeader);
+	
+	storePickupMap = [:];
+	storeInfo = null;
+	for(GenericValue orderHeader : ordersList)
+	{
+		storeId = "";
+		orderPickupDetailMap = [:];
+		deliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], false);
+		if (UtilValidate.isNotEmpty(deliveryOptionAttr))
+		{
+			deliveryOption =deliveryOptionAttr.attrValue; 
+		}
+		if (UtilValidate.isNotEmpty(deliveryOption) && deliveryOption == "STORE_PICKUP")
+		{
+			orderPickupDetailMap.isStorePickup = "Y";
+			orderStoreLocationAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "STORE_LOCATION"], false);
+			if (UtilValidate.isNotEmpty(orderStoreLocationAttr))
+			{
+				storeId = orderStoreLocationAttr.attrValue;
+			}
+		}
+
+		if (UtilValidate.isNotEmpty(storeId))
+		{
+			orderPickupDetailMap.storeId = storeId;
+			store = delegator.findOne("Party", [partyId : storeId], false);
+			orderPickupDetailMap.store = store;
+			storeInfo = delegator.findOne("PartyGroup", [partyId : storeId], false);
+			if (UtilValidate.isNotEmpty(storeInfo))
+			{
+				orderPickupDetailMap.storeInfo = storeInfo;
+			}
+			
+			partyContactMechValueMaps = ContactMechWorker.getPartyContactMechValueMaps(delegator, storeId, false);
+			if (UtilValidate.isNotEmpty(partyContactMechValueMaps))
+			{
+				partyContactMechValueMaps.each { partyContactMechValueMap ->
+					contactMechPurposes = partyContactMechValueMap.partyContactMechPurposes;
+					contactMechPurposes.each { contactMechPurpose ->
+						if (contactMechPurpose.contactMechPurposeTypeId.equals("GENERAL_LOCATION"))
+						{
+							orderPickupDetailMap.storeContactMechValueMap = partyContactMechValueMap;
+						}
+					}
+				}
+			}
+		}
+		storePickupMap.put(orderHeader.orderId, orderPickupDetailMap);
+	}
+	
+	//Retrieve CC Types for Display purposes
+	creditCardTypes = delegator.findByAndCache("Enumeration", [enumTypeId : "CREDIT_CARD_TYPE"], ["sequenceId"]);
+	creditCardTypesMap = [:];
+	for (GenericValue creditCardType :  creditCardTypes)
+	{
+	   creditCardTypesMap[creditCardType.enumCode] = creditCardType.description;
+	}
+	
+	//BUILD CONTEXT MAP FOR PRODUCT_FEATURE_TYPE_ID and DESCRIPTION(EITHER FROM PRODUCT_FEATURE_GROUP OR PRODUCT_FEATURE_TYPE)
+	Map productFeatureTypesMap = FastMap.newInstance();
+	productFeatureTypesList = delegator.findList("ProductFeatureType", null, null, null, null, true);
+	
+	//get the whole list of ProductFeatureGroup and ProductFeatureGroupAndAppl
+	productFeatureGroupList = delegator.findList("ProductFeatureGroup", null, null, null, null, true);
+	productFeatureGroupAndApplList = delegator.findList("ProductFeatureGroupAndAppl", null, null, null, null, true);
+	productFeatureGroupAndApplList = EntityUtil.filterByDate(productFeatureGroupAndApplList);
+	
+	if(UtilValidate.isNotEmpty(productFeatureTypesList))
+	{
+		for (GenericValue productFeatureType : productFeatureTypesList)
+		{
+			//filter the ProductFeatureGroupAndAppl list based on productFeatureTypeId to get the ProductFeatureGroupId
+			productFeatureGroupAndAppls = EntityUtil.filterByAnd(productFeatureGroupAndApplList, UtilMisc.toMap("productFeatureTypeId", productFeatureType.productFeatureTypeId));
+			description = "";
+			if(UtilValidate.isNotEmpty(productFeatureGroupAndAppls))
+			{
+				productFeatureGroupAndAppl = EntityUtil.getFirst(productFeatureGroupAndAppls);
+				productFeatureGroups = EntityUtil.filterByAnd(productFeatureGroupList, UtilMisc.toMap("productFeatureGroupId", productFeatureGroupAndAppl.productFeatureGroupId));
+				productFeatureGroup = EntityUtil.getFirst(productFeatureGroups);
+				description = productFeatureGroup.description;
+			}
+			else
+			{
+				description = productFeatureType.description;
+			}
+			productFeatureTypesMap.put(productFeatureType.productFeatureTypeId,description);
+		}
+		
+	}
+	
+	//Set Context Variables
+	context.shoppingCartStoreId = shoppingCartStoreId;
+	context.ordersList = ordersList;
+	context.storePickupMap = storePickupMap;	
+	context.appliedPromoList = appliedPromoList;
+	context.appliedLoyaltyPointsList = appliedLoyaltyPointsList;
+	context.appliedTaxList = appliedTaxList;
+	context.totalTaxPercent = totalTaxPercent.setScale(2).toString();
+	context.isStorePickUp = isStorePickUp;
+	context.offerPriceVisible = offerPriceVisible;
     context.orderId = orderId;
     context.orderHeader = orderHeader;
     context.localOrderReadHelper = orderReadHelper;
     context.orderItems = orderItems;
-	context.shoppingCartTotalQuantity = orderItems.size();
+	context.shoppingCartTotalQuantity = orderItemsTotalQty;
+	context.shoppingCartSize = orderItemsTotalQty;
     context.orderAdjustments = orderAdjustments;
     context.orderHeaderAdjustments = orderHeaderAdjustments;
     context.orderSubTotal = orderSubTotal;
@@ -221,23 +491,17 @@ if (UtilValidate.isNotEmpty(orderHeader))
     context.headerAdjustmentsToShow = headerAdjustmentsToShow;
 	currencyUomId = orderReadHelper.getCurrency();
     context.currencyUomId = currencyUomId;
-
     context.orderShippingTotal = orderShippingTotal;
     context.orderTaxTotal = orderTaxTotal;
-    context.orderGrandTotal = OrderReadHelper.getOrderGrandTotal(orderItems, orderAdjustments);
+    context.orderGrandTotal = orderGrandTotal;
     context.placingCustomerPerson = placingCustomerPerson;
-
     context.billingAccount = billingAccount;
     context.paymentMethods = paymentMethods;
-
     context.productStore = productStore;
-
     context.orderShipmentInfoSummaryList = orderShipmentInfoSummaryList;
     context.customerPoNumberSet = customerPoNumberSet;
-
     orderItemChangeReasons = delegator.findByAndCache("Enumeration", [enumTypeId : "ODR_ITM_CH_REASON"], ["sequenceId"]);
     context.orderItemChangeReasons = orderItemChangeReasons;
-    
     //Address Locations
     billingLocations = orderReadHelper.getBillingLocations();
     if (UtilValidate.isNotEmpty(billingLocations))
@@ -249,170 +513,33 @@ if (UtilValidate.isNotEmpty(orderHeader))
     {
        context.shippingAddress = EntityUtil.getFirst(shippingLocations);
     }
-	
 	context.shippingApplies = shippingApplies;
-}
-
-if("Y".equals (showThankYouStatus)) 
-{
-    context.OrderCompleteInfoMapped = UtilProperties.getMessage("OSafeUiLabels","OrderCompleteInfo", locale )
-}
-
-//Retrieve CC Types for Display purposes
-creditCardTypes = delegator.findByAndCache("Enumeration", [enumTypeId : "CREDIT_CARD_TYPE"], ["sequenceId"]);
-creditCardTypesMap = [:];
- for (GenericValue creditCardType :  creditCardTypes) 
- {
-    creditCardTypesMap[creditCardType.enumCode] = creditCardType.description;
- }
-
-context.creditCardTypesMap = creditCardTypesMap;
-
-if (UtilValidate.isNotEmpty(orderId)) 
-{
-    orderAttrPickupStore = delegator.findOne("OrderAttribute", ["orderId" : orderId, "attrName" : "STORE_LOCATION"], false);
-    if (UtilValidate.isNotEmpty(orderAttrPickupStore)) 
-    {
-        storeId = orderAttrPickupStore.attrValue;
-        context.isStorePickUp = "true"
-    }
-}
-
-//BUILD CONTEXT MAP FOR PRODUCT_FEATURE_TYPE_ID and DESCRIPTION(EITHER FROM PRODUCT_FEATURE_GROUP OR PRODUCT_FEATURE_TYPE)
-Map productFeatureTypesMap = FastMap.newInstance();
-productFeatureTypesList = delegator.findList("ProductFeatureType", null, null, null, null, true);
-
-//get the whole list of ProductFeatureGroup and ProductFeatureGroupAndAppl
-productFeatureGroupList = delegator.findList("ProductFeatureGroup", null, null, null, null, true);
-productFeatureGroupAndApplList = delegator.findList("ProductFeatureGroupAndAppl", null, null, null, null, true);
-productFeatureGroupAndApplList = EntityUtil.filterByDate(productFeatureGroupAndApplList);
-
-if(UtilValidate.isNotEmpty(productFeatureTypesList))
-{
-    for (GenericValue productFeatureType : productFeatureTypesList)
-    {
-    	//filter the ProductFeatureGroupAndAppl list based on productFeatureTypeId to get the ProductFeatureGroupId
-    	productFeatureGroupAndAppls = EntityUtil.filterByAnd(productFeatureGroupAndApplList, UtilMisc.toMap("productFeatureTypeId", productFeatureType.productFeatureTypeId));
-    	description = "";
-    	if(UtilValidate.isNotEmpty(productFeatureGroupAndAppls))
-    	{
-    		productFeatureGroupAndAppl = EntityUtil.getFirst(productFeatureGroupAndAppls);
-        	productFeatureGroups = EntityUtil.filterByAnd(productFeatureGroupList, UtilMisc.toMap("productFeatureGroupId", productFeatureGroupAndAppl.productFeatureGroupId));
-        	productFeatureGroup = EntityUtil.getFirst(productFeatureGroups);
-        	description = productFeatureGroup.description;
-    	}
-    	else
-    	{
-    		description = productFeatureType.description;
-    	}
-    	productFeatureTypesMap.put(productFeatureType.productFeatureTypeId,description);
-    }
+	if(UtilValidate.isNotEmpty(chosenShippingMethodDescription))
+	{
+		context.chosenShippingMethodDescription = chosenShippingMethodDescription;
+	}
+	//Sub Total
+	context.cartSubTotal = orderSubTotal;
+	context.currencyUom = currencyUomId;
+	if(UtilValidate.isNotEmpty(shippingInstructions))
+	{
+		context.shippingInstructions = shippingInstructions;
+	}
+	context.checkoutSuppressTaxIfZero = Util.isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO");
+    context.checkoutShowSalesTaxMulti = Util.isProductStoreParmTrue(request,"CHECKOUT_SHOW_SALES_TAX_MULTI");
+	context.creditCardTypesMap = creditCardTypesMap;
+	context.productFeatureTypesMap = productFeatureTypesMap;
+	if(UtilValidate.isNotEmpty(storeInfo))
+	{
+		context.storeInfo = storeInfo;
+	}
+    context.deliveryOption = deliveryOption;
 	
 }
 
-context.productFeatureTypesMap = productFeatureTypesMap;
-
-//get Promo Text
-appliedPromoList = FastList.newInstance();
-if(UtilValidate.isNotEmpty(orderHeaderAdjustments) && orderHeaderAdjustments.size() > 0)
-{
-	adjustments = orderHeaderAdjustments;
-	for (GenericValue cartAdjustment : adjustments)
-	{
-		promoInfo = FastMap.newInstance();
-		promoInfo.put("cartAdjustment", cartAdjustment);
-		promoCodeText = "";
-		adjustmentType = cartAdjustment.getRelatedOneCache("OrderAdjustmentType");
-		adjustmentTypeDesc = adjustmentType.get("description",locale);
-		promoInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
-		productPromo = cartAdjustment.getRelatedOneCache("ProductPromo");
-		if(UtilValidate.isNotEmpty(productPromo))
-		{
-			promoText = productPromo.promoText;
-			promoInfo.put("promoText", promoText);
-			productPromoCode = productPromo.getRelatedCache("ProductPromoCode");
-			if(UtilValidate.isNotEmpty(productPromoCode))
-			{
-				promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
-				if(UtilValidate.isNotEmpty(promoCodesEntered))
-				{
-					for (GenericValue promoCodeEntered : promoCodesEntered)
-					{
-						if(UtilValidate.isNotEmpty(promoCodeEntered))
-						{
-							for (GenericValue promoCode : productPromoCode)
-							{
-								promoCodeEnteredId = promoCodeEntered;
-								promoCodeId = promoCode.productPromoCodeId;
-								if(UtilValidate.isNotEmpty(promoCodeEnteredId))
-								{
-									if(promoCodeId == promoCodeEnteredId)
-									{
-										promoCodeText = promoCode.productPromoCodeId;
-										promoInfo.put("promoCodeText", promoCodeText);
-									}
-								}
-							}
-						}
-					}
-					
-				}
-			}
-		}
-		appliedPromoList.add(promoInfo);
-	}
-}
-
-context.appliedPromoList = appliedPromoList;
 
 
-//get shipping method
-selectedStoreId = "";
-if(UtilValidate.isNotEmpty(orderItemShipGroups))
-{
-	for(GenericValue shipGroup : orderItemShipGroups)
-	{
-		if(UtilValidate.isNotEmpty(orderHeader))
-		{
-			orderAttrPickupStoreList = orderHeader.getRelatedByAnd("OrderAttribute", UtilMisc.toMap("attrName", "STORE_LOCATION"));
-			if(UtilValidate.isNotEmpty(orderAttrPickupStoreList))
-			{
-				orderAttrPickupStore = EntityUtil.getFirst(orderAttrPickupStoreList);
-				selectedStoreId = orderAttrPickupStore.attrValue;
-			}
-			if(UtilValidate.isEmpty(selectedStoreId))
-			{
-				shipmentMethodType = shipGroup.getRelatedOneCache("ShipmentMethodType");
-				carrierPartyId = shipGroup.carrierPartyId;
-				if(UtilValidate.isNotEmpty(shipmentMethodType))
-				{
-					carrier =  delegator.findByPrimaryKeyCache("PartyGroup", UtilMisc.toMap("partyId", shipGroup.carrierPartyId));
-					if(UtilValidate.isNotEmpty(carrier))
-					{
-						if(UtilValidate.isNotEmpty(carrier.groupName))
-						{
-							chosenShippingMethodDescription = carrier.groupName + " " + shipmentMethodType.description;
-						}
-						else
-						{
-							chosenShippingMethodDescription = carrier.partyId + " " + shipmentMethodType.description;
-						}
-						
-					}
-				}
-			}
-		}
-	}
-}
 
 
-//Sub Total
-context.cartSubTotal = orderSubTotal;
-context.currencyUom = currencyUomId;
-
-if(UtilValidate.isNotEmpty(chosenShippingMethodDescription))
-{
-	context.chosenShippingMethodDescription = chosenShippingMethodDescription;
-}
 
 

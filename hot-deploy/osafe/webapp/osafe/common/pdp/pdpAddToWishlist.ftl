@@ -1,5 +1,11 @@
-<#if Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(request,"PDP_WISHLIST_ACTIVE_FLAG")>
-    <div class="pdpAddToWishlist">
-        <a href="javascript:void(0);" onClick="javascript:addItem('addToWishlist');" class="standardBtn addToWishlist" id="addToWishlist"><span>${uiLabelMap.AddToWishlistBtn}</span></a>
-    </div>
-</#if>
+<li class="${request.getAttribute("attributeClass")!}">
+  <#if pdpSelectMultiVariant?exists && pdpSelectMultiVariant?has_content && ((pdpSelectMultiVariant.toUpperCase() == "QTY") || (pdpSelectMultiVariant.toUpperCase() == "CHECKBOX")) >
+      <div>
+          <a href="javascript:void(0);" onClick="javascript:addMultiItemsToWishlist('${pdpSelectMultiVariant}');" class="standardBtn addToWishlist" id="js_addToWishlist"><span>${uiLabelMap.AddToWishlistBtn}</span></a>
+      </div>
+  <#else>
+	  <div>
+	      <a href="javascript:void(0);" onClick="javascript:addItemToWishlist();" class="standardBtn addToWishlist <#if featureOrder?exists && featureOrder?size gt 0>inactiveAddToWishlist</#if>" id="js_addToWishlist"><span>${uiLabelMap.AddToWishlistBtn}</span></a>
+	  </div>
+  </#if>
+</li>

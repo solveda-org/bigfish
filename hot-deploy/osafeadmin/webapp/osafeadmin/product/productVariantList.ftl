@@ -15,7 +15,7 @@
     <th class="qtyCol">${uiLabelMap.BFInventoryWarehouseLabel}</th>
     <#list resultList as variantProduct>
       <#assign variantProdDetail = variantProduct.getRelatedOne("AssocProduct")>
-        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists, "productFeatureApplTypeId", "STANDARD_FEATURE"})/>
+        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists, "productFeatureApplTypeId", "STANDARD_FEATURE"}, Static["org.ofbiz.base.util.UtilMisc"].toList("productFeatureTypeId"))/>
         <#if productFeatureAndAppls?exists && productFeatureAndAppls?has_content>
           <#list productFeatureAndAppls as productFeatureAndAppl>
             <#assign featureType = ""/>
@@ -63,7 +63,7 @@
         <#assign productVariantSalePrice = Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, variantProdDetail.productId, "DEFAULT_PRICE")!>
         <#if productVariantSalePrice?has_content>
 	    	<#assign defaultPrice = productVariantSalePrice.price!"" />
-	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("variantSalePrice", globalContext.currencySymbol+""+defaultPrice, "virtualSalePrice", globalContext.currencySymbol+""+productDefaultPrice.price)>
+	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("variantSalePrice", globalContext.currencySymbol+""+defaultPrice, "virtualSalePrice", globalContext.currencySymbol+""+productDefaultPrice.price!)>
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VariantOverrideDefaultPriceInfo",pricesMap, locale )+"</p>">
 	    <#else>
 	    	<#assign defaultPrice = productDefaultPrice.price!"" />
@@ -89,7 +89,7 @@
         </#if>
         <td class="qtyCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">${bfTotalInventory!}</td>
         <td class="qtyCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">${bfWHInventory!}</td>
-        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists, "productFeatureApplTypeId", "STANDARD_FEATURE"})/>
+        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists, "productFeatureApplTypeId", "STANDARD_FEATURE"}, Static["org.ofbiz.base.util.UtilMisc"].toList("productFeatureTypeId"))/>
         <#if productFeatureAndAppls?exists && productFeatureAndAppls?has_content>
           <#list productFeatureAndAppls as productFeatureAndAppl>
             <td class="statusCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">${(productFeatureAndAppl.get("description",locale))?if_exists}</td>

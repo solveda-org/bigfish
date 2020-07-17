@@ -3,7 +3,7 @@
     <table class="osafe" cellspacing="0">
       <thead>
         <tr class="heading">
-          <th class="idCol firstCol">${uiLabelMap.BigFishConetentIdLabel}</th>
+          <th class="idCol firstCol">${uiLabelMap.BigFishContentIdLabel}</th>
           <th class="nameCol">${uiLabelMap.SeoFriendlyPrefixLabel}</th>
           <th class="nameCol">${uiLabelMap.SeoFriendlyNameLabel}</th>
         </tr>

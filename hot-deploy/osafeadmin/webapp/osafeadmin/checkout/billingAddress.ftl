@@ -14,8 +14,14 @@
           <#if checkThisAddress>
             <#assign chosenAddress = billingAddress/>
           </#if>
-          <input class="checkBoxEntry" type="radio" id="BILLING_SELECT_ADDRESS" name="BILLING_SELECT_ADDRESS" value="${billingAddress.contactMechId!}" <#if checkThisAddress> checked</#if> onchange="javascript:showPostalAddress('billing_${billingAddress.contactMechId!}','selectedBillingAddress');"/>
-          ${billingAddress.attnName?default((billingAddress.address1)?if_exists)}
+          <div>
+              <input class="checkBoxEntry" type="radio" id="BILLING_SELECT_ADDRESS" name="BILLING_SELECT_ADDRESS" value="${billingAddress.contactMechId!}" <#if checkThisAddress> checked</#if> onchange="javascript:showPostalAddress('billing_${billingAddress.contactMechId!}','selectedBillingAddress');"/>
+              <#if billingAddress?has_content>
+                  ${setRequestAttribute("PostalAddress",billingAddress)}
+                  ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_NICKNAME")}
+                  ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddress")}
+              </#if>
+           </div>
         </#list>
       </div>
     </div>
@@ -29,24 +35,10 @@
           <label>${uiLabelMap.AddressCaption}</label>
         </div>
         <div class="infoValue address">
-          <#if selectedAddress?has_content><p>${selectedAddress.toName?if_exists}</p></#if>
-            <#if selectedAddress.address1?has_content>
-              <p>${selectedAddress.address1}</p>
+            <#if selectedAddress?has_content>
+                  ${setRequestAttribute("PostalAddress",selectedAddress)}
+                  ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddress")}
             </#if>
-          <#if selectedAddress.address2?has_content>
-            <p>${selectedAddress.address2}</p>
-          </#if>
-          <#if selectedAddress.address3?has_content>
-            <p>${selectedAddress.address3}</p>
-          </#if>
-          <p>
-            <#-- city and state have to stay on one line otherwise an extra space is added before the comma -->
-            <#if selectedAddress.city?has_content && selectedAddress.city != '_NA_'>${selectedAddress.city}</#if><#if selectedAddress.stateProvinceGeoId?has_content && selectedAddress.stateProvinceGeoId != '_NA_'>, ${selectedAddress.stateProvinceGeoId}</#if>
-            <#if selectedAddress.postalCode?has_content && selectedAddress.postalCode != '_NA_' > ${selectedAddress.postalCode}</#if>
-          </p>
-          <#if selectedAddress.countryGeoId?has_content>
-            <p>${selectedAddress.countryGeoId}</p>
-          </#if>
         </div>
       </div>
     </div>

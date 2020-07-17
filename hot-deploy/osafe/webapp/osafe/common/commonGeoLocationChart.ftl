@@ -1,3 +1,42 @@
+<script src="${GMAP_JS_API_URL!}${GMAP_JS_API_KEY!}" type="text/javascript"></script>
+<script type="text/javascript">
+    geocoder = new google.maps.Geocoder();  
+    jQuery('#address').keyup(function() 
+    { 
+        geocoder.geocode( { 'address': jQuery('#address').val()}, function(results, status) 
+        {
+          if (status == google.maps.GeocoderStatus.OK)
+          {
+              jQuery('#latitude').val(results[0].geometry.location.lat());
+              jQuery('#longitude').val(results[0].geometry.location.lng());
+          }
+          else
+          {
+              jQuery('#latitude').val("");
+              jQuery('#longitude').val("");
+          }
+        });
+    });
+    <#if notFoundAddress?exists && notFoundAddress?has_content>
+    jQuery(document).ready(function () {
+        geocoder.geocode( { 'address': '${notFoundAddress!}'}, function(results, status) 
+        {
+          if (status == google.maps.GeocoderStatus.OK)
+          {
+              jQuery('#notFoundLatitude').val(results[0].geometry.location.lat());
+              jQuery('#notFoundLongitude').val(results[0].geometry.location.lng());
+          }
+          else
+          {
+              jQuery('#notFoundLatitude').val("");
+              jQuery('#notFoundLongitude').val("");
+          }
+        });
+    });
+    </#if>
+    
+</script>
+
 <#if parameters.showMap?has_content && parameters.showMap == "Y">
 <script type="text/javascript">
     jQuery(document).ready(function () {
@@ -36,7 +75,6 @@
             <a href="javascript:void(0);" class="standardBtn action" onclick="hideDirection();">${uiLabelMap.CloseBtn}</a>
           </div>
         </div>
-        <script src="${geoChart.GeoMapRequestUrl}" type="text/javascript"></script>
         <script type="text/javascript"><!--
         var directionsService;
         var directionsDisplay;
@@ -64,17 +102,11 @@
           directionsDisplay.setPanel(document.getElementById("routeDirection"));
 
           <#if geoChart.points?has_content>
-            var latlng = [
             <#list geoChart.points as point>
-              new google.maps.LatLng(${point.lat?c}, ${point.lon?c})<#if point_has_next>,</#if>
+              <#if point.userLocation?has_content && point.userLocation == "Y">
+                  map.setCenter(new google.maps.LatLng(${point.lat?c}, ${point.lon?c}));
+              </#if>
             </#list>
-            ];
-            var latlngbounds = new google.maps.LatLngBounds();
-            for (var i = 0; i < latlng.length; i++) {
-              latlngbounds.extend(latlng[i]);
-            }
-            map.setCenter(latlngbounds.getCenter());
-            map.fitBounds(latlngbounds);
           <#else>
             map.setCenter(new google.maps.LatLng(0, 0));
           </#if>
@@ -158,6 +190,7 @@
                           noDirection();
                         }
                       });
+                      infoWindow.close();
         }
       --></script>
       </#if>

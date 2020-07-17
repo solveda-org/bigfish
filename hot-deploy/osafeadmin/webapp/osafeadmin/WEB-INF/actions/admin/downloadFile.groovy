@@ -1,26 +1,15 @@
-import org.ofbiz.base.util.UtilValidate;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.File;
 import org.ofbiz.base.util.*
-import org.ofbiz.base.util.string.*;
+import org.ofbiz.base.util.string.*
 import org.ofbiz.entity.*
-import org.ofbiz.base.util.string.*;
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import org.w3c.dom.*;
-import org.ofbiz.security.*;
-import org.ofbiz.base.util.*;
-import org.ofbiz.webapp.pseudotag.*;
-import org.ofbiz.entity.model.*;
-import org.ofbiz.entity.util.*;
-import org.ofbiz.entity.transaction.*;
-import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.condition.*
+import org.ofbiz.entity.model.*
+import org.ofbiz.entity.transaction.*
+import org.ofbiz.entity.util.*
+import org.ofbiz.security.*
+import org.ofbiz.webapp.pseudotag.*
+import org.w3c.dom.*
 
+osafeProperties = UtilProperties.getResourceBundleMap("OsafeProperties.xml", locale);
 productStoreId = (session.getAttribute("selectedStore")).get("productStoreId");
 
 //Reads the FileToExport parameter and gets the xmlFilePath.
@@ -29,14 +18,14 @@ if(UtilValidate.isNotEmpty(parameters.fileToExport) && UtilValidate.isNotEmpty(p
     XmlFilePath = null;
     if(parameters.fileToExport == "uiSequenceFile")
     {
-        XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe.properties", "ecommerce-UiSequence-xml-file"), context);
+        XmlFilePath = FlexibleStringExpander.expandString(osafeProperties.ecommerceUiSequenceXmlFile, context);
     }
-    if(parameters.fileToExport == "uiLabelFile")
+    else if(parameters.fileToExport == "uiLabelFile")
     {
         XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-deployment-UiLabel-xml-file"), context);
     }
-    if(parameters.fileToExport == "XProductStoreParm")
-    {   
+    else if(parameters.fileToExport == "XProductStoreParm")
+    {
         efo = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
         filePath = System.getProperty("ofbiz.home") + "/runtime/tmp/";
         String curEntityName = "XProductStoreParm";
@@ -126,6 +115,15 @@ if(UtilValidate.isNotEmpty(parameters.fileToExport) && UtilValidate.isNotEmpty(p
                 }
         }
     }
+	else
+	{
+		ecommerceConfigPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-config-path"), context);
+		exportFile = new File(ecommerceConfigPath, parameters.fileToExport);
+		if (exportFile.exists())
+	    {
+			XmlFilePath = exportFile.getAbsolutePath();
+		}
+	}
     
     //Logic to write an XML file and displaying on the new browser tab.
     if(UtilValidate.isNotEmpty(XmlFilePath))

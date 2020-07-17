@@ -21,6 +21,7 @@ import javolution.util.FastSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -59,7 +60,7 @@ public class SolrEvents
 {
     public static final String module = SolrEvents.class.getName();
     private static final ResourceBundle OSAFE_UI_LABELS = UtilProperties.getResourceBundle("OSafeUiLabels.xml", Locale.getDefault());
-    private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("osafe.properties", Locale.getDefault());
+    private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
 
     public static String solrSearch(HttpServletRequest request, HttpServletResponse response) 
     {
@@ -83,26 +84,43 @@ public class SolrEvents
 
             // Get text to use for a site search query
             String searchText = Util.stripHTML(request.getParameter("searchText"));
-            
             if (UtilValidate.isEmpty(searchText))
             {
                 searchText = Util.stripHTML((String)request.getAttribute("searchText"));
             }
             
-            // Get text to use for a site search query
-            String searchTextSpellCheck = Util.stripHTML((String)request.getAttribute("searchTextSpellCheck"));
-            
-            if (UtilValidate.isNotEmpty(searchTextSpellCheck))
+            if(UtilValidate.isNotEmpty(searchText))
             {
-                searchText = searchTextSpellCheck;
+            	searchText = searchText.replace("\\", "%5C");
+            	searchText = searchText.replace("\"", "%22");
+            	searchText = searchText.replace(":", "%3A");
+            	searchText = searchText.replace("&", "%26");
             }
+            
+            String searchType = (String)request.getAttribute("searchType");
+            if (UtilValidate.isNotEmpty(searchText) && UtilValidate.isEmpty(searchType))
+            {
+                searchText = "\""+searchText+"\"";
+            }
+
+            // Get text to use for a site search query
+            if(UtilValidate.isNotEmpty(searchType) && searchType.equalsIgnoreCase("SpellCheckSearch"))
+            {
+            	String searchTextSpellCheck = Util.stripHTML((String)request.getAttribute("searchTextSpellCheck"));
+                
+                if (UtilValidate.isNotEmpty(searchTextSpellCheck))
+                {
+                    searchText = searchTextSpellCheck;
+                }
+            }
+            
             
             GenericValue productStore = ProductStoreWorker.getProductStore(request);
             String productStoreId = productStore.getString("productStoreId");
 
             String catalogTopCategoryId = CatalogWorker.getCatalogTopCategoryId(request);
             
-            String solrServer = OSAFE_PROPS.getString("solr-search-server");
+            String solrServer = OSAFE_PROPS.getString("solrSearchServer");
 			CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
             solr.setRequestWriter(new BinaryRequestWriter());
 
@@ -187,21 +205,15 @@ public class SolrEvents
 
             if (UtilValidate.isNotEmpty(searchText)) 
             {
-            	String wildCardSearch = request.getParameter("wildCardSearch");
-                if (UtilValidate.isEmpty(wildCardSearch))
-                {
-                	wildCardSearch = (String)request.getAttribute("wildCardSearch");
-                }
-            	if(UtilValidate.isNotEmpty(wildCardSearch) && wildCardSearch.equalsIgnoreCase("Y"))
+            	if(UtilValidate.isNotEmpty(searchType) && searchType.equalsIgnoreCase("WildCardSearch"))
             	{
             		queryFacet = "searchText: (" + searchText +"*)";
-            		request.removeAttribute("wildCardSearch");
             	}
             	else
             	{
             		queryFacet = "searchText: (" + searchText +")";
             	}
-                
+            	searchText = searchText.replace("\"", "");
                 cc.setSearchText(searchText);
 
                 if (UtilValidate.isEmpty(productCategoryId) && UtilValidate.isNotEmpty(topMostProductCategoryId)) 
@@ -239,7 +251,7 @@ public class SolrEvents
             	{
             		for(GenericValue productFeatureGroup : productFeatureGroups) 
             		{
-            			String productFeatureGroupId = SolrConstants.EXTRACT_PRODUCT_FEATURE_PREFIX + productFeatureGroup.getString("productFeatureGroupId");
+            			String productFeatureGroupId = productFeatureGroup.getString("productFeatureGroupId");
             			facetGroups.add(productFeatureGroupId);
             			facetGroupIds.put(productFeatureGroupId, productFeatureGroup.getString("productFeatureGroupId"));
             		}
@@ -266,6 +278,11 @@ public class SolrEvents
                     
                     String[] splitTemp = filterGroupValue.split(":");
                     String encodedValue = null;
+                    splitTemp[1] = splitTemp[1].replace("/", "%2F");
+                    splitTemp[1] = splitTemp[1].replace("\"", "%22");
+                    splitTemp[1] = splitTemp[1].replace(":", "%3A");
+                    splitTemp[1] = splitTemp[1].replace("&", "%26");
+                    
                     try 
                     {
                         encodedValue = URLEncoder.encode(splitTemp[1], SolrConstants.DEFAULT_ENCODING);
@@ -279,7 +296,7 @@ public class SolrEvents
                     // Price
                     if (filterGroupValue.toLowerCase().contains("price")) 
                     {
-                        filterPriceQuery = filterGroupValue.replaceAll("productFeature_PRICE", SolrConstants.TYPE_PRICE);
+                        filterPriceQuery = filterGroupValue.replaceAll("PRICE", SolrConstants.TYPE_PRICE);
                         //calculation for price range retrieve on price facet selection click
                         String[] priceRangeArr =  URLDecoder.decode(encodedValue, SolrConstants.DEFAULT_ENCODING).split(" ");
                         try 
@@ -299,7 +316,7 @@ public class SolrEvents
                     // Customer Rating
                     if (filterGroupValue.toLowerCase().contains("customer_rating")) 
                     {
-                        filterCustomerRatingQuery = filterGroupValue.replaceAll("productFeature_CUSTOMER_RATING", SolrConstants.TYPE_CUSTOMER_RATING);
+                        filterCustomerRatingQuery = filterGroupValue.replaceAll("CUSTOMER_RATING", SolrConstants.TYPE_CUSTOMER_RATING);
                         // skip
                         continue;
                     }
@@ -644,9 +661,9 @@ public class SolrEvents
 
             // Customer Rating Facets
             // This should always give us the same set of "Customer Rating" facets
-            int ratingStart = NumberUtils.toInt(OSAFE_PROPS.getString("customer-rating-start"), 4);
-            int ratingEnd = NumberUtils.toInt(OSAFE_PROPS.getString( "customer-rating-end"), 1);
-            int ratingMax = NumberUtils.toInt(OSAFE_PROPS.getString("customer-rating-max"), 5);
+            int ratingStart = NumberUtils.toInt(OSAFE_PROPS.getString("customerRatingStart"), 4);
+            int ratingEnd = NumberUtils.toInt(OSAFE_PROPS.getString( "customerRatingEnd"), 1);
+            int ratingMax = NumberUtils.toInt(OSAFE_PROPS.getString("customerRatingMax"), 5);
             for (int i = ratingStart; i >= ratingEnd; i--) 
             {
                 solrQueryFacet.addFacetQuery("customerRating:[" + i + " " + ratingMax + "]");
@@ -698,7 +715,7 @@ public class SolrEvents
                     sortOption = sortOption.trim().toUpperCase();
                     if(OSAFE_PROPS.containsKey(sortOption))
                     {
-                        String sortOptionTxt = OSAFE_PROPS.getString(sortOption);//UtilProperties.getPropertyValue("osafe.properties", sortOption);
+                        String sortOptionTxt = OSAFE_PROPS.getString(sortOption);
                         if (UtilValidate.isNotEmpty(sortOptionTxt))
                         {
                             List<String> sortOptionAttrList = StringUtil.split(sortOptionTxt, "|");
@@ -863,6 +880,7 @@ public class SolrEvents
             request.setAttribute("completeDocumentList", newresultComplete);
             request.getSession().setAttribute("productDocumentList", newresultComplete);
             request.setAttribute("sortResults",sortResults);
+            request.setAttribute("filterGroup", filterGroup);
 
         } 
         catch (MalformedURLException e) 
@@ -910,7 +928,7 @@ public class SolrEvents
     
     public static String solrSpellCheck(HttpServletRequest request, HttpServletResponse response) 
     {
-    	String solrServer = OSAFE_PROPS.getString("solr-search-server");
+    	String solrServer = OSAFE_PROPS.getString("solrSearchServer");
         
     	String searchText = Util.stripHTML(request.getParameter("searchText"));
         
@@ -931,6 +949,7 @@ public class SolrEvents
             } 
             else 
             {
+            	request.setAttribute("searchType", "SpellCheckSearch");
             	request.setAttribute("searchTextSpellCheck", responseSpellCheck.getSpellCheckResponse().getCollatedResult());
             }
         } 
@@ -943,13 +962,19 @@ public class SolrEvents
     
     public static String addWildCardSearch(HttpServletRequest request, HttpServletResponse response) 
     {
-    	request.setAttribute("wildCardSearch", "Y");
+    	request.setAttribute("searchType", "WildCardSearch");
+        return "success";
+    }
+    
+    public static String addAllWordSearch(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	request.setAttribute("searchType", "AllWordSearch");
         return "success";
     }
     
     public static String autoSuggestionList(HttpServletRequest request, HttpServletResponse response) 
     {
-    	String solrServer = OSAFE_PROPS.getString("solr-search-server");
+    	String solrServer = OSAFE_PROPS.getString("solrSearchServer");
     	
     	List<String> autoSuggestionList = FastList.newInstance();
     	List<Long> autoSuggestionFreqList = FastList.newInstance();

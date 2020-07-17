@@ -55,5 +55,5 @@
         <input type="hidden" name="status" value="" id="status"/>
     </form>
 <#else>
-    <tr><td class="boxNumber" colspan="5">${uiLabelMap.NoMatchingDataInfo}</td></tr>
+     ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoResult")}
 </#if>

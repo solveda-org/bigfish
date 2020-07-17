@@ -18,6 +18,7 @@
 	        <sub-menu-item className="subLevel" description="CatalogProductInfo" heading="CatalogProductHeading" href="productManagement" name="CatalogProductNav" sequenceNumber="1" text="CatalogProductNav"/>
 	        <sub-menu-item className="subLevel" description="CatalogAddProductInfo" heading="CatalogAddProductHeading" href="addProduct" name="CatalogAddProductNav" sequenceNumber="2" text="CatalogAddProductNav"/>
 	        <sub-menu-item className="subLevel" description="CatalogPriceInfo" heading="CatalogPriceHeading" href="underConstruction" name="CatalogPriceNav" sequenceNumber="3" text="CatalogPriceNav"/>
+	        <sub-menu-item className="subLevel" description="CatalogManufacturerInfo" heading="CatalogManufacturerHeading" href="manufacturerManagement" name="ManufacturerMgmntNav" sequenceNumber="4" text="ManufacturerMgmntNav"/>
 	    </menu-item>
 	    <menu-item action="_VIEW" className="topLevel" entity="SPER_PROMO" href="promotionNavigation" name="PromotionNav" navigationCategory="PROMOTION" sequenceNumber="3" text="PromotionNav">
 	        <sub-menu-item className="subLevel navfirstitem" description="PromotionViewInfo" heading="PromotionViewHeading" href="promotionManagement" name="PromotionViewNav" sequenceNumber="0" text="PromotionViewNav"/>
@@ -47,8 +48,8 @@
 	    	<sub-menu-item className="subLevel navfirstitem" description="CarrierInfo" heading="CarrierHeading" href="carrierManagement" name="CarrierNav" sequenceNumber="0" text="CarrierNav"/>
 	        <sub-menu-item className="subLevel" description="ShipmentMethodInfo" heading="ShipmentMethodHeading" href="shipmentMethodManagement" name="ShipmentMethodNav" sequenceNumber="1" text="ShipmentMethodNav"/>
 	        <sub-menu-item className="subLevel" description="ShippingChargeInfo" heading="ShippingChargeHeading" href="shippingChargeManagement" name="ShippingChargeNav" sequenceNumber="2" text="ShippingChargeNav"/>
-	        <sub-menu-item className="subLevel" description="TaxesInfo" heading="TaxesHeading" href="taxManagement" name="TaxesNav" sequenceNumber="3" text="TaxesNav"/>
-	        <sub-menu-item className="subLevel" description="ShipmentGatewaysInfo" heading="ShipmentGatewaysHeading" href="shipmentGatewaysManagement" name="ShipmentGatewaysNav" sequenceNumber="4" text="ShipmentGatewaysNav"/>
+	        <sub-menu-item className="subLevel" description="ShipmentGatewaysInfo" heading="ShipmentGatewaysHeading" href="shipmentGatewaysManagement" name="ShipmentGatewaysNav" sequenceNumber="3" text="ShipmentGatewaysNav"/>
+	        <sub-menu-item className="subLevel" description="TaxesInfo" heading="TaxesHeading" href="taxManagement" name="TaxesNav" sequenceNumber="4" text="TaxesNav"/>
 	    </menu-item>
 	    <menu-item action="_VIEW" className="topLevel" entity="SPER_CONTENT" href="userNavigation" name="UserNav" navigationCategory="USER" sequenceNumber="8" text="UserNav">
 	    	<sub-menu-item className="subLevel navfirstitem" description="UserManagementInfo" heading="UserManagementHeading" href="userManagement" name="UserManagementNav" sequenceNumber="0" text="UserManagementNav"/>

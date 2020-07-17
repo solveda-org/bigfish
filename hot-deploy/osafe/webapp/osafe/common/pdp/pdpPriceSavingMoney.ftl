@@ -5,12 +5,14 @@
   <#assign showSavingMoneyAbove = PRODUCT_MONEY_THRESHOLD!"0"/>
   <#if pdpPriceMap.listPrice?has_content && pdpPriceMap.price?has_content>
     <#assign youSaveMoney = (pdpPriceMap.listPrice - pdpPriceMap.price)/>
-    <div class="pdpPriceSavingMoney" id="pdpPriceSavingMoney">
-      <#if youSaveMoney gt showSavingMoneyAbove?number>
-        <label>${uiLabelMap.YouSaveCaption}</label>
-        <span class="savings"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed rounding=globalContext.currencyRounding /></span>
-      </#if>
-    </div>
+    <li class="${request.getAttribute("attributeClass")!}">
+      <div class="pdpPriceSavingMoney" id="js_pdpPriceSavingMoney">
+        <#if youSaveMoney gt showSavingMoneyAbove?number>
+          <label>${uiLabelMap.YouSaveCaption}</label>
+          <span><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed rounding=globalContext.currencyRounding /></span>
+        </#if>
+      </div>
+    </li>
   </#if>
 </#if>
 
@@ -22,9 +24,9 @@
       <#if productPrice.listPrice?has_content && productPrice.basePrice?has_content>
         <#assign youSaveMoney = (productPrice.listPrice - productPrice.basePrice)/>
         <#if youSaveMoney gt showSavingMoneyAbove?number>
-          <div class="pdpPriceSavingMoney" id="pdpPriceSavingMoney_${key}" style="display:none">
+          <div class="pdpPriceSavingMoney" id="js_pdpPriceSavingMoney_${key}" style="display:none">
             <label>${uiLabelMap.YouSaveCaption}</label>
-            <span class="savings"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productPrice.currencyUsed rounding=globalContext.currencyRounding /></span>
+            <span><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productPrice.currencyUsed rounding=globalContext.currencyRounding /></span>
           </div>
         </#if>
       </#if>

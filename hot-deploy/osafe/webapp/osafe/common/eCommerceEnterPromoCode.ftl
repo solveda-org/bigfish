@@ -1,14 +1,20 @@
  <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <#assign shoppingCart = sessionAttributes.shoppingCart?if_exists />
 <#if (shoppingCart.size() > 0)>
-<div class="displayBox">
+<div class="${request.getAttribute("attributeClass")!}">
+ <div class="displayBox">
     <h3>${uiLabelMap.PromotionHeading}</h3>
-    <div id="ecommercePromocodeEntry" class="entry">
+    <ul class="displayActionList ${request.getAttribute("attributeClass")!}">
+      <@fieldErrors fieldName="productPromoCodeId"/>
+      <li>
+       <div>
         <label>${uiLabelMap.EnterPromoCodeLabel}</label>
-        <input type="text" id="manualOfferCode" name="manualOfferCode" value="${requestParameters.UofferCode!""}" maxlength="20"/>
+        <input type="text" id="js_manualOfferCode" name="manualOfferCode" value="${requestParameters.manualOfferCode!""}" maxlength="20"/>
         <a class="standardBtn action" href="javascript:addManualPromoCode();"><span>${uiLabelMap.ApplyOfferBtn}</span></a>
-        <@fieldErrors fieldName="productPromoCodeId"/>
-    </div>
-    ${screens.render("component://osafe/widget/EcommerceCheckoutScreens.xml#eCommerceEnteredPromoCode")}
+       </div>
+      </li>
+    </ul>
+    ${screens.render("component://osafe/widget/EcommerceCheckoutScreens.xml#eCommerceEnteredPromoCode")}    
+ </div>
 </div>
 </#if>

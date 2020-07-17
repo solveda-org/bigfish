@@ -5,6 +5,12 @@ import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.order.order.OrderReadHelper;
+import com.osafe.util.OsafeAdminUtil;
+import org.ofbiz.entity.GenericValue;
+import javolution.util.FastList;
+import org.ofbiz.base.util.UtilFormatOut;
 
 userLogin = session.getAttribute("userLogin");
 orderId = StringUtils.trimToEmpty(parameters.orderId);
@@ -31,11 +37,37 @@ if (UtilValidate.isNotEmpty(orderId))
 
 if(UtilValidate.isNotEmpty(orderId))
 {
+    List summaryPaymentInfo = FastList.newInstance();
     //Fetching Data For PAYMENT METHOD INFO && PAYMENT PREFERENCE section(credit card or paypal)
-    if(UtilValidate.isNotEmpty(parameters.orderPaymentPreferenceId))
+    if (UtilValidate.isNotEmpty(parameters.orderPaymentPreferenceId)) 
     {
-        paymentPrefId = parameters.orderPaymentPreferenceId;
+    	context.paraOrderPaymentPreferenceId = parameters.orderPaymentPreferenceId;
+    }
+    context.summaryPaymentInfo = delegator.findList("OrderPaymentPreference",EntityCondition.makeCondition([orderId : orderId]), null, null, null, false);
+    GenericValue orderPaymentPreference = null;
+    
+    if(UtilValidate.isNotEmpty(context.orderPaymentPreferenceId))
+    {
+        paymentPrefId = context.orderPaymentPreferenceId;
         orderPaymentPreference = delegator.findByPrimaryKey("OrderPaymentPreference",UtilMisc.toMap("orderPaymentPreferenceId",paymentPrefId));
+        context.date = OsafeAdminUtil.convertDateTimeFormat(orderPaymentPreference.createdDate, preferredDateFormat);
+        context.time = OsafeAdminUtil.convertDateTimeFormat(orderPaymentPreference.createdDate, preferredTimeFormat);
+        
+        orderHeader = orderPaymentPreference.getRelatedOne("OrderHeader");
+        orderReadHelper = new OrderReadHelper(orderHeader);
+        if(UtilValidate.isNotEmpty(orderPaymentPreference.maxAmount))
+        {
+        	maxAmountFormatted = UtilFormatOut.formatCurrency(orderPaymentPreference.maxAmount, orderReadHelper.getCurrency(), locale, globalContext.currencyRounding);
+            context.maxAmount = maxAmountFormatted;	
+        }
+        
+        context.methodType = orderPaymentPreference.paymentMethodTypeId;
+        paymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType");
+        context.description=paymentMethodType.description;
+        status = orderPaymentPreference.getRelatedOne("StatusItem");
+        context.statusDescription=status.description;
+        context.createdByUserLogin=orderPaymentPreference.createdByUserLogin;
+        
         if(UtilValidate.isNotEmpty(orderPaymentPreference))
         {
             paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod");
@@ -60,6 +92,12 @@ if(UtilValidate.isNotEmpty(orderId))
                     context.ebsInfo = paymentMethodInfo;
                     context.paymentMethodInfoHeading =  uiLabelMap.EbsPaymentMethodHeading;
                 }
+                if((paymentMethod.getString("paymentMethodTypeId")).equals("GIFT_CARD"))
+                {
+                    paymentMethodInfo = paymentMethod.getRelatedOne("GiftCard");
+                    context.giftInfo = paymentMethodInfo;
+                    context.paymentMethodInfoHeading =  uiLabelMap.GiftCardPaymentMethodHeading;
+                }
             }
         }
         context.paymentPrefInfo = orderPaymentPreference;
@@ -67,16 +105,20 @@ if(UtilValidate.isNotEmpty(orderId))
     //Fetching Data For PAYMENT GATEWAY RESPONSE &&  PAYMENT INFO section.
     if(UtilValidate.isNotEmpty(orderPaymentPreference))
     {
+    	GenericValue paymentInfo = null;
         orderReadHelper = new OrderReadHelper(orderHeader);
         gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse");
         if(UtilValidate.isNotEmpty(gatewayResponses))
         {
-            orderedList = EntityUtil.orderBy(gatewayResponses, ['lastUpdatedStamp']);
-            context.gatewayResponseInfo = orderedList.getLast();
+            context.gatewayResponseInfoList = EntityUtil.orderBy(gatewayResponses, ['lastUpdatedStamp']);
         }
         if(UtilValidate.isNotEmpty(orderReadHelper.getOrderPayments()))
         {
-            context.paymentInfo = orderReadHelper.getOrderPayments().getFirst();
+        	payment = delegator.findList("Payment", EntityCondition.makeCondition([paymentPreferenceId: context.orderPaymentPreferenceId]), null, null, null, false);
+        	if(UtilValidate.isNotEmpty(payment))
+        	{
+        		context.paymentInfo = payment.getFirst();
+        	}
         }
     }
 }

@@ -68,12 +68,12 @@
             <#if compareParamResult.type == "2" && compareParamResult.key?has_content>
               <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareParamResult.key)>
               <#assign addParamKeyTooltip = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","AddParamKeyTooltip",keyMap, locale ) />
-              <a href="<@ofbizUrl>addMissingParameter?addKey=${compareParamResult.key?if_exists}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addParamKeyTooltip!""}');" onMouseout="hideTooltip()" class="createIcon"></a>
+              <a href="<@ofbizUrl>addMissingParameter?addKey=${compareParamResult.key?if_exists}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addParamKeyTooltip!""}');" onMouseout="hideTooltip()"><span class="createIcon"></span></a>
             </#if>
             <#if compareParamResult.type == "3" && compareParamResult.key?has_content && valuesMatch == "false">
               <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareParamResult.key, "value", valueCompareToParamFile)>
               <#assign addParamKeyTooltip = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SyncKeyAndValueTooltip",keyMap, locale ) />
-              <a href="javascript:setNewValue('${compareParamResult.key?if_exists}','${valueCompareToParamFile!}');" onMouseover="javascript:showTooltip(event,'${addParamKeyTooltip!""}');" onMouseout="hideTooltip()" class="syncIcon"></a>
+              <a href="javascript:setNewValue('${compareParamResult.key?if_exists}','${valueCompareToParamFile!}');" onMouseover="javascript:showTooltip(event,'${addParamKeyTooltip!""}');" onMouseout="hideTooltip()"><span class="syncIcon"></span></a>
             </#if>
           </#if>
         </td>

@@ -7,14 +7,14 @@
  		<!-- check for bad or missing values --> 
         <if-empty field="parameters.userLoginId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadUserLoginIdError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="userLoginId"  list="error_list"/>
             <else>
             	<call-object-method method-name="length" obj-field="parameters.userLoginId" ret-field="userLoginIdLength"/>
             	<set field="minUserLoginIdLength" value="5"/>
                 
                 <if-compare-field field="userLoginIdLength" operator="less" to-field="minUserLoginIdLength" type="Integer">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadUserLoginIdError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="userLoginId"  list="error_list"/>
                     <else>
                     	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
                                     <field field="parameters.userLoginId"/>
@@ -26,13 +26,13 @@
 	                        </entity-one>
 	                        <if-not-empty field="existingUserLoginId">
 	                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginIdExistError"/>
-	                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                            <string-to-list string="${tempErrorMessage}" message-field="userLoginId"  list="error_list"/>
 	                            <else></else>
 	                        </if-not-empty>
                         	<else>
 	                            <set field="errorKey" from-field="parameters.userLoginId"/>
 	                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
-	                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                            <string-to-list string="${tempErrorMessage}" message-field="userLoginId"  list="error_list"/>
                             </else>
                         </if-compare>
                     </else>
@@ -44,7 +44,7 @@
 	            </call-class-method>
 	            <if-compare-field field="isSubString" operator="equals" to-field="true" type="Boolean">
 	            		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginIdEmailAddressError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="userLoginId"  list="error_list"/>
 	            </if-compare-field>
             </else>
         </if-empty>
@@ -52,14 +52,14 @@
         <if-not-empty field="parameters.newPassword">
         	<if-empty field="parameters.confirmPassword">
         		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
-		        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		        <string-to-list string="${tempErrorMessage}" message-field="confirmPassword"  list="error_list"/>
 		        <else>
 		        	<if-compare-field field="parameters.newPassword" operator="equals" to-field="parameters.confirmPassword" type="String">
 			        	<call-object-method method-name="length" obj-field="parameters.newPassword" ret-field="userLoginPasswordLength"/>
 	            		<set field="minUserLoginPasswordLength" value="6"/>
 	            		<if-compare-field field="userLoginPasswordLength" operator="less" to-field="minUserLoginPasswordLength" type="Integer">
 	            			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
-		        			<string-to-list string="${tempErrorMessage}" list="error_list"/>
+		        			<string-to-list string="${tempErrorMessage}" message-field="newPassword"  list="error_list"/>
 		        			<else>
 					            <set field="parameters.currentPassword" from-field="parameters.newPassword"/>
 					            <set field="parameters.currentPasswordVerify" from-field="parameters.confirmPassword"/>
@@ -67,20 +67,20 @@
 	            		</if-compare-field>
 			        	<else>
 			        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
-			        		<string-to-list string="${tempErrorMessage}" list="error_list"/>
+			        		<string-to-list string="${tempErrorMessage}" message-field="newPassword"  list="error_list"/>
 			        	</else>
 		        	</if-compare-field>
 		        </else>
         	</if-empty>
         	<else>
        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
-	        	<string-to-list string="${tempErrorMessage}" list="error_list"/>
+	        	<string-to-list string="${tempErrorMessage}" message-field="newPassword"  list="error_list"/>
         	</else>
         </if-not-empty>
     
         <if-empty field="parameters.passwordHint">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPasswordHintError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="passwordHint"  list="error_list"/>
         </if-empty>
         
         <if-not-empty field="parameters.DISABLED_DATE">
@@ -93,7 +93,7 @@
 	        </call-class-method>
 	        <if-empty field="ValidDisabledDateTime">
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidDisabledDateError"/>
-	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="DISABLED_DATE"  list="error_list"/>
 		        <else>
 		            <set from-field="ValidDisabledDateTime" field="parameters.disabledDateTime"/> 
 		            <!-- check if datetime passed already -->
@@ -102,7 +102,7 @@
 		            </call-class-method>
 		            <if-compare field="PassedDisabledTime" operator="equals" value="false">
 		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DisabledTimePassedError"/>
-		                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		                <string-to-list string="${tempErrorMessage}" message-field="DISABLED_HOUR"  list="error_list"/>
 		            </if-compare>
 		        </else>
 	        </if-empty>
@@ -160,17 +160,17 @@
     <simple-method method-name="updateUser" short-description="Update a User">
     	<!-- check for bad or missing values -->  
     	
-    	<if-empty field="parameters.isSystem">
+    	<if-compare field="parameters.isSystem" operator="not-equals" value="Y" type="String">
     	   
 		    	<if-empty field="parameters.userLoginId">
 		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadUserLoginIdError"/>
-		            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="isSystem"  list="error_list"/>
 		            <else>
 		            	<call-object-method method-name="length" obj-field="parameters.userLoginId" ret-field="userLoginIdLength"/>
 		            	<set field="minUserLoginIdLength" value="5"/>
 		                <if-compare-field field="userLoginIdLength" operator="less" to-field="minUserLoginIdLength" type="Integer">
 		                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadUserLoginIdError"/>
-		                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		                    <string-to-list string="${tempErrorMessage}" message-field="isSystem"  list="error_list"/>
 		                    <else>
 						    	 <call-object-method obj-field="parameters.userLoginId" method-name="toLowerCase" ret-field="parameters.userLoginId"/>
 		                    </else>
@@ -192,7 +192,7 @@
 					<set field="parameters.currentPassword" from-field="parameters.encryptPassword"/>
 			        <if-compare-field field="parameters.currentPassword" operator="not-equals" to-field="userLoginMap.currentPassword" type="String">
 			        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginIncorrectPasswordError"/>
-				        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        <string-to-list string="${tempErrorMessage}" message-field="currentPassword"  list="error_list"/>
 				        <else>
 				        	<!-- the user has entered the correct password -->
 				        	<set field="changePassCheck" value="true"/>
@@ -203,7 +203,7 @@
 		        <if-not-empty field="parameters.newPassword">
 		        	<if-empty field="parameters.confirmPassword">
 		        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
-				        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        <string-to-list string="${tempErrorMessage}" message-field="confirmPassword"  list="error_list"/>
 				        <set field="changePassCheck" value="false"/>
 				        <else>
 				        	<if-compare-field field="parameters.newPassword" operator="equals" to-field="parameters.confirmPassword" type="String">
@@ -211,7 +211,7 @@
 			            		<set field="minUserLoginPasswordLength" value="6"/>
 			            		<if-compare-field field="userLoginPasswordLength" operator="less" to-field="minUserLoginPasswordLength" type="Integer">
 			            			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
-				        			<string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        			<string-to-list string="${tempErrorMessage}" message-field="newPassword"  list="error_list"/>
 				        			<set field="changePassCheck" value="false"/>
 				        			<else>
 				        				<set field="encryptPassword" from-field="parameters.newPassword"/>
@@ -224,7 +224,7 @@
 			            		</if-compare-field>
 					        	<else>
 					        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
-					        		<string-to-list string="${tempErrorMessage}" list="error_list"/>
+					        		<string-to-list string="${tempErrorMessage}" message-field="newPassword"  list="error_list"/>
 					        		<set field="changePassCheck" value="false"/>
 					        	</else>
 				        	</if-compare-field>
@@ -233,12 +233,12 @@
 		        	<else>
 		        		<if-not-empty field="parameters.confirmPassword">
 		        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
-				        	<string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        	<string-to-list string="${tempErrorMessage}" message-field="confirmPassword"  list="error_list"/>
 				        	<set field="changePassCheck" value="false"/>
 		        		</if-not-empty>
 		        		<if-not-empty field="parameters.currentPassword">
 		        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
-				        	<string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        	<string-to-list string="${tempErrorMessage}" message-field="confirmPassword"  list="error_list"/>
 				        	<set field="changePassCheck" value="false"/>
 		        		</if-not-empty>
 		        	</else>
@@ -253,9 +253,8 @@
 		
 		        <if-empty field="parameters.passwordHint">
 		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPasswordHintError"/>
-		            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="passwordHint"  list="error_list"/>
 		        </if-empty>
-		        
 		        <if-not-empty field="parameters.DISABLED_DATE">
 			        <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="getValidJobDate" ret-field="ValidDisabledDateTime">
 			            <field field="parameters.DISABLED_DATE"/>
@@ -266,7 +265,7 @@
 			        </call-class-method>
 			        <if-empty field="ValidDisabledDateTime">
 			            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidDisabledDateError"/>
-			            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+			            <string-to-list string="${tempErrorMessage}" message-field="DISABLED_DATE"  list="error_list"/>
 				        <else>
 				            <set from-field="ValidDisabledDateTime" field="parameters.disabledDateTime"/> 
 				            <!-- check if datetime passed already -->
@@ -275,11 +274,15 @@
 				            </call-class-method>
 				            <if-compare field="PassedDisabledTime" operator="equals" value="false">
 				                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DisabledTimePassedError"/>
-				                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+				                <string-to-list string="${tempErrorMessage}" message-field="DISABLED_HOUR"  list="error_list"/>
 				            </if-compare>
 				        </else>
 			        </if-empty>
 		        </if-not-empty>
+		        
+		        <if-compare field="parameters.enabled" operator="equals" value="Y">
+		            <set field="parameters.disabledDateTime" from-field="nullValue" set-if-null="true"/>
+		        </if-compare>
 		        
 		        <if-not-empty field="parameters.successiveFailedLogins">
 		            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
@@ -287,18 +290,18 @@
 		            </call-class-method>
 		            <if-compare field="isNumber" operator="equals" value="false">
 		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSuccessiveFailedLoginsError"/>
-		                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		                <string-to-list string="${tempErrorMessage}" message-field="successiveFailedLogins"  list="error_list"/>
 		            </if-compare>
 		        </if-not-empty> 
 		        
-		        <else>
-		        	<if-compare field="parameters.isSystem" operator="equals" value="Y" type="String">
-		        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="isSystemSaveError"/>
-		                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-		        	</if-compare>
-		        </else>
+		<else>
+		    <if-compare field="parameters.isSystem" operator="equals" value="Y" type="String">
+		        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="isSystemSaveError"/>
+		        <string-to-list string="${tempErrorMessage}" message-field="isSystem"  list="error_list"/>
+		    </if-compare>
+		</else>
         
-        </if-empty>
+        </if-compare>
 
         <check-errors/>
         
@@ -323,7 +326,7 @@
  		<!-- check for bad or missing values --> 
         <if-empty field="parameters.groupId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGroupIdError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="groupId"  list="error_list"/>
             <else>
 	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
 					<field field="parameters.groupId"/>
@@ -331,7 +334,7 @@
 				<if-compare field="isValidId" operator="equals" value="false">
 					<set field="errorKey" from-field="parameters.groupId"/>
 					<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
-					<string-to-list string="${tempErrorMessage}" list="error_list"/>
+					<string-to-list string="${tempErrorMessage}" message-field="groupId"  list="error_list"/>
 					<else> 
 						<call-object-method obj-field="parameters.groupId" method-name="toUpperCase" ret-field="parameters.groupId"/>
 						<entity-one entity-name="SecurityGroup" value-field="existingGroupId">
@@ -339,7 +342,7 @@
 					    </entity-one>
 					    <if-not-empty field="existingGroupId">
 						    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GroupIdExistError"/>
-						    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+						    <string-to-list string="${tempErrorMessage}" message-field="groupId"  list="error_list"/>
 					    </if-not-empty>
 					</else>
 				</if-compare> 
@@ -348,7 +351,7 @@
         
         <if-empty field="parameters.description">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankSecurityGroupDescriptionError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description"  list="error_list"/>
         </if-empty>
         
         <check-errors/>
@@ -378,7 +381,7 @@
  		<!-- check for bad or missing values --> 
         <if-empty field="parameters.groupId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGroupIdError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="groupId"  list="error_list"/>
             <else>
 	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
 					<field field="parameters.groupId"/>
@@ -386,7 +389,7 @@
 				<if-compare field="isValidId" operator="equals" value="false">
 					<set field="errorKey" from-field="parameters.groupId"/>
 					<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
-					<string-to-list string="${tempErrorMessage}" list="error_list"/>
+					<string-to-list string="${tempErrorMessage}" message-field="groupId"  list="error_list"/>
 					<else> 
 						<call-object-method obj-field="parameters.groupId" method-name="toUpperCase" ret-field="parameters.groupId"/>
 					</else>
@@ -396,7 +399,7 @@
         
         <if-empty field="parameters.description">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankSecurityGroupDescriptionError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description"  list="error_list"/>
         </if-empty>
         
         <check-errors/>
@@ -430,7 +433,7 @@
         </if-not-empty>
         <if-not-empty field="dupGroupIdList">
         	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DuplicateSecurityGroupError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="relatedGroupId"  list="error_list"/>
         </if-not-empty>
 
         <check-errors/>
@@ -481,7 +484,7 @@
         </if-not-empty>
         <if-not-empty field="dupPermissionIdList">
         	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DuplicatePermissionError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="relatedPermissionId"  list="error_list"/>
         </if-not-empty>
 
         <check-errors/>

@@ -1,5 +1,8 @@
-<div class="pdpLabelName">
-  <label>${uiLabelMap.PDPLabelNameLabel}</label>
-  <span class="labelName">${pdpLabel!""}</span>
-</div>
-
+<li class="${request.getAttribute("attributeClass")!}">
+  <#if pdpLabel?has_content>
+    <div>
+      <label>${uiLabelMap.PDPLabelNameLabel}</label>
+      <span>${pdpLabel!""}</span>
+    </div>
+  </#if>
+</li>

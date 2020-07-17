@@ -105,15 +105,24 @@ under the License.
           </#list>
        </#list>
     </#if>
-    <#assign shippingContactMechList = Static["org.ofbiz.party.contact.ContactHelper"].getContactMech(party, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false)/>
-    <#assign billingContactMechList = Static["org.ofbiz.party.contact.ContactHelper"].getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false)/>
-    <#if billingContactMechList?has_content>
-        <#assign billingContactMech = billingContactMechList.get(0)?if_exists>
-        <#if shippingContactMechList?has_content>
-            <#assign removed = shippingContactMechList.remove(billingContactMech)/>
-        </#if>
-        <#assign added =shippingContactMechList.add(0, billingContactMech)/>
-    </#if>
+   <#assign shippingContactMechList = Static["javolution.util.FastList"].newInstance()/>
+   <#assign partyContactMechPurpose = party.getRelated("PartyContactMechPurpose")/>
+   <#if partyContactMechPurpose?has_content> 
+	   <#assign partyContactMechPurpose = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyContactMechPurpose,true)/>
+	   <#assign partyShippingLocations = Static["org.ofbiz.entity.util.EntityUtil"].filterByOr(partyContactMechPurpose, [Static["org.ofbiz.entity.condition.EntityCondition"].makeCondition("contactMechPurposeTypeId", Static["org.ofbiz.entity.condition.EntityOperator"].EQUALS, "BILLING_LOCATION"),Static["org.ofbiz.entity.condition.EntityCondition"].makeCondition("contactMechPurposeTypeId", Static["org.ofbiz.entity.condition.EntityOperator"].EQUALS, "SHIPPING_LOCATION"),Static["org.ofbiz.entity.condition.EntityCondition"].makeCondition("contactMechPurposeTypeId", Static["org.ofbiz.entity.condition.EntityOperator"].EQUALS, "GENERAL_LOCATION")])/>
+	   <#assign partyShippingLocations = Static["org.ofbiz.entity.util.EntityUtil"].getRelated("PartyContactMech", partyShippingLocations)/>
+	   <#assign partyShippingLocations = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyShippingLocations,true)/>
+	   <#assign partyShippingLocations = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(partyShippingLocations, Static["org.ofbiz.base.util.UtilMisc"].toList("fromDate DESC"))/>
+	   <#if partyShippingLocations?has_content> 
+	        <#assign contactMechList = Static["org.ofbiz.entity.util.EntityUtil"].getRelated("ContactMech",partyShippingLocations)/>
+            <#list contactMechList as contactMech>
+              <#if !shippingContactMechList.contains(contactMech)>
+                   <#assign added = shippingContactMechList.add(contactMech)/>
+              </#if>
+            </#list>
+	   </#if>
+   </#if>
+
     <#assign typeId = partyrow.get("partyTypeId")>
     <#if typeId?has_content && typeId=="PERSON">
       <#assign currentStatus=partyrow.get("statusId")>
@@ -256,16 +265,13 @@ under the License.
 								
 								<fo:block font-size="8pt">
 							    <fo:block>${companyName}</fo:block>
-							    <#if companyAddress?exists>
-							        <#if companyAddress?has_content>
-							            <fo:block>${companyAddress.address1?if_exists}</fo:block>
-							            <#if companyAddress.address2?has_content><fo:block>${companyAddress.address2?if_exists}</fo:block></#if>
-							            <fo:block>${companyAddress.city?if_exists}, ${stateProvinceAbbr?if_exists} ${companyAddress.postalCode?if_exists}, ${countryName?if_exists}</fo:block>
-							        </#if>
-							    <#else>
-							        <fo:block>${uiLabelMap.NoPostalAddressInfo}</fo:block>
-							        <fo:block>${uiLabelMap.ForCaption} ${companyName}</fo:block>
-							    </#if>
+                                <#if companyAddress?exists>
+                                  ${setRequestAttribute("PostalAddress",companyAddress)}
+                                  ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddressPDF")}
+                                <#else>
+                                    <fo:block>${uiLabelMap.NoPostalAddressInfo}</fo:block>
+                                    <fo:block>${uiLabelMap.ForCaption} ${companyName}</fo:block>
+                                </#if>
 							
 							    <#if companyPhone?exists || companyEmail?exists || companyWebsite?exists>
 							    <fo:list-block provisional-distance-between-starts=".5in">
@@ -384,8 +390,33 @@ under the License.
                                   <fo:table-cell text-align="start" >
                                         <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CustomerRoleCaption}</fo:block>
                                   </fo:table-cell>
+							     <#if partyRoles?has_content>
+							      <#list partyRoles as partyRole>
+							         <#assign roleType = partyRole.getRelatedOne("RoleType")>
+							         <#if roleType.roleTypeId=="GUEST_CUSTOMER">
+							           <#assign partyRoleType = roleType.description />
+							           <#break>
+							         </#if>
+							         <#if roleType.roleTypeId=="CUSTOMER" || roleType.roleTypeId=="EMAIL_SUBSCRIBER">
+							               <#assign partyRoleType = roleType.description>
+							         </#if>
+							      </#list>
+							     <#else>
+							              <#assign partyRoleType = "">
+							     </#if>
                                   <fo:table-cell text-align="start">
-                                        <fo:block font-size="8pt" start-indent="10pt">${partyRoleType!""}</fo:block>
+                                        <fo:block font-size="8pt" start-indent="10pt">
+					                    <#if partyRoles?has_content>
+					                        <#list partyRoles as partyRole>
+					                            <#assign roleType = partyRole.getRelatedOne("RoleType")>
+					                            <#if roleType.roleTypeId !="_NA_">
+					                                <#assign partyRoleType = roleType.description>
+								                    ${partyRoleType!""}
+								                    <#if partyRole_has_next>,</#if>
+					                            </#if>
+					                        </#list>
+					                    </#if>
+                                        </fo:block>
                                   </fo:table-cell>
 			                 </fo:table-row>
                              <fo:table-row height="20px">
@@ -518,7 +549,29 @@ under the License.
         <fo:block space-after="0.2in"/>
         
     
-    <#if title?has_content || gender?has_content || dob_MMDD?has_content || dob_MMDDYYYY?has_content || dob_DDMM?has_content || dob_DDMMYYYY?has_content>   
+    <#assign partyCustomAttributeListRes = dispatcher.runSync("getPartyCustomAttributeList", Static["org.ofbiz.base.util.UtilMisc"].toMap("useCache", "false"))/>
+    <#assign partyAttributes = delegator.findByAnd("PartyAttribute", {"partyId" : partyId})?if_exists />
+    <#assign customPartyAttributeList = partyCustomAttributeListRes.get("customPartyAttributeList")!/>
+    <#assign atleastOneCustomPartyAttributeExists = "false"/>
+    <#if customPartyAttributeList?has_content>
+        <#list customPartyAttributeList as customPartyAttribute>
+            <#assign attrName =  customPartyAttribute.AttrName! />
+            <#if partyAttributes?has_content>
+	            <#list partyAttributes as partyAttribute>
+	                <#if partyAttribute.attrName == attrName>
+	                    <#assign attrValue = partyAttribute.attrValue!"">
+	                    <#break>
+	                </#if>
+	            </#list>
+            </#if>
+            <#if attrValue?has_content>
+                <#assign atleastOneCustomPartyAttributeExists = "true"/>
+                <#break>
+            </#if>
+        </#list>
+    </#if>
+                             
+    <#if title?has_content || gender?has_content || dob_MMDD?has_content || dob_MMDDYYYY?has_content || dob_DDMM?has_content || dob_DDMMYYYY?has_content || atleastOneCustomPartyAttributeExists == "true">   
         
         <fo:table table-layout="fixed" width="100%">
           <fo:table-body>
@@ -653,7 +706,39 @@ under the License.
                                   </fo:table-cell>
                              </fo:table-row>
                              </#if>
-			                     
+                             
+                             <#if customPartyAttributeList?has_content>
+                                 <#list customPartyAttributeList as customPartyAttribute>
+                                     <#assign attrValue = ""/>
+                                     <#assign attrName =  customPartyAttribute.AttrName! />
+                                     <#if partyAttributes?has_content>
+	                                     <#list partyAttributes as partyAttribute>
+	                                         <#if partyAttribute.attrName == attrName>
+	                                             <#assign attrValue = partyAttribute.attrValue!"">
+	                                             <#break>
+	                                         </#if>
+	                                     </#list>
+                                     </#if>
+                                     <#if attrValue?has_content>
+                                         <fo:table-row height="20px">
+                                             <fo:table-cell text-align="start" >
+                                                 <fo:block font-size="8pt" text-align="right" font-weight="bold">${customPartyAttribute.Caption}</fo:block>
+                                             </fo:table-cell>
+                                             <fo:table-cell text-align="start">
+                                                 <fo:block font-size="8pt" start-indent="10pt">${attrValue!""}</fo:block>
+                                             </fo:table-cell>
+                                 
+                                             <fo:table-cell text-align="start" >
+                                                 <fo:block font-size="8pt" text-align="right" font-weight="bold"></fo:block>
+                                             </fo:table-cell>
+                                             <fo:table-cell text-align="start">
+                                                 <fo:block font-size="8pt" start-indent="10pt"></fo:block>
+                                             </fo:table-cell>
+                                          </fo:table-row>
+                                     </#if>
+                                 </#list>
+                             </#if>
+                             
 		                </fo:table-body>
 	                 </fo:table>
               </fo:table-cell>
@@ -697,26 +782,21 @@ under the License.
                   </fo:table-cell>
                   <fo:table-cell>
                     <fo:block>
-                      <#if postalAddress?has_content>
-                        <#if postalAddress.address1?has_content>${postalAddress.address1},</#if>
-                        <#if postalAddress.address2?has_content> ${postalAddress.address2},</#if>
-                        <#if postalAddress.address3?has_content> ${postalAddress.address3},</#if>
-                        <#-- city and state have to stay on one line otherwise an extra space is added before the comma -->
-                        <#if postalAddress.city?has_content && postalAddress.city != '_NA_'> ${postalAddress.city},</#if>
-                        <#if postalAddress.stateProvinceGeoId?has_content && postalAddress.stateProvinceGeoId != '_NA_'> ${postalAddress.stateProvinceGeoId}</#if>
-                        <#if postalAddress.postalCode?has_content && postalAddress.postalCode != '_NA_' > ${postalAddress.postalCode}</#if>
-                        <#if postalAddress.countryGeoId?has_content> ${postalAddress.countryGeoId}</#if>
-                      </#if>
+                        <#if postalAddress?has_content>
+                          ${setRequestAttribute("PostalAddress",postalAddress)}
+                          ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_FULL_ADDRESS")}
+                          ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddressPDF")}
+                        </#if>
                     </fo:block>
                   </fo:table-cell>
                 </fo:table-row>
               </#list>
             <#else>
-              <fo:table-row>
+               <fo:table-row>
                 <fo:table-cell number-columns-spanned="2">
-                  <fo:block text-align="center">${uiLabelMap.NoDataAvailableInfo}</fo:block>
+                 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
                 </fo:table-cell>
-              </fo:table-row>
+               </fo:table-row>
             </#if>
           </fo:table-body>
         </fo:table>
@@ -790,7 +870,7 @@ under the License.
                   <#else>
                     <fo:table-row>
                       <fo:table-cell number-columns-spanned="5">
-                        <fo:block text-align="center">${uiLabelMap.NoDataAvailableInfo}</fo:block>
+                      		${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
                       </fo:table-cell>
                     </fo:table-row>
                   </#if>

@@ -11,19 +11,23 @@
         <#assign selectedCountry = defaultCountryGeoMap.geoId/>
     </#if>
 </#if>
+<#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI!"")>
+	<#assign selectedCountry = defaultCountryGeoMap.geoId/>
+</#if>
 
 <!-- address country entry -->
-<div class="addressInfoCountry">
-    <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"COUNTRY_MULTI")>
-        <div class="entry">
-            <label for="${fieldPurpose?if_exists}_COUNTRY"><@required/>${uiLabelMap.CountryCaption}</label>
-            <select name="${fieldPurpose?if_exists}_COUNTRY" id="${fieldPurpose?if_exists}_COUNTRY" class="dependentSelectMaster">
-                <#list countryList as country>
-                    <option value='${country.geoId}' <#if selectedCountry = country.geoId >selected=selected</#if>>${country.get("geoName")?default(country.geoId)}</option>
-                </#list>
-            </select>
-        </div>
-    <#else>
-        <input type="hidden" name="${fieldPurpose?if_exists}_COUNTRY" id="${fieldPurpose?if_exists}_COUNTRY" value="${selectedCountry}"/>
-    </#if>
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
+    <label for="${fieldPurpose?if_exists}_COUNTRY"><#if mandatory == "Y"><@required/></#if>${uiLabelMap.CountryCaption}</label>
+    <div class="entryField">
+    	<select name="${fieldPurpose?if_exists}_COUNTRY" id="js_${fieldPurpose?if_exists}_COUNTRY" class="dependentSelectMaster">
+        	<#list countryList as country>
+        		<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI!"") || selectedCountry == country.geoId>
+            		<option value='${country.geoId}' <#if selectedCountry == country.geoId >selected=selected</#if>>${country.get("geoName")?default(country.geoId)}</option>
+            	</#if>
+        	</#list>
+    	</select>
+    	<input type="hidden" id="${fieldPurpose?if_exists}_COUNTRY_MANDATORY" name="${fieldPurpose?if_exists}_COUNTRY_MANDATORY" value="${mandatory}"/>
+    	<@fieldErrors fieldName="${fieldPurpose?if_exists}_COUNTRY"/>
+    </div>
 </div>

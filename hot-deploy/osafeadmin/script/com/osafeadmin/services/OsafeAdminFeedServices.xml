@@ -6,7 +6,7 @@
     <simple-method method-name="importProductRatingsXml" short-description="Method to Import Product Ratings.">
         <if-empty field="parameters._uploadedFile_fileName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankFeedFileError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="UPLOADEDFILE" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="_uploadedFile_fileName" list="error_list"/>
         </if-empty>
         <if-not-empty field="parameters._uploadedFile_fileName">
             <call-object-method method-name="toUpperCase" obj-field="parameters._uploadedFile_fileName" ret-field="feedFileNameUpperCase"/>
@@ -15,7 +15,7 @@
             </call-object-method>
             <if-compare field="isXMLFile" operator="equals" value="false">
                 <property-to-field resource="OSafeAdminUiLabels" property="FeedFileNotXmlError" field="tempErrorMessage"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="_uploadedFile_fileName" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <check-errors/>
@@ -30,6 +30,21 @@
             </call-service>
             <clear-field field="uploadFileCtx"/>
         </if-not-empty>
+        
+        <set field="getProductRatingDataListFromFileCtx.productRatingFilePath" from-field="parameters.uploadFilePath"/>
+        <set field="getProductRatingDataListFromFileCtx.productRatingFileName" from-field="parameters.uploadFileName"/>
+        <call-service service-name="getProductRatingDataListFromFile" in-map-name="getProductRatingDataListFromFileCtx">
+            <result-to-field result-name="productRatingDataList" field="parameters.productRatingDataList"/>
+            <result-to-field result-name="errorMessageList" field="error_list"/>
+        </call-service>
+        <check-errors/>
+        
+        <set field="validateProductRatingDataCtx.productRatingDataList" from-field="parameters.productRatingDataList"/>
+        <call-service service-name="validateProductRatingData" in-map-name="validateProductRatingDataCtx">
+            <result-to-field result-name="errorMessageList" field="parameters.validateErrorMessageList"/>
+        </call-service>
+        <list-to-list to-list="error_list" list="parameters.validateErrorMessageList"/>
+        <check-errors/>
         
         <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
         <set field="importClientProductRatingXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
@@ -41,7 +56,7 @@
     <simple-method method-name="importOrderStatusChangeXml" short-description="Method to Import Order Status Change Feeds.">
         <if-empty field="parameters._uploadedFile_fileName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankFeedFileError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="UPLOADEDFILE" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="uploadedFile" list="error_list"/>
         </if-empty>
         <if-not-empty field="parameters._uploadedFile_fileName">
             <call-object-method method-name="toUpperCase" obj-field="parameters._uploadedFile_fileName" ret-field="feedFileNameUpperCase"/>
@@ -50,7 +65,7 @@
             </call-object-method>
             <if-compare field="isXMLFile" operator="equals" value="false">
                 <property-to-field resource="OSafeAdminUiLabels" property="FeedFileNotXmlError" field="tempErrorMessage"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="uploadedFile" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <check-errors/>
@@ -65,6 +80,22 @@
             </call-service>
             <clear-field field="uploadFileCtx"/>
         </if-not-empty>
+        
+        <set field="getOrderStatusDataListFromFileCtx.orderStatusFilePath" from-field="parameters.uploadFilePath"/>
+        <set field="getOrderStatusDataListFromFileCtx.orderStatusFileName" from-field="parameters.uploadFileName"/>
+        <call-service service-name="getOrderStatusDataListFromFile" in-map-name="getOrderStatusDataListFromFileCtx">
+            <result-to-field result-name="orderStatusDataList" field="parameters.orderStatusDataList"/>
+            <result-to-field result-name="errorMessageList" field="error_list"/>
+        </call-service>
+        <check-errors/>
+        
+        <set field="validateOrderStatusDataCtx.orderStatusDataList" from-field="parameters.orderStatusDataList"/>
+        <set field="validateOrderStatusDataCtx.productStoreId" from-field="parameters.productStoreId"/>
+        <call-service service-name="validateOrderStatusData" in-map-name="validateOrderStatusDataCtx">
+            <result-to-field result-name="errorMessageList" field="parameters.validateErrorMessageList"/>
+        </call-service>
+        <list-to-list to-list="error_list" list="parameters.validateErrorMessageList"/>
+        <check-errors/>
         
         <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
         <set field="importOrderStatusChangeXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
@@ -77,7 +108,7 @@
     <simple-method method-name="importStoresXml" short-description="Method to Import Stores.">
         <if-empty field="parameters._uploadedFile_fileName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankFeedFileError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="UPLOADEDFILE" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="_uploadedFile_fileName" list="error_list"/>
         </if-empty>
         <if-not-empty field="parameters._uploadedFile_fileName">
             <call-object-method method-name="toUpperCase" obj-field="parameters._uploadedFile_fileName" ret-field="feedFileNameUpperCase"/>
@@ -86,7 +117,7 @@
             </call-object-method>
             <if-compare field="isXMLFile" operator="equals" value="false">
                 <property-to-field resource="OSafeAdminUiLabels" property="FeedFileNotXmlError" field="tempErrorMessage"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="_uploadedFile_fileName" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <check-errors/>
@@ -113,7 +144,7 @@
     <simple-method method-name="importCustomerXml" short-description="Method to Import Customers.">
         <if-empty field="parameters._uploadedFile_fileName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankFeedFileError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="UPLOADEDFILE" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="_uploadedFile_fileName" list="error_list"/>
         </if-empty>
         <if-not-empty field="parameters._uploadedFile_fileName">
             <call-object-method method-name="toUpperCase" obj-field="parameters._uploadedFile_fileName" ret-field="feedFileNameUpperCase"/>
@@ -122,7 +153,7 @@
             </call-object-method>
             <if-compare field="isXMLFile" operator="equals" value="false">
                 <property-to-field resource="OSafeAdminUiLabels" property="FeedFileNotXmlError" field="tempErrorMessage"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="_uploadedFile_fileName" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <check-errors/>
@@ -137,6 +168,21 @@
             </call-service>
             <clear-field field="uploadFileCtx"/>
         </if-not-empty>
+        
+        <set field="getCustomerDataListFromFileCtx.customerFilePath" from-field="parameters.uploadFilePath"/>
+        <set field="getCustomerDataListFromFileCtx.customerFileName" from-field="parameters.uploadFileName"/>
+        <call-service service-name="getCustomerDataListFromFile" in-map-name="getCustomerDataListFromFileCtx">
+            <result-to-field result-name="customerDataList" field="parameters.customerDataList"/>
+            <result-to-field result-name="errorMessageList" field="error_list"/>
+        </call-service>
+        <check-errors/>
+        
+        <set field="validateCustomerDataCtx.customerDataList" from-field="parameters.customerDataList"/>
+        <call-service service-name="validateCustomerData" in-map-name="validateCustomerDataCtx">
+            <result-to-field result-name="errorMessageList" field="parameters.validateErrorMessageList"/>
+        </call-service>
+        <list-to-list to-list="error_list" list="parameters.validateErrorMessageList"/>
+        <check-errors/>
         
         <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
         <set field="importCustomerXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
@@ -158,11 +204,11 @@
             </call-object-method>
             <if-compare operator="equals" value="false" field="isXMLFile">
                 <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
             </if-compare>
         <else>
             <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
         </else>
         </if-not-empty>
         <check-errors/>
@@ -250,11 +296,11 @@
             </call-object-method>
             <if-compare operator="equals" value="false" field="isXMLFile">
                 <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
             </if-compare>
         <else>
             <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
         </else>
         </if-not-empty>
         <check-errors/>
@@ -340,11 +386,11 @@
             </call-object-method>
             <if-compare operator="equals" value="false" field="isXMLFile">
                 <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
             </if-compare>
         <else>
             <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
         </else>
         </if-not-empty>
         <check-errors/>
@@ -446,11 +492,11 @@
             </call-object-method>
             <if-compare operator="equals" value="false" field="isXMLFile">
                 <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
             </if-compare>
         <else>
             <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
         </else>
         </if-not-empty>
         <check-errors/>

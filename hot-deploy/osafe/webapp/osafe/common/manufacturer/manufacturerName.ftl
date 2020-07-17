@@ -1,3 +1,3 @@
-<div class="manufacturerName">
-  <span class="profileName">${profileName!""}</span>
+<div class="${request.getAttribute("attributeClass")!}">
+  <span>${profileName!""}</span>
 </div>

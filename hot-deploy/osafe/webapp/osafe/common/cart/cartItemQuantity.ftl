@@ -1,8 +1,6 @@
-<div class="cartItemQuantity">
-  <div class="labelText">
+<li class="${request.getAttribute("attributeClass")!}<#if lineIndex == 0> firstRow</#if>">
+  <div>
     <label>${uiLabelMap.CartItemQuantityCaption}</label>
-  </div>
-  <div class="labelValue">
     <span>${quantity!}</span>
   </div>
-</div>
+</li>

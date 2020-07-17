@@ -42,6 +42,12 @@
     <simple-method method-name="getPostalAddress" short-description="Get the postal address">
         <entity-one value-field="address" entity-name="PostalAddress"/>
         <field-to-result field="address.contactMechId" result-name="contactMechId"/>
+        <if-not-empty field="address.attnName">
+            <field-to-result field="address.attnName" result-name="attnName"/>
+        </if-not-empty>
+        <if-not-empty field="address.toName">
+            <field-to-result field="address.toName" result-name="toName"/>
+        </if-not-empty>
         <if-not-empty field="address.address1">
             <field-to-result field="address.address1" result-name="address1"/>
         </if-not-empty>
@@ -70,4 +76,146 @@
             <field-to-result field="address.countryGeoId" result-name="countryGeoId"/>
         </if-not-empty>
     </simple-method>
+    
+    
+    
+    <simple-method method-name="getShowMapInfoMap" short-description="Verify if store locations exist within radius of address" login-required="false">
+        <set field="address" from-field="parameters.address"/>
+        <set field="latitude" from-field="parameters.latitude"/>
+        <set field="longitude" from-field="parameters.longitude"/>
+        <set field="productStoreId" from-field="parameters.productStoreId"/>
+        <set field="showMap" value="N"/>
+        
+        <create-object class-name="com.osafe.geo.OsafeGeo" field="osafeGeo">
+            <field field="latitude"/>
+            <field field="longitude"/>
+        </create-object>
+        <call-object-method method-name="isEmpty" obj-field="osafeGeo" ret-field="isEmpty"/>
+        <if-compare operator="equals" value="true" field="isEmpty">
+	        <call-class-method class-name="com.osafe.geo.OsafeGeo"  method-name="fromAddress" ret-field="osafeGeo">
+	            <field field="address"/>
+	            <field field="productStoreId"/>
+	        </call-class-method>
+        </if-compare>
+        <call-object-method method-name="latitude" obj-field="osafeGeo" ret-field="latitude"/>
+        <call-object-method method-name="longitude" obj-field="osafeGeo" ret-field="longitude"/>
+        <if>
+            <condition>
+                <and>
+                    <if-empty field="latitude"/>
+                    <if-empty field="longitude"/>
+                </and>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="GetGeoCodeError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </then>
+            <else>
+                <!--    search address OsafeGeo Object        -->
+                <create-object class-name="com.osafe.geo.OsafeGeo" field="searchOsafeGeo">
+                    <field field="latitude" type="String"/>
+                    <field field="longitude" type="String"/>
+                </create-object>
+
+                <!--    product store param  GMAP_RADIUS      -->
+                <set field="searchRadius" value="20"/>
+		        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="gmapRadius">
+		            <string value="${productStoreId}"/>
+		            <string value="GMAP_RADIUS"/>
+		        </call-class-method>
+                <call-class-method class-name="com.osafe.util.Util" method-name="isNumber" ret-field="isNumber">
+                    <field field="gmapRadius" type="String"/>
+                </call-class-method>
+                <if-compare field="isNumber" operator="equals" value="true">
+                    <set field="searchRadius" from-field="gmapRadius"/>
+                </if-compare>
+                <!--    product store param  GMAP_UOM      -->
+                <set field="uom" value="Miles"/>
+		        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="gmapUom">
+		            <string value="${productStoreId}"/>
+		            <string value="GMAP_UOM"/>
+		        </call-class-method>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isParamUomNotEmpty">
+                    <field field="gmapUom" type="String"/>
+                </call-class-method>
+                <if-compare field="isParamUomNotEmpty" operator="equals" value="true">
+                    <call-object-method method-name="equalsIgnoreCase" obj-field="gmapUom" ret-field="isParamUomKm">
+                        <string value="Kilometers"/>
+                    </call-object-method>
+                    <call-object-method method-name="equalsIgnoreCase" obj-field="gmapUom" ret-field="isParamUomMi">
+                        <string value="Miles"/>
+                    </call-object-method>
+                </if-compare>
+                <if>
+                    <condition>
+                        <or>
+                            <if-compare field="isParamUomKm" operator="equals" value="true"/>
+                            <if-compare field="isParamUomMi" operator="equals" value="true"/>
+                        </or>
+                    </condition>
+                    <then>
+                        <set field="uom" from-field="gmapUom"/>
+                    </then>
+                </if>
+
+                <!--    find store near by address        -->
+                <set field="isStoreFound" value="false" type="Boolean"/>
+		        <entity-condition entity-name="PartyRoleAndPartyDetail" list="storeList" use-cache="true">
+		            <condition-list>
+		                <condition-expr field-name="partyTypeId" operator="equals" value="PARTY_GROUP"/>
+		                <condition-expr field-name="roleTypeId" operator="equals" value="STORE_LOCATION"/>
+		                <condition-expr field-name="statusId" operator="equals" value="PARTY_ENABLED"/>
+		            </condition-list>
+		        </entity-condition>
+                <iterate list="storeList" entry="Party" >
+                    <call-class-method class-name="org.ofbiz.common.geo.GeoWorker" method-name="findLatestGeoPoint" ret-field="storeGeoPoint">
+                        <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+                        <string value="PartyGeoPoint"/>
+                        <string value="partyId"/>
+                        <field field="Party.partyId" type="String"/>
+                        <field field="null"/>
+                        <field field="null"/>
+                    </call-class-method>
+                   <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isNotEmpty">
+                       <field field="storeGeoPoint" type="Object"/>
+                  </call-class-method>
+                  <if-compare field="isNotEmpty" operator="equals" value="true">
+                      <set field="GeoPoint.geoPointId" from-field="storeGeoPoint.geoPointId"/>
+                      <call-object-method obj-field="delegator" method-name="findByPrimaryKey" ret-field="geoPoint">
+                          <string value="GeoPoint"/>
+                          <field field="GeoPoint" type="java.util.Map"/>
+                      </call-object-method>
+                      <set field="storeLatitude" from-field="geoPoint.latitude" type="String"/>
+                      <set field="storeLongitude" from-field="geoPoint.longitude" type="String"/>
+                      <create-object class-name="com.osafe.geo.OsafeGeo" field="storeOsafeGeo">
+                          <field field="storeLatitude" type="String"/>
+                          <field field="storeLongitude" type="String"/>
+                      </create-object>
+                      <call-class-method class-name="com.osafe.util.Util" method-name="distFrom" ret-field="distance">
+                          <field field="searchOsafeGeo" type="com.osafe.geo.OsafeGeo"/>
+                          <field field="storeOsafeGeo" type="com.osafe.geo.OsafeGeo"/>
+                          <field field="uom" type="String"/>
+                      </call-class-method>
+                      <if-compare operator="less-equals" field="distance" value="${searchRadius}" type="BigDecimal">
+                          <set field="isStoreFound" value="true" type="Boolean"/>
+                      </if-compare>
+                  </if-compare>
+                </iterate>
+                
+                <field-to-result field="latitude"/>
+                <field-to-result field="longitude"/>
+                <field-to-result field="searchRadius"/>
+                <field-to-result field="uom"/>
+                <if-compare field="isStoreFound" operator="equals" value="true">
+                    <set field="showMap" value="Y"/>
+                    <field-to-result field="showMap"/>
+                    <else>
+                        <field-to-result field="showMap"/>
+                    </else>
+                </if-compare>
+            </else>
+        </if>
+    </simple-method>
+    
+    
 </simple-methods>

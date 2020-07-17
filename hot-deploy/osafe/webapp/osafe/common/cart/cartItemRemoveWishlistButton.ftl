@@ -1,12 +1,11 @@
-<div class="cartItemRemoveButton">
-  <div class="labelText">
+<li class="${request.getAttribute("attributeClass")!}<#if lineIndex == 0> firstRow</#if>">
+  <div>
     <label>${uiLabelMap.CartItemRemoveBtnCaption}</label>
-  </div>
-  <div class="labelValue">
-    <a class="standardBtn action" href="<@ofbizUrl>${deleteFromWishListAction!}?delete_${wishListItem.shoppingListItemSeqId}=${wishListItem.shoppingListItemSeqId}</@ofbizUrl>" title="${uiLabelMap.RemoveItemBtn}">
+    <a class="standardBtn delete" href="<@ofbizUrl>${deleteFromWishListAction!}?delete_${wishListItem.shoppingListItemSeqId}=${wishListItem.shoppingListItemSeqId}</@ofbizUrl>" title="${uiLabelMap.RemoveItemBtn}">
       <span>${uiLabelMap.RemoveItemBtn}</span>
     </a>
   </div>
-</div>
+</li>
+
 
 

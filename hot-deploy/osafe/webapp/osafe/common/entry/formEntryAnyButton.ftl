@@ -1,4 +1,4 @@
-<div class="entryButtons">
+<div class="container button">
     <#if backAction?exists && backAction?has_content>
         <a class="standardBtn negative" href="<@ofbizUrl>${backAction!}</@ofbizUrl>">${uiLabelMap.CommonBack}</a>
     </#if>

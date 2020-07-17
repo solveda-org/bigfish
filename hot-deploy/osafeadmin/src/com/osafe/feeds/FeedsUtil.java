@@ -2,6 +2,7 @@ package com.osafe.feeds;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -25,99 +26,6 @@ import com.osafe.feeds.osafefeeds.ShippingAddressType;
 public class FeedsUtil {
 	public static final String module = FeedsUtil.class.getName();
 	
-	public static void getCustomerBillingAddress(ObjectFactory objFactory, CustomerType customer, List<GenericValue> partyContactDetails,String contactMechPurposeTypeId, Delegator delegator) {
-		
-		List addressList = null;
-		try {
-		
-		List<GenericValue> partyLocationDetails = EntityUtil.filterByAnd(partyContactDetails, UtilMisc.toMap("contactMechPurposeTypeId",contactMechPurposeTypeId));
-        for(GenericValue partyLocationDetail : partyLocationDetails) 
-        {
-        	//Object address = null;
-        	BillingAddressType address = objFactory.createBillingAddressType();
-    		
-    	    addressList = customer.getBillingAddress();
-    		
-            String address1 = (String)partyLocationDetail.get("address1");
-            if(UtilValidate.isEmpty(address1)) {
-            	address1 = "";
-            }
-            
-            String address2 = (String)partyLocationDetail.get("address2");
-            if(UtilValidate.isEmpty(address2)) {
-            	address2 = "";
-            }
-            
-            String address3 = (String)partyLocationDetail.get("address3");
-            if(UtilValidate.isEmpty(address3)) {
-            	address3 = "";
-            }
-            
-            String city = (String)partyLocationDetail.get("city");
-            if(UtilValidate.isEmpty(city)) {
-            	city = "";
-            }
-            
-            address.setAddress1(address1);
-            address.setAddress2(address2);
-            address.setAddress3(address3);
-            address.setCountry((String)partyLocationDetail.get("countryGeoId"));
-            address.setCityTown(city);
-            address.setStateProvince((String)partyLocationDetail.get("stateProvinceGeoId"));
-            address.setZipPostCode((String)partyLocationDetail.get("postalCode"));
-            addressList.add(address);
-        }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-    public static void getCustomerShippingAddress(ObjectFactory objFactory, CustomerType customer, List<GenericValue> partyContactDetails,String contactMechPurposeTypeId, Delegator delegator) {
-		
-		List addressList = null;
-		try {
-		
-		List<GenericValue> partyLocationDetails = EntityUtil.filterByAnd(partyContactDetails, UtilMisc.toMap("contactMechPurposeTypeId",contactMechPurposeTypeId));
-        for(GenericValue partyLocationDetail : partyLocationDetails) 
-        {
-        	//Object address = null;
-        	ShippingAddressType address = objFactory.createShippingAddressType();
-    		
-    	    addressList = customer.getShippingAddress();
-    		
-            String address1 = (String)partyLocationDetail.get("address1");
-            if(UtilValidate.isEmpty(address1)) {
-            	address1 = "";
-            }
-            
-            String address2 = (String)partyLocationDetail.get("address2");
-            if(UtilValidate.isEmpty(address2)) {
-            	address2 = "";
-            }
-            
-            String address3 = (String)partyLocationDetail.get("address3");
-            if(UtilValidate.isEmpty(address3)) {
-            	address3 = "";
-            }
-            
-            String city = (String)partyLocationDetail.get("city");
-            if(UtilValidate.isEmpty(city)) {
-            	city = "";
-            }
-            
-            address.setAddress1(address1);
-            address.setAddress2(address2);
-            address.setAddress3(address3);
-            address.setCountry((String)partyLocationDetail.get("countryGeoId"));
-            address.setCityTown(city);
-            address.setStateProvince((String)partyLocationDetail.get("stateProvinceGeoId"));
-            address.setZipPostCode((String)partyLocationDetail.get("postalCode"));
-            addressList.add(address);
-        }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public static void marshalObject(Object obj, File file) {
 	    try {
@@ -141,7 +49,8 @@ public class FeedsUtil {
 		
 		String feedDirectory = System.getProperty("ofbiz.home") + "/runtime/tmp/download/";
 		
-		if(UtilValidate.isNotEmpty(feedType)) {
+		if(UtilValidate.isNotEmpty(feedType)) 
+		{
 			feedDirectory = feedDirectory + feedType + "/";
 		}
 		return feedDirectory;
@@ -155,7 +64,10 @@ public class FeedsUtil {
 			if(UtilValidate.isNotEmpty(partyPhoneDetails)) {
 				partyPhoneDetails = EntityUtil.filterByDate(partyPhoneDetails);
 				partyPhoneDetail = EntityUtil.getFirst(partyPhoneDetails);
-				partyPhoneNumber = OsafeAdminUtil.formatTelephone((String)partyPhoneDetail.get("areaCode"),(String)partyPhoneDetail.get("contactNumber"));
+				if(UtilValidate.isNotEmpty(partyPhoneDetail))
+				{
+					partyPhoneNumber = OsafeAdminUtil.formatTelephone((String)partyPhoneDetail.get("areaCode"),(String)partyPhoneDetail.get("contactNumber"));
+				}
     	    }
 		} catch (GenericEntityException e) {
 			// TODO Auto-generated catch block
@@ -172,7 +84,11 @@ public class FeedsUtil {
 			if(UtilValidate.isNotEmpty(partyPhoneExtDetails)) {
 				partyPhoneExtDetails = EntityUtil.filterByDate(partyPhoneExtDetails);
 				partyPhoneExtDetail = EntityUtil.getFirst(partyPhoneExtDetails);
-				partyPhoneExt = (String)partyPhoneExtDetail.get("extension");
+				if(UtilValidate.isNotEmpty(partyPhoneExtDetail))
+				{
+					partyPhoneExt = (String)partyPhoneExtDetail.get("extension");
+				}
+				
     	    }
 		} catch (GenericEntityException e) {
 			// TODO Auto-generated catch block

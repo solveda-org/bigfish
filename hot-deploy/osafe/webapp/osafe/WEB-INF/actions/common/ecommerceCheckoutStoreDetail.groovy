@@ -4,15 +4,20 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.party.contact.ContactMechWorker;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.product.store.ProductStoreWorker;
+import javolution.util.FastList;
+import org.ofbiz.base.util.Debug
 
 storeId = parameters.storeId;
+shoppingCart = session.getAttribute("shoppingCart");
 if (UtilValidate.isEmpty(storeId)) 
 {
-    shoppingCart = session.getAttribute("shoppingCart");
     if (UtilValidate.isNotEmpty(shoppingCart))
     {
         storeId = shoppingCart.getOrderAttribute("STORE_LOCATION");
         context.shoppingCart = shoppingCart;
+		context.shoppingCartStoreId = storeId;
     }
 } 
 else 
@@ -29,9 +34,39 @@ if (UtilValidate.isEmpty(storeId))
         if (UtilValidate.isNotEmpty(orderAttrPickupStore)) 
         {
             storeId = orderAttrPickupStore.attrValue;
+			context.shoppingCartStoreId = storeId;
         }
     }
 }
+
+
+//get a list of all the stores
+productStore = ProductStoreWorker.getProductStore(request);
+productStoreId=productStore.getString("productStoreId");
+openStores = FastList.newInstance();
+allStores = delegator.findByAndCache("ProductStoreRole", UtilMisc.toMap("productStoreId", productStoreId,"roleTypeId", "STORE_LOCATION"));
+if (UtilValidate.isNotEmpty(allStores))
+{
+	for(GenericValue store : allStores)
+	{
+		storeParty = store.getRelatedOneCache("Party");
+		if(UtilValidate.isNotEmpty(storeParty.statusId) && "PARTY_ENABLED".equals(storeParty.statusId))
+		{
+			openStores.add(storeParty);
+		}
+	}
+}
+if (UtilValidate.isNotEmpty(openStores))
+{
+	if(openStores.size() == 1)
+	{
+		oneStoreOpen = openStores.getAt(0);
+		storeId = oneStoreOpen.partyId;
+		context.oneStoreOpenStoreId = storeId;
+	}
+}
+
+
 
 if (UtilValidate.isNotEmpty(storeId)) 
 {
@@ -68,3 +103,10 @@ if (UtilValidate.isNotEmpty(storeId))
         }
     }
 }
+
+
+
+
+
+
+

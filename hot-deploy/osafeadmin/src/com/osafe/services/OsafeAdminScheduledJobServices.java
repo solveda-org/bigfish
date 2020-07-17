@@ -19,6 +19,7 @@
 package com.osafe.services;
 
 import static org.ofbiz.base.util.UtilGenerics.checkCollection;
+
 import static org.ofbiz.base.util.UtilGenerics.checkMap;
 
 import java.io.File;
@@ -74,6 +75,7 @@ import java.text.ParseException;
 
 import com.ibm.icu.util.Calendar;
 import com.osafe.util.OsafeAdminUtil;
+import org.ofbiz.base.util.MessageString;
 
 /**
  * OsafeAdminScheduledJobServices - WebApp Events Related To Framework pieces
@@ -101,8 +103,8 @@ public class OsafeAdminScheduledJobServices {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
-        List<String> error_list = new ArrayList<String>();
-
+        List<MessageString> error_list = new ArrayList<MessageString>();
+        MessageString tmp = null;
         Map<String, Object> params = UtilHttp.getParameterMap(request);
         // get the schedule parameters
         String jobName = (String) params.remove("JOB_NAME");
@@ -156,7 +158,9 @@ public class OsafeAdminScheduledJobServices {
         ModelService modelService = null;
         if (serviceName.length() == 0) 
         {
-        	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingServiceNameError", locale));
+        	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingServiceNameError", locale));
+        	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingServiceNameError", locale),"SERVICE_NAME",true);
+        	error_list.add(tmp);
         }
         else
         {
@@ -171,7 +175,9 @@ public class OsafeAdminScheduledJobServices {
             }
             if (modelService == null) 
             {
-                error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidServiceNameError1", locale));
+                //error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidServiceNameError1", locale));
+                tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidServiceNameError1", locale),"SERVICE_NAME",true);
+            	error_list.add(tmp);
             }
         }
         
@@ -209,7 +215,9 @@ public class OsafeAdminScheduledJobServices {
 	            		Map<String, String> errorArgs = FastMap.newInstance();
 	            		errorArgs.put("serviceName", serviceName);
 	            		errorArgs.put("name", name);
-	            		error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingParamError", errorArgs, locale));
+	            		//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingParamError", errorArgs, locale));
+	            		tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingParamError", locale),"SERVICE_NAME",true);
+	                	error_list.add(tmp);
 	            	}
 	            }
 	
@@ -233,7 +241,9 @@ public class OsafeAdminScheduledJobServices {
         //jobName
         if (jobName.length() == 0) 
         {
-        	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingJobNameError", locale));
+        	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingJobNameError", locale));
+        	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingJobNameError", locale),"JOB_NAME",true);
+        	error_list.add(tmp);
         }
  
         
@@ -249,7 +259,9 @@ public class OsafeAdminScheduledJobServices {
         {
             if (!checkPassedJobDate(serviceDateEOD)) 
             {
-                error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
+                //error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
+            	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale),"SERVICE_HOUR",true);
+            	error_list.add(tmp);
             }
             else
             {
@@ -261,7 +273,9 @@ public class OsafeAdminScheduledJobServices {
                     {
                         if (!checkPassedJobDate(serviceDateTime)) 
                         {
-                            error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
+                            //error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
+                            tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale),"SERVICE_HOUR",true);
+                        	error_list.add(tmp);
                         }
                     }
             	}
@@ -270,22 +284,30 @@ public class OsafeAdminScheduledJobServices {
         }
         else
         {
-        	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "BlankStartDateError", locale));
+        	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "BlankStartDateError", locale));
+        	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "BlankStartDateError", locale),"SERVICE_DATE",true);
+        	error_list.add(tmp);
         }
 
         if(!OsafeAdminUtil.isNumber(serviceHour))
         {
-        	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "HHNotSelectedError", locale));
+        	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "HHNotSelectedError", locale));
+        	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "HHNotSelectedError", locale),"SERVICE_HOUR",true);
+        	error_list.add(tmp);
         }
         
         if(!OsafeAdminUtil.isNumber(serviceMinute))
         {
-        	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MMNotSelectedError", locale));
+        	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MMNotSelectedError", locale));
+        	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MMNotSelectedError", locale),"SERVICE_MINUTE",true);
+        	error_list.add(tmp);
         }
         
         if(!OsafeAdminUtil.isNumber(serviceAMPMString))
         {
-        	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "AMPMNotSelectedError", locale));
+        	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "AMPMNotSelectedError", locale));
+        	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "AMPMNotSelectedError", locale),"SERVICE_AMPM",true);
+        	error_list.add(tmp);
         }
         
         //check interval
@@ -298,7 +320,9 @@ public class OsafeAdminScheduledJobServices {
                 intervals = Integer.parseInt(serviceIntr);
             } catch (NumberFormatException nfe) 
             {
-            	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidIntervalError", locale));
+            	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidIntervalError", locale));
+            	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidIntervalError", locale),"SERVICE_INTERVAL",true);
+            	error_list.add(tmp);
             	validNumInt = false;
             }
             //check if it is between 1 and 999
@@ -306,7 +330,9 @@ public class OsafeAdminScheduledJobServices {
             {
             	if(intervals < 1 || intervals > 999)
             	{
-            		error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "OutRangeIntervalError", locale));
+            		//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "OutRangeIntervalError", locale));
+            		tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "OutRangeIntervalError", locale),"SERVICE_INTERVAL",true);
+                	error_list.add(tmp);
             	}
             }
         }
@@ -319,7 +345,9 @@ public class OsafeAdminScheduledJobServices {
             {
                 counter = Integer.parseInt(serviceCnt);
             } catch (NumberFormatException nfe) {
-            	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidFrequencyCountError", locale));
+            	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidFrequencyCountError", locale));
+            	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidFrequencyCountError", locale),"SERVICE_FREQUENCY",true);
+            	error_list.add(tmp);
             	validNumFreq = false;
             }
           //check if it is between 1 and 999
@@ -331,7 +359,9 @@ public class OsafeAdminScheduledJobServices {
             	}
             	else
             	{
-            		error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "OutRangeFreqError", locale));
+            		//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "OutRangeFreqError", locale));
+            		tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "OutRangeFreqError", locale),"SERVICE_FREQUENCY",true);
+                	error_list.add(tmp);
             	}
             }
         }

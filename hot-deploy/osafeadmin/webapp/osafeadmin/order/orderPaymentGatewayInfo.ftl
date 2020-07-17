@@ -1,4 +1,15 @@
+<#assign gatewayResponseInfo = request.getAttribute("gatewayResponseInfo")!/>
 <#if gatewayResponseInfo?has_content>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.AmountCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${gatewayResponseInfo.amount!""}</p>
+      </div>
+    </div>
+  </div>
   <div class="infoRow">
     <div class="infoEntry">
       <div class="infoCaption">
@@ -9,33 +20,29 @@
       </div>
     </div>
   </div>
+  <#if gatewayResponseInfo.paymentServiceTypeEnumId?exists>
+     <#assign serviceTypeEnumeration = delegator.findOne("Enumeration", {"enumId" : gatewayResponseInfo.paymentServiceTypeEnumId}, false)>
+  </#if>
   <div class="infoRow">
     <div class="infoEntry">
       <div class="infoCaption">
         <label>${uiLabelMap.PaymentServiceTypeEnumIdCaption}</label>
       </div>
       <div class="infoValue">
-          <p>${gatewayResponseInfo.paymentServiceTypeEnumId!""}</p>
+          <p>${gatewayResponseInfo.paymentServiceTypeEnumId!""}<#if serviceTypeEnumeration?exists>(${serviceTypeEnumeration.description})</#if></p>
       </div>
     </div>
   </div>
+  <#if gatewayResponseInfo.transCodeEnumId?exists>
+     <#assign transCodeEnumeration = delegator.findOne("Enumeration", {"enumId" : gatewayResponseInfo.transCodeEnumId}, false)>
+  </#if>
   <div class="infoRow">
     <div class="infoEntry">
       <div class="infoCaption">
         <label>${uiLabelMap.TransCodeEnumIdCaption}</label>
       </div>
       <div class="infoValue">
-          <p>${gatewayResponseInfo.transCodeEnumId!""}</p>
-      </div>
-    </div>
-  </div>
-  <div class="infoRow">
-    <div class="infoEntry">
-      <div class="infoCaption">
-        <label>${uiLabelMap.AmountCaption}</label>
-      </div>
-      <div class="infoValue">
-          <p>${gatewayResponseInfo.amount!""}</p>
+          <p>${gatewayResponseInfo.transCodeEnumId!""}<#if transCodeEnumeration?exists>(${transCodeEnumeration.description})</#if></p>
       </div>
     </div>
   </div>
@@ -190,9 +197,5 @@
     </div>
   </div>
   <#else>
-    <div class="infoRow">
-       <div class="infoEntry">
-         <div class="infoValue">${uiLabelMap.NoDataAvailableInfo}</div>
-       </div>
-    </div>
+    ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

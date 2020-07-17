@@ -21,6 +21,8 @@ import java.util.HashMap;
 import org.ofbiz.party.contact.ContactMechWorker;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.*;
+
 
 /* puts the following in the context: "contactMech", "contactMechId",
         "partyContactMech", "partyContactMechPurposes", "contactMechTypeId",
@@ -28,76 +30,147 @@ import org.ofbiz.base.util.UtilMisc;
         "requestName", "donePage", "tryEntity", "contactMechTypes"
  */
 target = [:];
-ContactMechWorker.getContactMechAndRelated(request, userLogin.partyId, target);
+
+userLogin = session.getAttribute("userLogin");
+partyId="";
+if (UtilValidate.isEmpty(userLogin)) 
+{
+    partyId = cart.getPartyId();
+}
+else
+{
+	partyId=userLogin.partyId;
+}
+
+ContactMechWorker.getContactMechAndRelated(request, partyId, target);
 context.putAll(target);
 
 
-if (!security.hasEntityPermission("PARTYMGR", "_VIEW", session) && !context.partyContactMech && context.contactMech) {
+if (!security.hasEntityPermission("PARTYMGR", "_VIEW", session) && !context.partyContactMech && context.contactMech) 
+{
     context.canNotView = true;
-} else {
+} 
+else 
+{
     context.canNotView = false;
 }
 
 preContactMechTypeId = parameters.preContactMechTypeId;
-if (preContactMechTypeId) context.preContactMechTypeId = preContactMechTypeId;
+if (UtilValidate.isNotEmpty(preContactMechTypeId)) 
+ {
+	context.preContactMechTypeId = preContactMechTypeId;
+ }
 
 paymentMethodId = parameters.paymentMethodId;
-if (paymentMethodId) context.paymentMethodId = paymentMethodId;
+if (UtilValidate.isNotEmpty(paymentMethodId))
+ {
+	context.paymentMethodId = paymentMethodId;
+ }
 
 cmNewPurposeTypeId = parameters.contactMechPurposeTypeId;
-if (cmNewPurposeTypeId) {
+if (UtilValidate.isNotEmpty(cmNewPurposeTypeId))
+{
     contactMechPurposeType = delegator.findByPrimaryKey("ContactMechPurposeType", [contactMechPurposeTypeId : cmNewPurposeTypeId]);
-    if (contactMechPurposeType) {
+    if (UtilValidate.isNotEmpty(contactMechPurposeType))
+    {
         context.contactMechPurposeType = contactMechPurposeType;
-    } else {
+    } 
+    else 
+    {
         cmNewPurposeTypeId = null;
     }
     context.cmNewPurposeTypeId = cmNewPurposeTypeId;
 }
 
 tryEntity = context.tryEntity;
-
 contactMechData = context.contactMech;
-if (!tryEntity) contactMechData = parameters;
-if (!contactMechData) contactMechData = [:];
-if (contactMechData) context.contactMechData = contactMechData;
+
+if (UtilValidate.isEmpty(tryEntity))
+ {
+	contactMechData = parameters;
+ }
+if (UtilValidate.isEmpty(contactMechData))
+ {
+	contactMechData = [:];
+ }
+if (UtilValidate.isNotEmpty(contactMechData))
+ {
+	context.contactMechData = contactMechData;
+ }
 
 partyContactMechData = context.partyContactMech;
-if (!tryEntity) partyContactMechData = parameters;
-if (!partyContactMechData) partyContactMechData = [:];
-if (partyContactMechData) context.partyContactMechData = partyContactMechData;
+if (UtilValidate.isEmpty(tryEntity))
+ {
+	partyContactMechData = parameters;
+ }
+if (UtilValidate.isEmpty(partyContactMechData))
+ {
+	partyContactMechData = [:];
+ }
+if (UtilValidate.isNotEmpty(partyContactMechData))
+ {
+	context.partyContactMechData = partyContactMechData;
+ }
 
 postalAddressData = context.postalAddress;
-if (!tryEntity) postalAddressData = parameters;
-if (!postalAddressData) postalAddressData = [:];
-if (postalAddressData) context.postalAddressData = postalAddressData;
+if (UtilValidate.isEmpty(tryEntity))
+ {
+	postalAddressData = parameters;
+ }
+if (UtilValidate.isEmpty(postalAddressData))
+ {
+	postalAddressData = [:];
+ }
+if (UtilValidate.isNotEmpty(postalAddressData))
+ {
+	context.postalAddressData = postalAddressData;
+ }
 
 telecomNumberData = context.telecomNumber;
-if (!tryEntity) telecomNumberData = parameters;
-if (!telecomNumberData) telecomNumberData = [:];
-if (telecomNumberData) context.telecomNumberData = telecomNumberData;
+if (UtilValidate.isEmpty(tryEntity))
+ {
+	telecomNumberData = parameters;
+ }
+if (UtilValidate.isEmpty(telecomNumberData))
+ {
+	telecomNumberData = [:];
+ }
+if (UtilValidate.isNotEmpty(telecomNumberData))
+ {
+	context.telecomNumberData = telecomNumberData;
+ }
 
 // load the geo names for selected countries and states/regions
-if (parameters.countryGeoId) {
+if (parameters.countryGeoId) 
+{
     geoValue = delegator.findByPrimaryKeyCache("Geo", [geoId : parameters.countryGeoId]);
-    if (geoValue) {
+    if (UtilValidate.isNotEmpty(geoValue)) 
+    {
         context.selectedCountryName = geoValue.geoName;
     }
-} else if (postalAddressData?.countryGeoId) {
+} 
+else if (postalAddressData?.countryGeoId) 
+{
     geoValue = delegator.findByPrimaryKeyCache("Geo", [geoId : postalAddressData.countryGeoId]);
-    if (geoValue) {
+    if (UtilValidate.isNotEmpty(geoValue))
+    {
         context.selectedCountryName = geoValue.geoName;
     }
 }
 
-if (parameters.stateProvinceGeoId) {
+if (parameters.stateProvinceGeoId) 
+{
     geoValue = delegator.findByPrimaryKeyCache("Geo", [geoId : parameters.stateProvinceGeoId]);
-    if (geoValue) {
+    if (UtilValidate.isNotEmpty(geoValue))
+    {
         context.selectedStateName = geoValue.geoName;
     }
-} else if (postalAddressData?.stateProvinceGeoId) {
+} 
+else if (postalAddressData?.stateProvinceGeoId) 
+{
     geoValue = delegator.findByPrimaryKeyCache("Geo", [geoId : postalAddressData.stateProvinceGeoId]);
-    if (geoValue) {
+    if (UtilValidate.isNotEmpty(geoValue))
+    {
         context.selectedStateName = geoValue.geoName;
     }
 }

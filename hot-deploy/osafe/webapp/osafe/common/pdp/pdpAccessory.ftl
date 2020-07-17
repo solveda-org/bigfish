@@ -1,6 +1,7 @@
-<#-- variable setup and worker calls -->
-<#if accessoryProducts?has_content>
-  <div class="pdpAccessory">
+<li class="${request.getAttribute("attributeClass")!}">
+  <#-- variable setup and worker calls -->
+  <#if accessoryProducts?has_content>
+    <div class="js_pdpAccessory">
        <#assign plpFacetGroupVariantSwatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_SWATCH_IMG")!""/>
        <#assign plpFacetGroupVariantSticky =  Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_PDP_MATCH")!""/>
        <#assign facetGroupMatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_GROUP_VARIANT_MATCH")!""/>
@@ -45,14 +46,15 @@
        </#if>
        
        <h2>${uiLabelMap.AccessoryProductHeading}</h2>
-            <#list accessoryProducts as accessoryProduct>
-             ${setRequestAttribute("plpItemId",accessoryProduct.productIdTo)}
-                 <!-- DIV for Displaying Accessory products STARTS here -->
-                      <div class="eCommerceListItem eCommerceAccessoryProduct">
-                        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPAccessoryDivSequence")}
-                      </div>
-                 <!-- DIV for Displaying Accessory products ENDS here -->     
-            </#list>
-  </div>
-</#if>
+       <div class="boxList productList">
+        <#list accessoryProducts as accessoryProduct>
+            ${setRequestAttribute("plpItemId",accessoryProduct.productIdTo)}
+            <!-- DIV for Displaying Accessory products STARTS here -->
+            ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPAccessoryDivSequence")}
+            <!-- DIV for Displaying Accessory products ENDS here -->     
+        </#list>
+      </div>
+    </div>
+  </#if>
+</li>
 

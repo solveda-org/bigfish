@@ -5,9 +5,9 @@
     <th class="descCol">${uiLabelMap.DescriptionLabel}</th>
     <th class="actionCol"></th>
   </tr>
-  <#if customerActivityList?exists && customerActivityList?has_content>
+  <#if resultList?exists && resultList?has_content>
     <#assign rowClass = "1"/>
-    <#list customerActivityList as customerActivity>
+    <#list resultList as customerActivity>
       <#assign hasNext = customerActivity_has_next>
       <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
         <td class="idCol <#if !customerActivity_has_next?if_exists>lastRow</#if> firstCol">${(Static["com.osafe.util.OsafeAdminUtil"].convertDateTimeFormat(customerActivity.activityDate, preferredDateFormat).toLowerCase())!"N/A"}</td>
@@ -33,5 +33,5 @@
       </#if>
     </#list>
   <#else>
-    <tr><td class="boxNumber" colspan="5">${uiLabelMap.NoDataAvailableInfo}</td></tr>
+        ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
   </#if>

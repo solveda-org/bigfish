@@ -48,7 +48,6 @@
                             <!-- header -->
                             <include-screen name="searchDialog" location="component://osafe/widget/DialogScreens.xml"/>
                             <include-screen name="pincodeCheckDialog" location="component://osafe/widget/DialogScreens.xml"/>
-                            <include-screen name="eCommerceHeaderLinks" location="${parameters.eCommerceScreensLocation}"/>
                             <include-screen name="eCommerceHeader" location="${parameters.eCommerceScreensLocation}"/>
 
                             <include-screen name="eCommerceNavBar" location="${parameters.eCommerceScreensLocation}"/>
@@ -156,9 +155,7 @@
                 <container id="scrollerPageTop"></container>
                 <container id="eCommerceOuterBasicBevelWrap">
                     <include-screen name="searchDialog" location="component://osafe/widget/DialogScreens.xml"/>
-                    <container id="eCommerceHeaderLinksBevelWrapper">
-                        <include-screen name="eCommerceHeaderLinks" location="${parameters.eCommerceScreensLocation}"/>
-                    </container>
+                    <include-screen name="pincodeCheckDialog" location="component://osafe/widget/DialogScreens.xml"/>
                     <container id="eCommerceInnerBasicBevelWrapper">
                         <container id="eCommerceContent" style="${contentPanelStyle}">
                             <!-- header -->
@@ -218,7 +215,6 @@
                     </container>
                 </container>
                 <include-screen name="googleAnalytics"/>
-                <include-screen name="pixelTracking"/>
                 <!-- closing tags for body and html -->
                 <platform-specific>
                     <html>
@@ -446,6 +442,27 @@
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/reviewAge.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="giftMessageTypes">
+        <section>
+            <actions>
+                <set field="enumTypeId" value="GIFT_MESSAGE"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/giftMessageTypes.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="displayPostalAddress">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/displayPostalAddress.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/displayPostalAddress.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>

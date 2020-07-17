@@ -7,9 +7,9 @@
   <#if errorMessageList?has_content>
     <#assign fieldMessages = Static["org.ofbiz.base.util.MessageString"].getMessagesForField(fieldName, true, errorMessageList)>
     <#if fieldMessages?has_content>
-	    <ul>
+	    <ul class="fieldErrorMessage">
 	      <#list fieldMessages as errorMsg>
-	        <li class="fieldErrorMessage">${errorMsg}</li>
+	        <li>${errorMsg}</li>
 	      </#list>
 	    </ul>
     </#if>

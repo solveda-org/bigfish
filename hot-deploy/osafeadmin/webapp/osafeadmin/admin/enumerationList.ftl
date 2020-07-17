@@ -37,8 +37,6 @@
         </#if>
     </#list>
 <#else>
-   <tr>
-       <td colspan="4" class="boxNumber">${uiLabelMap.NoDataAvailableInfo}</td>
-    </tr>
+    ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>
 <!-- end creditCardTypeList.ftl -->

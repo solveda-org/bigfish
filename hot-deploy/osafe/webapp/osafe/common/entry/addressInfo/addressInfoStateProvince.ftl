@@ -13,17 +13,19 @@
         <#assign selectedCountry = defaultCountryGeoMap.geoId/>
     </#if>
 </#if>
+<#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI!"")>
+	<#assign selectedCountry = defaultCountryGeoMap.geoId/>
+</#if>
 <#assign  selectedState = parameters.get(fieldPurpose+"_STATE")!stateProvinceGeoId?if_exists/>
 
-<div class="addressInfoStateProvince">
-    <div id="${fieldPurpose?if_exists}_STATES" class="entry">
-        <label for="${fieldPurpose?if_exists}_STATE">
-            <span class="${fieldPurpose?if_exists}_USA"><@required/>${uiLabelMap.StateCaption}</span>
-            <span class="${fieldPurpose?if_exists}_CAN"><@required/>${uiLabelMap.ProvinceCaption}</span>
-            <span class="${fieldPurpose?if_exists}_OTHER"><@required/>${uiLabelMap.StateOrProvinceCaption}</span>
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
+    <div id="${fieldPurpose?if_exists}_STATES" class="state">
+        <label for="${fieldPurpose?if_exists}_STATE"><#if mandatory == "Y"><@required/></#if>${uiLabelMap.StateOrProvinceCaption}
             <span id="advice-required-${fieldPurpose?if_exists}_STATE" style="display:none" class="errorMessage">(${uiLabelMap.CommonRequired})</span>
         </label>
-        <select id="${fieldPurpose?if_exists}_STATE" name="${fieldPurpose?if_exists}_STATE" class="select ${fieldPurpose?if_exists}_COUNTRY">
+       <div class="entryField">
+        <select id="js_${fieldPurpose?if_exists}_STATE" name="${fieldPurpose?if_exists}_STATE" class="select ${fieldPurpose?if_exists}_COUNTRY">
             <#list countryList as country>
                 <#if country.geoId == selectedCountry>
                   <#assign stateMap = dispatcher.runSync("getAssociatedStateList", Static["org.ofbiz.base.util.UtilMisc"].toMap("countryGeoId", country.geoId, "userLogin", userLogin, "listOrderBy", "geoCode"))/>
@@ -37,9 +39,12 @@
                 </#if>
             </#list>
         </select>
-        <@fieldErrors fieldName="${fieldPurpose?if_exists}_STATE"/>
+        <input type="hidden" id="${fieldPurpose?if_exists}_STATE_MANDATORY" name="${fieldPurpose?if_exists}_STATE_MANDATORY" value="${mandatory}"/>
         <#if stateList?has_content>
-            <input type="hidden" name="${fieldPurpose?if_exists}_STATE_LIST_FIELD" value="" id="${fieldPurpose?if_exists}_STATE_LIST_FIELD"/>
+            <input type="hidden" id="${fieldPurpose?if_exists}_STATE_LIST_FIELD_MANDATORY" name="${fieldPurpose?if_exists}_STATE_LIST_FIELD_MANDATORY" value="${mandatory}"/>
+            <input type="hidden" id="${fieldPurpose?if_exists}_STATE_LIST_FIELD" name="${fieldPurpose?if_exists}_STATE_LIST_FIELD" value=""/>
         </#if>
+        <@fieldErrors fieldName="${fieldPurpose?if_exists}_STATE"/>
+       </div>
     </div>
 </div>

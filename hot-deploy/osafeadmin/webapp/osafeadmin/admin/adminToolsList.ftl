@@ -11,7 +11,7 @@
     <#list adminToolsList as adminTool>
       <#assign hasNext = adminTool_has_next>
         <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
-          <td class="nameCol <#if !hasNext?if_exists>lastRow</#if> firstCol" ><a href="<@ofbizUrl>adminToolDetail?detailScreen=${adminTool.toolDetail!""}</@ofbizUrl>">${adminTool.toolType!""}</a></td>
+          <td class="nameCol <#if !hasNext?if_exists>lastRow</#if> firstCol" ><a href="<@ofbizUrl>${detailAction!}?detailScreen=${adminTool.toolDetail!""}</@ofbizUrl>">${adminTool.toolType!""}</a></td>
           <td class="descCol <#if !hasNext?if_exists>lastRow</#if>">${adminTool.toolDesc!""}</td>
         </tr>
         <#if rowClass == "2">

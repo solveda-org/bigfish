@@ -43,6 +43,7 @@ import org.ofbiz.service.ServiceUtil;
 
 import com.osafe.constants.Constants;
 import com.osafe.util.OsafeAdminUtil;
+import org.ofbiz.base.util.MessageString;
 
 public class OsafeAdminServices {
     public static final String module = OsafeAdminServices.class.getName();
@@ -56,21 +57,23 @@ public class OsafeAdminServices {
         String productLoadImagesDir = (String) context.get("productLoadImagesDir");
         String imageUrl = (String) context.get("imageUrl");
         String xlsFileName = (String)context.get("xlsFileName");
-        String processingOpt = (String)context.get("processingOpt");
         String errorExists = (String)context.get("errorExists");
         String productStoreId = (String)context.get("productStoreId");
         
-        List<String> error_list = new ArrayList<String>();
-        if (UtilValidate.isEmpty(processingOpt)) {
-            error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankProcessingOptionError", locale));
+        List<MessageString> error_list = new ArrayList<MessageString>();
+		MessageString tmp = null;
+        if(errorExists.equals("yes")) 
+        {
+			tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "ProductLoaderError", locale),productStoreId,true);
+            error_list.add(tmp);
         }
-        if(errorExists.equals("yes")) {
-            error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ProductLoaderError", locale));
-        }
-        if(error_list.size() > 0) {
+        if(error_list.size() > 0) 
+        {
             return ServiceUtil.returnError(error_list);
         }
-        if (UtilValidate.isNotEmpty(xlsFileName)) {
+        
+        if (UtilValidate.isNotEmpty(xlsFileName)) 
+        {
         
             String tempDir = (String)context.get("xlsFilePath");
             String filenameToUse = xlsFileName;
@@ -78,34 +81,42 @@ public class OsafeAdminServices {
             String xlsDataFile = tempDir + filenameToUse;
             String xmlDataDir = tempDir;
             Boolean removeAll = false;
-            if(processingOpt.equals("reload")){
-                removeAll = true;
-            }
-            if(processingOpt.equals("update")){
-                removeAll = false;
-            }
             Boolean autoLoad = true;
             Map<String, Object> importClientProductTemplateCtx = null;
             
-            try {
+            try 
+            {
                 Map result  = FastMap.newInstance();
-                if(xlsDataFile.endsWith(".xls")) {
+                if(xlsDataFile.endsWith(".xls")) 
+                {
                     importClientProductTemplateCtx = UtilMisc.toMap("xlsDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin, "productStoreId", productStoreId);
                     result = dispatcher.runSync("importClientProductTemplate", importClientProductTemplateCtx);
                 }
-                if(xlsDataFile.endsWith(".xml")) {
-                    importClientProductTemplateCtx = UtilMisc.toMap("xmlDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin);
+                if(xlsDataFile.endsWith(".xml")) 
+                {
+                    importClientProductTemplateCtx = UtilMisc.toMap("xmlDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin, "productStoreId", productStoreId);
                     result = dispatcher.runSync("importClientProductXMLTemplate", importClientProductTemplateCtx);
                 }
+                if(UtilValidate.isNotEmpty(result.get("responseMessage")) && result.get("responseMessage").equals("error"))
+                {
+                	error_list.add(new MessageString(result.get("errorMessage").toString(), productStoreId ,true));
+                	return ServiceUtil.returnError(error_list);
+                }
                 List<String> serviceMsg = (List)result.get("messages");
-                if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) {
-                    try {
+                if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) 
+                {
+                    try 
+                    {
                         FileUtils.deleteDirectory(new File(tempDir));
-                    } catch (IOException e) {
+                    } 
+                    catch (IOException e) 
+                    {
                         Debug.logWarning(e, module);
                     }
                 }
-            } catch (GenericServiceException e) {
+            } 
+            catch (GenericServiceException e) 
+            {
                 Debug.logWarning(e, module);
             }
         }
@@ -118,7 +129,8 @@ public class OsafeAdminServices {
         Locale locale = (Locale) context.get("locale");
         ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
         String xlsFileName = (String)context.get("_uploadedFile_fileName");
-        List<String> error_list = new ArrayList<String>();
+        List<MessageString> error_list = new ArrayList<MessageString>();
+		MessageString tmp = null;
         Map result = ServiceUtil.returnSuccess();
         if (UtilValidate.isNotEmpty(xlsFileName))
         {
@@ -133,17 +145,21 @@ public class OsafeAdminServices {
                 
                 File file = new File(uploadTempDir + filenameToUse);
                 
-                if(file.exists()) {
+                if(file.exists()) 
+                {
                     file.delete();
                 }
                 
-                try {
+                try 
+                {
                     RandomAccessFile out = new RandomAccessFile(file, "rw");
                     out.write(uploadBytes.array());
                     out.close();
                     result.put("uploadFileName",xlsFileName);
                     result.put("uploadFilePath",uploadTempDir);
-                } catch (FileNotFoundException e) {
+                } 
+                catch (FileNotFoundException e) 
+                {
                     Debug.logError(e, module);
                     return ServiceUtil.returnError("Unable to open file for writing: " + file.getAbsolutePath());
                 } catch (IOException e) {
@@ -153,7 +169,9 @@ public class OsafeAdminServices {
         } 
         else 
         {
-            error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankUploadFileError", locale));
+            //error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankUploadFileError", locale));
+			tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankUploadFileError", locale),"_uploadedFile_fileName",true);
+            error_list.add(tmp);
             return ServiceUtil.returnError(error_list);
         }
         
@@ -166,7 +184,8 @@ public class OsafeAdminServices {
         String dayBackDateTime = (UtilDateTime.addDaysToTimestamp(UtilDateTime.nowTimestamp(), -1)).toString();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
-        List<String> error_list = new ArrayList<String>();
+        List<MessageString> error_list = new ArrayList<MessageString>();
+		MessageString tmp = null;
         Delegator delegator = dctx.getDelegator();
         String entityName = (String)context.get("entityDBName");
         SQLProcessor sqlP = null;
@@ -219,24 +238,33 @@ public class OsafeAdminServices {
                     }
                 } catch (Exception e) {
                     Debug.logInfo("An error occurred executing query"+e, module);
-                    error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
+                    //error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
+                    tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale),"",true);
+                    error_list.add(tmp);
+					
                     return ServiceUtil.returnError(error_list);
                 } finally {
                     try {
                         sqlP.close();
                     } catch (GenericDataSourceException e) {
                         Debug.logInfo("An error occurred in closing SQLProcessor"+e, module);
-                        error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
+                        //error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
+                        tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale),"",true);
+                        error_list.add(tmp);
                         return ServiceUtil.returnError(error_list);
                     } catch (Exception e) {
                         Debug.logInfo("An error occurred in closing SQLProcessor"+e, module);
-                        error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
+                        tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale),"",true);
+                        error_list.add(tmp);
+                        //error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
                         return ServiceUtil.returnError(error_list);
                     } 
                 }
         }
         else {
-            error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankEntityName", locale));
+            //error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankEntityName", locale));
+			tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankEntityName", locale),"entityDBName",true);
+            error_list.add(tmp);
             return ServiceUtil.returnError(error_list);
         }
         // send the notification

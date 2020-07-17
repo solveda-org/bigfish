@@ -3,14 +3,20 @@
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
 
-    <simple-method method-name="submitRequestCatalog" short-description="submit request catalog" login-required="false">
+    <simple-method method-name="submitRequestCatalog" short-description="submit request catalog" login-required="false" use-transaction="false">
         <call-simple-method method-name="validateRequestCatalog" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <check-errors/>
+        
         <call-simple-method method-name="submitCustRequest"/>
+        <call-simple-method method-name="sendCustRequestEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
     </simple-method>
 
-    <simple-method method-name="submitContactUs" short-description="submit Contact Us" login-required="false">
+    <simple-method method-name="submitContactUs" short-description="submit Contact Us" login-required="false" use-transaction="false">
         <call-simple-method method-name="validateContactUs" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <check-errors/>
+        
         <call-simple-method method-name="submitCustRequest"/>
+        <call-simple-method method-name="sendCustRequestEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
     </simple-method>
 
     <simple-method method-name="submitCustRequest" short-description="create Customer Request Attribute and send mail" login-required="false">
@@ -26,8 +32,7 @@
             <result-to-field result-name="emailAddress" field="emailAddressCompany"/>
         </call-service>
         <set field="custRequestContext.emailAddressCompany" from-field="emailAddressCompany"/>
-
-
+        
         <!-- Create Customer Request -->
         <if-not-empty field="parameters.custRequestTypeId">
             <set field="custRequest.userLogin" from-field="systemUserLogin"/>
@@ -80,6 +85,11 @@
            <if-not-empty field="custRequestContext.lastName">
                 <set field="custRequestAttr.attrName" value="LAST_NAME"/>
                 <set field="custRequestAttr.attrValue" from-field="custRequestContext.lastName"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+            <if-not-empty field="custRequestContext.fullName">
+                <set field="custRequestAttr.attrName" value="FULL_NAME"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.fullName"/>
                 <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
             </if-not-empty>
            <if-not-empty field="custRequestContext.address1">
@@ -177,12 +187,10 @@
          <if-not-empty field="custRequestId">
         <set field="createComEventMap.custRequestId" from-field="custRequestId"/>
         </if-not-empty>
-        <if-not-empty field="emailAddressCompany">
-           <set field="createComEventMap.toString" from-field="emailAddressCompany"/>
+        <if-not-empty field="custRequestContext.emailAddress">
+           <set field="createComEventMap.toString" from-field="custRequestContext.emailAddress"/>
         </if-not-empty>
         <call-service service-name="createCommunicationEventWithoutPermission" in-map-name="createComEventMap"/>
-
-        <call-simple-method method-name="sendCustRequestEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
     </simple-method>
     
 </simple-methods>

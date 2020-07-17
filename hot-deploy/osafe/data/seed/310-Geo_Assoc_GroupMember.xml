@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
     <GeoAssoc geoId="AA" geoIdTo="USAF" geoAssocTypeId="GROUP_MEMBER" lastUpdatedStamp="2011-07-20 13:14:19.127" lastUpdatedTxStamp="2011-07-20 13:14:19.05" createdStamp="2008-05-07 11:45:36.84" createdTxStamp="2008-05-07 11:45:36.677"/>
     <GeoAssoc geoId="AE" geoIdTo="USAF" geoAssocTypeId="GROUP_MEMBER" lastUpdatedStamp="2011-07-20 13:14:19.143" lastUpdatedTxStamp="2011-07-20 13:14:19.05" createdStamp="2008-05-07 11:45:36.84" createdTxStamp="2008-05-07 11:45:36.677"/>
     <GeoAssoc geoId="AHUST" geoIdTo="US50" geoAssocTypeId="GROUP_MEMBER" lastUpdatedStamp="2011-07-20 13:14:19.173" lastUpdatedTxStamp="2011-07-20 13:14:19.05" createdStamp="2008-05-07 11:45:36.917" createdTxStamp="2008-05-07 11:45:36.677"/>
@@ -104,3 +106,4 @@
     <GeoAssoc geoId="VI" geoIdTo="USTR" geoAssocTypeId="GROUP_MEMBER" lastUpdatedStamp="2011-07-20 13:34:29.12" lastUpdatedTxStamp="2011-07-20 13:14:19.05" createdStamp="2008-05-07 11:45:36.857" createdTxStamp="2008-05-07 11:45:36.677"/>
     <GeoAssoc geoId="VT" geoIdTo="USCN" geoAssocTypeId="GROUP_MEMBER" lastUpdatedStamp="2011-07-20 13:34:29.137" lastUpdatedTxStamp="2011-07-20 13:14:19.05" createdStamp="2008-05-07 11:45:36.903" createdTxStamp="2008-05-07 11:45:36.677"/>
     <GeoAssoc geoId="WA" geoIdTo="USCN" geoAssocTypeId="GROUP_MEMBER" lastUpdatedStamp="2011-07-20 13:34:29.15" lastUpdatedTxStamp="2011-07-20 13:14:19.05" createdStamp="2008-05-07 11:45:36.907" createdTxStamp="2008-05-07 11:45:36.677"/>
+</entity-engine-xml>

@@ -4,10 +4,12 @@
 <#assign showSavingMoneyAbove = PRODUCT_MONEY_THRESHOLD!"0"/>
 <#if plpListPrice?has_content && plpPrice?has_content>
   <#assign youSaveMoney = (plpListPrice - plpPrice)/>
-  <div class="plpPriceSavingMoney">
+ <li class="${request.getAttribute("attributeClass")!}">
+  <div class="js_plpPriceSavingMoney">
     <#if youSaveMoney gt showSavingMoneyAbove?number>
       <label>${uiLabelMap.YouSaveCaption}</label>
-      <span class="price"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId rounding=globalContext.currencyRounding /></span>
+      <span><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId rounding=globalContext.currencyRounding /></span>
     </#if>
   </div>
+ </li>   
 </#if>

@@ -1,8 +1,6 @@
-<div class="cartItemPrice">
-    <div class="labelText">
-      <label>${uiLabelMap.CartItemPriceCaption}</label>
-    </div>
-    <div class="labelValue">
-      <span class="price"><@ofbizCurrency amount=displayPrice isoCode=currencyUom rounding=globalContext.currencyRounding/></span>
-    </div>
-</div>
+<li class="${request.getAttribute("attributeClass")!}<#if lineIndex == 0> firstRow</#if>">
+  <div>
+    <label>${uiLabelMap.CartItemPriceCaption}</label>
+    <span><@ofbizCurrency amount=displayPrice isoCode=currencyUom rounding=globalContext.currencyRounding/></span>
+  </div>
+</li>

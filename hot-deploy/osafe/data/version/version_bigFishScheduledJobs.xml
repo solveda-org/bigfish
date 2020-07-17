@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<!-- RUNTIME DATA FOR SCHEDULE JOB -->
+<RuntimeData runtimeDataId="GEN_PRD_SOLR_INDX">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="browseRootProductCategoryId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productCategoryRootId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="GEN_PRD_SOLR_INDX" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="GEN_PRD_SOLR_INDX" recurrenceRuleId="GEN_PRD_SOLR_INDX" startDateTime="2011-02-24 00:00:00.0"/>
+<JobSandbox jobId="GEN_PRD_SOLR_INDX" jobName="genProductsIndex" serviceName="genProductsIndex" runtimeDataId="GEN_PRD_SOLR_INDX" recurrenceInfoId="GEN_PRD_SOLR_INDX" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="SHIP_REVIEW_EML">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="SHIP_REVIEW_EML" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="SHIP_REVIEW_EML" recurrenceRuleId="SHIP_REVIEW_EML" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="SHIP_REVIEW_EML" jobName="shipReviewEmail" serviceName="shipReviewEmail" runtimeDataId="SHIP_REVIEW_EML" recurrenceInfoId="SHIP_REVIEW_EML" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="GEN_STORE_GEOPT">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin currentPassword="{SHA}47ca69ebb4bdc9ae0adec130880165d2cc05db1a" enabled="Y" hasLoggedOut="N" partyId="admin" requirePasswordChange="N" successiveFailedLogins="0" userLoginId="admin"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="GEN_STORE_GEOPT" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="GEN_STORE_GEOPT" recurrenceRuleId="GEN_STORE_GEOPT" startDateTime="2011-02-24 00:00:00.0"/>
+<JobSandbox jobId="GEN_STORE_GEOPT" jobName="genStoreGeoPoint" serviceName="genStoreGeoPoint" runtimeDataId="GEN_STORE_GEOPT" recurrenceInfoId="GEN_STORE_GEOPT" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="ABANDON_CART_EML">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="ABANDON_CART_EML" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="ABANDON_CART_EML" recurrenceRuleId="ABANDON_CART_EML" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="ABANDON_CART_EML" jobName="abandonCartEmail" serviceName="abandonCartEmail" runtimeDataId="ABANDON_CART_EML" recurrenceInfoId="ABANDON_CART_EML" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="CLNT_PRD_UPDT">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="CLNT_PRD_UPDT" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="CLNT_PRD_UPDT" recurrenceRuleId="CLNT_PRD_UPDT" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="CLNT_PRD_UPDT" jobName="clientProductUpdate" serviceName="clientProductUpdate" runtimeDataId="CLNT_PRD_UPDT" recurrenceInfoId="CLNT_PRD_UPDT" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="CLNT_STORE_UPDT">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="CLNT_STORE_UPDT" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="CLNT_STORE_UPDT" recurrenceRuleId="CLNT_STORE_UPDT" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="CLNT_STORE_UPDT" jobName="clientStoreUpdate" serviceName="clientStoreUpdate" runtimeDataId="CLNT_STORE_UPDT" recurrenceInfoId="CLNT_STORE_UPDT" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="CLNT_PRD_RTNG_UPDT">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="CLNT_PRD_RTNG_UPDT" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="CLNT_PRD_RTNG_UPDT" recurrenceRuleId="CLNT_PRD_RTNG_UPDT" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="CLNT_PRD_RTNG_UPDT" jobName="clientProductRatingUpdate" serviceName="clientProductRatingUpdate" runtimeDataId="CLNT_PRD_RTNG_UPDT" recurrenceInfoId="CLNT_PRD_RTNG_UPDT" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="BF_CUSTOMER_FEED">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="BF_CUSTOMER_FEED" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="BF_CUSTOMER_FEED" recurrenceRuleId="BF_CUSTOMER_FEED" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="BF_CUSTOMER_FEED" jobName="bigFishCustomerFeed" serviceName="bigFishCustomerFeed" runtimeDataId="BF_CUSTOMER_FEED" recurrenceInfoId="BF_CUSTOMER_FEED" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="BF_ORDER_FEED">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="BF_ORDER_FEED" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="BF_ORDER_FEED" recurrenceRuleId="BF_ORDER_FEED" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="BF_ORDER_FEED" jobName="bigFishOrderFeed" serviceName="bigFishOrderFeed" runtimeDataId="BF_ORDER_FEED" recurrenceInfoId="BF_ORDER_FEED" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="BF_CNTCT_US_FEED">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="BF_CNTCT_US_FEED" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="BF_CNTCT_US_FEED" recurrenceRuleId="BF_CNTCT_US_FEED" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="BF_CNTCT_US_FEED" jobName="bigFishContactUsFeed" serviceName="bigFishContactUsFeed" runtimeDataId="BF_CNTCT_US_FEED" recurrenceInfoId="BF_CNTCT_US_FEED" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="BF_REQ_CATALOG_FEED">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="BF_REQ_CATALOG_FEED" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="BF_REQ_CATALOG_FEED" recurrenceRuleId="BF_REQ_CATALOG_FEED" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="BF_REQ_CATALOG_FEED" jobName="bigFishRequestCatalogFeed" serviceName="bigFishRequestCatalogFeed" runtimeDataId="BF_REQ_CATALOG_FEED" recurrenceInfoId="BF_REQ_CATALOG_FEED" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="REEVOO_GET_PRD_RTNG">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="REEVOO_GET_PRD_RTNG" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="REEVOO_GET_PRD_RTNG" recurrenceRuleId="REEVOO_GET_PRD_RTNG" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="REEVOO_GET_PRD_RTNG" jobName="reevooGetProductRatingScore" serviceName="reevooGetProductRatingScore" runtimeDataId="REEVOO_GET_PRD_RTNG" recurrenceInfoId="REEVOO_GET_PRD_RTNG" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="REEVOO_PRD_RTNG_UPDT">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="REEVOO_PRD_RTNG_UPDT" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="REEVOO_PRD_RTNG_UPDT" recurrenceRuleId="REEVOO_PRD_RTNG_UPDT" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="REEVOO_PRD_RTNG_UPDT" jobName="reevooProductRatingUpdate" serviceName="reevooProductRatingUpdate" runtimeDataId="REEVOO_PRD_RTNG_UPDT" recurrenceInfoId="REEVOO_PRD_RTNG_UPDT" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="CLNT_ODR_STATUS_UPDT">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="CLNT_ODR_STATUS_UPDT" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="CLNT_ODR_STATUS_UPDT" recurrenceRuleId="CLNT_ODR_STATUS_UPDT" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="CLNT_ODR_STATUS_UPDT" jobName="clientOrderStatusUpdate" serviceName="clientOrderStatusUpdate" runtimeDataId="CLNT_ODR_STATUS_UPDT" recurrenceInfoId="CLNT_ODR_STATUS_UPDT" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="GEN_SEO_FRNDLY_URL">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="browseRootProductCategoryId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productCategoryRootId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="GEN_SEO_FRNDLY_URL" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="GEN_SEO_FRNDLY_URL" recurrenceRuleId="GEN_SEO_FRNDLY_URL" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="GEN_SEO_FRNDLY_URL" jobName="genSeoFriendlyUrl" serviceName="genSeoFriendlyUrl" runtimeDataId="GEN_SEO_FRNDLY_URL" recurrenceInfoId="GEN_SEO_FRNDLY_URL" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+<RuntimeData runtimeDataId="CLNT_PRD_SLR_SEO_GEN">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="browseRootProductCategoryId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productCategoryRootId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="CLNT_PRD_SLR_SEO_GEN" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="CLNT_PRD_SLR_SEO_GEN" recurrenceRuleId="CLNT_PRD_SLR_SEO_GEN" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="CLNT_PRD_SLR_SEO_GEN" jobName="clientProductUpdateIndexSeoFriendlyUrl" serviceName="clientProductUpdateIndexSeoFriendlyUrl" runtimeDataId="CLNT_PRD_SLR_SEO_GEN" recurrenceInfoId="CLNT_PRD_SLR_SEO_GEN" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
+</entity-engine-xml>

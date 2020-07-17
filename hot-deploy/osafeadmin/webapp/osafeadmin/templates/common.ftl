@@ -38,9 +38,6 @@
                 <link rel="stylesheet" href="<@ofbizContentUrl>${StringUtil.wrapString(styleSheet)}</@ofbizContentUrl>" type="text/css"/>
               </#list>
             </#if>
-            <!--[if IE 8]>
-                <link rel="stylesheet" type="text/css" href="<@ofbizContentUrl>/html/admin/css/ie8.css</@ofbizContentUrl>" />
-            <![endif]-->
 
         <#if (layoutSettings.javaScripts)?has_content>
             <#list layoutSettings.javaScripts as javaScript>

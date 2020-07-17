@@ -1,7 +1,10 @@
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.*;
+
 import javolution.util.FastList;
+
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 
 paymentMethodTypeId = request.getParameter("paymentMethodTypeId");
 paymentServiceTypeEnumId = request.getParameter("paymentServiceTypeEnumId");
@@ -10,52 +13,128 @@ customMethodsCond = null;
 if (paymentMethodTypeId && paymentServiceTypeEnumId) 
 {
     context.productStorePaymentSetting = delegator.findOne("ProductStorePaymentSetting",UtilMisc.toMap("productStoreId", productStoreId, "paymentMethodTypeId", paymentMethodTypeId, "paymentServiceTypeEnumId", paymentServiceTypeEnumId), false);
-    if (paymentMethodTypeId == "CREDIT_CARD" && paymentServiceTypeEnumId == "PRDS_PAY_AUTH" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "CC_AUTH");
-    } else if (paymentMethodTypeId == "CREDIT_CARD" && paymentServiceTypeEnumId == "PRDS_PAY_CAPTURE" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "CC_CAPTURE");
-    } else if (paymentMethodTypeId == "CREDIT_CARD" && paymentServiceTypeEnumId == "PRDS_PAY_REAUTH" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "CC_AUTH");
-    } else if (paymentMethodTypeId == "CREDIT_CARD" && paymentServiceTypeEnumId == "PRDS_PAY_REFUND" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "CC_REFUND");
-    } else if (paymentMethodTypeId == "CREDIT_CARD" && paymentServiceTypeEnumId == "PRDS_PAY_RELEASE" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "CC_RELEASE");
-    } else if (paymentMethodTypeId == "EFT_ACCOUNT" && paymentServiceTypeEnumId == "PRDS_PAY_AUTH" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "EFT_AUTH");
-    } else if (paymentMethodTypeId == "EFT_ACCOUNT" && paymentServiceTypeEnumId == "PRDS_PAY_RELEASE" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "EFT_RELEASE");
-    } else if (paymentMethodTypeId == "FIN_ACCOUNT" && paymentServiceTypeEnumId == "PRDS_PAY_AUTH" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "FIN_AUTH");
-    } else if (paymentMethodTypeId == "FIN_ACCOUNT" && paymentServiceTypeEnumId == "PRDS_PAY_CAPTURE" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "FIN_CAPTURE");
-    } else if (paymentMethodTypeId == "FIN_ACCOUNT" && paymentServiceTypeEnumId == "PRDS_PAY_REFUND" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "FIN_REFUND");
-    } else if (paymentMethodTypeId == "FIN_ACCOUNT" && paymentServiceTypeEnumId == "PRDS_PAY_RELEASE" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "FIN_RELEASE");
-    } else if (paymentMethodTypeId == "GIFT_CARD" && paymentServiceTypeEnumId == "PRDS_PAY_AUTH" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "GIFT_AUTH");
-    } else if (paymentMethodTypeId == "GIFT_CARD" && paymentServiceTypeEnumId == "PRDS_PAY_CAPTURE" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "GIFT_CAPTURE");
-    } else if (paymentMethodTypeId == "GIFT_CARD" && paymentServiceTypeEnumId == "PRDS_PAY_REFUND" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "GIFT_REFUND");
-    } else if (paymentMethodTypeId == "GIFT_CARD" && paymentServiceTypeEnumId == "PRDS_PAY_RELEASE" ) 
-    {
-        customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, "GIFT_RELEASE");
-    }
+	customMethodTypeId = "";
+
+    if (paymentServiceTypeEnumId == "PRDS_PAY_AUTH" )
+	{
+		if (paymentMethodTypeId == "CREDIT_CARD")
+		{
+		    customMethodTypeId = "CC_AUTH";
+		}
+		else if (paymentMethodTypeId == "GIFT_CARD")
+		{
+		    customMethodTypeId = "GIFT_AUTH";
+		}
+		else if (paymentMethodTypeId == "EFT_ACCOUNT")
+		{
+		    customMethodTypeId = "EFT_AUTH";
+		}
+		else if (paymentMethodTypeId == "EXT_PAYPAL")
+		{
+		    customMethodTypeId = "PAYPAL_AUTH";
+		}
+		else if (paymentMethodTypeId == "EXT_EBS")
+		{
+		    customMethodTypeId = "EBS_AUTH";
+		}
+	} 
+	else if (paymentServiceTypeEnumId == "PRDS_PAY_CAPTURE" )
+	{
+		if (paymentMethodTypeId == "CREDIT_CARD")
+		{
+		    customMethodTypeId = "CC_CAPTURE";
+		}
+		else if (paymentMethodTypeId == "GIFT_CARD")
+		{
+		    customMethodTypeId = "GIFT_CAPTURE";
+		}
+		else if (paymentMethodTypeId == "FIN_ACCOUNT")
+		{
+		    customMethodTypeId = "FIN_CAPTURE";
+		}
+		else if (paymentMethodTypeId == "EXT_PAYPAL")
+		{
+		    customMethodTypeId = "PAYPAL_CAPTURE";
+		}
+		else if (paymentMethodTypeId == "EXT_EBS")
+		{
+		    customMethodTypeId = "EBS_CAPTURE";
+		}
+	} 
+	else if (paymentServiceTypeEnumId == "PRDS_PAY_REAUTH" )
+	{
+		if (paymentMethodTypeId == "CREDIT_CARD")
+		{
+		    customMethodTypeId = "CC_AUTH";
+		}
+		else if (paymentMethodTypeId == "GIFT_CARD")
+		{
+		    customMethodTypeId = "GIFT_AUTH";
+		}
+		else if (paymentMethodTypeId == "EXT_PAYPAL")
+		{
+		    customMethodTypeId = "PAYPAL_AUTH";
+		}
+		else if (paymentMethodTypeId == "EXT_EBS")
+		{
+		    customMethodTypeId = "EBS_AUTH";
+		}
+	} 
+	else if (paymentServiceTypeEnumId == "PRDS_PAY_REFUND" )
+	{
+		if (paymentMethodTypeId == "CREDIT_CARD")
+		{
+		    customMethodTypeId = "CC_REFUND";
+		}
+		else if (paymentMethodTypeId == "GIFT_CARD")
+		{
+		    customMethodTypeId = "GIFT_REFUND";
+		}
+		else if (paymentMethodTypeId == "FIN_ACCOUNT")
+		{
+		    customMethodTypeId = "FIN_REFUND";
+		}
+		else if (paymentMethodTypeId == "EXT_PAYPAL")
+		{
+		    customMethodTypeId = "PAYPAL_REFUND";
+		}
+		else if (paymentMethodTypeId == "EXT_EBS")
+		{
+		    customMethodTypeId = "EBS_REFUND";
+		}
+	}
+	else if (paymentServiceTypeEnumId == "PRDS_PAY_RELEASE" )
+	{
+		if (paymentMethodTypeId == "CREDIT_CARD")
+		{
+		    customMethodTypeId = "CC_RELEASE";
+		}
+		else if (paymentMethodTypeId == "GIFT_CARD")
+		{
+		    customMethodTypeId = "GIFT_RELEASE";
+		}
+		else if (paymentMethodTypeId == "EFT_ACCOUNT")
+		{
+		    customMethodTypeId = "EFT_RELEASE";
+		}
+		else if (paymentMethodTypeId == "FIN_ACCOUNT")
+		{
+		    customMethodTypeId = "FIN_RELEASE";
+		}
+		else if (paymentMethodTypeId == "EXT_PAYPAL")
+		{
+		    customMethodTypeId = "PAYPAL_RELEASE";
+		}
+		else if (paymentMethodTypeId == "EXT_EBS")
+		{
+		    customMethodTypeId = "EBS_RELEASE";
+		}
+	}
+
+	if (UtilValidate.isNotEmpty(customMethodTypeId))
+	{
+	    customMethodsCond = EntityCondition.makeCondition("customMethodTypeId", EntityOperator.EQUALS, customMethodTypeId);
+	}
 } 
 
 if (!paymentMethodTypeId || !paymentServiceTypeEnumId) 

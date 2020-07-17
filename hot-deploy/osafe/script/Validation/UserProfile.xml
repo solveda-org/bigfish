@@ -28,16 +28,17 @@
          <check-errors/>
     </simple-method>
     
-    <simple-method method-name="validateLoginInfo" short-description="Validate Customer Login Information" login-required="false">
+    
+    <simple-method method-name="validateEmailInfo" short-description="Validate Customer Login Information" login-required="false">
         <property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
         <property-to-field resource="security" property="password.lowercase" default="false" field="password_lowercase"/>
         <if-compare field="username_lowercase" operator="equals" value="true">
             <call-object-method obj-field="parameters.CUSTOMER_EMAIL" method-name="toLowerCase" ret-field="parameters.CUSTOMER_EMAIL"/>
+            <call-object-method obj-field="parameters.CUSTOMER_EMAIL_NEW" method-name="toLowerCase" ret-field="parameters.CUSTOMER_EMAIL_NEW"/>
             <call-object-method obj-field="parameters.CUSTOMER_EMAIL_CONFIRM" method-name="toLowerCase" ret-field="parameters.CUSTOMER_EMAIL_CONFIRM"/>
         </if-compare>
         <if-compare field="password_lowercase" operator="equals" value="true">
             <call-object-method obj-field="parameters.PASSWORD" method-name="toLowerCase" ret-field="parameters.PASSWORD"/>
-            <call-object-method obj-field="parameters.CONFIRM_PASSWORD" method-name="toLowerCase" ret-field="parameters.CONFIRM_PASSWORD"/>
         </if-compare>
         <call-map-processor in-map-name="parameters" out-map-name="emailCheckContext">
             <simple-map-processor name="emailCheck">
@@ -46,13 +47,107 @@
                     <not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty>
                     <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
                 </process>
+                <process field="CUSTOMER_EMAIL_NEW">
+                    <copy to-field="customerEmailNew"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="NewEmailAddressMissingError"/></not-empty>
+                    <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
+                </process>
                 <process field="CUSTOMER_EMAIL_CONFIRM">
                     <copy to-field="customerEmailConfirm"/>
-                    <compare-field operator="equals" field="CUSTOMER_EMAIL"><fail-property resource="OSafeUiLabels" property="EmailMatchError"/></compare-field>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="ConfirmEmailAddressMissingError"/></not-empty>
+                    <compare-field operator="equals" field="CUSTOMER_EMAIL_NEW"><fail-property resource="OSafeUiLabels" property="EmailMatchError"/></compare-field>
                 </process>
             </simple-map-processor>
         </call-map-processor>
+        
+        <if-not-empty field="parameters.CUSTOMER_EMAIL_NEW">
+            <entity-one value-field="customerUserLogin" entity-name="UserLogin">
+                <field-map field-name="userLoginId" from-field="parameters.CUSTOMER_EMAIL_NEW"/>
+            </entity-one>
+            <if-not-empty field="customerUserLogin">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="UserAlreadyExistsError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_EMAIL_NEW" list="error_list"></string-to-list>
+            </if-not-empty>
+        </if-not-empty>
 
+        <if-empty field="parameters.OLD_PASSWORD">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CurrentPasswordMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="OLD_PASSWORD" list="error_list"></string-to-list>
+        </if-empty>
+        <if-not-empty field="parameters.OLD_PASSWORD">
+            <call-map-processor in-map-name="parameters" out-map-name="passwordContext">
+                <simple-map-processor name="newPassword">
+                    <process field="USERNAME"><copy to-field="userLoginId"/></process>
+                    <process field="OLD_PASSWORD">
+                        <copy to-field="oldPassword"/>
+                    </process>
+                </simple-map-processor>
+            </call-map-processor>
+        </if-not-empty>
+        
+        <if-not-empty field="passwordContext.oldPassword">
+	            <set-service-fields service-name="checkUserPassword" map="passwordContext" to-map="currentUserCtx"/>
+	            <set field="currentUserCtx.username" from-field="passwordContext.userLoginId"/>
+	            <set field="currentUserCtx.password" from-field="passwordContext.oldPassword"/>
+	            <call-service service-name="checkUserPassword" in-map-name="currentUserCtx">
+	                <result-to-field result-name="passwordMatches" field="passwordMatches"/>
+	            </call-service>
+	            <if-compare operator="equals" value="N" field="passwordMatches">
+	                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CurrentPasswordIncorrectError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="OLD_PASSWORD" list="error_list"></string-to-list>
+	            </if-compare>
+        </if-not-empty>
+        
+        <check-errors/>
+    </simple-method>
+    
+    <simple-method method-name="validatePasswordInfo" short-description="Validate Customer Login Information" login-required="false">
+        <property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
+        <property-to-field resource="security" property="password.lowercase" default="false" field="password_lowercase"/>
+        <if-compare field="username_lowercase" operator="equals" value="true">
+            <call-object-method obj-field="parameters.CUSTOMER_EMAIL" method-name="toLowerCase" ret-field="parameters.CUSTOMER_EMAIL"/>
+        </if-compare>
+        <if-compare field="password_lowercase" operator="equals" value="true">
+            <call-object-method obj-field="parameters.PASSWORD" method-name="toLowerCase" ret-field="parameters.PASSWORD"/>
+            <call-object-method obj-field="parameters.CONFIRM_PASSWORD" method-name="toLowerCase" ret-field="parameters.CONFIRM_PASSWORD"/>
+        </if-compare>
+        
+        <if-empty field="parameters.OLD_PASSWORD">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CurrentPasswordMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="OLD_PASSWORD" list="error_list"></string-to-list>
+        </if-empty>
+        <if-empty field="parameters.PASSWORD">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="NewPasswordMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PASSWORD" list="error_list"></string-to-list>
+        </if-empty>
+        <if-empty field="parameters.CONFIRM_PASSWORD">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ConfirmPasswordMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="CONFIRM_PASSWORD" list="error_list"></string-to-list>
+        </if-empty>
+        
+        <if-not-empty field="parameters.OLD_PASSWORD">
+            <call-map-processor in-map-name="parameters" out-map-name="passwordContext">
+                <simple-map-processor name="newPassword">
+                    <process field="CUSTOMER_EMAIL"><copy to-field="userLoginId"/></process>
+                    <process field="OLD_PASSWORD">
+                        <copy to-field="oldPassword"/>
+                    </process>
+                </simple-map-processor>
+            </call-map-processor>
+        </if-not-empty>
+        <if-not-empty field="passwordContext.oldPassword">
+	            <set-service-fields service-name="checkUserPassword" map="passwordContext" to-map="currentUserCtx"/>
+	            <set field="currentUserCtx.username" from-field="passwordContext.userLoginId"/>
+	            <set field="currentUserCtx.password" from-field="passwordContext.oldPassword"/>
+	            <call-service service-name="checkUserPassword" in-map-name="currentUserCtx">
+	                <result-to-field result-name="passwordMatches" field="passwordMatches"/>
+	            </call-service>
+	            <if-compare operator="equals" value="N" field="passwordMatches">
+	                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CurrentPasswordIncorrectError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="OLD_PASSWORD" list="error_list"></string-to-list>
+	            </if-compare>
+        </if-not-empty>
+        
         <!-- Do password validation only if a password is entered otherwise it can be skipped -->
         <if-not-empty field="parameters.PASSWORD">
             <call-class-method class-name="com.osafe.util.Util" method-name="checkPasswordStrength" ret-field="isValidPass">
@@ -61,46 +156,24 @@
             </call-class-method>
             <if-compare operator="not-equals" value="success" field="isValidPass">
                 <set field="tempErrorMessage" from-field="isValidPass"/>
-                <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_EMAIL_CONFIRM" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="PASSWORD" list="error_list"/>
             </if-compare>
             <call-map-processor in-map-name="parameters" out-map-name="passwordContext">
                 <simple-map-processor name="newPassword">
                     <process field="USERNAME"><copy to-field="userLoginId"/></process>
-                    <process field="OLD_PASSWORD">
-                        <copy to-field="oldPassword"/>
-                    </process>
                     <process field="PASSWORD"><copy to-field="currentPassword"/></process>
-                    <process field="CONFIRM_PASSWORD">
-                        <!-- 
-                        <compare-field operator="equals" field="PASSWORD"><fail-property resource="OSafeUiLabels" property="PasswordMatchError"/></compare-field>
-                        This is checked below in the checkNewPassword method in the bsh block: <not-empty><fail-message message="You must enter your password twice"/></not-empty> -->
-                        <copy to-field="currentPasswordVerify"/>
-                    </process>
+                    <process field="CONFIRM_PASSWORD"><copy to-field="currentPasswordVerify"/></process>
                 </simple-map-processor>
             </call-map-processor>
-            <if-empty field="parameters.OLD_PASSWORD">
-                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OldPasswordMissingError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="OLD_PASSWORD" list="error_list"></string-to-list>
-            </if-empty>
+            
             <if-compare-field field="parameters.PASSWORD" operator="equals" to-field="parameters.OLD_PASSWORD">
-                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PasswordOldMatchNewError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PasswordCurrentMatchNewError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="PASSWORD" list="error_list"></string-to-list>
             </if-compare-field>
             <if-compare-field field="parameters.PASSWORD" operator="not-equals" to-field="parameters.CONFIRM_PASSWORD">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PasswordNewMatchError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="CONFIRM_PASSWORD" list="error_list"></string-to-list>
             </if-compare-field>
-            
-            <set-service-fields service-name="checkUserPassword" map="passwordContext" to-map="currentUserCtx"/>
-            <set field="currentUserCtx.username" from-field="passwordContext.userLoginId"/>
-            <set field="currentUserCtx.password" from-field="passwordContext.oldPassword"/>
-            <call-service service-name="checkUserPassword" in-map-name="currentUserCtx">
-                <result-to-field result-name="passwordMatches" field="passwordMatches"/>
-            </call-service>
-            <if-compare operator="equals" value="N" field="passwordMatches">
-                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OldPasswordIncorrectError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="OLD_PASSWORD" list="error_list"></string-to-list>
-            </if-compare>
             
             <make-value entity-name="UserLogin" value-field="newUserLogin"/>
             <set from-field="passwordContext.userLoginId" field="newUserLogin.userLoginId"/>
@@ -131,119 +204,8 @@
                 }
             ]]></call-bsh>
 
-            <!-- if-compare field="passwordContext.passwordHasNumber" operator="equals" value="N">
-                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PasswordHasNoNumberError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="CONFIRM_PASSWORD" list="error_list"></string-to-list>
-            </if-compare-->
-	      	
-	      	<!-- 
-            <if-compare-field field="parameters.PASSWORD" operator="not-equals" to-field="parameters.CONFIRM_PASSWORD">
-                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PasswordNewMatchError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="CONFIRM_PASSWORD" list="error_list"></string-to-list>
-            </if-compare-field>
-            -->
-            
         </if-not-empty>
-
-        <!-- Check the Mobile Phone -->
-        <if>
-            <condition>
-                <or>
-                    <if-compare value="CAN" operator="equals" field="parameters.USER_COUNTRY"></if-compare>
-                    <if-compare value="USA" operator="equals" field="parameters.USER_COUNTRY"></if-compare>
-                </or>
-            </condition>
-            <then>
-                <call-map-processor in-map-name="parameters" out-map-name="contactMobilePhoneMap">
-                    <simple-map-processor name="newTelecomNumber">
-                            <make-in-string field="contactNumber">
-                                <in-field field="PHONE_MOBILE_CONTACT3"/>
-                                <in-field field="PHONE_MOBILE_CONTACT4"/>
-                            </make-in-string>
-                            <process field="contactNumber"><copy to-field="contactMobilePhoneContact"/></process>
-                    </simple-map-processor>
-                </call-map-processor>
-                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                    <field field="parameters.PHONE_MOBILE_AREA"/>
-                    <field field="contactMobilePhoneMap.contactMobilePhoneContact"/>
-                    <field field="parameters.PHONE_MOBILE_REQUIRED"/>
-                </call-class-method>
-                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                    <if-compare field="parameters.PHONE_MOBILE_REQUIRED" operator="equals" value="true">
-                        <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
-                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
-                            <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
-                        </if-compare>
-                    </if-compare>
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
-                    </if-compare>
-                </if-compare>
-            </then>
-            <else>
-                <set field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact" from-field="parameters.PHONE_MOBILE_CONTACT_OTHER"/>
-                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                    <string value=""/>
-                    <field field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
-                    <field field="parameters.PHONE_MOBILE_REQUIRED"/>
-                </call-class-method>
-                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                    <if-compare field="parameters.PHONE_MOBILE_REQUIRED" operator="equals" value="true">
-                        <if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact">
-                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
-                            <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
-                        </if-empty>
-                    </if-compare>
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
-                    </if-compare>
-                </if-compare>
-            </else>
-        </if>
-            
-        <!-- Create the Mobile Phone -->
-        <if>
-           <condition>
-              <or>
-                <if-compare value="CAN" operator="equals" field="parameters.USER_COUNTRY"></if-compare>
-                <if-compare value="USA" operator="equals" field="parameters.USER_COUNTRY"></if-compare>
-              </or>
-           </condition>
-                <then>
-                    <if-not-empty field="contactMobilePhoneMap.contactMobilePhoneContact">
-                        <set field="mobilePhoneContext.contactNumber" from-field="contactMobilePhoneMap.contactMobilePhoneContact"/>
-                        <call-map-processor in-map-name="parameters" out-map-name="mobilePhoneContext">
-                            <simple-map-processor name="newTelecomNumber">
-                                <process field="roleTypeId"><copy/></process>
-                                <process field="USER_MOBILE_COUNTRY"><copy to-field="countryCode"/></process>
-                                <process field="PHONE_MOBILE_AREA">
-                                    <copy to-field="areaCode"/>
-                                </process>
-                                <process field="PHONE_MOBILE_EXT"><copy to-field="extension"/></process>
-                                <process field="PHONE_MOBILE_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
-                            </simple-map-processor>
-                        </call-map-processor>
-                    </if-not-empty>
-                </then>
-            <else>
-                <if-not-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact">
-                        <set field="mobilePhoneContext.contactNumber" from-field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
-                        <call-map-processor in-map-name="parameters" out-map-name="mobilePhoneContext">
-                            <simple-map-processor name="newTelecomNumber">
-                                <process field="roleTypeId"><copy/></process>
-                                <process field="PHONE_MOBILE_COUNTRY"><copy to-field="countryCode"/></process>
-                                <process field="PHONE_MOBILE_AREA_OTHER">
-                                    <copy to-field="areaCode"/>
-                                </process>
-                                <process field="PHONE_MOBILE_EXT"><copy to-field="extension"/></process>
-                                <process field="PHONE_MOBILE_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
-                            </simple-map-processor>
-                        </call-map-processor>
-                    </if-not-empty>
-               </else>
-        </if>
+        
         <check-errors/>
     </simple-method>
 </simple-methods>

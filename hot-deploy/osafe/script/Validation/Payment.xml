@@ -153,11 +153,15 @@
             <result-to-request result-name="paymentMethodId"/>
             <result-to-field result-name="paymentMethodId"/>
         </call-service>
+       <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+           <field field="request" type="javax.servlet.ServletRequest"/>
+       </call-class-method>
         
         <if-compare field="parameters.setAsDefaultCard" operator="equals" value="Y">
            <set-service-fields service-name="setPartyProfileDefaults" map="parameters" to-map="partyProfileDefaultsCtx"/>
            <set field="partyProfileDefaultsCtx.defaultPayMeth" from-field="paymentMethodId"/>
            <set field="partyProfileDefaultsCtx.partyId" from-field="userLogin.partyId"/>
+           <set field="partyProfileDefaultsCtx.productStoreId" from-field="productStoreId"/>
            <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
         </if-compare>
         <if-compare field="parameters.contactMechId" operator="equals" value="_NEW_">
@@ -197,10 +201,37 @@
 	               <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
 		        </if-compare-field>
             </if-not-empty>
+            
+        	<!-- Get the card number and exp date from CreditCard being deleted -->
+	        <entity-one value-field="creditCard" entity-name="CreditCard" auto-field-map="true"/>
+	        <if-not-empty field="creditCard">
+	        	<!-- Get a list of all the users payment methods -->
+	        	<set from-field="userLogin.partyId" field="findPaymentMethodsMap.partyId"/>
+	        	<set value="CREDIT_CARD" field="findPaymentMethodsMap.paymentMethodTypeId"/>
+		        <find-by-and list="paymentMethodList" map="findPaymentMethodsMap" entity-name="PaymentMethod"/>
+		        <if-not-empty field="paymentMethodList">
+		        	<!-- Iterate through Payment Methods -->
+		        	<iterate entry="paymentMethodInfo" list="paymentMethodList">
+		        		<!-- Get related Credit Card -->
+		        		<entity-one entity-name="CreditCard" value-field="creditCardDelete">
+			                <field-map field-name="paymentMethodId" from-field="paymentMethodInfo.paymentMethodId"/>
+			            </entity-one>
+		        		<if-not-empty field="creditCardDelete">
+		        			<!-- Check if the cardNumber and expireDate is the same as the card being deleted -->
+		        			<if-compare-field operator="equals" field="creditCardDelete.cardNumber" to-field="creditCard.cardNumber">
+		        				<if-compare-field operator="equals" field="creditCardDelete.expireDate" to-field="creditCard.expireDate">
+		        					<set from-field="userLogin" field="deletePaymentMethodMap.userLogin"/>
+		        					<set from-field="paymentMethodInfo.paymentMethodId" field="deletePaymentMethodMap.paymentMethodId"/>
+		        					<call-service service-name="deletePaymentMethod" in-map-name="deletePaymentMethodMap">
+							            <default-message>Payment Method successfully deleted.</default-message>
+							        </call-service>
+		        				</if-compare-field>
+		        			</if-compare-field>
+		        		</if-not-empty>
+		        	</iterate>
+		        </if-not-empty>
+	        </if-not-empty>
         </if-not-empty>
-        <call-service service-name="deletePaymentMethod" in-map-name="context">
-            <default-message>Payment Method successfully deleted.</default-message>
-        </call-service>
     </simple-method>
     
 </simple-methods>

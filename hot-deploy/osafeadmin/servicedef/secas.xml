@@ -25,6 +25,15 @@
     <eca service="modifyImageLocationPreferencesXml" event="commit">
         <action service="copyImageLocationPreferencesXml" mode="sync"/>
     </eca>
+    <eca service="updateBigfishParameter" event="commit">
+        <action service="copyBigfishParameterXml" mode="sync"/>
+    </eca>
+    <eca service="addBigfishParameterXml" event="commit">
+        <action service="copyBigfishParameterXml" mode="sync"/>
+    </eca>
+    <eca service="deleteBigfishParameterXml" event="commit">
+        <action service="copyBigfishParameterXml" mode="sync"/>
+    </eca>
     <!-- THIS ECA BY SERVICE NAME generates a order status change when the order is generated  
     <eca service="changeOrderStatus" event="global-commit" run-on-error="false">
         <condition field-name="statusId" operator="not-equals" value="ORDER_COMPLETED"/>
@@ -106,9 +115,9 @@
         <set field-name="scheduledJobName" value="bigFishRequestCatalogFeed"/>
         <action service="sendScheduledJobNotification" mode="async" persist="true"/>
     </eca>
-    <eca service="genPartyGeoPoint" event="return" run-on-failure="true" run-on-error="true">
+    <eca service="genStoreGeoPoint" event="return" run-on-failure="true" run-on-error="true">
         <condition field-name="productStoreId" operator="is-not-empty"/>
-        <set field-name="scheduledJobName" value="genPartyGeoPoint"/>
+        <set field-name="scheduledJobName" value="genStoreGeoPoint"/>
         <action service="sendScheduledJobNotification" mode="async" persist="true"/>
     </eca>
     <eca service="genSeoFriendlyUrl" event="return" run-on-failure="true" run-on-error="true">
@@ -121,5 +130,13 @@
         <set field-name="scheduledJobName" value="clientProductUpdateIndexSeoFriendlyUrl"/>
         <action service="sendScheduledJobNotification" mode="async" persist="true"/>
     </eca>
-
+    <eca service="addCustomPartyAttributeItemXml" event="commit">
+        <action service="copyCustomPartyAttributeXml" mode="sync"/>
+    </eca>
+    <eca service="updateCustomPartyAttributeItemXml" event="commit">
+        <action service="copyCustomPartyAttributeXml" mode="sync"/>
+    </eca>
+    <eca service="genProductsIndex" event="global-commit">
+        <action service="clearAllCache" mode="async"/>
+    </eca>
 </service-eca>

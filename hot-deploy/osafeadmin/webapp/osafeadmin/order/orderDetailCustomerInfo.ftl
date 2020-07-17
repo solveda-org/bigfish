@@ -10,14 +10,18 @@
    </div>
  </div>
  <#if displayParty?has_content>
-   <#assign displayPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", displayParty.partyId, "lastNameFirst","Y", "compareDate", orderHeader.orderDate, "userLogin", userLogin))/>
+   <#assign displayPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", displayParty.partyId, "compareDate", orderHeader.orderDate, "userLogin", userLogin))/>
   <div class="infoRow">
    <div class="infoEntry">
      <div class="infoCaption">
       <label>${uiLabelMap.CustomerNameCaption}</label>
      </div>
      <div class="infoValue">
-       ${displayPartyNameResult.fullName?default("[${uiLabelMap.PartyNameNotFoundInfo}]")}
+       <#if displayPartyNameResult?has_content && (displayPartyNameResult.firstName?has_content || displayPartyNameResult.middleName?has_content || displayPartyNameResult.lastName?has_content)>
+         ${displayPartyNameResult.firstName!""} ${displayPartyNameResult.middleName!""} ${displayPartyNameResult.lastName!""}
+       <#else>
+         ${uiLabelMap.PartyNameNotFoundInfo}
+       </#if>
      </div>
    </div>
   </div>
@@ -43,12 +47,8 @@
              <div class="infoValue">
                   <#assign postalAddress = orderContactMechValueMap.postalAddress />
                     <#if postalAddress?has_content>
-                        <#if postalAddress.toName?has_content><p>${postalAddress.toName}</p></#if>
-                        <p>${postalAddress.address1}</p>
-                        <#if postalAddress.address2?has_content><p>${postalAddress.address2}</p></#if>
-                        <p>${postalAddress.city?if_exists}<#if postalAddress.stateProvinceGeoId?has_content && postalAddress.stateProvinceGeoId != '_NA_'>, ${postalAddress.stateProvinceGeoId} </#if>
-                        ${postalAddress.postalCode?if_exists}</p>
-                        <p>${postalAddress.countryGeoId?if_exists}</p>
+                         ${setRequestAttribute("PostalAddress",postalAddress)}
+                         ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddress")}
                     </#if>
              </div>
            </div> <#-- end infoEntry -->
@@ -80,40 +80,42 @@
       </#if>
       <#if phoneWorkTelecomNumber?has_content>
         <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(phoneWorkTelecomNumber.areaCode?if_exists, phoneWorkTelecomNumber.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
-        <#if phoneWorkTelecomNumber.extension?has_content>
-          <#assign partyWorkPhoneExt = phoneWorkTelecomNumber.extension!/> 
+        <#if partyPurposeWorkPhone?has_content>
+            <#assign partyWorkPhoneExt = partyPurposeWorkPhone.extension?if_exists />
         </#if>
       </#if>
       <#if phoneMobileTelecomNumber?has_content>
         <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(phoneMobileTelecomNumber.areaCode?if_exists, phoneMobileTelecomNumber.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
       </#if>
       
-    <#if formattedHomePhone?has_content || formattedCellPhone?has_content || formattedWorkPhone?has_content>
+    <#if formattedHomePhone?has_content>
 	  <div class="infoRow">
-	    <#if formattedHomePhone?has_content>
           <div class="infoEntry">
             <div class="infoCaption">
               <label>${uiLabelMap.HomePhoneCaption}</label>
             </div>
             <div class="infoValue">${formattedHomePhone!}</div>
           </div>
-        </#if>
-        <#if formattedCellPhone?has_content>
+      </div>
+    </#if>
+    <#if formattedCellPhone?has_content>
+	  <div class="infoRow">
           <div class="infoEntry">
             <div class="infoCaption">
               <label>${uiLabelMap.CellPhoneCaption}</label>
             </div>
             <div class="infoValue">${formattedCellPhone!}</div>
           </div>
-        </#if>
-        <#if formattedWorkPhone?has_content>
+      </div>
+    </#if>
+    <#if formattedWorkPhone?has_content>
+	  <div class="infoRow">
           <div class="infoEntry">
             <div class="infoCaption">
               <label>${uiLabelMap.WorkPhoneCaption}</label>
             </div>
             <div class="infoValue">${formattedWorkPhone!}<#if partyWorkPhoneExt?has_content>&nbsp;x${partyWorkPhoneExt}</#if></div>
           </div>
-        </#if>
       </div>
     </#if>
     <#-- End Phone Number -->

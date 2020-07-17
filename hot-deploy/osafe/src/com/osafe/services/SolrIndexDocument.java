@@ -51,6 +51,8 @@ public class SolrIndexDocument {
     @Field
     private Float price;
     @Field
+    private Float recurrencePrice;
+    @Field
     private Float customerRating;
 
     public SolrIndexDocument() {
@@ -238,6 +240,14 @@ public class SolrIndexDocument {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public Float getRecurrencePrice() {
+        return recurrencePrice;
+    }
+
+    public void setRecurrencePrice(Float recurrencePrice) {
+        this.recurrencePrice = recurrencePrice;
     }
 
     public Float getCustomerRating() {

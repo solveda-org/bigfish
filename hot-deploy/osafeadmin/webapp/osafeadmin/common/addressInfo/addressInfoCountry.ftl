@@ -8,13 +8,14 @@
     </#if>
 </#if>
 
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <!-- address country entry -->
-<div class = "addressInfoCountry">
+<div class="${request.getAttribute("attributeClass")!}">
     <#if Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(COUNTRY_MULTI!"")>
         <div class="infoRow">
             <div class="infoEntry">
                 <div class="infoCaption">
-                    <label>${uiLabelMap.CountryCaption}</label>
+                    <label><#if mandatory == "Y"><span class="required">*</span></#if>${uiLabelMap.CountryCaption}</label>
                 </div>
                 <div class="infoValue">
                     <select name="${fieldPurpose?if_exists}_country" id="${fieldPurpose?if_exists}_country" class="dependentSelectMaster">
@@ -28,4 +29,5 @@
     <#else>
         <input type="hidden" name="${fieldPurpose?if_exists}_country" id="${fieldPurpose?if_exists}_country" value="${selectedCountry}"/>
     </#if>
+    <input type="hidden" id="${fieldPurpose?if_exists}_country_mandatory" name="${fieldPurpose?if_exists}_country_mandatory" value="${mandatory}"/>
 </div>

@@ -6,13 +6,13 @@
     <#assign attnName = postalAddressData.attnName!"" />
 </#if>
 
-<div class="addressInfoNickname">
-    <#if showAttnName?has_content && showAttnName == "Y">
+<#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
+<div class="${request.getAttribute("attributeClass")!}">
         <!-- address nick name -->
-        <div class="entry">
-          <label for="${fieldPurpose?if_exists}_ATTN_NAME"><@required/>${uiLabelMap.AddressNickNameCaption}</label>
-          <input type="text" maxlength="100" class="addressNickName" name="${fieldPurpose?if_exists}_ATTN_NAME" id="${fieldPurpose?if_exists}_ATTN_NAME" value="${requestParameters.get(fieldPurpose+"_ATTN_NAME")!attnName!shippingAttnName!""}" />
-          <@fieldErrors fieldName="${fieldPurpose?if_exists}_ATTN_NAME"/>
-        </div>
-    </#if>
+          <label for="${fieldPurpose?if_exists}_ATTN_NAME"><#if mandatory == "Y"><@required/></#if>${uiLabelMap.AddressNickNameCaption}</label>
+          <div class="entryField">
+          	<input type="text" maxlength="100" class="addressNickName" name="${fieldPurpose?if_exists}_ATTN_NAME" id="js_${fieldPurpose?if_exists}_ATTN_NAME" value="${requestParameters.get(fieldPurpose+"_ATTN_NAME")!attnName!addressAttnName!""}" />
+          	<input type="hidden" id="${fieldPurpose?if_exists}_ATTN_NAME_MANDATORY" name="${fieldPurpose?if_exists}_ATTN_NAME_MANDATORY" value="${mandatory}"/>
+          	<@fieldErrors fieldName="${fieldPurpose?if_exists}_ATTN_NAME"/>
+          </div>
 </div>

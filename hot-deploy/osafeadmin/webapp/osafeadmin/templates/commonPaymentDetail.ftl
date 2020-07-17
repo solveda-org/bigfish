@@ -20,38 +20,19 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
         </div>
     </div>
 </#if>
-<#if paymentMethodInfoHeading?exists && paymentMethodInfoHeading?has_content>
-    <div class="displayBox detailInfo">
-        <div class="header"><h2>${paymentMethodInfoHeading!}</h2></div>
-        <div class="boxBody">
-            ${sections.render('paymentMethodInfoBoxBody')!}
-        </div>
-    </div>
-</#if>
-<#if orderPaymentPreferenceHeading?exists && orderPaymentPreferenceHeading?has_content>
+<#if summaryInfoBoxHeading?exists && summaryInfoBoxHeading?has_content>
     <div class="displayListBox orderItemInfo">
-        <div class="header"><h2>${orderPaymentPreferenceHeading!}</h2></div>
+        <div class="header"><h2>${summaryInfoBoxHeading!}</h2></div>
         <div class="boxBody">
-             ${sections.render('orderPaymentPreferenceBoxBody')!}
+             ${sections.render('summaryInfoBoxBody')!}
         </div>
     </div>
 </#if>
-<#if paymentInfoHeading?exists && paymentInfoHeading?has_content>
-    <div class="displayListBox orderItemInfo">
-        <div class="header"><h2>${paymentInfoHeading!}</h2></div>
-        <div class="boxBody">
-            ${sections.render('paymentInfoBoxBody')!}
-        </div>
-    </div>
+
+<#if detailInfoBoxHeading?exists && detailInfoBoxHeading?has_content>
+             ${sections.render('detailInfoBoxBody')!}
 </#if>
-<#if paymentGatewayResponseHeading?exists && paymentGatewayResponseHeading?has_content>
-    <div class="displayListBox orderItemInfo">
-        <div class="header"><h2>${paymentGatewayResponseHeading!}</h2></div>
-        <div class="boxBody">
-            ${sections.render('paymentGatewayResponseBoxBody')!}
-        </div>
-    </div>
-</#if>
+
 <div class="displayBox footerInfo">
     <div>
         ${sections.render('footerBoxBody')!}

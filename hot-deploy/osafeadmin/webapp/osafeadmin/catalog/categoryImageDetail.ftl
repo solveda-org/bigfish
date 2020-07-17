@@ -43,7 +43,7 @@
        </div>
        
        <#assign urlReferenceCategoryImageExist = "false"/>
-       <#if (categoryImageUrlStr?has_content) && (categoryImageUrlStr.contains("//"))>
+       <#if (categoryImageUrlStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(categoryImageUrlStr)>
          <#assign urlReferenceCategoryImageExist = "true"/>
        </#if>
        

@@ -13,6 +13,10 @@
 <EnumerationType enumTypeId="PERSONAL_TITLE" parentTypeId="" hasTable="" description="Personal title"/>
 
 <EnumerationType enumTypeId="REVIEW_AGE" parentTypeId="" hasTable="" description="Personal title"/>
+
+<!-- Gift Message -->
+<EnumerationType enumTypeId="GIFT_MESSAGE" parentTypeId="" hasTable="" description="Gift Message"/>
+
     
 <!-- CUSTOMER REQUEST TYPE -->
 <CustRequestType custRequestTypeId="RF_CATALOG" parentTypeId="" hasTable="N" description="Request For Catalog"/>
@@ -113,6 +117,8 @@
 <!-- Payment Gateway Config -->
 <PaymentGatewayConfigType paymentGatewayConfigTypeId="SAGEPAYTOKEN" hasTable="N" description="SagePay Token Payment Gateway"/>
 <PaymentGatewayConfigType paymentGatewayConfigTypeId="EBS" hasTable="N" description="EBS Payment Gateway"/>
+<PaymentGatewayConfigType paymentGatewayConfigTypeId="TENDER_CARD" hasTable="N" description="Tender Gift Card Payment Gateway"/>
+<PaymentGatewayConfigType paymentGatewayConfigTypeId="PAYNETZ" hasTable="N" description="Atom PayNetz Payment Gateway"/>
 
 <!-- Shipment Gateway Config -->
 <ShipmentGatewayConfigType shipmentGatewayConfTypeId="BLUEDART" hasTable="N" description="BLUEDART Shipment Gateway"/>
@@ -120,12 +126,19 @@
 <!-- Payment METHOD TYPE -->
 <PaymentMethodType description="SagePay Token" paymentMethodTypeId="SAGEPAY_TOKEN"/>
 <PaymentMethodType paymentMethodTypeId="EXT_EBS" description="EBS Payment" />
+<PaymentMethodType paymentMethodTypeId="EXT_PAYNETZ" description="Atom PayNetz Payment"/>
 
 <!--Custom Method Type-->
 <CustomMethodType customMethodTypeId="EBS_AUTH" parentTypeId="" hasTable="N" description="EBS authorize methods"/>
 <CustomMethodType customMethodTypeId="EBS_RELEASE" parentTypeId="" hasTable="N" description="EBS release methods"/>
 <CustomMethodType customMethodTypeId="EBS_CAPTURE" parentTypeId="" hasTable="N" description="EBS capture methods"/>
 <CustomMethodType customMethodTypeId="EBS_REFUND" parentTypeId="" hasTable="N" description="EBS refund methods"/>
+<CustomMethodType customMethodTypeId="SHIP_CHARGE_AVAIL" parentTypeId="" hasTable="" description="Shipment Service which determines if a shipping Charge (method) is available"/>
+
+<CustomMethodType customMethodTypeId="PAYNETZ_AUTH" parentTypeId="" hasTable="N" description="PAYNETZ authorize methods"/>
+<CustomMethodType customMethodTypeId="PAYNETZ_RELEASE" parentTypeId="" hasTable="N" description="PAYNETZ release methods"/>
+<CustomMethodType customMethodTypeId="PAYNETZ_CAPTURE" parentTypeId="" hasTable="N" description="PAYNETZ capture methods"/>
+<CustomMethodType customMethodTypeId="PAYNETZ_REFUND" parentTypeId="" hasTable="N" description="PAYNETZ refund methods"/>
 
 <!-- New content type,  This allows for specific content to be grouped together  -->
 <ContentType contentTypeId="BF_CONTENT_LIBRARY" description="content library" hasTable="N" parentTypeId=""/>
@@ -146,9 +159,13 @@
 <MimeTypeHtmlTemplate mimeTypeId="application/octet-stream" templateLocation=""/>
 <!-- END of MimeTypeHtmlTemplate -->
 
-
 <!-- ShoppingListType  -->
 <ShoppingListType description="Auto Suggestion List" shoppingListTypeId="SLT_WISH_LIST"/>
 <ShoppingListType description="Wish List" shoppingListTypeId="SLT_BF_WISH_LIST"/>
 <!-- END of ShoppingListType -->
+
+<!--  OrderAdjustmentType -->
+<OrderAdjustmentType description="Loyalty Point Redemption" hasTable="N" orderAdjustmentTypeId="LOYALTY_POINTS" parentTypeId=""/>
+<!--  End of OrderAdjustmentType -->
+
 </entity-engine-xml>

@@ -82,8 +82,6 @@
             </tr>
             </tfoot>
         <#else>
-                <tr>
-                    <td colspan="6" class="boxNumber">${uiLabelMap.NoMatchingDataInfo}</td>
-                </tr>
+              ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoResult")}
         </#if>
         </table>

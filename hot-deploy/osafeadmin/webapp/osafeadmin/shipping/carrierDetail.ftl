@@ -64,5 +64,5 @@
     </div>
   </div>
 <#else>
-  ${uiLabelMap.NoDataAvailableInfo}
+    ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

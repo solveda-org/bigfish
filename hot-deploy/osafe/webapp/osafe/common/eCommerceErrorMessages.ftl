@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-
+<#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <#if requestAttributes.errorMessageList?has_content><#assign errorMessageList=requestAttributes.errorMessageList></#if>
 <#if requestAttributes.osafeSuccessMessageList?has_content><#assign osafeSuccessMessageList=requestAttributes.osafeSuccessMessageList></#if>
 <#if requestAttributes.warningMessageList?has_content><#assign warningMessageList=requestAttributes.warningMessageList></#if>
@@ -47,17 +47,22 @@ under the License.
 
 <#-- display the error messages -->
 
-<#if !(fieldLevelErrors?has_content)>
+<#if !(fieldLevelErrors?has_content && fieldLevelErrors ="Y")>
     <#if (errorMessage?has_content || errorMessageList?has_content)>
       <div class="content-messages eCommerceErrorMessage">
         <div class="errorImage"></div>
+        <p class="errorMessage">${uiLabelMap.CommonFollowingErrorsOccurred}</p>
         <#if errorMessage?has_content>
-          <p class="errorMessage">${errorMessage}</p>
+            <ul>
+	          <li class="errorMessage">${StringUtil.wrapString(errorMessage)}</li>
+	        </ul>
         </#if>
         <#if errorMessageList?has_content>
-          <#list errorMessageList as errorMsg>
-            <p class="errorMessage">${errorMsg}</p>
-          </#list>
+            <ul>
+	          <#list errorMessageList as errorMsg>
+	            <li class="errorMessage">${errorMsg}</li>
+	          </#list>
+	        </ul>
         </#if>
       </div>
     </#if>
@@ -66,6 +71,12 @@ under the License.
         <div class="content-messages eCommerceErrorMessage">
             <div class="errorImage"></div>
             <p class="errorMessage">${uiLabelMap.CommonFollowingErrorsOccurred}</p>
+            <ul>
+	          <#list errorMessageList as errorMsg>
+	            <li class="errorMessage">${errorMsg}</li>
+	          </#list>
+	        </ul>
+            <@fieldErrors fieldName="GENERAL_FIELD_MESSAGE_ERROR"/>
         </div>
     </#if>
 </#if>

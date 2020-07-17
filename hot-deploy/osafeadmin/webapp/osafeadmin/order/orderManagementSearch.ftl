@@ -63,13 +63,19 @@
 	                    <input type="checkbox" class="checkBoxEntry" name="downloadnew" id="downloadnew" value="Y" <#if parameters.downloadnew?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.NewLabel}
 	                    <input type="checkbox" class="checkBoxEntry" name="downloadloaded" id="downloadloaded" value="Y" <#if parameters.downloadloaded?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportedLabel}
 	          </div>
-	     </div>
-      <div class="entry">
-          <label>${uiLabelMap.PromoCodeCaption}</label>
-          <div class="entryInput">
-            <input class="textEntry" type="text" id="productPromoCodeId" name="productPromoCodeId" maxlength="40" value="${parameters.productPromoCodeId!""}"/>
+	      </div>   
+          <div class="entry">
+             <label>${uiLabelMap.ProductNoCaption}</label>
+             <div class="entryInput">
+               <input class="textEntry" type="text" id="productId" name="productId" maxlength="40" value="${parameters.productId!""}"/>
+             </div>
           </div>
-      </div>
+          <div class="entry">
+            <label>${uiLabelMap.PromoCodeCaption}</label>
+            <div class="entryInput">
+              <input class="textEntry" type="text" id="productPromoCodeId" name="productPromoCodeId" maxlength="40" value="${parameters.productPromoCodeId!""}"/>
+            </div>
+          </div>
      </div>
 <!-- end searchBox -->
 

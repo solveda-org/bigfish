@@ -63,7 +63,7 @@
        </div>
        
        <#assign urlReferencePlpSwatchImageExist = "false"/>
-       <#if (productFeaturePLPSwatchURLStr?has_content) && (productFeaturePLPSwatchURLStr.contains("//"))>
+       <#if (productFeaturePLPSwatchURLStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(productFeaturePLPSwatchURLStr)>
          <#assign urlReferencePlpSwatchImageExist = "true"/>
        </#if>
        
@@ -169,7 +169,7 @@
        </div>
        
        <#assign urlReferencePdpSwatchImageExist = "false"/>
-       <#if (productFeaturePDPSwatchURLStr?has_content) && (productFeaturePDPSwatchURLStr.contains("//"))>
+       <#if (productFeaturePDPSwatchURLStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(productFeaturePDPSwatchURLStr)>
          <#assign urlReferencePdpSwatchImageExist = "true"/>
        </#if>
        

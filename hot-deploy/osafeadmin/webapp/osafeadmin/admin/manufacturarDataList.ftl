@@ -8,6 +8,7 @@
     <th class="nameCol">${uiLabelMap.CityLabel}</th>
     <th class="nameCol">${uiLabelMap.StateLabel}</th>
     <th class="nameCol">${uiLabelMap.ZipLabel}</th>
+    <th class="nameCol">${uiLabelMap.CountryLabel}</th>
     <th class="decsCol">${uiLabelMap.ShortDescLabel}</th>
     <th class="decsCol">${uiLabelMap.LongDescLabel}</th>
     <th class="nameCol">${uiLabelMap.ManuImageLabel}</th>
@@ -24,6 +25,7 @@
         <td class="nameCol">${manufacturer.city!""}</td>
         <td class="nameCol">${manufacturer.state!""}</td>
         <td class="nameCol">${manufacturer.zip!""}</td>
+        <td class="nameCol">${manufacturer.country!""}</td>
         <td class="decsCol">
           <#assign shortDescription = manufacturer.shortDescription!""/>
           <#if shortDescription?has_content && shortDescription != "">
@@ -51,9 +53,7 @@
       <#assign rowNo = rowNo+1/>
     </#list>
   <#else>
-    <tr>
-      <td colspan="6" class="boxNumber">${uiLabelMap.NoMatchingDataInfo}</td>
-    </tr>
+    ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
   </#if>
 </table>
 </div>

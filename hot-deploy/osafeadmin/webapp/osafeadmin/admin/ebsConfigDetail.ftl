@@ -51,7 +51,7 @@
                 </tr>
                 <tr class="dataRow odd">
                      <td class="descCol" >
-                       <label>${uiLabelMap.EBSModeCaption!""}</label>
+                       <label>${uiLabelMap.ModeCaption!""}</label>
                      </td>
                      <td class="seqCol">
                        <select name="ebsMode">
@@ -63,5 +63,5 @@
         </tbody>
       </table>
   <#else>
-        ${uiLabelMap.NoDataAvailableInfo}
+  	 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

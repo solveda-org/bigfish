@@ -6,7 +6,7 @@
     <simple-method method-name="createPromotion" short-description="Create a promotion">
         <if-empty field="parameters.productPromoId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionIdError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="productPromoId" list="error_list"/>
             <else>
                 <set field="maxLength" value="20" type="Integer"/>
                 <set field="spaceReplacement" value=" " type="String"/>
@@ -19,13 +19,13 @@
                 </call-class-method>
                 <if-empty field="productPromoId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionIdLengthError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="productPromoId" list="error_list"/>
                     <else>
 		                <set field="findProductPromoCtx.productPromoId" from-field="productPromoId"/>
 		                <find-by-primary-key value-field="existingProductPromo" entity-name="ProductPromo" map="findProductPromoCtx"/>
                         <if-not-empty field="existingProductPromo">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionIdExistError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="productPromoId" list="error_list"/>
                             <else>
                                 <set field="parameters.productPromoId" from-field="productPromoId"/>
                             </else>
@@ -36,25 +36,25 @@
         </if-empty>
         <if-empty field="parameters.promoName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionNameError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="promoName" list="error_list"/>
             <else>
                 <set field="parameters.ruleName" from-field="parameters.promoName"/>
             </else>
         </if-empty>
         <if-empty field="parameters.promoText">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionDescError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="promoText" list="error_list"/>
         </if-empty>
         <if-empty field="parameters.useLimitPerOrder">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionUseLimitPerOrderError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}"  message-field="useLimitPerOrder" list="error_list"/>
            <else>
                <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                    <field field="parameters.useLimitPerOrder"/>
                </call-class-method>
                <if-compare field="isNumber" operator="equals" value="false">
                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
-                   <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                   <string-to-list string="${tempErrorMessage}" message-field="useLimitPerOrder" list="error_list"/>
                    <else>
                        <if>
                            <condition>
@@ -66,7 +66,7 @@
                            <then></then>
                            <else>
                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
-                               <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                               <string-to-list string="${tempErrorMessage}" message-field="useLimitPerOrder" list="error_list"/>
                            </else>
                        </if>
                    </else>
@@ -79,7 +79,7 @@
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerCustomerError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="useLimitPerCustomer" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <if-not-empty field="parameters.useLimitPerPromotion">
@@ -88,7 +88,7 @@
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerPromotionError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="useLimitPerCustomer" list="error_list"/>
             </if-compare>
         </if-not-empty>
 
@@ -99,7 +99,7 @@
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="useLimitPerCustomer" list="error_list"/>
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.fromDate">
                         <field field="parameters.fromDate"/>
@@ -115,7 +115,7 @@
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="thruDate" list="error_list"/>
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.thruDate">
                         <field field="parameters.thruDate"/>
@@ -126,14 +126,14 @@
         </if-not-empty>
         <if-empty field="parameters.condValue">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionCondValueError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="condValue"  list="error_list"/>
             <else>
                 <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
                     <field field="parameters.condValue"/>
                 </call-class-method>
                 <if-compare field="isFloat" operator="equals" value="false">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCondValueError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="condValue" list="error_list"/>
                 </if-compare>
             </else>
         </if-empty>
@@ -145,14 +145,14 @@
             <then>
                 <if-empty field="parameters.quantity">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionQuantityError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                    <else>
                        <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                            <field field="parameters.quantity"/>
                        </call-class-method>
                        <if-compare field="isNumber" operator="equals" value="false">
                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionQuantityError"/>
-                           <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                           <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                            <else>
                                <if>
                                    <condition>
@@ -166,7 +166,7 @@
                                    </then>
                                    <else>
                                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionQuantityError"/>
-                                       <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                       <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                                    </else>
                                </if>
                            </else>
@@ -175,7 +175,7 @@
                 </if-empty>
                 <if-empty field="parameters.productId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionItemIdError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="productId" list="error_list"/>
                 </if-empty>
                 <if>
                     <condition>
@@ -194,14 +194,14 @@
                 <then>
                     <if-empty field="parameters.amount">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                         <else>
                             <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
                                 <field field="parameters.amount"/>
                             </call-class-method>
                             <if-compare field="isFloat" operator="equals" value="false">
                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                                 <else>
                                     <if>
                                         <condition>
@@ -216,7 +216,7 @@
                                         </then>
                                         <else>
                                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
-                                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                                         </else>
                                     </if>
                                 </else>
@@ -232,7 +232,7 @@
                         </condition>
                         <then>
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCategoryOrProductRequiredError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="productPromoActionProductIds" list="error_list"/>
                         </then>
                     </if>
                 </then>
@@ -248,14 +248,14 @@
                 <then>
                     <if-empty field="parameters.quantity">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionMinQuantityError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                         <else>
                             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                                 <field field="parameters.quantity"/>
                             </call-class-method>
                             <if-compare field="isNumber" operator="equals" value="false">
                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionMinQuantityError"/>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                                 <else>
                                     <if>
                                         <condition>
@@ -269,7 +269,7 @@
                                         </then>
                                         <else>
                                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionMinQuantityError"/>
-                                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            <string-to-list string="${tempErrorMessage}" message-field="productId" list="error_list"/>
                                         </else>
                                     </if>
                                 </else>
@@ -286,7 +286,7 @@
                         <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
                         </if-compare>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                         <else>
                             <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
                                 <field field="parameters.amount"/>
@@ -301,7 +301,7 @@
                                 <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
                                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
                                 </if-compare>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}"  message-field="amount" list="error_list"/>
                                 <else>
                                     <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC">
                                         <if>
@@ -314,7 +314,7 @@
                                             <then></then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -329,7 +329,7 @@
                                             <then></then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -344,7 +344,7 @@
                                             <then></then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -361,7 +361,7 @@
                         </condition>
                         <then>
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCategoryOrProductRequiredError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="productPromoActionProductIds" list="error_list"/>
                         </then>
                     </if>
                 </then>
@@ -389,7 +389,7 @@
                         <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionTaxDiscountPerError"/>
                         </if-compare>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                         <else>
                             <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
                                 <field field="parameters.amount"/>
@@ -407,7 +407,7 @@
                                 <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
                                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionTaxDiscountPerError"/>
                                 </if-compare>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                                 <else>
                                     <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT">
                                         <if>
@@ -422,7 +422,7 @@
                                             </then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -440,7 +440,7 @@
                                             </then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -457,7 +457,7 @@
                                             </then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionShipDiscountPerError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -474,7 +474,7 @@
                                             </then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionTaxDiscountPerError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -628,23 +628,23 @@
     <simple-method method-name="updatePromotion" short-description="Update a promotion">
         <if-empty field="parameters.promoName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionNameError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="promoName" list="error_list"/>
         </if-empty>
         <if-empty field="parameters.promoText">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionDescError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="promoText" list="error_list"/>
         </if-empty>
    
         <if-empty field="parameters.useLimitPerOrder">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionUseLimitPerOrderError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="useLimitPerOrder" list="error_list"/>
            <else>
                <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                    <field field="parameters.useLimitPerOrder"/>
                </call-class-method>
                <if-compare field="isNumber" operator="equals" value="false">
                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
-                   <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                   <string-to-list string="${tempErrorMessage}" message-field="useLimitPerOrder" list="error_list"/>
                    <else>
                        <if>
                            <condition>
@@ -656,7 +656,7 @@
                            <then></then>
                            <else>
                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
-                               <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                               <string-to-list string="${tempErrorMessage}" message-field="useLimitPerOrder" list="error_list"/>
                            </else>
                        </if>
                    </else>
@@ -669,7 +669,7 @@
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerCustomerError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}"  message-field="useLimitPerCustomer" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <if-not-empty field="parameters.useLimitPerPromotion">
@@ -678,7 +678,7 @@
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerPromotionError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="useLimitPerPromotion" list="error_list"/>
             </if-compare>
         </if-not-empty>
 
@@ -689,7 +689,7 @@
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="fromDate" list="error_list"/>
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.fromDate">
                         <field field="parameters.fromDate"/>
@@ -705,7 +705,7 @@
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="thruDate" list="error_list"/>
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.thruDate">
                         <field field="parameters.thruDate"/>
@@ -716,14 +716,14 @@
         </if-not-empty>
         <if-empty field="parameters.condValue">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionCondValueError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="condValue" list="error_list"/>
             <else>
                 <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
                     <field field="parameters.condValue"/>
                 </call-class-method>
                 <if-compare field="isFloat" operator="equals" value="false">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCondValueError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="condValue" list="error_list"/>
                 </if-compare>
             </else>
         </if-empty>
@@ -735,14 +735,14 @@
             <then>
                 <if-empty field="parameters.quantity">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionQuantityError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                    <else>
                        <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                            <field field="parameters.quantity"/>
                        </call-class-method>
                        <if-compare field="isNumber" operator="equals" value="false">
                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionQuantityError"/>
-                           <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                           <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                            <else>
                                <if>
                                    <condition>
@@ -756,7 +756,7 @@
                                    </then>
                                    <else>
                                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionQuantityError"/>
-                                       <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                       <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                                    </else>
                                </if>
                            </else>
@@ -765,7 +765,7 @@
                 </if-empty>
                 <if-empty field="parameters.productId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionItemIdError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="productId" list="error_list"/>
                 </if-empty>
                 <if>
                     <condition>
@@ -784,14 +784,14 @@
                 <then>
                     <if-empty field="parameters.amount">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                         <else>
                             <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
                                 <field field="parameters.amount"/>
                             </call-class-method>
                             <if-compare field="isFloat" operator="equals" value="false">
                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                                 <else>
                                     <if>
                                         <condition>
@@ -806,7 +806,7 @@
                                         </then>
                                         <else>
                                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
-                                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                                         </else>
                                     </if>
                                 </else>
@@ -822,7 +822,7 @@
                         </condition>
                         <then>
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCategoryOrProductRequiredError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                         </then>
                     </if>
                 </then>
@@ -838,14 +838,14 @@
                 <then>
                     <if-empty field="parameters.quantity">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionMinQuantityError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                         <else>
                             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                                 <field field="parameters.quantity"/>
                             </call-class-method>
                             <if-compare field="isNumber" operator="equals" value="false">
                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionMinQuantityError"/>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                                 <else>
                                     <if>
                                         <condition>
@@ -857,7 +857,7 @@
                                         <then></then>
                                         <else>
                                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionMinQuantityError"/>
-                                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            <string-to-list string="${tempErrorMessage}" message-field="quantity" list="error_list"/>
                                         </else>
                                     </if>
                                 </else>
@@ -874,7 +874,7 @@
                         <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
                         </if-compare>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                         <else>
                             <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
                                 <field field="parameters.amount"/>
@@ -889,7 +889,7 @@
                                 <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
                                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
                                 </if-compare>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                                 <else>
                                     <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC">
                                         <if>
@@ -904,7 +904,7 @@
                                             </then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -919,7 +919,7 @@
                                             <then></then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -934,7 +934,7 @@
                                             <then></then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -951,7 +951,7 @@
                         </condition>
                         <then>
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCategoryOrProductRequiredError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                         </then>
                     </if>
                 </then>
@@ -979,7 +979,7 @@
                         <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionTaxDiscountPerError"/>
                         </if-compare>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}"  message-field="amount" list="error_list"/>
                         <else>
                             <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
                                 <field field="parameters.amount"/>
@@ -997,7 +997,7 @@
                                 <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
                                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionTaxDiscountPerError"/>
                                 </if-compare>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="amount" list="error_list"/>
                                 <else>
                                     <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT">
                                         <if>
@@ -1013,7 +1013,7 @@
                                             </then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -1030,7 +1030,7 @@
                                             </then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -1047,7 +1047,7 @@
                                             </then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionShipDiscountPerError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}"  message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -1064,7 +1064,7 @@
                                             </then>
                                             <else>
                                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionTaxDiscountPerError"/>
-                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                                <string-to-list string="${tempErrorMessage}" message-field="productPromoActionEnumId" list="error_list"/>
                                             </else>
                                         </if>
                                     </if-compare>
@@ -1240,7 +1240,7 @@
     <simple-method method-name="createPromotionCode" short-description="Update a promotion Code">
         <if-empty field="parameters.productPromoCodeId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionCodeIdError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId"  list="error_list"/>
             <else>
                 <set field="maxLength" value="20" type="Integer"/>
                 <set field="spaceReplacement" value=" " type="String"/>
@@ -1253,14 +1253,14 @@
                 </call-class-method>
                 <if-empty field="productPromoCodeId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCodeIdLengthError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
                     <else>
                         <entity-one entity-name="ProductPromoCode" value-field="existingProductPromoCode">
                             <field-map field-name="productPromoCodeId" from-field="productPromoCodeId"/>
                         </entity-one>
                         <if-not-empty field="existingProductPromoCode">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCodeIdExistError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
                             <else>
                                 <set field="parameters.productPromoCodeId" from-field="productPromoCodeId"/>
                             </else>
@@ -1275,7 +1275,7 @@
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUseLimitPerOrderError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="promoCodeUseLimitPerCode" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <if-not-empty field="parameters.promoCodeUseLimitPerCustomer">
@@ -1284,7 +1284,7 @@
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUseLimitPerCustomerError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="promoCodeUseLimitPerCustomer" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <if-not-empty field="parameters.promoCodeUserEntered">
@@ -1301,7 +1301,7 @@
                 </then>
                 <else>
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUserEnteredError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="promoCodeUserEntered" list="error_list"/>
                 </else>
             </if>
         </if-not-empty>
@@ -1312,7 +1312,7 @@
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="promoCodeFromDate" list="error_list"/>
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeFromDate">
                         <field field="parameters.promoCodeFromDate"/>
@@ -1328,7 +1328,7 @@
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="promoCodeThruDate" list="error_list"/>
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeThruDate">
                         <field field="parameters.promoCodeThruDate"/>
@@ -1357,7 +1357,7 @@
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUseLimitPerOrderError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}"  message-field="promoCodeUseLimitPerCode" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <if-not-empty field="parameters.promoCodeUseLimitPerCustomer">
@@ -1366,7 +1366,7 @@
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUseLimitPerCustomerError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="promoCodeUseLimitPerCustomer" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <if-not-empty field="parameters.promoCodeUserEntered">
@@ -1383,7 +1383,7 @@
                 </then>
                 <else>
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUserEnteredError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="promoCodeUserEntered" list="error_list"/>
                 </else>
             </if>
         </if-not-empty>
@@ -1394,7 +1394,7 @@
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="promoCodeFromDate" list="error_list"/>
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeFromDate">
                     
@@ -1411,7 +1411,7 @@
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="promoCodeThruDate" list="error_list"/>
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeThruDate">
                         <field field="parameters.promoCodeThruDate"/>

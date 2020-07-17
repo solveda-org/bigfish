@@ -34,6 +34,7 @@ public class GeoServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = (String) context.get("partyId");
         String roleTypeId = (String) context.get("roleTypeId");
+        String contactMechPurposeTypeId = (String) context.get("contactMechPurposeTypeId");
 
         Map conditions = FastMap.newInstance();
         if (UtilValidate.isNotEmpty(partyId)) {
@@ -51,7 +52,13 @@ public class GeoServices {
                     GenericValue party = partyRole.getRelatedOneCache("Party");
                     partyId = party.getString("partyId");
 
-                    Collection<GenericValue> contactMechList = ContactHelper.getContactMechByType(party, "POSTAL_ADDRESS", false);
+                    Collection<GenericValue> contactMechList = null;
+                    if (UtilValidate.isNotEmpty(contactMechPurposeTypeId)) {
+                    	contactMechList = ContactHelper.getContactMechByPurpose(party, contactMechPurposeTypeId, false);
+                    }
+                    if (UtilValidate.isEmpty(contactMechList)) {
+                        contactMechList = ContactHelper.getContactMechByType(party, "POSTAL_ADDRESS", false);
+                    }
                     if (UtilValidate.isNotEmpty(contactMechList)) {
                         GenericValue contactMech  = EntityUtil.getFirst((List<GenericValue>) contactMechList);
                         GenericValue postalAddress  = contactMech.getRelatedOneCache("PostalAddress");

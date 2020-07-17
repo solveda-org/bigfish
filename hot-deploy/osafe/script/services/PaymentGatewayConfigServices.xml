@@ -34,4 +34,18 @@ under the License.
         <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
         <store-value value-field="lookedUpValue"/>
     </simple-method>
+    
+    <!-- Belongs in accounting.payment.PaymentGatewayConfigSeervices.xml -->
+    <simple-method method-name="updatePaymentGatewayConfigTenderCard" short-description="Update Payment Gateway Config TenderCard">
+        <entity-one entity-name="PaymentGatewayTenderCard" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/>
+    </simple-method>
+    
+    <!-- Belongs in accounting.payment.PaymentGatewayConfigSeervices.xml -->
+    <simple-method method-name="updatePaymentGatewayPayNetz" short-description="Update Payment Gateway Config Atom PayNetz">
+        <entity-one entity-name="PaymentGatewayPayNetz" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/>
+    </simple-method>
 </simple-methods>

@@ -2,6 +2,16 @@
   <div class="infoRow">
     <div class="infoEntry">
       <div class="infoCaption">
+        <label>${uiLabelMap.AmountCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${maxAmount!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
         <label>${uiLabelMap.PaymentMethodIdCaption}</label>
       </div>
       <div class="infoValue">
@@ -9,13 +19,22 @@
       </div>
     </div>
   </div>
+  <#if creditCardInfo.cardType?exists>
+     <#assign enumerationCreditCards = delegator.findByAnd("Enumeration", {"enumCode" : creditCardInfo.cardType})>
+  </#if>
   <div class="infoRow">
     <div class="infoEntry">
       <div class="infoCaption">
         <label>${uiLabelMap.CardTypeCaption}</label>
       </div>
       <div class="infoValue">
-          <p>${creditCardInfo.cardType!""}</p>
+          <p>
+             <#if enumerationCreditCards?exists>
+                <#list enumerationCreditCards  as enumerationCreditCard>
+                      ${enumerationCreditCard.enumId} (${enumerationCreditCard.description})
+                </#list>
+             </#if>
+          </p>
       </div>
     </div>
   </div>
@@ -25,7 +44,7 @@
         <label>${uiLabelMap.CardNumberCaption}</label>
       </div>
       <div class="infoValue">
-          <p>${creditCardInfo.cardNumber!""}</p>
+          <p>${uiLabelMap.AsteriskLabel}${creditCardInfo.cardNumber.substring(creditCardInfo.cardNumber.length()-4, creditCardInfo.cardNumber.length())!""}</p>
       </div>
     </div>
   </div>
@@ -163,6 +182,16 @@
   <div class="infoRow">
     <div class="infoEntry">
       <div class="infoCaption">
+        <label>${uiLabelMap.AmountCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${maxAmount!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
         <label>${uiLabelMap.PaymentMethodIdCaption}</label>
       </div>
       <div class="infoValue">
@@ -244,6 +273,16 @@
   <div class="infoRow">
     <div class="infoEntry">
       <div class="infoCaption">
+        <label>${uiLabelMap.AmountCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${maxAmount!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
         <label>${uiLabelMap.PaymentMethodIdCaption}</label>
       </div>
       <div class="infoValue">
@@ -277,7 +316,7 @@
         <label>${uiLabelMap.ReferenceNumberCaption}</label>
       </div>
       <div class="infoValue">
-          <p>${ebsInfo.merchantRefNo!""}</p>
+          <p>${ebsInfo.merchantReferenceNum!""}</p>
       </div>
     </div>
   </div>
@@ -301,10 +340,57 @@
       </div>
     </div>
   </div>
-  <#else>
-     <div class="infoRow">
-       <div class="infoEntry">
-         <div class="infoValue">${uiLabelMap.NoDataAvailableInfo}</div>
-       </div>
+  <#elseif giftInfo?has_content>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.AmountCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${maxAmount!""}</p>
+      </div>
     </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.PaymentMethodIdCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${giftInfo.paymentMethodId!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.CardNumberCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${giftInfo.cardNumber!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.PinNumberCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${giftInfo.pinNumber!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.ExpireDateCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${giftInfo.expireDate!""}</p>
+      </div>
+    </div>
+  </div>
+  <#else>
+     ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

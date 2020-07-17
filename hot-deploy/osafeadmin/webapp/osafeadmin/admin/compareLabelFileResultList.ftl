@@ -68,12 +68,12 @@
             <#if compareLabelResult.type == "2" && compareLabelResult.key?has_content>
               <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareLabelResult.key)>
               <#assign addKeyTooltipText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","AddKeyTooltip",keyMap, locale ) />
-              <a href="<@ofbizUrl>addMissingUiLabel?addKey=${compareLabelResult.key?if_exists}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()" class="createIcon"></a>
+              <a href="<@ofbizUrl>addMissingUiLabel?addKey=${compareLabelResult.key?if_exists}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()"><span class="createIcon"></span></a>
             </#if>
             <#if compareLabelResult.type == "3" && compareLabelResult.key?has_content && valuesMatch == "false">
               <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareLabelResult.key, "value", valueCompareToLabelFile)>
               <#assign addKeyTooltipText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SyncKeyAndValueTooltip",keyMap, locale ) />
-              <a href="javascript:setNewValue('${compareLabelResult.key?if_exists}','${valueCompareToLabelFile!}');" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()" class="syncIcon"></a>
+              <a href="javascript:setNewValue('${compareLabelResult.key?if_exists}','${valueCompareToLabelFile!}');" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()"><span class="syncIcon"></span></a>
             </#if>
           </#if>
         </td>

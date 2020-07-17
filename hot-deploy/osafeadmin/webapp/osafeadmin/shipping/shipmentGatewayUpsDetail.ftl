@@ -151,6 +151,7 @@
         <div class="infoValue">       
             <#if mode?has_content>
           		<select name="saveCertInfo" id="saveCertInfo" >
+          			  <option value="">${uiLabelMap.SelectOneLabel}</option>
                       <option value="true" <#if selectedSaveCertInfo == "true" >selected=selected</#if>>True</option>
                       <option value="false" <#if selectedSaveCertInfo == "false" >selected=selected</#if>>False</option>
 		        </select>
@@ -180,6 +181,7 @@
         <div class="infoValue">       
             <#if mode?has_content>
           		<select name="shipperPickupType" id="shipperPickupType" >
+          		      <option value="">${uiLabelMap.SelectOneLabel}</option>
                       <option value="06" <#if selectedShipperPickupType == "06" >selected=selected</#if>>One Time Pickup</option>
                       <option value="01" <#if selectedShipperPickupType == "01" >selected=selected</#if>>Daily Pickup</option>
                       <option value="03" <#if selectedShipperPickupType == "03" >selected=selected</#if>>Customer Counter</option>
@@ -228,6 +230,7 @@
         <div class="infoValue">       
             <#if mode?has_content>
           		<select name="codAllowCod" id="codAllowCod" >
+                      <option value="">${uiLabelMap.SelectOneLabel}</option>
                       <option value="true" <#if selectedCodAllowCod == "true" >selected=selected</#if>>True</option>
                       <option value="false" <#if selectedCodAllowCod == "false" >selected=selected</#if>>False</option>
 		        </select>
@@ -270,6 +273,7 @@
         <div class="infoValue">       
             <#if mode?has_content>
           		<select name="codSurchargeApplyToPackage" id="codSurchargeApplyToPackage" >
+                      <option value="">${uiLabelMap.SelectOneLabel}</option>
                       <option value="all" <#if selectedCodSurchargeApplyToPackage == "all" >selected=selected</#if>>Surcharge amount will be applied to each shipment package</option>                      
                       <option value="first" <#if selectedCodSurchargeApplyToPackage == "first" >selected=selected</#if>>Surcharge amount will be applied to the first package in the shipment</option>
                       <option value="split" <#if selectedCodSurchargeApplyToPackage == "split" >selected=selected</#if>>Surcharge amount will be split between shipment packages</option>
@@ -288,6 +292,7 @@
         <div class="infoValue">       
             <#if mode?has_content>
           		<select name="codFundsCode" id="codFundsCode" >
+                      <option value="">${uiLabelMap.SelectOneLabel}</option>
                       <option value="0" <#if selectedCodFundsCode == "0" >selected=selected</#if>>Unsecured Funds Allowed</option>
                       <option value="8" <#if selectedCodFundsCode == "8" >selected=selected</#if>>Secured Funds Only</option>
 		        </select>
@@ -324,5 +329,5 @@
     
   </#if>  
 <#else>
-  ${uiLabelMap.NoDataAvailableInfo}
+    ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

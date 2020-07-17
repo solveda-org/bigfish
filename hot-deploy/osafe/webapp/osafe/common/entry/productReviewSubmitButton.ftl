@@ -1,4 +1,4 @@
-<div class="entryButtons">
+<div class="container button">
      <input type="submit" value="${uiLabelMap.SubmitBtn}" class="standardBtn action"/>
      <a href="<@ofbizUrl>eCommerceProductDetail?productId=${productId?if_exists}</@ofbizUrl>" class="standardBtn negative">${uiLabelMap.CancelBtn}</a>
 	 <span class="productReviewBarLinks">

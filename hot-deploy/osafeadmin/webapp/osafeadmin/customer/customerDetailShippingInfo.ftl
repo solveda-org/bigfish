@@ -1,7 +1,7 @@
 <!-- start customerDetailShippingInfo.ftl -->
 <div id="${fieldPurpose?if_exists}_addressEntry">
-    <div class="infoRow row">
-        <div class="header"><h2>${uiLabelMap.ShippingAddressHeading}</h2></div>
+    <div class="heading">
+     <h3>${uiLabelMap.ShippingAddressHeading}</h3>
     </div>
     <div class="infoRow">
         <div class="infoEntry">

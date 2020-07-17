@@ -44,7 +44,7 @@
         <#if isPromotionDetail>
           <#if (mode?has_content && mode == "add")>
             <#if !parameters.productPromoId?has_content>
-              <#assign productPromoSeqId = delegator.getNextSeqId("ProductPromo")/>
+               <#assign productPromoSeqId = Static["com.osafe.util.OsafeAdminUtil"].getNextSeqId(delegator, "ProductPromo", "ProductPromo", "productPromoId")!""/>
             </#if>
             <input type="hidden" name="productPromoId" id="productPromoId" maxlength="20" value="${parameters.productPromoId!productPromoSeqId!""}"/>${parameters.productPromoId!productPromoSeqId!""}
           <#elseif mode?has_content && mode == "edit">
@@ -113,7 +113,7 @@
       </div>
       <div class="infoValue small">
         <#if isPromotionDetail>
-          <input type="text" class="textEntry" name="useLimitPerOrder" maxlength="20" value='${parameters.useLimitPerOrder!useLimitPerOrder!""}'/>
+          <input type="text" class="textEntry" name="useLimitPerOrder" maxlength="20" value='${parameters.useLimitPerOrder!useLimitPerOrder!"1"}'/>
         <#else>
           ${useLimitPerOrder!""}
         </#if>
@@ -128,7 +128,7 @@
       </div>
       <div class="infoValue small">
         <#if isPromotionDetail>
-          <input type="text"  class="textEntry" name="useLimitPerCustomer" maxlength="20" value='${parameters.useLimitPerCustomer!useLimitPerCustomer!""}'/>
+          <input type="text"  class="textEntry" name="useLimitPerCustomer" maxlength="20" value='${parameters.useLimitPerCustomer!useLimitPerCustomer!"1"}'/>
         <#else>
           ${useLimitPerCustomer!""}
         </#if>
@@ -143,7 +143,7 @@
       </div>
       <div class="infoValue small">
         <#if isPromotionDetail>
-          <input type="text"  class="textEntry" name="useLimitPerPromotion" maxlength="20" value='${parameters.useLimitPerPromotion!useLimitPerPromotion!""}'/>
+          <input type="text"  class="textEntry" name="useLimitPerPromotion" maxlength="20" value='${parameters.useLimitPerPromotion!useLimitPerPromotion!"999"}'/>
         <#else>
           ${useLimitPerPromotion!""}
         </#if>
@@ -213,5 +213,5 @@
   </div>
 
 <#else>
-    ${uiLabelMap.NoDataAvailableInfo}
+    ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
 </#if>

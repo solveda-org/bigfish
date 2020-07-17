@@ -1,5 +1,6 @@
-<#if complementProducts?has_content>
-  <div class="pdpComplement">
+<li class="${request.getAttribute("attributeClass")!}">
+  <#if complementProducts?has_content>
+    <div class="js_pdpComplement">
        <#assign plpFacetGroupVariantSwatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_SWATCH_IMG")!""/>
        <#assign plpFacetGroupVariantSticky =  Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_PDP_MATCH")!""/>
        <#assign facetGroupMatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_GROUP_VARIANT_MATCH")!""/>
@@ -44,14 +45,15 @@
        </#if>
        
        <h2>${uiLabelMap.ComplementProductHeading}</h2>
+       <div class="boxList productList">
             <#list complementProducts as complementProduct>
-             ${setRequestAttribute("plpItemId",complementProduct.productIdTo)}
-                 <!-- DIV for Displaying Recommended productss STARTS here -->
-                      <div class="eCommerceListItem eCommerceComplementProduct">
-                        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPComplementDivSequence")}
-                      </div>
-                 <!-- DIV for Displaying PLP item ENDS here -->     
+                ${setRequestAttribute("plpItemId",complementProduct.productIdTo)}
+                <!-- DIV for Displaying Recommended productss STARTS here -->
+                ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPComplementDivSequence")}
+                <!-- DIV for Displaying PLP item ENDS here -->     
             </#list>
-  </div>
-</#if>
+       </div>
+    </div>
+  </#if>
+</li>
 

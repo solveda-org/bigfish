@@ -15,50 +15,61 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.TimeZone;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.util.Currency;
+import java.util.TreeMap;
 
 import javax.servlet.ServletRequest;
 
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.ObjectType;
+import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.string.FlexibleStringExpander;
+import org.ofbiz.common.CommonWorkers;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.ServiceUtil;
-
-import javolution.util.FastList;
-import javolution.util.FastMap;
-import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.common.CommonWorkers;
 import org.w3c.tidy.Tidy;
 
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.Currency;
 import com.osafe.services.OsafeManageXml;
-
-import java.util.*;
 
 public class OsafeAdminUtil {
 
     public static final String module = OsafeAdminUtil.class.getName();
     public static final String decimalPointDelimiter = ".";
     public static final boolean defaultEmptyOK = true;
+    private static String[] dateFormats = {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd", "yyyy/MM/dd", "yyyyMMdd"};
+    private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
     /**
      * Return a string formatted as format
      * if format is wrong or null return dateString for the default locale
@@ -124,7 +135,47 @@ public class OsafeAdminUtil {
           }
           return true;
     }
-
+    
+    public static java.util.Date validDate(String date) 
+    {
+    	java.util.Date formattedDate = new java.util.Date();
+    	
+    	for(String dateFormat : dateFormats)
+    	{
+    		try
+        	{
+    			DateFormat dateFormatSdf = new SimpleDateFormat(dateFormat);
+    			dateFormatSdf.setLenient(false);
+            	formattedDate = dateFormatSdf.parse(date);
+            	return formattedDate;
+        	}
+        	catch(ParseException pe)
+        	{
+        	}
+    	}
+        
+        return formattedDate;
+    }
+    
+    public static Boolean isValidDate(String date) 
+    {
+    	
+    	for(String dateFormat : dateFormats)
+    	{
+    		try
+        	{
+    			DateFormat dateFormatSdf = new SimpleDateFormat(dateFormat);
+    			dateFormatSdf.setLenient(false);
+    			dateFormatSdf.parse(date);
+        		return true;
+        	}
+        	catch(ParseException pe)
+        	{
+        	}
+    	}
+        return false;
+    }
+    
     public static String filterNonAscii(String inString) {
         // from http://www.velocityreviews.com/forums/t140837-convert-utf-8-to-ascii.html
         // Create the encoder and decoder for the character encoding
@@ -227,18 +278,26 @@ public class OsafeAdminUtil {
      */
 
     public static String getProductStoreParm(Delegator delegator, String productStoreId, String parmKey) {
-        if (UtilValidate.isEmpty(parmKey) || UtilValidate.isEmpty(productStoreId)) {
+        if (UtilValidate.isEmpty(parmKey) || UtilValidate.isEmpty(productStoreId)) 
+        {
             return null;
         }
         String parmValue = null;
         GenericValue xProductStoreParam = null;
-        try {
+        try 
+        {
             xProductStoreParam = delegator.findOne("XProductStoreParm", UtilMisc.toMap("productStoreId", productStoreId, "parmKey", parmKey), false);
             if (UtilValidate.isNotEmpty(xProductStoreParam))
             {
                 parmValue = xProductStoreParam.getString("parmValue");
+                if (UtilValidate.isNotEmpty(parmValue)) 
+                {
+                	parmValue = parmValue.trim();
+                }
             }
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             Debug.logError(e, e.getMessage(), module);
         }
         return parmValue;
@@ -249,7 +308,7 @@ public class OsafeAdminUtil {
          {
              return false;
          }
-         if ("TRUE".equals(parmValue.toUpperCase()))
+         if ("TRUE".equals(parmValue.trim().toUpperCase()))
          {
              return true;
          }
@@ -314,22 +373,53 @@ public class OsafeAdminUtil {
         return true;
     }
     
-    public static List<File> getUserContent(String type) {
+    public static List<File> getUserContent(String type) 
+    {
+    	return getUserContent(type, false);
+    }
+    
+    public static List<File> getUserContent(String type, boolean makeNewDirectory) {
         List<File> fileList = new ArrayList<File>();
         Map<String, ?> context = FastMap.newInstance();
-        String osafeThemeServerPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "osafe.theme.server"), context);
-        String userContentImagePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "user-content.image-path"), context);
+        String osafeThemeServerPath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("osafeThemeServer"), context);
+        String userContentImagePath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("userContentImagePath"), context);
 
         String userContentPath = null;
-        if(UtilValidate.isNotEmpty(type)) {
-            userContentPath = osafeThemeServerPath + userContentImagePath + type+"/";
-            
-        } else {
-            userContentPath = osafeThemeServerPath + userContentImagePath;
+        if(UtilValidate.isNotEmpty(type)) 
+        {
+           userContentPath = osafeThemeServerPath + userContentImagePath + type+"/";
+        } 
+        else 
+        {
+           userContentPath = osafeThemeServerPath + userContentImagePath;
         }
         File userContentDir = new File(userContentPath);
         
-        fileList = getFileList(userContentDir, fileList);
+        if(!userContentDir.exists() && makeNewDirectory)
+        {
+        	userContentDir.mkdir();
+        }
+        
+        if(userContentDir.exists())
+        {
+        	fileList = getFileList(userContentDir, fileList);
+    	}
+    
+        return fileList;
+    }
+    
+    public static List<File> getUserContentDirectories() 
+    {
+        List<File> fileList = new ArrayList<File>();
+        Map<String, ?> context = FastMap.newInstance();
+        String osafeThemeServerPath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("osafeThemeServer"), context);
+        String userContentImagePath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("userContentImagePath"), context);
+
+        String userContentPath = null;
+        userContentPath = osafeThemeServerPath + userContentImagePath;
+        File userContentDir = new File(userContentPath);
+        
+        fileList = getDirectoryList(userContentDir, fileList);
         return fileList;
     }
 
@@ -338,24 +428,30 @@ public class OsafeAdminUtil {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         List<GenericValue> countryList = FastList.newInstance();
         String countryDefault = "";
+        String countryDropdownParm = "";
         String countryDropdown = "";
         String countryMulti = "";
 
         countryDefault = getProductStoreParm(delegator, ProductStoreWorker.getProductStoreId(request), "COUNTRY_DEFAULT");
-        if (UtilValidate.isEmpty(countryDefault)) {
+        if (UtilValidate.isEmpty(countryDefault)) 
+        {
             countryDefault = "USA";
         }
-        countryDropdown =  getProductStoreParm(delegator, ProductStoreWorker.getProductStoreId(request), "COUNTRY_DROPDOWN");
+        countryDropdownParm =  getProductStoreParm(delegator, ProductStoreWorker.getProductStoreId(request), "COUNTRY_DROPDOWN");
         countryMulti = getProductStoreParm(delegator, ProductStoreWorker.getProductStoreId(request), "COUNTRY_MULTI");
-        countryDropdown = countryDropdown+","+countryDefault;
+        countryDropdown = countryDropdownParm+","+countryDefault;
 
-        if (UtilValidate.isNotEmpty(countryMulti) && countryMulti.equalsIgnoreCase("true")) {
+        if (UtilValidate.isNotEmpty(countryMulti) && countryMulti.equalsIgnoreCase("true")) 
+        {
             countryList = CommonWorkers.getCountryList(delegator);
-            if (UtilValidate.isNotEmpty(countryDropdown) && !(countryDropdown.equalsIgnoreCase("ALL"))) {
-                List<String> countryDropdownList = StringUtil.split(countryDropdown,",");
-                for(GenericValue country: countryList) {
+            if (UtilValidate.isNotEmpty(countryDropdown) && !(countryDropdownParm.equalsIgnoreCase("ALL"))) 
+            {
+                List<String> countryDropdownList = StringUtil.split(StringUtil.removeSpaces(countryDropdown),",");
+                for(GenericValue country: countryList) 
+                {
                     String geoId = country.getString("geoId");
-                    if (!countryDropdownList.contains(geoId)) {
+                    if (!countryDropdownList.contains(geoId)) 
+                    {
                         countryList.remove(country);
                     }
                 }
@@ -377,6 +473,29 @@ public class OsafeAdminUtil {
                     }
                 }
             } catch (Exception exc) {
+                Debug.logError(exc, module);
+            }
+        }
+        return fileList;
+    }
+    
+    //retrieve a list of Directories (sub-folders) in a given Directory 
+    public static List<File> getDirectoryList(File userContentDir , List<File> fileList) 
+    {
+        File[] fileArray = userContentDir.listFiles();
+        for (File file: fileArray) {
+            try 
+            {
+                if(!file.getName().equals(".svn")) 
+                {
+                    if(file.isDirectory()) 
+                    {
+                    	fileList.add(file);
+                    }
+                }
+            } 
+            catch (Exception exc) 
+            {
                 Debug.logError(exc, module);
             }
         }
@@ -445,7 +564,8 @@ public class OsafeAdminUtil {
      * @param locale The Locale used to format the number
      * @return A String with the currency symbol
      */
-    public static String showCurrency(String isoCode, Locale locale) {
+    public static String showCurrency(String isoCode, Locale locale) 
+    {
         NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
         if (isoCode != null && isoCode.length() > 1) {
             nf.setCurrency(Currency.getInstance(isoCode));
@@ -518,20 +638,29 @@ public class OsafeAdminUtil {
         }
         return isNumber;
     }
-    public static boolean isDateTime(String dateStr) {
+    public static boolean isDateTime(String dateStr) 
+    {
         String entryDateFormat = UtilProperties.getPropertyValue("osafeAdmin.properties", "entry-date-format");
         return isDateTime(dateStr, entryDateFormat);
     }
 
-    public static boolean isDateTime(String dateStr, String format) {
+    public static boolean isDateTime(String dateStr, String format) 
+    {
+    	if (UtilValidate.isEmpty(dateStr) || UtilValidate.isEmpty(format) ) 
+        {
+            return false;
+        }
         boolean isValid = false;
-
-        try {
-            Object convertedDate = ObjectType.simpleTypeConvert(dateStr, "Timestamp", format, null);
-            if (convertedDate != null) {
-                isValid = true;
-            }
-        } catch (GeneralException e) {
+        
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+		sdf.setLenient(false);
+        try 
+        {
+        	Date date = sdf.parse(dateStr);
+            isValid = true;
+        } 
+        catch (Exception e) 
+        {
             isValid = false;
         }
         return isValid;
@@ -603,12 +732,29 @@ public class OsafeAdminUtil {
         char[] chars = desc.toCharArray();
         for (char c: chars) 
         {
-            if ((!Character.isLetterOrDigit(c)) && (c!='-') && (c!='_') && (c!='!') && (c!='@') && (c!='#') && (c!='$') && (c!='%') && (c!=':') && (c!='?') && (c!=',') && (c!=';') && (c!='.') && (c!='&') && (c!='\'') && (Character.UnicodeBlock.of(c) != Character.UnicodeBlock.LATIN_1_SUPPLEMENT)) 
+            if ((!Character.isLetterOrDigit(c)) && (c!='-') && (c!='_') && (c!='!') && (c!='@') && (c!='#') && (c!='$') && (c!='%') && (c!=':') && (c!='?') && (c!=',') && (c!=';') && (c!='.') && (c!='&') && (c!='/') && (Character.UnicodeBlock.of(c) != Character.UnicodeBlock.LATIN_1_SUPPLEMENT)) 
             {
                 if(!(c == ' '))
                 {
                     return false;
                 }
+            }
+        }
+        return true;
+    }
+    
+    public static boolean isValidFeature(String desc) 
+    {
+        if (UtilValidate.isEmpty(desc)) 
+        {
+            return false;
+        }
+        char[] chars = desc.toCharArray();
+        for (char c: chars) 
+        {
+        	if ((!Character.isLetterOrDigit(c)) && ((c =='<') || (c=='>') || (c==','))) 
+            {
+                return false;
             }
         }
         return true;
@@ -714,7 +860,8 @@ public class OsafeAdminUtil {
         removeDuplicates(duplicates);
         return duplicates;
     }
-    public static void removeDuplicates(List list) {
+    public static void removeDuplicates(List list) 
+    {
         HashSet set = new HashSet(list);
         list.clear();
         list.addAll(set);
@@ -743,7 +890,9 @@ public class OsafeAdminUtil {
                 sortedMap.put(entry.getKey(), entry.getValue());  
             }
             return sortedMap;
-        } catch (Exception e){
+        } 
+        catch (Exception e)
+        {
             return mapToSort;
         }
     }
@@ -776,13 +925,13 @@ public class OsafeAdminUtil {
 
             sequenceSortedMap = sortMapByValues(sequenceSortedMap);
 
-            Map <K, V> sequenceMapInMultiple = FastMap.newInstance();
+            Map <K, V> sequenceMapInMultiple = new LinkedHashMap <K, V> ();
             int row = 0;
             for (Map.Entry < K, Integer>  entry : sequenceSortedMap.entrySet()) 
             {
                 if (entry.getValue() == -1)
                 {
-                    sequenceMapInMultiple.put(entry.getKey(), (V)"");
+                    sequenceMapInMultiple.put(entry.getKey(), (V)"0");
                 } 
                 else if (entry.getValue() == 0)
                 {
@@ -802,12 +951,72 @@ public class OsafeAdminUtil {
                 }
             }
             return sequenceMapInMultiple;
-        } catch (Exception e){
+        } 
+        catch (Exception e)
+        {
             return sequenceMap;
         }
     }
+
+    public static <K, V> Map <K, V> setSequenceMapByMultiple(final Map <K, V> sequenceMap, final Map <K, V> groupMap, Integer multiple) 
+    {
+        if (UtilValidate.isEmpty(sequenceMap) || UtilValidate.isEmpty(groupMap)) 
+        {
+            return sequenceMap;
+        }
+        try 
+        {
+        	Map <K, V> sortedGroupMap = setSequenceMap(groupMap);
+        	TreeMap <Integer, Map <K, V>> seqGroupMap = new TreeMap <Integer, Map <K, V>>();
+            for (Map.Entry < K, V>  entry : sortedGroupMap.entrySet()) 
+            {
+            	Map <K, V> seqMap =  (Map <K, V>)seqGroupMap.get(Integer.parseInt(entry.getValue().toString()));
+                if (UtilValidate.isEmpty(seqMap))
+                {
+                    seqMap = FastMap.newInstance();
+                }
+                seqMap.put(entry.getKey(), sequenceMap.get(entry.getKey()));
+                seqGroupMap.put(Integer.parseInt(entry.getValue().toString()), seqMap);
+            }
+
+            if (UtilValidate.isEmpty(multiple)) 
+            {
+                multiple = 1;
+            }
+            int row = 0;
+        	Map <K, V> sequenceMapInMultiple = new LinkedHashMap <K, V> ();
+            for (Map.Entry <Integer, Map <K, V>> entry : seqGroupMap.entrySet()) 
+            {
+	            	Map <K, V> seqMap =  (Map <K, V>)entry.getValue();
+	                if (UtilValidate.isNotEmpty(seqMap))
+	                {
+	                	Map <K, V> sortedseqMap = setSequenceMap(seqMap);
+		                if (entry.getKey() > 0)
+		                {
+		                    for (Map.Entry <K, V> seqEentry : sortedseqMap.entrySet()) 
+		                    {
+		                        Integer seqValue = (++row)*multiple;
+		                        sequenceMapInMultiple.put(seqEentry.getKey(), (V)seqValue.toString());
+		                    }
+	                    }
+		                else
+		                {
+		                	sequenceMapInMultiple.putAll(sortedseqMap);
+		                }
+                    }
+            }
+
+            return sequenceMapInMultiple;
+        }
+        catch (Exception e)
+        {
+            return sequenceMap;
+        }
+    }
+
     /** Returns the ocurrences of a subStr in a String. */
-    public static int countOccurrences(String str, String subStr) {
+    public static int countOccurrences(String str, String subStr) 
+    {
         int subStrCount = 0;
         if (UtilValidate.isNotEmpty(str) && UtilValidate.isNotEmpty(subStr)) 
         {
@@ -815,14 +1024,19 @@ public class OsafeAdminUtil {
         }
         return subStrCount;
     }
+    
     /** Trims all the trailing white spaces of a String. */
-    public static String trimTrailSpaces(String str) {
+    public static String trimTrailSpaces(String str) 
+    {
         String trimmedStr = null;
-        if (UtilValidate.isNotEmpty(str)){
+        if (UtilValidate.isNotEmpty(str))
+        {
             int i;  
-            for ( i = str.length()-1; i > 0; i--){  
+            for ( i = str.length()-1; i > 0; i--)
+            {  
                 char c = str.charAt(i);  
-                if (c != '\u0020') {  
+                if (c != '\u0020') 
+                {  
                     break;
                 }
             }
@@ -833,49 +1047,65 @@ public class OsafeAdminUtil {
     
     public static boolean isValidURL(String url) 
     {
-        if (UtilValidate.isEmpty(url)) {
+    	String httpPattern="^http(s{0,1})://[a-zA-Z0-9_/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9_/\\&\\?\\=\\-\\.\\~\\%]*";
+        String wwwPattern="^www.[a-zA-Z0-9_/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9_/\\&\\?\\=\\-\\.\\~\\%]*";
+        String Pattern = "^[a-zA-Z0-9_/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9_/\\&\\?\\=\\-\\.\\~\\%]*";
+        if (UtilValidate.isEmpty(url)) 
+        {
             return false;
         }
-        if (url.indexOf("//") != -1)
-            return true;
-        return false;
+        return (url.matches(httpPattern) || url.matches(wwwPattern) || url.matches(Pattern));
     }
 
-    public static String checkTelecomNumber(String areaCode, String contactNumber, String required) {
+    public static String checkTelecomNumber(String areaCode, String contactNumber, String required) 
+    {
         return checkTelecomNumber(areaCode, contactNumber, null, required);
     }
 
-    public static String checkTelecomNumber(String areaCode, String contactNumber, String extension, String required) {
+    public static String checkTelecomNumber(String areaCode, String contactNumber, String extension, String required) 
+    {
 
-        if (Boolean.parseBoolean(required) || "Y".equalsIgnoreCase(required)) {
-            if (UtilValidate.isEmpty(areaCode) && UtilValidate.isEmpty(contactNumber)) {
+        if (Boolean.parseBoolean(required) || "Y".equalsIgnoreCase(required)) 
+        {
+            if (UtilValidate.isEmpty(areaCode) && UtilValidate.isEmpty(contactNumber)) 
+            {
                 return "missing";
             }
-            if (UtilValidate.isEmpty(areaCode) || UtilValidate.isEmpty(contactNumber)) {
+            if (UtilValidate.isEmpty(areaCode) || UtilValidate.isEmpty(contactNumber)) 
+            {
                 return "invalid";
             }
         }
 
-        if (UtilValidate.isNotEmpty(areaCode)) {
+        if (UtilValidate.isNotEmpty(areaCode)) 
+        {
             String justNumbers = StringUtil.removeRegex(areaCode, "[\\s-]");
-            if (!UtilValidate.isInteger(justNumbers)) {
+            if (!UtilValidate.isInteger(justNumbers)) 
+            {
                 return "invalid";
-            } else if (justNumbers.length() < 3) {
+            } 
+            else if (justNumbers.length() < 3) 
+            {
                 return "invalid";
             }
-
         }
-        if (UtilValidate.isNotEmpty(contactNumber)) {
+        if (UtilValidate.isNotEmpty(contactNumber)) 
+        {
             String justNumbers = StringUtil.removeRegex(contactNumber, "[\\s-]");
-            if (!UtilValidate.isInteger(justNumbers)) {
+            if (!UtilValidate.isInteger(justNumbers)) 
+            {
                 return "invalid";
-            } else if (justNumbers.length() < 7) {
+            } 
+            else if (justNumbers.length() < 7) 
+            {
                 return "invalid";
             }
         }
-        if (UtilValidate.isNotEmpty(extension)) {
+        if (UtilValidate.isNotEmpty(extension)) 
+        {
             String justNumbers = StringUtil.removeRegex(extension, "[\\s-]");
-            if (!UtilValidate.isInteger(justNumbers)) {
+            if (!UtilValidate.isInteger(justNumbers)) 
+            {
                 return "invalid";
             }
         }
@@ -883,10 +1113,77 @@ public class OsafeAdminUtil {
         return "success";
     }
 
-    public static Map<String, Object> getCountryGeoInfo(Delegator delegator, String geoId) {
+    public static String checkDateOfBirth(String day, String month, String year, String format, String required) 
+    {
+    	
+        if(UtilValidate.isEmpty(format))
+        {
+        	format = "MMDDYYYY";
+        }
+        if(UtilValidate.isEmpty(required))
+        {
+        	required = "N";
+        }
+        
+        if(format.equalsIgnoreCase("MMDD") || format.equalsIgnoreCase("DDMM"))
+        {
+                if (UtilValidate.isEmpty(month) && UtilValidate.isEmpty(day)) 
+                {
+                	if (Boolean.parseBoolean(required) || "Y".equalsIgnoreCase(required) || "YES".equalsIgnoreCase(required)) 
+                	{
+                        return "missing";
+                    }
+                }
+                else if(UtilValidate.isEmpty(month) && UtilValidate.isNotEmpty(day))
+                {
+                    return "invalid";
+                }
+                else if(UtilValidate.isNotEmpty(month) && UtilValidate.isEmpty(day))
+                {
+                    return "invalid";
+                }
+        }
+        else if(format.equalsIgnoreCase("MMDDYYYY") || format.equalsIgnoreCase("DDMMYYYY"))
+        {
+            if (UtilValidate.isEmpty(month) && UtilValidate.isEmpty(day) && UtilValidate.isEmpty(year)) 
+            {
+            	if (Boolean.parseBoolean(required) || "Y".equalsIgnoreCase(required) || "YES".equalsIgnoreCase(required)) 
+            	{
+                    return "missing";
+                }
+            }
+            else if(UtilValidate.isNotEmpty(day) && (UtilValidate.isEmpty(month) || UtilValidate.isEmpty(year)))
+            {
+                return "invalid";
+            }
+            else if(UtilValidate.isNotEmpty(month) && (UtilValidate.isEmpty(day) || UtilValidate.isEmpty(year)))
+            {
+                return "invalid";
+            }
+            else if(UtilValidate.isNotEmpty(year) && (UtilValidate.isEmpty(day) || UtilValidate.isEmpty(month)))
+            {
+                return "invalid";
+            }
+        }
+
+    	if (UtilValidate.isNotEmpty(month) && UtilValidate.isNotEmpty(day) && UtilValidate.isNotEmpty(year)) 
+    	{
+            String dobDateString = month.concat("/").concat(day).concat("/").concat(year);
+            if(UtilValidate.isNotEmpty(dobDateString) && !UtilValidate.isDate(dobDateString))
+            {
+            	return "invalid";
+            }
+        }
+
+        return "success";
+    }
+
+    public static Map<String, Object> getCountryGeoInfo(Delegator delegator, String geoId) 
+    {
         GenericValue geo = null;
         Map<String, Object> result = FastMap.newInstance();
-        try {
+        try 
+        {
             Debug.logInfo("geoId: " + geoId, module);
 
             geo = delegator.findByPrimaryKeyCache("Geo", UtilMisc.toMap("geoId", geoId.toUpperCase()));
@@ -896,7 +1193,9 @@ public class OsafeAdminUtil {
                 result.put("geoId", (String) geo.get("geoId"));
                 result.put("geoName", (String) geo.get("geoName"));
             }
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             String errMsg = "Failed to find/setup geo id";
             Debug.logError(e, errMsg, module);
             return ServiceUtil.returnError(errMsg);
@@ -904,62 +1203,79 @@ public class OsafeAdminUtil {
         return result;
     }
 
-    public static String passPattern(String password, String pwdLenStr, String minDigitStr, String minUpCaseStr) {
+    public static String passPattern(String password, String pwdLenStr, String minDigitStr, String minUpCaseStr) 
+    {
 
         int pwdLength = 6;//Need to confirm this value.
         int minDigit = 0;
         int minUpCase = 0;
 
-        if (isNumber(pwdLenStr)  && (Integer.parseInt(pwdLenStr) > 0)) {
+        if (isNumber(pwdLenStr)  && (Integer.parseInt(pwdLenStr) > 0)) 
+        {
             pwdLength = Integer.parseInt(pwdLenStr);
-       }
-       if (isNumber(minDigitStr)) {
-           minDigit = Integer.parseInt(minDigitStr);
-       }
-       if (isNumber(minUpCaseStr)) {
-           minUpCase = Integer.parseInt(minUpCaseStr);
-       }
-
-       return passPattern(password, pwdLength, minDigit, minUpCase);
-    
+        }
+        if (isNumber(minDigitStr)) 
+        {
+            minDigit = Integer.parseInt(minDigitStr);
+        }
+        if (isNumber(minUpCaseStr)) 
+        {
+            minUpCase = Integer.parseInt(minUpCaseStr);
+        }
+        return passPattern(password, pwdLength, minDigit, minUpCase);
     }
 
-    public static String passPattern(String password, int passwordLength, int minDigit, int minUpperCase) {
-        if (passwordLength > 0) {
+    public static String passPattern(String password, int passwordLength, int minDigit, int minUpperCase)
+    {
+        if (passwordLength > 0) 
+        {
             String digitMsgStr = "digits";
             String upperCaseMsgStr = "letters";
         String errormessage = UtilProperties.getMessage("OSafeUiLabels", "PasswordMinLengthError", UtilMisc.toMap("passwordLength", passwordLength), Locale.getDefault());
-        if (minDigit > 0) {
-            if (minDigit == 1) {
+        if (minDigit > 0) 
+        {
+            if (minDigit == 1) 
+            {
                 digitMsgStr = "digit";
-                
             }
             errormessage = errormessage+" "+UtilProperties.getMessage("OSafeUiLabels", "PasswordDigitError", UtilMisc.toMap("minDigit", (Integer)minDigit, "digitMsgStr", digitMsgStr), Locale.getDefault());
         }
         
-        if (minUpperCase == 1) {
+        if (minUpperCase == 1) 
+        {
             upperCaseMsgStr = "letter";
         }
-        if (minDigit > 0 && minUpperCase > 0) {
+        if (minDigit > 0 && minUpperCase > 0) 
+        {
             errormessage = errormessage+" and "+UtilProperties.getMessage("OSafeUiLabels", "PasswordUpperCaseError", UtilMisc.toMap("minUpperCase", (Integer) minUpperCase, "upperCaseMsgStr", upperCaseMsgStr), Locale.getDefault());
-        } else if (minDigit == 0 && minUpperCase > 0) {
+        } 
+        else if (minDigit == 0 && minUpperCase > 0) 
+        {
             errormessage = errormessage+" "+UtilProperties.getMessage("OSafeUiLabels", "PasswordWithNoDigitUpperCaseError", UtilMisc.toMap("minUpperCase", (Integer) minUpperCase, "upperCaseMsgStr", upperCaseMsgStr), Locale.getDefault());
         }
         
-        if (!(password.length() >= passwordLength)) {
+        if (!(password.length() >= passwordLength)) 
+        {
             return errormessage;
-        } else {
+        } 
+        else 
+        {
             char[] passwordChars = password.toCharArray();
             int digitCount = 0;
             int upperCount = 0;
-            for (char passwordChar: passwordChars) {
-                if (Character.isDigit(passwordChar)) {
+            for (char passwordChar: passwordChars) 
+            {
+                if (Character.isDigit(passwordChar)) 
+                {
                     digitCount = digitCount + 1;
-                } else if (Character.isUpperCase(passwordChar)) {
+                } 
+                else if (Character.isUpperCase(passwordChar)) 
+                {
                     upperCount = upperCount + 1;
                 }
             }
-            if (!(digitCount >= minDigit) || !(upperCount >= minUpperCase)) {
+            if (!(digitCount >= minDigit) || !(upperCount >= minUpperCase)) 
+            {
                 return errormessage;
             }
         }
@@ -967,24 +1283,29 @@ public class OsafeAdminUtil {
         return "success";
     }
 
-    public static String stripHTML(String content) {
+    public static String stripHTML(String content) 
+    {
         return stripHTML(content,800);
     }
 
-    public static String stripHTML(String content,int wrapLen) {
+    public static String stripHTML(String content,int wrapLen) 
+    {
         
-        if (content == null) {
+        if (content == null) 
+        {
             return "";
         }
         String cleanContent = content;//StringUtil.wrapString(content).toString();
         Tidy tidy = new Tidy();
         InputStream inStream = null;
-        try {
+        try 
+        {
             cleanContent = filterNonAscii(cleanContent);
             inStream = new ByteArrayInputStream(cleanContent.getBytes("UTF-8"));
 
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            if (inStream != null) {
+            if (UtilValidate.isNotEmpty(inStream)) 
+            {
 
                 PrintWriter pw = new PrintWriter(new StringWriter());
                 tidy.setWraplen(wrapLen);
@@ -992,7 +1313,8 @@ public class OsafeAdminUtil {
                 tidy.setShowWarnings(false);
                 tidy.setMakeClean(true);
                 tidy.parse(inStream, outStream);
-                if (outStream != null) {
+                if (outStream != null) 
+                {
                     cleanContent = outStream.toString("UTF-8");
                     cleanContent = cleanContent.replaceAll("\\<.*?>", "");
                     String[] split = StringUtils.split(cleanContent, "\n\r");
@@ -1000,19 +1322,24 @@ public class OsafeAdminUtil {
                 }
 
             }
-        } catch (UnsupportedEncodingException e) {
+        } 
+        catch (UnsupportedEncodingException e) 
+        {
             Debug.logError(e, e.getMessage(), module);
         }
         return cleanContent;
     }
 
-    public static String stripHTMLInLength(String content) {
+    public static String stripHTMLInLength(String content) 
+    {
         return stripHTMLInLength(content, "800");
     }
 
-    public static String stripHTMLInLength(String content, String length) {
+    public static String stripHTMLInLength(String content, String length)
+   {
         int maxLength = 800;
-        if (isNumber(length)) {
+        if (isNumber(length)) 
+        {
             maxLength = Integer.parseInt(length);
         }
         String stripHTMLStr = stripHTML(content);
@@ -1020,11 +1347,12 @@ public class OsafeAdminUtil {
     }
     
     /** String with in the given limit
-     * @param String that need to refector
+     * @param String that need to refactor
      * @param Int length
      * @return A String with in the given limit
      */
-    public static String getStringInLength(String str, int length) {
+    public static String getStringInLength(String str, int length) 
+    {
         String strInLength = null;
         if (UtilValidate.isNotEmpty(str))
         { 
@@ -1057,7 +1385,8 @@ public class OsafeAdminUtil {
         return strInLength;
     }
 
-    public static String htmlSpecialChars(String html) {
+    public static String htmlSpecialChars(String html) 
+    {
         html = StringUtil.replaceString(html, "&", "&amp;");
         html = StringUtil.replaceString(html, "<", "&lt;");
         html = StringUtil.replaceString(html, ">", "&gt;");
@@ -1068,17 +1397,188 @@ public class OsafeAdminUtil {
         return html;
     }
     // Method to reduce currenttimeStamp by 1 month.
-    public static Timestamp getMonthBackTimeStamp(int monthsBack) {
+    public static Timestamp getMonthBackTimeStamp(int monthsBack) 
+    {
         Timestamp retStamp = null;
-        try {
+        try 
+        {
             Calendar tempCal = UtilDateTime.toCalendar(UtilDateTime.nowTimestamp()); 
             tempCal.add(Calendar.MONTH, -monthsBack);
             retStamp = new Timestamp(tempCal.getTimeInMillis());
             retStamp.setNanos(0);
         }
-        catch (Exception e){
-            
+        catch (Exception e)
+        {
+            Debug.logError(e, e.getMessage(), module);
         }
         return retStamp;
+    }
+
+    /*Returns the value 0 if the first string is equal to second string; 
+      a value less than 0 if first string is alphanumerically less than the second string ; 
+      and a value greater than 0 if first string is alphanumerically greater than the second string. */
+    public static int alphaNumericSort(String firstStrToCompare, String secondStrToCompare) 
+    {
+        String firstString = firstStrToCompare;
+        String secondString = secondStrToCompare;
+ 
+        if (UtilValidate.isEmpty(secondString) || UtilValidate.isEmpty(firstString)) 
+        {
+            return 0;
+        }
+
+        int lengthFirstStr = firstString.length();
+        int lengthSecondStr = secondString.length();
+ 
+        int index1 = 0;
+        int index2 = 0;
+
+        while (index1 < lengthFirstStr && index2 < lengthSecondStr) 
+        {
+            char ch1 = firstString.charAt(index1);
+            char ch2 = secondString.charAt(index2);
+ 
+            char[] space1 = new char[lengthFirstStr];
+            char[] space2 = new char[lengthSecondStr];
+ 
+            int loc1 = 0;
+            int loc2 = 0;
+            
+            //Create Two Character Sequence 'space1' and 'space2' of Same Type either Alphabetic or Numeric
+            space1[0] = ch1;
+            while(index1 < lengthFirstStr)
+            {
+            	if(Character.isDigit(ch1) == Character.isDigit(space1[0]))
+            	{
+            		space1[loc1++] = ch1;
+            		index1++;
+            		if(index1 < lengthFirstStr)
+            		{
+                	    ch1 = firstString.charAt(index1);
+            		}
+            	}
+            	else
+            	{
+            		break;
+            	}
+            }
+            space2[0] = ch2;
+            while(index2 < lengthSecondStr)
+            {
+            	if(Character.isDigit(ch2) == Character.isDigit(space2[0]))
+            	{
+            		space2[loc2++] = ch2;
+            		index2++;
+            		if(index2 < lengthSecondStr)
+            		{
+                	    ch2 = secondString.charAt(index2);
+            		}
+            	}
+            	else
+            	{
+            		break;
+            	}
+            }
+ 
+            //Build Two Strings 'str1' and 'str2' of Same Type either Alphabetic or Numeric from Character Sequence
+            String str1 = new String(space1);
+            String str2 = new String(space2);
+ 
+            int result;
+ 
+            //If both Character Sequences starts with numeric value then convert the same type of String to the Integer value and then Compare
+            if (Character.isDigit(space1[0]) && Character.isDigit(space2[0])) 
+            {
+                Integer firstNumberToCompare = new Integer(Integer.parseInt(str1.trim()));
+                Integer secondNumberToCompare = new Integer(Integer.parseInt(str2.trim()));
+                result = firstNumberToCompare.compareTo(secondNumberToCompare);
+            }
+            else 
+            {
+            	//Compare the Same Type of String 'str1' and 'str2'
+                result = str1.trim().compareTo(str2.trim());
+            }
+            /*If both Same type of String 'str1' and 'str2' are equal then continue to the outer loop with the next index position.
+            else return the positive or negative integer value */
+            if (result != 0) 
+            {
+                return result;
+            }
+        }
+        return lengthFirstStr - lengthSecondStr;
+    }
+
+    /**
+     *returns the values in sorted by column
+     *
+     *@param numberOfCols number of columns to display in generated HTML
+     *@param sortList list of GenericValue to sort
+     *@param sortByCol name of sorting column
+     *@return List of sorted values
+     */
+    public static List<Map<Object, Object>> sortInColumns(int numberOfCols, List<GenericValue> sortList, String sortByCol) 
+    {
+        if (UtilValidate.isEmpty(numberOfCols) || UtilValidate.isEmpty(sortList) || UtilValidate.isEmpty(sortByCol)) 
+        {
+            return null;
+        }
+        List<Map<Object, Object>> result = FastList.newInstance();
+        try 
+        {
+            // First sort the list base on sorting column
+            for (GenericValue value: sortList)
+            {
+            	Map<String, Object> valueMap = value.getAllFields();
+                if (UtilValidate.isNotEmpty(valueMap.get(sortByCol)) && UtilValidate.isInteger(valueMap.get(sortByCol).toString()))
+                {
+                    valueMap.put(sortByCol, Integer.parseInt(valueMap.get(sortByCol).toString()));
+                }
+                result.add(UtilGenerics.<Object, Object>checkMap(valueMap));
+            }
+            result = UtilMisc.sortMaps(result, UtilMisc.toList(sortByCol));
+
+            // Now Add the logic for Algorithm
+        	String newSortingCol = sortByCol+"_new";
+            int markUpOrder = 1;
+            int count = markUpOrder;
+            for (Map<Object, Object> valueMap: result)
+            {
+                valueMap.put(newSortingCol, markUpOrder);
+                markUpOrder += numberOfCols;
+                if (markUpOrder > result.size())
+                {
+                	markUpOrder = ++count;
+                }
+            }
+            result = UtilMisc.sortMaps(result, UtilMisc.toList(newSortingCol));
+        }
+        catch (Exception e)
+        {
+            Debug.logError(e, e.getMessage(), module);
+        }
+        return result;
+    }
+
+    public static String getNextSeqId(Delegator delegator, String seqName, String entityName, String entityPK)
+    {
+    	String seqId = delegator.getNextSeqId(seqName);
+        // check that id is not already exist
+        try 
+        {
+    	    GenericValue gv = delegator.findByPrimaryKey(entityName, UtilMisc.toMap(entityPK, seqId));
+    	    if (UtilValidate.isEmpty(gv))
+    	    {
+    	        return seqId;
+    	    }
+    	    else
+    	    {
+    	    	seqId = getNextSeqId(delegator, seqName, entityName, entityPK);
+    	    }
+        }
+        catch (Exception e)
+        {
+            Debug.logError(e, e.getMessage(), module);
+        }
+        return seqId;
     }
 }

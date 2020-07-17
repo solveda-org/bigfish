@@ -401,7 +401,7 @@ under the License.
             <arg value="delegator=default#DEMO2"/>
         </java>
     </target>
-    <target name="run-install-seed" depends="build"
+    <target name="run-install-seed" depends="build,run-bigfish-merge"
             description="This loads ONLY the seed data (not seed-initial, demo, ext* or anything else); meant for use after an update of the code to reload the seed data as it is generally maintained along with the code and needs to be in sync for operation">
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.initial.param}"/>
@@ -467,6 +467,46 @@ under the License.
             <arg value="readers=contentmenu"/>
         </java>
     </target>
+    <target name="load-bigfish-custom-shipment-methods" depends="build"
+        description="This loads custom shipment methods">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=customshipmentmethods"/>
+        </java>
+    </target>
+    <target name="load-bigfish-custom-payment-methods" depends="build"
+        description="This loads custom payment methods">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=custompaymentmethods"/>
+        </java>
+    </target>
+    <target name="load-giftcard-payment-settings" depends="build"
+        description="This loads gifcard payment settings">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=gifcardpaymentsettings"/>
+        </java>
+    </target>
+    <target name="load-tendercard-payment-settings" depends="build"
+        description="This loads tendercard payment settings">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=tendercardpaymentsettings"/>
+        </java>
+    </target>
     <target name="run-bigfish-types" depends="build"
         description="This loads content data; meant for adding data for BigFish OFBiz">
         <java jar="ofbiz.jar" fork="true">
@@ -505,6 +545,21 @@ under the License.
             <jvmarg value="${memory.maxpermsize.param}"/>
             <arg value="install"/>
             <arg value="readers=schedulers"/>
+        </java>
+    </target>
+    <target name="run-bigfish-merge">
+        <subant target="run-bigfish-merge">
+            <filelist dir="." files="hot-deploy/osafe/build.xml"/>
+        </subant>
+    </target>
+    <target name="run-bigfish-version" depends="build,run-bigfish-merge"
+        description="This loads content data; meant for adding data for BigFish OFBiz">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=version"/>
         </java>
     </target>
     <target name="run-install-readers" depends="build"

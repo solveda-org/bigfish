@@ -1,13 +1,13 @@
-<div class="plpThumbImage">
- <div class="eCommerceThumbNailHolder">
-    <div class="swatchProduct">
-    <!-- using class pdpUrl for preparing PDP URL according to the selected swatch. -->
+<li class="${request.getAttribute("attributeClass")!}">
+ <div class="js_eCommerceThumbNailHolder eCommerceThumbNailHolder">
+    <div class="js_swatchProduct">
+    <#-- using class pdpUrl for preparing PDP URL according to the selected swatch. -->
         <a class="pdpUrl" title="${plpProductName!""}" href="${plpProductFriendlyUrl!"#"}" id="${plpProductId!}">
             <img alt="${plpProductName!""}" title="${plpProductName!""}" src="${plpProductImageUrl}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if plpProductImageAltUrl?has_content && plpProductImageAltUrl != ''> onmouseover="src='${plpProductImageAltUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});" onmouseout="src='${plpProductImageUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});"</#if> onerror="onImgError(this, 'PLP-Thumb');"/>
         </a>
     </div>
 	<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"QUICKLOOK_ACTIVE") && uiSequenceScreen?has_content && uiSequenceScreen == 'PLP'>
-	  <div id="plpQuicklook_${plpProductId!""}" class="plpQuicklook" style="display:none">
+	  <div id="plpQuicklook_${plpProductId!""}" class="js_plpQuicklook plpQuicklookIcon" style="display:none">
 	    <input type="hidden" class="param" name="productId" id="productId" value="${plpProductId!}"/>
 	    <input type="hidden" class="param" name="productCategoryId" value="${plpCategoryId!}"/>
 	    <#if plpProductFeatureType?has_content && featureValueSelected?has_content>
@@ -18,7 +18,7 @@
 	  </div>
 	</#if>
  </div>
-</div>
+</li>
  
  
  

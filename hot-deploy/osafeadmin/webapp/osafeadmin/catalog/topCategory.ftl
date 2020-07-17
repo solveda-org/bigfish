@@ -15,7 +15,7 @@
         <#if topLevelList?has_content>
 
             <#assign rowClass = "1">
-            <#list topLevelList as category>
+            <#list resultList as category>
               
               <#assign primaryParentCategoryId = category.productCategoryId?if_exists />
                 <tr class="<#if rowClass == "2">even</#if>">
@@ -39,9 +39,7 @@
                 </#if>
             </#list>
         <#else>
-                <tr>
-                    <td colspan="3" class="boxNumber">${uiLabelMap.NoDataAvailableInfo}</td>
-                </tr>
+             ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoDataResult")}
         </#if>
         </table>
     </div>

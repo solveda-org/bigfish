@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <TaxAuthorityRateProduct taxAuthorityRateSeqId="PennsylvaniaState" taxAuthGeoId="PA" taxAuthPartyId="PA_DTF" productStoreId="" taxAuthorityRateTypeId="SALES_TAX"
+        minItemPrice="0" minPurchase="0" taxShipping="Y" taxPercentage="6.0" taxPromotions="Y" fromDate="2001-05-13 00:00:00.001" thruDate="" description="PA State Tax"/>
+    <TaxAuthorityRateProduct taxAuthorityRateSeqId="Philadelphia" taxAuthGeoId="PA" taxAuthPartyId="PHILADELPHIA_DTF" productStoreId="" taxAuthorityRateTypeId="SALES_TAX"
+        minItemPrice="0" minPurchase="0" taxShipping="Y" taxPercentage="2.0" taxPromotions="Y" fromDate="2001-05-13 00:00:00.001" thruDate="" description="Philly City Tax"/>
+</entity-engine-xml>

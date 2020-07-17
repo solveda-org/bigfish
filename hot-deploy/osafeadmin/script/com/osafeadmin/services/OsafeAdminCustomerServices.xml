@@ -4,15 +4,23 @@
         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
 
     <simple-method method-name="updateCustomer" short-description="Update Customer">
+        <set field="request" from-field="parameters.request"/>
+        <call-class-method method-name="getParameterMap" class-name="org.ofbiz.base.util.UtilHttp" ret-field="paramMap">
+            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+        </call-class-method>
         <!-- validating first name and last name -->
-        <if-empty field="parameters.firstName">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FirstNameMissingError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
-        <if-empty field="parameters.lastName">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LastNameMissingError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
+        <if-compare field="parameters.firstName_mandatory" operator="equals" value="Y">
+	        <if-empty field="parameters.firstName">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FirstNameMissingError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="firstName" list="error_list"/>
+	        </if-empty>
+        </if-compare>
+        <if-compare field="parameters.lastName_mandatory" operator="equals" value="Y">
+	        <if-empty field="parameters.lastName">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LastNameMissingError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="lastName" list="error_list"/>
+	        </if-empty>
+        </if-compare>
         <!-- validating E-mail if entered -->
         <if-not-empty field="parameters.emailAddress">
             <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isEmail" ret-field="isEmail">
@@ -20,7 +28,7 @@
             </call-class-method>
             <if-compare field="isEmail" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="EmailAddressNotFormattedCorrectlyError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="emailAddress" list="error_list"/>
             </if-compare>
         </if-not-empty>
 
@@ -38,16 +46,20 @@
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                     <field field="parameters.phoneHomeArea"/>
                     <field field="parameters.phoneHomeContact"/>
-                    <string value="false"/>
+                    <field field="parameters.phoneHome_mandatory"/>
                 </call-class-method>
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePhoneMissingError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneHomeArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneHomeContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneHomeContact4" list="error_list"/>
                     </if-compare>
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneHomeArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneHomeContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneHomeContact4" list="error_list"/>
                     </if-compare>
                 </if-compare>
 
@@ -56,12 +68,20 @@
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                     <field field="parameters.phoneMobileArea"/>
                     <field field="parameters.phoneMobileContact"/>
-                    <string value="false"/>
+                    <field field="parameters.phoneMobile_mandatory"/>
                 </call-class-method>
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MobilePhoneMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneMobileArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneMobileContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneMobileContact4" list="error_list"/>
+                    </if-compare>
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MobilePhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneMobileArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneMobileContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneMobileContact4" list="error_list"/>
                     </if-compare>
                 </if-compare>
 
@@ -71,17 +91,33 @@
                     <field field="parameters.phoneWorkArea"/>
                     <field field="parameters.phoneWorkContact"/>
                     <field field="parameters.phoneWorkExt"/>
-                    <string value="false"/>
+                    <field field="parameters.phoneWork_mandatory"/>
                 </call-class-method>
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="WorkPhoneMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneWorkArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkContact4" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkExt" list="error_list"/>
+                    </if-compare>
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="WorkPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneWorkArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkContact4" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkExt" list="error_list"/>
                     </if-compare>
                 </if-compare>
             </then>
         <else>
             <!-- validating Home Phone -->
+             <if-compare field="parameters.phoneHome_mandatory" operator="equals" value="Y">
+                 <if-empty field="parameters.phoneHomeContactOther">
+                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePhoneMissingError"/>
+                     <string-to-list string="${tempErrorMessage}" message-field="phoneHomeContactOther" list="error_list"/>
+                 </if-empty>
+             </if-compare>
             <if-not-empty field="parameters.phoneHomeContactOther">
              <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                  <string value=""/>
@@ -91,7 +127,7 @@
              <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                  <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                      <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePhoneInvalidError"/>
-                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                     <string-to-list string="${tempErrorMessage}" message-field="phoneHomeContactOther" list="error_list"/>
                  </if-compare>
              <else>
                  <set field="parameters.phoneHomeContact" from-field="parameters.phoneHomeContactOther"/>
@@ -100,6 +136,12 @@
             </if-not-empty>
 
             <!-- Check the Mobile Phone -->
+             <if-compare field="parameters.phoneMobile_mandatory" operator="equals" value="Y">
+                 <if-empty field="parameters.phoneMobileContactOther">
+                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MobilePhoneMissingError"/>
+                     <string-to-list string="${tempErrorMessage}" message-field="phoneMobileContactOther" list="error_list"/>
+                 </if-empty>
+             </if-compare>
             <if-not-empty field="parameters.phoneMobileContactOther">
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                     <string value=""/>
@@ -109,7 +151,7 @@
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MobilePhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneMobileContactOther" list="error_list"/>
                     </if-compare>
 	            <else>
 	                <set field="parameters.phoneMobileContact" from-field="parameters.phoneMobileContactOther"/>
@@ -118,6 +160,12 @@
             </if-not-empty>
 
             <!-- Check the Work Phone -->
+             <if-compare field="parameters.phoneWork_mandatory" operator="equals" value="Y">
+                 <if-empty field="parameters.phoneWorkContactOther">
+                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="WorkPhoneMissingError"/>
+                     <string-to-list string="${tempErrorMessage}" message-field="phoneWorkContactOther" list="error_list"/>
+                 </if-empty>
+             </if-compare>
             <if-not-empty field="parameters.phoneWorkContactOther">
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                     <string value=""/>
@@ -128,7 +176,7 @@
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="WorkPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneWorkContactOther" list="error_list"/>
                     </if-compare>
                 <else>
                     <set field="parameters.phoneWorkContact" from-field="parameters.phoneWorkContactOther"/>
@@ -140,204 +188,456 @@
         </if>
 
         <!-- validating Title -->
-        <set field="titleStr" value="personalTitle"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasTitleInput">
-            <field field="titleStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasTitleInput" operator="equals" value="true" type="Boolean">
+        <if-compare field="parameters.personalTitle_mandatory" operator="equals" value="Y">
             <if-empty field="parameters.personalTitle">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TitleMissingError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="personalTitle" list="error_list"/>
             </if-empty>
         </if-compare>
         <!-- validating Gender -->
-        <set field="genderStr" value="gender"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasGenderInput">
-            <field field="genderStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasGenderInput" operator="equals" value="true" type="Boolean">
+        <if-compare field="parameters.gender_mandatory" operator="equals" value="Y">
             <if-empty field="parameters.gender">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GenderMissingError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="gender" list="error_list"/>
             </if-empty>
         </if-compare>
 
         <!-- DOB Short(MMDD) validation -->
-        <set field="dobShortMonthUsStr" value="dobShortMonthUs"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobShortMonthUsInput">
-            <field field="dobShortMonthUsStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasDobShortMonthUsInput" operator="equals" value="true" type="Boolean">
-            <if-not-empty field="parameters.dobShortMonthUs">
-                <if-not-empty field="parameters.dobShortDayUs">
-                    <set field="dobShortMonth" from-field="parameters.dobShortMonthUs"/>
-                    <set field="dobShortDay" from-field="parameters.dobShortDayUs"/>
-                    <set field="tempDobYear" value="1972"/>
-                    <string-append string="${dobShortMonth}" field="dobDateString"/>
-                    <string-append string="/" field="dobDateString"/>
-                    <string-append string="${dobShortDay}" field="dobDateString"/>
-                    <string-append string="/" field="dobDateString"/>
-                    <string-append string="${tempDobYear}" field="dobDateString"/>
-                    <!-- validates date -->
-                    <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidDate">
-                        <field field="dobDateString" type = "String" />
-                    </call-class-method>
-                    <if-compare operator="equals" value="false" field="isValidDate" type="Boolean">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
-                <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                </else>
-                </if-not-empty>
-            <else>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+            <field field="parameters.dobShortDayUs"/>
+            <field field="parameters.dobShortMonthUs"/>
+            <string value="1972"/>
+            <string value="MMDD"/>
+            <field field="parameters.DOB_MMDD_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobShortDayUs" list="error_list"/>
+                <string-to-list string="" message-field="dobShortMonthUs" list="error_list"/>
+            </if-compare>
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </else>
-            </if-not-empty>
+                <string-to-list string="${tempErrorMessage}" message-field="dobShortDayUs" list="error_list"/>
+                <string-to-list string="" message-field="dobShortMonthUs" list="error_list"/>
+            </if-compare>
         </if-compare>
 
          <!-- DOB Long(MMDDYYYY) validation -->
-        <set field="dobLongMonthUsStr" value="dobLongMonthUs"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobLongMonthUsInput">
-            <field field="dobLongMonthUsStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasDobLongMonthUsInput" operator="equals" value="true" type="Boolean">
-            <if-not-empty field="parameters.dobLongMonthUs">
-                <if-not-empty field="parameters.dobLongDayUs">
-                  <if-not-empty field="parameters.dobLongYearUs">
-                    <set field="dobMonth" from-field="parameters.dobLongMonthUs"/>
-                    <set field="dobDay" from-field="parameters.dobLongDayUs"/>
-                    <set field="dobYear" from-field="parameters.dobLongYearUs"/>
-                    <string-append string="${dobMonth}" field="dobLongDateString"/>
-                    <string-append string="/" field="dobLongDateString"/>
-                    <string-append string="${dobDay}" field="dobLongDateString"/>
-                    <string-append string="/" field="dobLongDateString"/>
-                    <string-append string="${dobYear}" field="dobLongDateString"/>
-                    <!-- validates date -->
-                    <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidLongDate">
-                        <field field="dobLongDateString" type = "String" />
-                    </call-class-method>
-                    <if-compare operator="equals" value="false" field="isValidLongDate" type="Boolean">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
-                   <else>
-                       <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                       <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                   </else>
-                </if-not-empty>
-                <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                </else>
-                </if-not-empty>
-            <else>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </else>
-            </if-not-empty>
-        </if-compare>
-
-        <!-- DOB Short(DDMM) validation -->
-        <set field="dobShortMonthUkStr" value="dobShortMonthUk"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobShortMonthUkInput">
-            <field field="dobShortMonthUkStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasDobShortMonthUkInput" operator="equals" value="true" type="Boolean">
-            <if-not-empty field="parameters.dobShortMonthUk">
-                <if-not-empty field="parameters.dobShortDayUk">
-                    <set field="dobShortMonth" from-field="parameters.dobShortMonthUk"/>
-                    <set field="dobShortDay" from-field="parameters.dobShortDayUk"/>
-                    <set field="tempDobYear" value="1972"/>
-                    <string-append string="${dobShortMonth}" field="dobDateString"/>
-                    <string-append string="/" field="dobDateString"/>
-                    <string-append string="${dobShortDay}" field="dobDateString"/>
-                    <string-append string="/" field="dobDateString"/>
-                    <string-append string="${tempDobYear}" field="dobDateString"/>
-                    <!-- validates date -->
-                    <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidDate">
-                        <field field="dobDateString" type = "String" />
-                    </call-class-method>
-                    <if-compare operator="equals" value="false" field="isValidDate" type="Boolean">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
-                <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                </else>
-                </if-not-empty>
-            <else>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </else>
-            </if-not-empty>
-        </if-compare>
-        
-         <!-- DOB Long(DDMMYYYY) validation -->
-        <set field="dobLongMonthUkStr" value="dobLongMonthUk"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobLongMonthUkInput">
-            <field field="dobLongMonthUkStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasDobLongMonthUkInput" operator="equals" value="true" type="Boolean">
-            <if-not-empty field="parameters.dobLongMonthUk">
-                <if-not-empty field="parameters.dobLongDayUk">
-                  <if-not-empty field="parameters.dobLongYearUk">
-                    <set field="dobMonth" from-field="parameters.dobLongMonthUk"/>
-                    <set field="dobDay" from-field="parameters.dobLongDayUk"/>
-                    <set field="dobYear" from-field="parameters.dobLongYearUk"/>
-                    <string-append string="${dobMonth}" field="dobLongDateString"/>
-                    <string-append string="/" field="dobLongDateString"/>
-                    <string-append string="${dobDay}" field="dobLongDateString"/>
-                    <string-append string="/" field="dobLongDateString"/>
-                    <string-append string="${dobYear}" field="dobLongDateString"/>
-                    <!-- validates date -->
-                    <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidLongDate">
-                        <field field="dobLongDateString" type = "String" />
-                    </call-class-method>
-                    <if-compare operator="equals" value="false" field="isValidLongDate" type="Boolean">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
-                   <else>
-                       <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                       <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                   </else>
-                </if-not-empty>
-                <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                </else>
-                </if-not-empty>
-            <else>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </else>
-            </if-not-empty>
-        </if-compare>
-        <check-errors/>
-
-        <!-- update party status -->
-        <make-value entity-name="Party" value-field="lookupPKMap"/>
-        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
-        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
-        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
-        <store-value value-field="lookedUpValue"/>
-        
-        <!-- update user login -->
-        <get-related relation-name="UserLogin" list="userLoginList" value-field="lookedUpValue"/>
-        <if-not-empty field="userLoginList">
-            <first-from-list entry="userLogin" list="userLoginList"/>
-            <if-compare operator="equals" value="PARTY_DISABLED" field="parameters.statusId">
-                <set field="userLogin.enabled" value="N"/>
-            <else>
-                <set field="userLogin.enabled" value="Y"/>
-            </else>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+            <field field="parameters.dobLongDayUs"/>
+            <field field="parameters.dobLongMonthUs"/>
+            <field field="parameters.dobLongYearUs"/>
+            <string value="MMDDYYYY"/>
+            <field field="parameters.DOB_MMDDYYYY_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobLongDayUs" list="error_list"/>
+                <string-to-list string="" message-field="dobLongMonthUs" list="error_list"/>
+                <string-to-list string="" message-field="dobLongYearUs" list="error_list"/>
             </if-compare>
-            <store-value value-field="userLogin"/>
-        </if-not-empty>
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobLongDayUs" list="error_list"/>
+                <string-to-list string="" message-field="dobLongMonthUs" list="error_list"/>
+                <string-to-list string="" message-field="dobLongYearUs" list="error_list"/>
+            </if-compare>
+        </if-compare>
+        
+        <!-- DOB Short(DDMM) validation -->
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+            <field field="parameters.dobShortDayUk"/>
+            <field field="parameters.dobShortMonthUk"/>
+            <string value="1972"/>
+            <string value="DDMM"/>
+            <field field="parameters.DOB_DDMM_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobShortDayUk" list="error_list"/>
+                <string-to-list string="" message-field="dobShortMonthUk" list="error_list"/>
+            </if-compare>
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobShortDayUk" list="error_list"/>
+                <string-to-list string="" message-field="dobShortMonthUk" list="error_list"/>
+            </if-compare>
+        </if-compare>
+        
+        <!-- DOB Long(DDMMYYYY) validation -->
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+            <field field="parameters.dobLongDayUk"/>
+            <field field="parameters.dobLongMonthUk"/>
+            <field field="parameters.dobLongYearUk"/>
+            <string value="DDMMYYYY"/>
+            <field field="parameters.DOB_DDMMYYYY_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobLongDayUk" list="error_list"/>
+                <string-to-list string="" message-field="dobLongMonthUk" list="error_list"/>
+                <string-to-list string="" message-field="dobLongYearUk" list="error_list"/>
+            </if-compare>
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobLongDayUk" list="error_list"/>
+                <string-to-list string="" message-field="dobLongMonthUk" list="error_list"/>
+                <string-to-list string="" message-field="dobLongYearUk" list="error_list"/>
+            </if-compare>
+        </if-compare>
+
+        <!-- Validate Custom Party Attributes -->
+            <property-to-field resource="OsafeProperties" property="ecommerceUiSequenceXmlFile" field="XmlFileStr"/>
+            <set field="XmlFilePath" value="${groovy: org.ofbiz.base.util.string.FlexibleStringExpander.expandString(XmlFileStr, context)}" type="String"/>
+            
+            <set field="searchRestrictionMap" type="NewMap"/>
+            <set field="searchRestrictionMap.screen" value="Y" />
+            <set field="searchIgnoreCase" value="true" type="Boolean"/>
+            <set field="searchPartial" value="false" type="Boolean"/>
+            <set field="useCache" value="false" type="Boolean"/>
+            <set field="uiSequenceScreen" value="PersonalInfo" type="String"/>
+            
+            <call-class-method class-name="com.osafe.services.OsafeManageXml" method-name="getSearchListFromXmlFile" ret-field="uiSequenceSearchList">
+                <field field="XmlFilePath" type="String"/>
+                <field field="searchRestrictionMap" type="Map"/>
+                <field field="uiSequenceScreen" type="String"/>
+                <field field="searchIgnoreCase"  type="boolean" />
+                <field field="searchPartial"  type="boolean" />
+                <field field="useCache"  type="boolean" />
+            </call-class-method>
+            <set field="partyCustomAttributeActive" value="false"/>
+            <iterate entry="uiSequenceSearchScreen" list="uiSequenceSearchList">
+                <if-compare operator="equals" value="personalInfoCustomAttributes" field="uiSequenceSearchScreen.key">
+                    <if-compare operator="not-equals" value="0" field="uiSequenceSearchScreen.value">
+                        <set field="partyCustomAttributeActive" value="true"/>
+                    </if-compare>
+                </if-compare>
+            </iterate> 
+            
+            
+            <if-compare operator="equals" value="true" field="partyCustomAttributeActive">
+                <set field="getPartyCustomAttributeListCtx" type="NewMap"/>
+                <set field="getPartyCustomAttributeListCtx.useCache" value="false" type="String"/>
+                <call-service service-name="getPartyCustomAttributeList" in-map-name="getPartyCustomAttributeListCtx">
+                    <result-to-field result-name="customPartyAttributeList" field="customPartyAttributeList"/>
+                </call-service>
+	            
+	            <set field="attrNo" value="0" type="Integer"/>
+	            
+	            <iterate entry="customPartyAttributeMap" list="customPartyAttributeList">
+	                
+	                <set field="errorOnField" value="false"/>
+	                <set field="requiredMessage" from-field="customPartyAttributeMap.ReqMessage"/>
+	                <property-to-field field="dateCompletionErrorMessage" resource="OSafeAdminUiLabels" property="DateCompletionError"/>
+	                <if>
+                    <condition>
+                        <or>
+                            <if-compare operator="equals" value="Y" field="customPartyAttributeMap.Mandatory"/>
+			                <if-compare operator="equals" value="Yes" field="customPartyAttributeMap.Mandatory"/>
+                            <if-compare operator="equals" value="DATE_MMDD" field="customPartyAttributeMap.Type"/>
+                            <if-compare operator="equals" value="DATE_MMDDYYYY" field="customPartyAttributeMap.Type"/>
+                            <if-compare operator="equals" value="DATE_DDMM" field="customPartyAttributeMap.Type"/>
+                            <if-compare operator="equals" value="DATE_DDMMYYYY" field="customPartyAttributeMap.Type"/>
+                        </or>
+                    </condition>
+                    <then>
+                        <if>
+		                <condition> 
+		                    <if-compare operator="equals" value="DATE_MMDD" field="customPartyAttributeMap.Type"/>
+		                </condition>
+		                <then>
+		                    <!-- DOB Short(MMDD) validation -->
+					        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_DD"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_MM"/>
+					            <string value="1972"/>
+					            <string value="MMDD"/>
+					            <field field="customPartyAttributeMap.Mandatory"/>
+					        </call-class-method>
+					        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+					                <set field="errorOnField" value="true"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+					                <string-to-list string="${tempErrorMessage}" message-field="" list="error_list"/>
+					            </if-compare>
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+					                <set field="errorOnField" value="true"/>
+					                <if-compare operator="not-equals" value="Y" field="customPartyAttributeMap.Mandatory">
+				                        <set field="requiredMessage" from-field="dateCompletionErrorMessage"/>
+				                    </if-compare>
+					            </if-compare>
+					        </if-compare>
+		                </then>
+		                <else-if>
+		                    <condition>
+		                        <if-compare operator="equals" value="DATE_MMDDYYYY" field="customPartyAttributeMap.Type"/>
+		                    </condition>
+		                <then>
+		                    <!-- DOB Long(MMDDYYYY) validation -->
+					        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_DD"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_MM"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_YYYY"/>
+					            <string value="MMDDYYYY"/>
+					            <field field="customPartyAttributeMap.Mandatory"/>
+					        </call-class-method>
+					        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+					                <set field="errorOnField" value="true"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+					                <string-to-list string="${tempErrorMessage}" message-field="" list="error_list"/>
+					            </if-compare>
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+					                <set field="errorOnField" value="true"/>
+					                <if-compare operator="not-equals" value="Y" field="customPartyAttributeMap.Mandatory">
+				                        <set field="requiredMessage" from-field="dateCompletionErrorMessage"/>
+				                    </if-compare>
+					            </if-compare>
+					        </if-compare>
+		                </then>
+		                </else-if>
+		                <else-if>
+		                    <condition>
+		                        <if-compare operator="equals" value="DATE_DDMM" field="customPartyAttributeMap.Type"/>
+		                    </condition>
+		                <then>
+		                    <!-- DOB Short(DDMM) validation -->
+					        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_DD"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_MM"/>
+					            <string value="1972"/>
+					            <string value="DDMM"/>
+					            <field field="customPartyAttributeMap.Mandatory"/>
+					        </call-class-method>
+					        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+					                <set field="errorOnField" value="true"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+					                <string-to-list string="${tempErrorMessage}" message-field="" list="error_list"/>
+					            </if-compare>
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+					                <set field="errorOnField" value="true"/>
+					                <if-compare operator="not-equals" value="Y" field="customPartyAttributeMap.Mandatory">
+				                        <set field="requiredMessage" from-field="dateCompletionErrorMessage"/>
+				                    </if-compare>
+					            </if-compare>
+					        </if-compare>
+		                </then>
+		                </else-if>
+		                <else-if>
+		                    <condition>
+		                        <if-compare operator="equals" value="DATE_DDMMYYYY" field="customPartyAttributeMap.Type"/>
+		                    </condition>
+		                <then>
+		                    <!-- DOB Long(DDMMYYYY) validation -->
+					        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_DD"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_MM"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_YYYY"/>
+					            <string value="DDMMYYYY"/>
+					            <field field="customPartyAttributeMap.Mandatory"/>
+					        </call-class-method>
+					        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+					                <set field="errorOnField" value="true"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+					                <string-to-list string="${tempErrorMessage}" message-field="" list="error_list"/>
+					            </if-compare>
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+					                <set field="errorOnField" value="true"/>
+					                <if-compare operator="not-equals" value="Y" field="customPartyAttributeMap.Mandatory">
+				                        <set field="requiredMessage" from-field="dateCompletionErrorMessage"/>
+				                    </if-compare>
+					            </if-compare>
+					        </if-compare>
+		                </then>
+		                </else-if>
+		                <else>
+		                    <set field="attrValue" from-field="paramMap.${customPartyAttributeMap.AttrName}"/>
+		                    <if-empty field="paramMap.${customPartyAttributeMap.AttrName}">
+		                        <set field="errorOnField" value="true"/>
+		                    </if-empty>
+		                </else>
+		                </if>
+		                <if-compare operator="equals" value="true" field="errorOnField">
+		                    <if>
+		                        <condition> 
+		                            <if-compare operator="equals" value="0" field="attrNo"/>
+		                        </condition>
+		                        <then>
+		                            <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_0" list="error_list"/>
+		                        </then>
+		                        <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="1" field="attrNo"/>
+				                    </condition>
+			                    <then>
+			                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_1" list="error_list"/>
+			                    </then>
+				                </else-if>
+		                        <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="2" field="attrNo"/>
+				                    </condition>
+			                    <then>
+			                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_2" list="error_list"/>
+			                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="3" field="attrNo"/>
+				                    </condition>
+				                <then>
+				                    <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_3" list="error_list"/>
+				                </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="4" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_4" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="5" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_5" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="6" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_6" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="7" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_7" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="8" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_8" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="9" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_9" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="10" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_10" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="11" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_11" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="12" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_12" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="13" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_13" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="14" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_14" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="15" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_15" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="16" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_16" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="17" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_17" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="18" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_18" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="19" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_19" list="error_list"/>
+				                    </then>
+				                </else-if>
+		                    </if>
+		                </if-compare>
+                    </then>
+                    </if>
+	                
+	                <calculate field="attrNo">
+                        <calcop operator="add" >
+                            <calcop operator="get" field="attrNo"/>
+                            <number value="1"/>
+                        </calcop>
+                    </calculate>
+	            </iterate>
+            </if-compare>
+        
+        <check-errors/>
 
         <!-- update person -->
         <set-service-fields service-name="updatePerson" to-map="updatePersonCtx" map="parameters"/>
@@ -446,6 +746,152 @@
 
         <!-- create/Update party attribute -->
         <call-simple-method method-name="createUpdatePartyAttributes"/>
+        
+        <call-simple-method method-name="createUpdateCustomPartyAttributes"/>
+        <property-to-field field="tempSuccessMessage" resource="OSafeAdminUiLabels" property="UpdatedSuccess"/>
+        <string-to-list string="${tempSuccessMessage}"  list="successMessageList"/>
+        <field-to-request field="successMessageList" request-name="osafeSuccessMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="createUpdateCustomPartyAttributes" short-description="Update Custom Party Attributes" login-required="false" >
+        <if-compare operator="equals" value="true" field="partyCustomAttributeActive">
+            
+                <set field="getPartyCustomAttributeListCtx" type="NewMap"/>
+                <set field="getPartyCustomAttributeListCtx.useCache" value="false" type="String"/>
+                <call-service service-name="getPartyCustomAttributeList" in-map-name="getPartyCustomAttributeListCtx">
+                    <result-to-field result-name="customPartyAttributeList" field="customPartyAttributeList"/>
+                </call-service>
+                
+	            <iterate entry="customPartyAttribute" list="customPartyAttributeList">
+	                <set field ="attrValueStr" value="" />
+	                <if>
+                    <condition>
+                        <or>
+                            <if-compare value="CHECKBOX" operator="equals" field="customPartyAttribute.Type"></if-compare>
+                            <if-compare value="DROP_DOWN_MULTI" operator="equals" field="customPartyAttribute.Type"></if-compare>
+                        </or>
+                    </condition>
+                    <then>
+                              <set field ="attrValueList" from-field="paramMap.${customPartyAttribute.AttrName}" />
+                              
+		                            <iterate list="attrValueList" entry="attrValue">
+								           <string-append string="${attrValue}," field="attrValueStr" /> 
+						              </iterate>
+
+						              <if-compare operator="contains" value="," field="attrValueList">
+						              <if-not-empty field="attrValueStr">
+								            <call-object-method obj-field="attrValueStr" method-name="length" ret-field="attrValueStrLength"/>
+								            <calculate field="attrValueStrLength">
+								                <calcop operator="subtract" >
+								                    <calcop operator="get" field="attrValueStrLength"/>
+								                    <number value="1"/>
+								                </calcop>
+								            </calculate>
+								            <set field="startIndex" value="0" type="Integer"/>
+								            <set field="endIndex" from-field="attrValueStrLength" type="Integer"/>
+								            <call-object-method obj-field="attrValueStr" method-name="substring" ret-field="attrValueStr">
+								                <field field="startIndex" type="int"/>
+								                <field field="endIndex" type="int"/>
+								            </call-object-method>
+	                                  </if-not-empty>
+	                                  <else>
+	                                      <set field="attrValueStr" from-field="attrValueList" type="String"/>
+	                                  </else>
+	                                  </if-compare>
+                    </then>
+                    <else-if>
+                        <condition> 
+		                    <if-compare operator="equals" value="DATE_MMDD" field="customPartyAttribute.Type"/>
+		                </condition>
+                    <then>
+                        <clear-field field="shortDateString"/>
+                        <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_MM">
+			                <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_DD">
+			                    <set field="shortMonth" from-field="paramMap.${customPartyAttribute.AttrName}_MM"/>
+			                    <set field="shortDay" from-field="paramMap.${customPartyAttribute.AttrName}_DD"/>
+			                    <string-append string="${shortMonth}" field="shortDateString"/>
+			                    <string-append string="/" field="shortDateString"/>
+			                    <string-append string="${shortDay}" field="shortDateString"/>
+			                </if-not-empty>
+			            </if-not-empty>
+			            <set field="attrValueStr" from-field="shortDateString" set-if-null="true" set-if-empty="true"/>
+                    </then>
+                    </else-if>
+                    <else-if>
+                        <condition> 
+		                    <if-compare operator="equals" value="DATE_MMDDYYYY" field="customPartyAttribute.Type"/>
+		                </condition>
+                    <then>
+                        <clear-field field="dateString"/>
+                        <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_MM">
+			                <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_DD">
+			                    <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_YYYY">
+				                    <set field="month" from-field="paramMap.${customPartyAttribute.AttrName}_MM"/>
+				                    <set field="day" from-field="paramMap.${customPartyAttribute.AttrName}_DD"/>
+				                    <set field="year" from-field="paramMap.${customPartyAttribute.AttrName}_YYYY"/>
+				                    <string-append string="${month}" field="dateString"/>
+				                    <string-append string="/" field="dateString"/>
+				                    <string-append string="${day}" field="dateString"/>
+				                    <string-append string="/" field="dateString"/>
+				                    <string-append string="${year}" field="dateString"/>
+				                </if-not-empty>
+			                </if-not-empty>
+			            </if-not-empty>
+			            <set field="attrValueStr" from-field="dateString" set-if-null="true"/>
+                    </then>
+                    </else-if>
+                    <else-if>
+                        <condition> 
+		                    <if-compare operator="equals" value="DATE_DDMM" field="customPartyAttribute.Type"/>
+		                </condition>
+                    <then>
+                        <clear-field field="shortDateString"/>
+                        <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_DD">
+			                <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_MM">
+			                    <set field="shortDay" from-field="paramMap.${customPartyAttribute.AttrName}_DD"/>
+			                    <set field="shortMonth" from-field="paramMap.${customPartyAttribute.AttrName}_MM"/>
+			                    <string-append string="${shortDay}" field="shortDateString"/>
+			                    <string-append string="/" field="shortDateString"/>
+			                    <string-append string="${shortMonth}" field="shortDateString"/>
+			                </if-not-empty>
+			            </if-not-empty>
+			            <set field="attrValueStr" from-field="shortDateString" set-if-null="true"/>
+                    </then>
+                    </else-if>
+                    <else-if>
+                        <condition> 
+		                    <if-compare operator="equals" value="DATE_DDMMYYYY" field="customPartyAttribute.Type"/>
+		                </condition>
+                    <then>
+                        <clear-field field="dateString"/>
+                        <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_DD">
+			                <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_MM">
+			                    <if-not-empty field="paramMap.${customPartyAttribute.AttrName}_YYYY">
+			                        <set field="day" from-field="paramMap.${customPartyAttribute.AttrName}_DD"/>
+				                    <set field="month" from-field="paramMap.${customPartyAttribute.AttrName}_MM"/>
+				                    <set field="year" from-field="paramMap.${customPartyAttribute.AttrName}_YYYY"/>
+				                    <string-append string="${day}" field="dateString"/>
+				                    <string-append string="/" field="dateString"/>
+				                    <string-append string="${month}" field="dateString"/>
+				                    <string-append string="/" field="dateString"/>
+				                    <string-append string="${year}" field="dateString"/>
+				                </if-not-empty>
+			                </if-not-empty>
+			            </if-not-empty>
+			            <set field="attrValueStr" from-field="dateString" set-if-null="true"/>
+                    </then>
+                    </else-if>
+                    <else>
+                        <set field="attrValueStr" from-field="paramMap.${customPartyAttribute.AttrName}"/>
+                    </else>
+                    </if>
+                        <set field="createUpdateCustomPartyAttributeCtx.partyId" from-field="parameters.partyId"/>
+                        <set field="createUpdateCustomPartyAttributeCtx.attrName" value="${customPartyAttribute.AttrName}"/>
+                        <set field="createUpdateCustomPartyAttributeCtx.attrValue" from-field="attrValueStr" set-if-empty="true" set-if-null="true"/>
+                        <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateCustomPartyAttributeCtx"/>
+                        <clear-field field="createUpdateCustomPartyAttributeCtx"/>
+	            </iterate>
+            </if-compare>
     </simple-method>
 
     <simple-method method-name="createUpdatePartyAttributes" short-description="Update Party Attributes" login-required="false" >
@@ -460,6 +906,13 @@
             <set field="createUpdateGenderCtx.attrValue" from-field="parameters.gender"/>
             <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateGenderCtx"/>
         </if-compare>
+
+        <if-not-empty field="parameters.textPreference">
+            <set field="createUpdateTextPreferenceCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateTextPreferenceCtx.attrName" value="PARTY_TEXT_PREFERENCE"/>
+            <set field="createUpdateTextPreferenceCtx.attrValue" from-field="parameters.textPreference"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateTextPreferenceCtx"/>
+        </if-not-empty>
 
         <!-- Create/Update USER Title -->
         <set field="titleStr" value="personalTitle"/>
@@ -479,13 +932,15 @@
             <field field="dobShortMonthUkStr" type="Object"/>
         </call-object-method>
         <if-compare field="hasDobShortMonthUkInput" operator="equals" value="true" type="Boolean">
-            <string-append string="${parameters.dobShortDayUk}" field="DOB_DDMM"/>
-            <string-append string="/" field="DOB_DDMM"/>
-            <string-append string="${parameters.dobShortMonthUk}" field="DOB_DDMM"/>
-            <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
-            <set field="createUpdateDOBShortCtx.attrName" value="DOB_DDMM"/>
-            <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_DDMM"/>
-            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
+	        <if-not-empty field="parameters.dobShortDayUk">
+	            <string-append string="${parameters.dobShortDayUk}" field="DOB_DDMM"/>
+	            <string-append string="/" field="DOB_DDMM"/>
+	            <string-append string="${parameters.dobShortMonthUk}" field="DOB_DDMM"/>
+	        </if-not-empty>
+	        <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
+	        <set field="createUpdateDOBShortCtx.attrName" value="DOB_DDMM"/>
+	        <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_DDMM" set-if-null="true"/>
+	        <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
         </if-compare>
 
         <!-- Create/Update USER DOB (DDMMYYYY) -->
@@ -494,14 +949,16 @@
             <field field="dobLongMonthUkStr" type="Object"/>
         </call-object-method>
         <if-compare field="hasDobLongMonthUkInput" operator="equals" value="true" type="Boolean">
-            <string-append string="${parameters.dobLongDayUk}" field="DOB_DDMMYYYY"/>
-            <string-append string="/" field="DOB_DDMMYYYY"/>
-            <string-append string="${parameters.dobLongMonthUk}" field="DOB_DDMMYYYY"/>
-            <string-append string="/" field="DOB_DDMMYYYY"/>
-            <string-append string="${parameters.dobLongYearUk}" field="DOB_DDMMYYYY"/>
-            <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
-            <set field="createUpdateDOBLongCtx.attrName" value="DOB_DDMMYYYY"/>
-            <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_DDMMYYYY"/>
+	        <if-not-empty field="parameters.dobLongDayUk">
+	            <string-append string="${parameters.dobLongDayUk}" field="DOB_DDMMYYYY"/>
+	            <string-append string="/" field="DOB_DDMMYYYY"/>
+	            <string-append string="${parameters.dobLongMonthUk}" field="DOB_DDMMYYYY"/>
+	            <string-append string="/" field="DOB_DDMMYYYY"/>
+	            <string-append string="${parameters.dobLongYearUk}" field="DOB_DDMMYYYY"/>
+	        </if-not-empty>
+	        <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
+	        <set field="createUpdateDOBLongCtx.attrName" value="DOB_DDMMYYYY"/>
+	        <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_DDMMYYYY" set-if-null="true"/>
             <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
         </if-compare>
 
@@ -511,12 +968,15 @@
             <field field="dobShortMonthUsStr" type="Object"/>
         </call-object-method>
         <if-compare field="hasDobShortMonthUsInput" operator="equals" value="true" type="Boolean">
-            <string-append string="${parameters.dobShortMonthUs}" field="DOB_MMDD"/>
-            <string-append string="/" field="dobShortDateString"/>
-            <string-append string="${parameters.dobShortDayUs}" field="DOB_MMDD"/>
-            <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
-            <set field="createUpdateDOBShortCtx.attrName" value="DOB_MMDD"/>
-            <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_MMDD"/>
+	        <if-not-empty field="parameters.dobShortDayUs">
+	            <string-append string="${parameters.dobShortMonthUs}" field="DOB_MMDD"/>
+	            <string-append string="/" field="DOB_MMDD"/>
+	            <string-append string="${parameters.dobShortDayUs}" field="DOB_MMDD"/>
+	        </if-not-empty>
+	        <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
+	        <set field="createUpdateDOBShortCtx.attrName" value="DOB_MMDD"/>
+	        <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_MMDD" set-if-null="true"/>
+	        <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
             <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
         </if-compare>
 
@@ -526,14 +986,16 @@
             <field field="dobLongMonthUsStr" type="Object"/>
         </call-object-method>
         <if-compare field="hasDobLongMonthUsInput" operator="equals" value="true" type="Boolean">
-            <string-append string="${parameters.dobLongMonthUs}" field="DOB_MMDDYYYY"/>
-            <string-append string="/" field="dobLongDateString"/>
-            <string-append string="${parameters.dobLongDayUs}" field="DOB_MMDDYYYY"/>
-            <string-append string="/" field="dobLongDateString"/>
-            <string-append string="${parameters.dobLongYearUs}" field="DOB_MMDDYYYY"/>
-            <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
-            <set field="createUpdateDOBLongCtx.attrName" value="DOB_MMDDYYYY"/>
-            <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_MMDDYYYY"/>
+	        <if-not-empty field="parameters.dobLongDayUs">
+	            <string-append string="${parameters.dobLongMonthUs}" field="DOB_MMDDYYYY"/>
+	            <string-append string="/" field="DOB_MMDDYYYY"/>
+	            <string-append string="${parameters.dobLongDayUs}" field="DOB_MMDDYYYY"/>
+	            <string-append string="/" field="DOB_MMDDYYYY"/>
+	            <string-append string="${parameters.dobLongYearUs}" field="DOB_MMDDYYYY"/>
+	        </if-not-empty>
+	        <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
+	        <set field="createUpdateDOBLongCtx.attrName" value="DOB_MMDDYYYY"/>
+	        <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_MMDDYYYY" set-if-null="true"/>
             <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
         </if-compare>
 
@@ -548,79 +1010,114 @@
         <set field="createUpdateIsDownloadedCtx.attrName" value="IS_DOWNLOADED"/>
         <set field="createUpdateIsDownloadedCtx.attrValue" from-field="parameters.exportStatus"/>
         <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateIsDownloadedCtx"/>
+        
+        <!-- Create/Update USER Loyalty Points Id -->
+        <set field="createUpdateLoyaltyPointsCtx.partyId" from-field="parameters.partyId"/>
+        <set field="createUpdateLoyaltyPointsCtx.attrName" value="LOYALTY_POINT_ID"/>
+        <set field="createUpdateLoyaltyPointsCtx.attrValue" from-field="parameters.userLoyaltyPointId"/>
+        <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateLoyaltyPointsCtx"/>
     </simple-method>
 
     <simple-method method-name="createUpdateCustomerAddress" short-description="create/Update Customer Address">
         <!-- Check address fields on the Postal Address -->
-        <if-empty field="parameters.customer_attnName">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddressNickNameError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
-        <if-empty field="parameters.customer_address1">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress1Error"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
+        <if-not-empty field="parameters.customer_fullName">
+            <set field="parameters.fullName" from-field="parameters.customer_fullName"/>
+         <else>
+             <if-not-empty field="parameters.customer_firstName">
+                 <set field="parameters.fullName" value="${parameters.customer_firstName}"/>
+             </if-not-empty>
+             <if-not-empty field="parameters.customer_lastName">
+                 <if-not-empty field="parameters.CUSTOMER_FIRST_NAME">
+                     <set field="parameters.fullName" value="${parameters.fullName} ${parameters.customer_lastName}"/>
+                 <else>
+                     <set field="parameters.fullName" value="${parameters.customer_lastName}"/>
+                 </else>
+                 </if-not-empty>
+             </if-not-empty>
+         </else>
+         </if-not-empty>
 
-        <!--Check for countries other than US and Canada that Two of either Address-2, Address-3, Zip/Postal, City/Town or State/Province must be entered -->
-        <if>
-                <condition>
-                    <or>
-                        <if-compare value="CAN" operator="equals" field="parameters.customer_country"></if-compare>
-                        <if-compare value="USA" operator="equals" field="parameters.customer_country"></if-compare>
-                    </or>
-                </condition>
-                <then>
-                     <if-empty field="parameters.customer_state">
-                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStateError"/>
-                         <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                     </if-empty>
-                    <if-empty field="parameters.customer_city">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCityError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-empty>
-                    <if-empty field="parameters.customer_postalCode">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPostalCodeError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-		            <else>
-		                <if-compare value="USA" operator="equals" field="parameters.customer_country">
-		                    <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
-		                        <field field="parameters.customer_postalCode"/>
-		                    </call-class-method>
-		                </if-compare>
-		                <if-compare field="isZipCode" operator="equals"  value="false">
-		                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidPostalCodeError"/>
-		                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-		                </if-compare>
-		            </else>
-                    </if-empty>
-                </then>
-                <else>
-                    <set field="fieldCounter" value="0" type="Integer"/>
-                    <if-not-empty field="parameters.customer_address1">
-                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                    </if-not-empty>
-                    <if-compare field="parameters.customer_state" operator="equals" value="_NA_">
-                        <if-not-empty field="parameters.customer_address3">
-                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                        </if-not-empty>
-                    <else>
-                        <if-not-empty field="parameters.customer_state">
-                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                        </if-not-empty>
-                    </else>
-                    </if-compare>
-                    <if-not-empty field="parameters.customer_city">
-                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                    </if-not-empty>
-                    <if-not-empty field="parameters.customer_postalCode">
-                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                    </if-not-empty>
-                    <!-- <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddressIncompleteError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare> -->
-                </else>
-        </if>
+        <if-compare field="parameters.customer_attnName_mandatory" operator="equals" value="Y">
+	        <if-empty field="parameters.customer_attnName">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddressNickNameError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="customer_attnName" list="error_list"/>
+	        </if-empty>
+        </if-compare>
+         
+        <if-compare field="parameters.customer_fullName_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.customer_fullName">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddressFullNameError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="customer_fullName" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        
+        <if-compare field="parameters.customer_firstName_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.customer_firstName">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddressFirstNameError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="customer_firstName" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        
+        <if-compare field="parameters.customer_lastName_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.customer_lastName">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddressLastNameError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="customer_lastName" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-compare field="parameters.customer_address1_mandatory" operator="equals" value="Y">
+	        <if-empty field="parameters.customer_address1">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress1Error"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="customer_address1" list="error_list"/>
+	        </if-empty>
+        </if-compare>
+        <if-compare field="parameters.customer_address2_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.customer_address2">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress2Error"/>
+                <string-to-list string="${tempErrorMessage}" message-field="customer_address2" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-compare field="parameters.customer_address3_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.customer_address3">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress3Error"/>
+                <string-to-list string="${tempErrorMessage}" message-field="customer_address3" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-compare field="parameters.customer_city_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.customer_city">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCityError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="customer_city" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-compare field="parameters.customer_postalCode_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.customer_postalCode">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPostalCodeError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="customer_postalCode" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-not-empty field="parameters.customer_postalCode">
+            <if-compare value="USA" operator="equals" field="parameters.customer_country">
+                <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
+                    <field field="parameters.customer_postalCode"/>
+                </call-class-method>
+            </if-compare>
+            <if-compare field="isZipCode" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidPostalCodeError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="customer_postalCode" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <!-- if a country has States than state is mandatory. -->
+         <call-class-method class-name="org.ofbiz.common.CommonWorkers"  method-name="getAssociatedStateList" ret-field="statesList">
+             <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+             <field field="parameters.customer_country"/>
+         </call-class-method>
+        <if-compare field="parameters.customer_state_mandatory" operator="equals" value="Y">
+            <if-not-empty field="statesList">
+	            <if-empty field="parameters.customer_state">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStateError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="customer_state" list="error_list"/>
+	            </if-empty>
+            </if-not-empty>
+        </if-compare>
         <check-errors/>
 
         <!--Set the Value for City and Postal Code if they are empty as they are required fields by the service -->
@@ -643,6 +1140,7 @@
         </if>
         <set-service-fields service-name="createUpdatePartyPostalAddress" to-map="createUpdatePartyPostalAddressctx" map="parameters"/>
         <set field="createUpdatePartyPostalAddressctx.countryGeoId" from-field="parameters.customer_country"/>
+        <set field="createUpdatePartyPostalAddressctx.toName" from-field="parameters.customer_fullName"/>
         <set field="createUpdatePartyPostalAddressctx.attnName" from-field="parameters.customer_attnName"/>
         <set field="createUpdatePartyPostalAddressctx.address1" from-field="parameters.customer_address1"/>
         <set field="createUpdatePartyPostalAddressctx.address2" from-field="parameters.customer_address2"/>
@@ -662,10 +1160,14 @@
     </simple-method>
 
     <simple-method method-name="createCustomer" short-description="create Customer">
+        <set field="request" from-field="parameters.request"/>
+        <call-class-method method-name="getParameterMap" class-name="org.ofbiz.base.util.UtilHttp" ret-field="paramMap">
+            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+        </call-class-method>
         <!-- validating customer id -->
         <if-empty field="parameters.partyId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCustomerIdError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="partyId" list="error_list"/>
         <else>
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
                 <field field="parameters.partyId"/>
@@ -677,25 +1179,29 @@
                 <if-not-empty field="existingParty">
                     <set field="errorKey" from-field="parameters.partyId"/>
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="NewCustomerIdExistError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="partyId" list="error_list"/>
                 </if-not-empty>
             <else>
                 <set field="errorKey" from-field="parameters.partyId"/>
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="partyId" list="error_list"/>
             </else>
             </if-compare>
         </else>
         </if-empty>
         <!-- validating first name and last name -->
-        <if-empty field="parameters.firstName">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FirstNameMissingError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
-        <if-empty field="parameters.lastName">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LastNameMissingError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
+        <if-compare field="parameters.firstName_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.firstName">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FirstNameMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="firstName" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-compare field="parameters.lastName_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.lastName">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LastNameMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="lastName" list="error_list"/>
+            </if-empty>
+        </if-compare>
         <!-- validating E-mail if entered -->
         <if-not-empty field="parameters.emailAddress">
             <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isEmail" ret-field="isEmail">
@@ -703,7 +1209,7 @@
             </call-class-method>
             <if-compare field="isEmail" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="EmailAddressNotFormattedCorrectlyError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="emailAddress" list="error_list"/>
             </if-compare>
         </if-not-empty>
 
@@ -721,16 +1227,20 @@
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                     <field field="parameters.phoneHomeArea"/>
                     <field field="parameters.phoneHomeContact"/>
-                    <string value="false"/>
+                    <field field="parameters.phoneHome_mandatory"/>
                 </call-class-method>
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePhoneMissingError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneHomeArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneHomeContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneHomeContact4" list="error_list"/>
                     </if-compare>
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneHomeArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneHomeContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneHomeContact4" list="error_list"/>
                     </if-compare>
                 </if-compare>
 
@@ -739,12 +1249,20 @@
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                     <field field="parameters.phoneMobileArea"/>
                     <field field="parameters.phoneMobileContact"/>
-                    <string value="false"/>
+                    <field field="parameters.phoneMobile_mandatory"/>
                 </call-class-method>
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MobilePhoneMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneMobileArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneMobileContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneMobileContact4" list="error_list"/>
+                    </if-compare>
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MobilePhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneMobileArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneMobileContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneMobileContact4" list="error_list"/>
                     </if-compare>
                 </if-compare>
 
@@ -754,17 +1272,33 @@
                     <field field="parameters.phoneWorkArea"/>
                     <field field="parameters.phoneWorkContact"/>
                     <field field="parameters.phoneWorkExt"/>
-                    <string value="false"/>
+                    <field field="parameters.phoneWork_mandatory"/>
                 </call-class-method>
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="WorkPhoneMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneWorkArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkContact4" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkExt" list="error_list"/>
+                    </if-compare>
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="WorkPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneWorkArea" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkContact3" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkContact4" list="error_list"/>
+                        <string-to-list string="" message-field="phoneWorkExt" list="error_list"/>
                     </if-compare>
                 </if-compare>
             </then>
         <else>
             <!-- validating Home Phone -->
+             <if-compare field="parameters.phoneHome_mandatory" operator="equals" value="Y">
+                 <if-empty field="parameters.phoneHomeContactOther">
+                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePhoneMissingError"/>
+                     <string-to-list string="${tempErrorMessage}" message-field="phoneHomeContactOther" list="error_list"/>
+                 </if-empty>
+             </if-compare>
             <if-not-empty field="parameters.phoneHomeContactOther">
              <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                  <string value=""/>
@@ -774,7 +1308,7 @@
              <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                  <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                      <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePhoneInvalidError"/>
-                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                     <string-to-list string="${tempErrorMessage}" message-field="phoneHomeContactOther" list="error_list"/>
                  </if-compare>
              <else>
                  <set field="parameters.phoneHomeContact" from-field="parameters.phoneHomeContactOther"/>
@@ -783,6 +1317,12 @@
             </if-not-empty>
 
             <!-- Check the Mobile Phone -->
+             <if-compare field="parameters.phoneMobile_mandatory" operator="equals" value="Y">
+                 <if-empty field="parameters.phoneMobileContactOther">
+                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MobilePhoneMissingError"/>
+                     <string-to-list string="${tempErrorMessage}" message-field="phoneMobileContactOther" list="error_list"/>
+                 </if-empty>
+             </if-compare>
             <if-not-empty field="parameters.phoneMobileContactOther">
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                     <string value=""/>
@@ -792,7 +1332,7 @@
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MobilePhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneMobileContactOther" list="error_list"/>
                     </if-compare>
                 <else>
                     <set field="parameters.phoneMobileContact" from-field="parameters.phoneMobileContactOther"/>
@@ -801,6 +1341,12 @@
             </if-not-empty>
 
             <!-- Check the Work Phone -->
+             <if-compare field="parameters.phoneWork_mandatory" operator="equals" value="Y">
+                 <if-empty field="parameters.phoneWorkContactOther">
+                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="WorkPhoneMissingError"/>
+                     <string-to-list string="${tempErrorMessage}" message-field="phoneWorkContactOther" list="error_list"/>
+                 </if-empty>
+             </if-compare>
             <if-not-empty field="parameters.phoneWorkContactOther">
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                     <string value=""/>
@@ -811,7 +1357,7 @@
                 <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                     <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="WorkPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="phoneWorkContactOther" list="error_list"/>
                     </if-compare>
                 <else>
                     <set field="parameters.phoneWorkContact" from-field="parameters.phoneWorkContactOther"/>
@@ -823,339 +1369,322 @@
         </if>
 
         <!-- validating Title -->
-        <set field="titleStr" value="personalTitle"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasTitleInput">
-            <field field="titleStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasTitleInput" operator="equals" value="true" type="Boolean">
+        <if-compare field="parameters.personalTitle_mandatory" operator="equals" value="Y">
             <if-empty field="parameters.personalTitle">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TitleMissingError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="personalTitle" list="error_list"/>
             </if-empty>
         </if-compare>
         <!-- validating Gender -->
-        <set field="genderStr" value="gender"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasGenderInput">
-            <field field="genderStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasGenderInput" operator="equals" value="true" type="Boolean">
+        <if-compare field="parameters.gender_mandatory" operator="equals" value="Y">
             <if-empty field="parameters.gender">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GenderMissingError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="gender" list="error_list"/>
             </if-empty>
         </if-compare>
 
         <!-- DOB Short(MMDD) validation -->
-        <set field="dobShortMonthUsStr" value="dobShortMonthUs"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobShortMonthUsInput">
-            <field field="dobShortMonthUsStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasDobShortMonthUsInput" operator="equals" value="true" type="Boolean">
-            <if-not-empty field="parameters.dobShortMonthUs">
-                <if-not-empty field="parameters.dobShortDayUs">
-                    <set field="dobShortMonth" from-field="parameters.dobShortMonthUs"/>
-                    <set field="dobShortDay" from-field="parameters.dobShortDayUs"/>
-                    <set field="tempDobYear" value="1972"/>
-                    <string-append string="${dobShortMonth}" field="dobDateString"/>
-                    <string-append string="/" field="dobDateString"/>
-                    <string-append string="${dobShortDay}" field="dobDateString"/>
-                    <string-append string="/" field="dobDateString"/>
-                    <string-append string="${tempDobYear}" field="dobDateString"/>
-                    <!-- validates date -->
-                    <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidDate">
-                        <field field="dobDateString" type = "String" />
-                    </call-class-method>
-                    <if-compare operator="equals" value="false" field="isValidDate" type="Boolean">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
-                <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                </else>
-                </if-not-empty>
-            <else>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+            <field field="parameters.dobShortDayUs"/>
+            <field field="parameters.dobShortMonthUs"/>
+            <string value="1972"/>
+            <string value="MMDD"/>
+            <field field="parameters.DOB_MMDD_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobShortDayUs" list="error_list"/>
+                <string-to-list string="" message-field="dobShortMonthUs" list="error_list"/>
+            </if-compare>
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </else>
-            </if-not-empty>
+                <string-to-list string="${tempErrorMessage}" message-field="dobShortDayUs" list="error_list"/>
+                <string-to-list string="" message-field="dobShortMonthUs" list="error_list"/>
+            </if-compare>
         </if-compare>
 
-         <!-- DOB Long(MMDDYYYY) validation -->
-        <set field="dobLongMonthUsStr" value="dobLongMonthUs"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobLongMonthUsInput">
-            <field field="dobLongMonthUsStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasDobLongMonthUsInput" operator="equals" value="true" type="Boolean">
-            <if-not-empty field="parameters.dobLongMonthUs">
-                <if-not-empty field="parameters.dobLongDayUs">
-                  <if-not-empty field="parameters.dobLongYearUs">
-                    <set field="dobMonth" from-field="parameters.dobLongMonthUs"/>
-                    <set field="dobDay" from-field="parameters.dobLongDayUs"/>
-                    <set field="dobYear" from-field="parameters.dobLongYearUs"/>
-                    <string-append string="${dobMonth}" field="dobLongDateString"/>
-                    <string-append string="/" field="dobLongDateString"/>
-                    <string-append string="${dobDay}" field="dobLongDateString"/>
-                    <string-append string="/" field="dobLongDateString"/>
-                    <string-append string="${dobYear}" field="dobLongDateString"/>
-                    <!-- validates date -->
-                    <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidLongDate">
-                        <field field="dobLongDateString" type = "String" />
-                    </call-class-method>
-                    <if-compare operator="equals" value="false" field="isValidLongDate" type="Boolean">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
-                   <else>
-                       <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                       <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                   </else>
-                </if-not-empty>
-                <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                </else>
-                </if-not-empty>
-            <else>
+        <!-- DOB Long(MMDDYYYY) validation -->
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+            <field field="parameters.dobLongDayUs"/>
+            <field field="parameters.dobLongMonthUs"/>
+            <field field="parameters.dobLongYearUs"/>
+            <string value="MMDDYYYY"/>
+            <field field="parameters.DOB_MMDDYYYY_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobLongDayUs" list="error_list"/>
+                <string-to-list string="" message-field="dobLongMonthUs" list="error_list"/>
+                <string-to-list string="" message-field="dobLongYearUs" list="error_list"/>
+            </if-compare>
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </else>
-            </if-not-empty>
+                <string-to-list string="${tempErrorMessage}" message-field="dobLongDayUs" list="error_list"/>
+                <string-to-list string="" message-field="dobLongMonthUs" list="error_list"/>
+                <string-to-list string="" message-field="dobLongYearUs" list="error_list"/>
+            </if-compare>
         </if-compare>
-
+        
         <!-- DOB Short(DDMM) validation -->
-        <set field="dobShortMonthUkStr" value="dobShortMonthUk"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobShortMonthUkInput">
-            <field field="dobShortMonthUkStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasDobShortMonthUkInput" operator="equals" value="true" type="Boolean">
-            <if-not-empty field="parameters.dobShortMonthUk">
-                <if-not-empty field="parameters.dobShortDayUk">
-                    <set field="dobShortMonth" from-field="parameters.dobShortMonthUk"/>
-                    <set field="dobShortDay" from-field="parameters.dobShortDayUk"/>
-                    <set field="tempDobYear" value="1972"/>
-                    <string-append string="${dobShortMonth}" field="dobDateString"/>
-                    <string-append string="/" field="dobDateString"/>
-                    <string-append string="${dobShortDay}" field="dobDateString"/>
-                    <string-append string="/" field="dobDateString"/>
-                    <string-append string="${tempDobYear}" field="dobDateString"/>
-                    <!-- validates date -->
-                    <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidDate">
-                        <field field="dobDateString" type = "String" />
-                    </call-class-method>
-                    <if-compare operator="equals" value="false" field="isValidDate" type="Boolean">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
-                <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                </else>
-                </if-not-empty>
-            <else>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+            <field field="parameters.dobShortDayUk"/>
+            <field field="parameters.dobShortMonthUk"/>
+            <string value="1972"/>
+            <string value="DDMM"/>
+            <field field="parameters.DOB_DDMM_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobShortDayUk" list="error_list"/>
+                <string-to-list string="" message-field="dobShortMonthUk" list="error_list"/>
+            </if-compare>
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </else>
-            </if-not-empty>
+                <string-to-list string="${tempErrorMessage}" message-field="dobShortDayUk" list="error_list"/>
+                <string-to-list string="" message-field="dobShortMonthUk" list="error_list"/>
+            </if-compare>
         </if-compare>
         
          <!-- DOB Long(DDMMYYYY) validation -->
-        <set field="dobLongMonthUkStr" value="dobLongMonthUk"/>
-        <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasDobLongMonthUkInput">
-            <field field="dobLongMonthUkStr" type="Object"/>
-        </call-object-method>
-        <if-compare field="hasDobLongMonthUkInput" operator="equals" value="true" type="Boolean">
-            <if-not-empty field="parameters.dobLongMonthUk">
-                <if-not-empty field="parameters.dobLongDayUk">
-                  <if-not-empty field="parameters.dobLongYearUk">
-                    <set field="dobMonth" from-field="parameters.dobLongMonthUk"/>
-                    <set field="dobDay" from-field="parameters.dobLongDayUk"/>
-                    <set field="dobYear" from-field="parameters.dobLongYearUk"/>
-                    <string-append string="${dobMonth}" field="dobLongDateString"/>
-                    <string-append string="/" field="dobLongDateString"/>
-                    <string-append string="${dobDay}" field="dobLongDateString"/>
-                    <string-append string="/" field="dobLongDateString"/>
-                    <string-append string="${dobYear}" field="dobLongDateString"/>
-                    <!-- validates date -->
-                    <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidLongDate">
-                        <field field="dobLongDateString" type = "String" />
-                    </call-class-method>
-                    <if-compare operator="equals" value="false" field="isValidLongDate" type="Boolean">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
-                   <else>
-                       <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                       <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                   </else>
-                </if-not-empty>
-                <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                </else>
-                </if-not-empty>
-            <else>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+            <field field="parameters.dobLongDayUk"/>
+            <field field="parameters.dobLongMonthUk"/>
+            <field field="parameters.dobLongYearUk"/>
+            <string value="DDMMYYYY"/>
+            <field field="parameters.DOB_DDMMYYYY_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="dobLongDayUk" list="error_list"/>
+                <string-to-list string="" message-field="dobLongMonthUk" list="error_list"/>
+                <string-to-list string="" message-field="dobLongYearUk" list="error_list"/>
+            </if-compare>
+            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDobDateError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </else>
+                <string-to-list string="${tempErrorMessage}" message-field="dobLongDayUk" list="error_list"/>
+                <string-to-list string="" message-field="dobLongMonthUk" list="error_list"/>
+                <string-to-list string="" message-field="dobLongYearUk" list="error_list"/>
+            </if-compare>
+        </if-compare>
+                    
+        <!-- Check address fields on the Billing Address -->
+         <if-not-empty field="parameters.billing_fullName">
+            <set field="parameters.fullName" from-field="parameters.billing_fullName"/>
+         <else>
+             <if-not-empty field="parameters.billing_firstName">
+                 <set field="parameters.fullName" value="${parameters.billing_firstName}"/>
+             </if-not-empty>
+             <if-not-empty field="parameters.billing_lastName">
+                 <if-not-empty field="parameters.billing_FIRST_NAME">
+                     <set field="parameters.fullName" value="${parameters.fullName} ${parameters.billing_lastName}"/>
+                 <else>
+                     <set field="parameters.fullName" value="${parameters.billing_lastName}"/>
+                 </else>
+                 </if-not-empty>
+             </if-not-empty>
+         </else>
+         </if-not-empty>
+
+        <if-compare field="parameters.billing_attnName_mandatory" operator="equals" value="Y">
+	        <if-empty field="parameters.billing_attnName">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressNickNameError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="billing_attnName" list="error_list"/>
+	        </if-empty>
+        </if-compare>
+         
+        <if-compare field="parameters.billing_fullName_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.billing_fullName">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressFullNameError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="billing_fullName" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        
+        <if-compare field="parameters.billing_firstName_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.billing_firstName">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressFirstNameError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="billing_firstName" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        
+        <if-compare field="parameters.billing_lastName_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.billing_lastName">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressLastNameError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="billing_lastName" list="error_list"/>
+            </if-empty>
+        </if-compare>
+
+        <if-compare field="parameters.billing_address1_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.billing_address1">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddress1Error"/>
+                <string-to-list string="${tempErrorMessage}" message-field="billing_address1" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-compare field="parameters.billing_address2_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.billing_address2">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddress2Error"/>
+                <string-to-list string="${tempErrorMessage}" message-field="billing_address2" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-compare field="parameters.billing_address3_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.billing_address3">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddress3Error"/>
+                <string-to-list string="${tempErrorMessage}" message-field="billing_address3" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-compare field="parameters.billing_city_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.billing_city">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingCityError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="billing_city" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-compare field="parameters.billing_postalCode_mandatory" operator="equals" value="Y">
+            <if-empty field="parameters.billing_postalCode">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingPostalCodeError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="billing_postalCode" list="error_list"/>
+            </if-empty>
+        </if-compare>
+        <if-not-empty field="parameters.billing_postalCode">
+            <if-compare value="USA" operator="equals" field="parameters.billing_country">
+                <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
+                    <field field="parameters.billing_postalCode"/>
+                </call-class-method>
+            </if-compare>
+            <if-compare field="isZipCode" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidBillingPostalCodeError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="billing_postalCode" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <!-- if a country has States than state is mandatory. -->
+         <call-class-method class-name="org.ofbiz.common.CommonWorkers"  method-name="getAssociatedStateList" ret-field="statesList">
+             <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+             <field field="parameters.billing_country"/>
+         </call-class-method>
+        <if-compare field="parameters.billing_state_mandatory" operator="equals" value="Y">
+            <if-not-empty field="statesList">
+                <if-empty field="parameters.billing_state">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingStateError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="billing_state" list="error_list"/>
+                </if-empty>
             </if-not-empty>
         </if-compare>
 
-        <!-- Check address fields on the Billing Address -->
-        <if-empty field="parameters.billing_attnName">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressNickNameError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
-        <if-empty field="parameters.billing_address1">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddress1Error"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
-
-        <!--Check for countries other than US and Canada that Two of either Address-2, Address-3, Zip/Postal, City/Town or State/Province must be entered -->
-        <if>
-                <condition>
-                    <or>
-                        <if-compare value="CAN" operator="equals" field="parameters.billing_country"></if-compare>
-                        <if-compare value="USA" operator="equals" field="parameters.billing_country"></if-compare>
-                    </or>
-                </condition>
-                <then>
-                     <if-empty field="parameters.billing_state">
-                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingStateError"/>
-                         <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                     </if-empty>
-                    <if-empty field="parameters.billing_city">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingCityError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-empty>
-                    <if-empty field="parameters.billing_postalCode">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingPostalCodeError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    <else>
-                        <if-compare value="USA" operator="equals" field="parameters.billing_country">
-                            <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
-                                <field field="parameters.billing_postalCode"/>
-                            </call-class-method>
-                        </if-compare>
-                        <if-compare field="isZipCode" operator="equals"  value="false">
-                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidBillingPostalCodeError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                        </if-compare>
-                    </else>
-                    </if-empty>
-                </then>
-                <else>
-                    <set field="fieldCounter" value="0" type="Integer"/>
-                    <if-not-empty field="parameters.billing_address1">
-                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                    </if-not-empty>
-                    <if-compare field="parameters.billing_state" operator="equals" value="_NA_">
-                        <if-not-empty field="parameters.billing_address3">
-                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                        </if-not-empty>
-                    <else>
-                        <if-not-empty field="parameters.billing_state">
-                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                        </if-not-empty>
-                    </else>
-                    </if-compare>
-                    <if-not-empty field="parameters.billing_city">
-                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                    </if-not-empty>
-                    <if-not-empty field="parameters.billing_postalCode">
-                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                    </if-not-empty>
-                    <!-- <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BillingAddressIncompleteError"/>
-                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare> -->
-                </else>
-        </if>
-
         <!-- Check address fields on the Shipping Address -->
+         <if-not-empty field="parameters.shipping_fullName">
+            <set field="parameters.fullName" from-field="parameters.shipping_fullName"/>
+         <else>
+             <if-not-empty field="parameters.shipping_firstName">
+                 <set field="parameters.fullName" value="${parameters.shipping_firstName}"/>
+             </if-not-empty>
+             <if-not-empty field="parameters.shipping_lastName">
+                 <if-not-empty field="parameters.shipping_FIRST_NAME">
+                     <set field="parameters.fullName" value="${parameters.fullName} ${parameters.shipping_lastName}"/>
+                 <else>
+                     <set field="parameters.fullName" value="${parameters.shipping_lastName}"/>
+                 </else>
+                 </if-not-empty>
+             </if-not-empty>
+         </else>
+         </if-not-empty>
         <if-empty field="parameters.isSameAsBilling">
-            <if-empty field="parameters.shipping_attnName">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressNickNameError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </if-empty>
-            <if-empty field="parameters.shipping_address1">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddress1Error"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </if-empty>
-    
-            <!--Check for countries other than US and Canada that Two of either Address-2, Address-3, Zip/Postal, City/Town or State/Province must be entered -->
-            <if>
-                    <condition>
-                        <or>
-                            <if-compare value="CAN" operator="equals" field="parameters.shipping_country"></if-compare>
-                            <if-compare value="USA" operator="equals" field="parameters.shipping_country"></if-compare>
-                        </or>
-                    </condition>
-                    <then>
-                         <if-empty field="parameters.shipping_state">
-                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingStateError"/>
-                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                         </if-empty>
-                        <if-empty field="parameters.shipping_city">
-                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingCityError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                        </if-empty>
-                        <if-empty field="parameters.shipping_postalCode">
-                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingPostalCodeError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                        <else>
-                            <if-compare value="USA" operator="equals" field="parameters.shipping_country">
-                                <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
-                                    <field field="parameters.shipping_postalCode"/>
-                                </call-class-method>
-                            </if-compare>
-                            <if-compare field="isZipCode" operator="equals"  value="false">
-                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidShippingPostalCodeError"/>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                            </if-compare>
-                        </else>
-                        </if-empty>
-                    </then>
-                    <else>
-                        <set field="fieldCounter" value="0" type="Integer"/>
-                        <if-not-empty field="parameters.shipping_address1">
-                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                        </if-not-empty>
-                        <if-compare field="parameters.shipping_state" operator="equals" value="_NA_">
-                            <if-not-empty field="parameters.shipping_address3">
-                                <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                            </if-not-empty>
-                        <else>
-                            <if-not-empty field="parameters.shipping_state">
-                                <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                            </if-not-empty>
-                        </else>
-                        </if-compare>
-                        <if-not-empty field="parameters.shipping_city">
-                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                        </if-not-empty>
-                        <if-not-empty field="parameters.shipping_postalCode">
-                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
-                        </if-not-empty>
-                        <!-- <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
-                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingAddressIncompleteError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                        </if-compare> -->
-                    </else>
-            </if>
+	        <if-compare field="parameters.shipping_fullName_mandatory" operator="equals" value="Y">
+	            <if-empty field="parameters.shipping_attnName">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressNickNameError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_attnName" list="error_list"/>
+	            </if-empty>
+	         </if-compare>
+	         
+	        <if-compare field="parameters.shipping_fullName_mandatory" operator="equals" value="Y">
+	            <if-empty field="parameters.shipping_fullName">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressFullNameError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_fullName" list="error_list"/>
+	            </if-empty>
+	        </if-compare>
+	        
+	        <if-compare field="parameters.shipping_firstName_mandatory" operator="equals" value="Y">
+	            <if-empty field="parameters.shipping_firstName">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressFirstNameError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_firstName" list="error_list"/>
+	            </if-empty>
+	        </if-compare>
+	        
+	        <if-compare field="parameters.shipping_lastName_mandatory" operator="equals" value="Y">
+	            <if-empty field="parameters.shipping_lastName">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressLastNameError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_lastName" list="error_list"/>
+	            </if-empty>
+	        </if-compare>
+
+	        <if-compare field="parameters.shipping_address1_mandatory" operator="equals" value="Y">
+	            <if-empty field="parameters.shipping_address1">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddress1Error"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_address1" list="error_list"/>
+	            </if-empty>
+	        </if-compare>
+	        <if-compare field="parameters.shipping_address2_mandatory" operator="equals" value="Y">
+	            <if-empty field="parameters.shipping_address2">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddress2Error"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_address2" list="error_list"/>
+	            </if-empty>
+	        </if-compare>
+	        <if-compare field="parameters.shipping_address3_mandatory" operator="equals" value="Y">
+	            <if-empty field="parameters.shipping_address3">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddress3Error"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_address3" list="error_list"/>
+	            </if-empty>
+	        </if-compare>
+	        <if-compare field="parameters.shipping_city_mandatory" operator="equals" value="Y">
+	            <if-empty field="parameters.shipping_city">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingCityError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_city" list="error_list"/>
+	            </if-empty>
+	        </if-compare>
+	        <if-compare field="parameters.shipping_postalCode_mandatory" operator="equals" value="Y">
+	            <if-empty field="parameters.shipping_postalCode">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingPostalCodeError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_postalCode" list="error_list"/>
+	            </if-empty>
+	        </if-compare>
+	        <if-not-empty field="parameters.shipping_postalCode">
+	            <if-compare value="USA" operator="equals" field="parameters.shipping_country">
+	                <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
+	                    <field field="parameters.shipping_postalCode"/>
+	                </call-class-method>
+	            </if-compare>
+	            <if-compare field="isZipCode" operator="equals"  value="false">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidShippingPostalCodeError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="shipping_postalCode" list="error_list"/>
+	            </if-compare>
+	        </if-not-empty>
+	        <!-- if a country has States than state is mandatory. -->
+	         <call-class-method class-name="org.ofbiz.common.CommonWorkers"  method-name="getAssociatedStateList" ret-field="statesList">
+	             <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+	             <field field="parameters.shipping_country"/>
+	         </call-class-method>
+	        <if-compare field="parameters.shipping_state_mandatory" operator="equals" value="Y">
+	            <if-not-empty field="statesList">
+	                <if-empty field="parameters.shipping_state">
+	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingStateError"/>
+	                    <string-to-list string="${tempErrorMessage}" message-field="shipping_state" list="error_list"/>
+	                </if-empty>
+	            </if-not-empty>
+	        </if-compare>
         </if-empty>
 
         <!-- validate the website login -->
         <if-empty field="parameters.loginEmail">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginEmailAddressMissingError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="loginEmail" list="error_list"/>
         <else>
             <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isEmail" ret-field="isEmail">
                 <field field="parameters.loginEmail"/>
             </call-class-method>
             <if-compare field="isEmail" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginEmailAddressNotFormattedCorrectlyError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="loginEmail" list="error_list"/>
             <else>
                 <call-object-method obj-field="parameters.loginEmail" method-name="toLowerCase" ret-field="loginEmailLowerCase"/>
                 <entity-one entity-name="UserLogin" value-field="existingUserLogin">
@@ -1171,11 +1700,11 @@
 	                <set field="argListNames[]" from-field="existingUserLogin.partyId"/>
                     <set field="argListNames[]" from-field="userLoginName"/>
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginEmailAlreadyExistError" arg-list-name="argListNames"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="loginEmail" list="error_list"/>
                 <else>
                     <if-compare-field operator="not-equals" field="parameters.loginEmail" to-field="parameters.loginEmailConfirm">
 		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginEmailMatchError"/>
-		                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		                <string-to-list string="${tempErrorMessage}" message-field="loginEmail" list="error_list"/>
                     </if-compare-field>
                 </else>
                 </if-not-empty>
@@ -1187,7 +1716,7 @@
         <!-- validate the website login password-->
         <if-empty field="parameters.password">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginPasswordMissingError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="password" list="error_list"/>
         <else>
 	        <!-- Check Password Strength -->
 	        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="pwdLenStr">
@@ -1210,16 +1739,364 @@
 	        </call-class-method>
 	        <if-compare field="isValidPass" operator="not-equals" value="success">
 	             <set field="tempErrorMessage" from-field="isValidPass"/>
-	             <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	             <string-to-list string="${tempErrorMessage}" message-field="password" list="error_list"/>
 	        <else>
                 <if-compare-field operator="not-equals" field="parameters.password" to-field="parameters.passwordConfirm">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginPasswordMatchError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="password" list="error_list"/>
                 </if-compare-field>
 	        </else>
 	        </if-compare>
         </else>
         </if-empty>
+
+
+        
+        <!-- Validate Custom Party Attributes -->
+            <property-to-field resource="OsafeProperties" property="ecommerceUiSequenceXmlFile" field="XmlFileStr"/>
+            <set field="XmlFilePath" value="${groovy: org.ofbiz.base.util.string.FlexibleStringExpander.expandString(XmlFileStr, context)}" type="String"/>
+            
+            <set field="searchRestrictionMap" type="NewMap"/>
+            <set field="searchRestrictionMap.screen" value="Y" />
+            <set field="searchIgnoreCase" value="true" type="Boolean"/>
+            <set field="searchPartial" value="false" type="Boolean"/>
+            <set field="useCache" value="false" type="Boolean"/>
+            <set field="uiSequenceScreen" value="PersonalInfo" type="String"/>
+            
+            <call-class-method class-name="com.osafe.services.OsafeManageXml" method-name="getSearchListFromXmlFile" ret-field="uiSequenceSearchList">
+                <field field="XmlFilePath" type="String"/>
+                <field field="searchRestrictionMap" type="Map"/>
+                <field field="uiSequenceScreen" type="String"/>
+                <field field="searchIgnoreCase"  type="boolean" />
+                <field field="searchPartial"  type="boolean" />
+                <field field="useCache"  type="boolean" />
+            </call-class-method>
+            <set field="partyCustomAttributeActive" value="false"/>
+            <iterate entry="uiSequenceSearchScreen" list="uiSequenceSearchList">
+                <if-compare operator="equals" value="personalInfoCustomAttributes" field="uiSequenceSearchScreen.key">
+                    <if-compare operator="not-equals" value="0" field="uiSequenceSearchScreen.value">
+                        <set field="partyCustomAttributeActive" value="true"/>
+                    </if-compare>
+                </if-compare>
+            </iterate> 
+            
+            <if-compare operator="equals" value="true" field="partyCustomAttributeActive">
+                <set field="getPartyCustomAttributeListCtx" type="NewMap"/>
+                <set field="getPartyCustomAttributeListCtx.useCache" value="false" type="String"/>
+                <call-service service-name="getPartyCustomAttributeList" in-map-name="getPartyCustomAttributeListCtx">
+                    <result-to-field result-name="customPartyAttributeList" field="customPartyAttributeList"/>
+                </call-service>
+	            
+	            <set field="attrNo" value="0" type="Integer"/>
+	            
+	            <iterate entry="customPartyAttributeMap" list="customPartyAttributeList">
+	                <set field="errorOnField" value="false"/>
+	                <set field="requiredMessage" from-field="customPartyAttributeMap.ReqMessage"/>
+	                <property-to-field field="dateCompletionErrorMessage" resource="OSafeAdminUiLabels" property="DateCompletionError"/>
+	                <if>
+                    <condition>
+                        <or>
+                            <if-compare operator="equals" value="Y" field="customPartyAttributeMap.Mandatory"/>
+                            <if-compare operator="equals" value="Yes" field="customPartyAttributeMap.Mandatory"/>
+                            <if-compare operator="equals" value="DATE_MMDD" field="customPartyAttributeMap.Type"/>
+                            <if-compare operator="equals" value="DATE_MMDDYYYY" field="customPartyAttributeMap.Type"/>
+                            <if-compare operator="equals" value="DATE_DDMM" field="customPartyAttributeMap.Type"/>
+                            <if-compare operator="equals" value="DATE_DDMMYYYY" field="customPartyAttributeMap.Type"/>
+                        </or>
+                    </condition>
+                    <then>
+                        <if>
+		                <condition> 
+		                    <if-compare operator="equals" value="DATE_MMDD" field="customPartyAttributeMap.Type"/>
+		                </condition>
+		                <then>
+		                    <!-- DOB Short(MMDD) validation -->
+					        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_DD"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_MM"/>
+					            <string value="1972"/>
+					            <string value="MMDD"/>
+					            <field field="customPartyAttributeMap.Mandatory"/>
+					        </call-class-method>
+					        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+					                <set field="errorOnField" value="true"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+					                <string-to-list string="${tempErrorMessage}" message-field="" list="error_list"/>
+					            </if-compare>
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+					                <set field="errorOnField" value="true"/>
+					                <if-compare operator="not-equals" value="Y" field="customPartyAttributeMap.Mandatory">
+				                        <set field="requiredMessage" from-field="dateCompletionErrorMessage"/>
+				                    </if-compare>
+					            </if-compare>
+					        </if-compare>
+		                </then>
+		                <else-if>
+		                    <condition>
+		                        <if-compare operator="equals" value="DATE_MMDDYYYY" field="customPartyAttributeMap.Type"/>
+		                    </condition>
+		                <then>
+		                    <!-- DOB Long(MMDDYYYY) validation -->
+					        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_DD"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_MM"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_YYYY"/>
+					            <string value="MMDDYYYY"/>
+					            <field field="customPartyAttributeMap.Mandatory"/>
+					        </call-class-method>
+					        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+					                <set field="errorOnField" value="true"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+					                <string-to-list string="${tempErrorMessage}" message-field="" list="error_list"/>
+					            </if-compare>
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+					                <set field="errorOnField" value="true"/>
+					                <if-compare operator="not-equals" value="Y" field="customPartyAttributeMap.Mandatory">
+				                        <set field="requiredMessage" from-field="dateCompletionErrorMessage"/>
+				                    </if-compare>
+					        	</if-compare>
+                            </if-compare>
+		                </then>
+		                </else-if>
+		                <else-if>
+		                    <condition>
+		                        <if-compare operator="equals" value="DATE_DDMM" field="customPartyAttributeMap.Type"/>
+		                    </condition>
+		                <then>
+		                    <!-- DOB Short(DDMM) validation -->
+					        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_DD"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_MM"/>
+					            <string value="1972"/>
+					            <string value="DDMM"/>
+					            <field field="customPartyAttributeMap.Mandatory"/>
+					        </call-class-method>
+					        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+					                <set field="errorOnField" value="true"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+					                <string-to-list string="${tempErrorMessage}" message-field="" list="error_list"/>
+					            </if-compare>
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+					                <set field="errorOnField" value="true"/>
+					                <if-compare operator="not-equals" value="Y" field="customPartyAttributeMap.Mandatory">
+				                        <set field="requiredMessage" from-field="dateCompletionErrorMessage"/>
+				                    </if-compare>
+					            </if-compare>
+					        </if-compare>
+        
+		                </then>
+		                </else-if>
+		                <else-if>
+		                    <condition>
+		                        <if-compare operator="equals" value="DATE_DDMMYYYY" field="customPartyAttributeMap.Type"/>
+		                    </condition>
+		                <then>
+		                    <!-- DOB Long(DDMMYYYY) validation -->
+					        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_DD"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_MM"/>
+					            <field field="paramMap.${customPartyAttributeMap.AttrName}_YYYY"/>
+					            <string value="DDMMYYYY"/>
+					            <field field="customPartyAttributeMap.Mandatory"/>
+					        </call-class-method>
+					        <if-compare field="checkDateOfBirthResult" operator="not-equals" value="success">
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
+					                <set field="errorOnField" value="true"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingDobDateError"/>
+					                <string-to-list string="${tempErrorMessage}" message-field="" list="error_list"/>
+					            </if-compare>
+					            <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
+					                <set field="errorOnField" value="true"/>
+					                <if-compare operator="not-equals" value="Y" field="customPartyAttributeMap.Mandatory">
+				                        <set field="requiredMessage" from-field="dateCompletionErrorMessage"/>
+				                    </if-compare>
+					            </if-compare>
+					        </if-compare>
+		                </then>
+		                </else-if>
+		                <else>
+		                    <set field="attrValue" from-field="paramMap.${customPartyAttributeMap.AttrName}"/>
+		                    <if-empty field="paramMap.${customPartyAttributeMap.AttrName}">
+		                        <set field="errorOnField" value="true"/>
+		                    </if-empty>
+		                </else>
+		                </if>
+		                <if-compare operator="equals" value="true" field="errorOnField">
+		                    <if>
+		                        <condition> 
+		                            <if-compare operator="equals" value="0" field="attrNo"/>
+		                        </condition>
+		                        <then>
+		                            <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_0" list="error_list"/>
+		                        </then>
+		                        <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="1" field="attrNo"/>
+				                    </condition>
+			                    <then>
+			                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_1" list="error_list"/>
+			                    </then>
+				                </else-if>
+		                        <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="2" field="attrNo"/>
+				                    </condition>
+			                    <then>
+			                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_2" list="error_list"/>
+			                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="3" field="attrNo"/>
+				                    </condition>
+				                <then>
+				                    <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_3" list="error_list"/>
+				                </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="4" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_4" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="5" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_5" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="6" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_6" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="7" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_7" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="8" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_8" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="9" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_9" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="10" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_10" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="11" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_11" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="12" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_12" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="13" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_13" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="14" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_14" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="15" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_15" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="16" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_16" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="17" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_17" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="18" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_18" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="19" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${requiredMessage}" message-field="FIELD_ERROR_19" list="error_list"/>
+				                    </then>
+				                </else-if>
+		                    </if>
+		                </if-compare>
+                    </then>
+                    </if>
+	                
+	                <calculate field="attrNo">
+                        <calcop operator="add" >
+                            <calcop operator="get" field="attrNo"/>
+                            <number value="1"/>
+                        </calcop>
+                    </calculate>
+	            </iterate>
+            </if-compare>
 
         <check-errors/>
 
@@ -1342,7 +2219,9 @@
                     </if-empty>
                 </else>
         </if>
+        
         <set-service-fields service-name="createUpdatePartyPostalAddress" to-map="createUpdatePartyPostalAddressctx" map="parameters"/>
+        <set field="createUpdatePartyPostalAddressctx.toName" from-field="parameters.billing_fullName"/>
         <set field="createUpdatePartyPostalAddressctx.countryGeoId" from-field="parameters.billing_country"/>
         <set field="createUpdatePartyPostalAddressctx.attnName" from-field="parameters.billing_attnName"/>
         <set field="createUpdatePartyPostalAddressctx.address1" from-field="parameters.billing_address1"/>
@@ -1379,6 +2258,7 @@
                 </else>
         </if>
         <set-service-fields service-name="createUpdatePartyPostalAddress" to-map="createUpdatePartyPostalAddressctx" map="parameters"/>
+        <set field="createUpdatePartyPostalAddressctx.toName" from-field="parameters.shipping_fullName"/>
         <set field="createUpdatePartyPostalAddressctx.countryGeoId" from-field="parameters.shipping_country"/>
         <if-empty field="parameters.isSameAsBilling">
             <set field="createUpdatePartyPostalAddressctx.attnName" from-field="parameters.shipping_attnName"/>
@@ -1406,5 +2286,11 @@
 
         <!-- create/Update party attribute -->
         <call-simple-method method-name="createUpdatePartyAttributes"/>
+        
+        <call-simple-method method-name="createUpdateCustomPartyAttributes"/>
+        
+        <property-to-field field="tempSuccessMessage" resource="OSafeAdminUiLabels" property="UpdatedSuccess"/>
+        <string-to-list string="${tempSuccessMessage}"  list="successMessageList"/>
+        <field-to-request field="successMessageList" request-name="osafeSuccessMessageList"/>
     </simple-method>
 </simple-methods>

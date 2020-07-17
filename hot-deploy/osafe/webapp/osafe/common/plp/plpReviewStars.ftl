@@ -1,8 +1,7 @@
 <#assign reviewMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"REVIEW_METHOD")!""/>
 <#if reviewMethod?has_content >
 	<#if (reviewMethod.toUpperCase() == "BIGFISH") || (reviewMethod.toUpperCase() == "REEVOO")>
-		<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"REVIEW_SHOW_ON_PLP")>
-		 <div class="plpReviewStars">
+          <li class="${request.getAttribute("attributeClass")!}">
 	    	<#if reviewMethod.toUpperCase() == "REEVOO">
 	    		<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"REEVOO_SHOW_ON_PLP")>
 			        <#assign reevooBadgeurl = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_BADGE_URL")!""/>
@@ -26,7 +25,6 @@
 		            <div class="rating_bar"><div style="width:${ratePercentage}%"></div></div>
 		        </#if>
 	        </#if>
-		 </div>
-		</#if>
+		 </li>
 	</#if>
 </#if>

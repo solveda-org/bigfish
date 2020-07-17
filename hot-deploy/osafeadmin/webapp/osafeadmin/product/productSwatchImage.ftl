@@ -50,7 +50,7 @@
        </div>
        
        <#assign urlReferencePlpSwatchImageExist = "false"/>
-       <#if (plpSwatchImageURLStr?has_content) && (plpSwatchImageURLStr.contains("//"))>
+       <#if (plpSwatchImageURLStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(plpSwatchImageURLStr)>
          <#assign urlReferencePlpSwatchImageExist = "true"/>
        </#if>
        
@@ -157,7 +157,7 @@
        </div>
        
        <#assign urlReferencePdpSwatchImageExist = "false"/>
-       <#if (pdpSwatchImageURLStr?has_content) && (pdpSwatchImageURLStr.contains("//"))>
+       <#if (pdpSwatchImageURLStr?has_content) && Static["com.osafe.util.OsafeAdminUtil"].isValidURL(pdpSwatchImageURLStr)>
          <#assign urlReferencePdpSwatchImageExist = "true"/>
        </#if>
        

@@ -14,6 +14,8 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.product.ProductWorker;
 import com.osafe.util.Util;
 import org.ofbiz.product.product.ProductContentWrapper;
+import org.ofbiz.product.catalog.CatalogWorker;
+import org.ofbiz.product.category.CategoryWorker;
 
 paramsExpr = FastList.newInstance();
 exprBldr =  new EntityConditionBuilder();
@@ -36,6 +38,7 @@ if (UtilValidate.isNotEmpty(manufacturerPartyId))
 		  context.IMG_SIZE_PROF_MFG_H = Util.getProductStoreParm(request,"IMG_SIZE_PROF_MFG_H");
 		  context.IMG_SIZE_PROF_MFG_W = Util.getProductStoreParm(request,"IMG_SIZE_PROF_MFG_W");
 		  
+		  
 
           paramsExpr.add(EntityCondition.makeCondition(exprBldr.EQUALS(manufacturerPartyId: manufacturerPartyId)));
 	      productSearchList = [];
@@ -48,6 +51,20 @@ if (UtilValidate.isNotEmpty(manufacturerPartyId))
           productList = FastList.newInstance();
 		  if (UtilValidate.isNotEmpty(productSearchList))
 		  {
+              currentCategories = [];
+	 		  productStoreCatalogList  = CatalogWorker.getStoreCatalogs(request);
+			  if (UtilValidate.isNotEmpty(productStoreCatalogList))
+			  {
+					productStoreCatalogList  = EntityUtil.filterByDate(productStoreCatalogList, true);
+					gvProductStoreCatalog = EntityUtil.getFirst(productStoreCatalogList);
+					String prodCatalogId = gvProductStoreCatalog.prodCatalogId;
+					String topCategoryId = CatalogWorker.getCatalogTopCategoryId(request, prodCatalogId);
+					if(UtilValidate.isNotEmpty(topCategoryId))
+					{
+	   				    currentCategories = CategoryWorker.getRelatedCategoriesRet(request, "topLevelList", topCategoryId, true, true, true);
+					}
+			  }
+		  
                for (GenericValue product: productSearchList)
                {
                    String isVariant = product.getString("isVariant");
@@ -57,6 +74,24 @@ if (UtilValidate.isNotEmpty(manufacturerPartyId))
                    }
                   if ("N".equals(isVariant) && ProductWorker.isSellable(product))
                   {
+                  
+					 if (UtilValidate.isNotEmpty(currentCategories))
+					 {
+				        boolean productNotInCateogry = true;
+				        for (GenericValue currentCategory  : currentCategories)
+				        {
+				          if (CategoryWorker.isProductInCategory(delegator,product.productId,currentCategory.productCategoryId))
+				          {
+				            productNotInCateogry = false;
+				            break;
+				          }
+				        }
+				        if (productNotInCateogry)
+				        {
+				          continue;
+				        }
+					 }
+                  
 					 ProductContentWrapper productContentWrapper = new ProductContentWrapper(product, request);
 					 Map manufacturerProductItems = FastMap.newInstance();
 					 manufacturerProductItems.put("productId",product.productId);

@@ -42,7 +42,7 @@
       <label>${uiLabelMap.OrderCancelledCaption}</label>
      </div>
      <div class="infoValue">
-        <#if orderItem?has_content>${orderItem.cancelQuantity!"0"}</#if>
+        ${itemCancelledAmmount!}
      </div>
    </div>
 </div>
@@ -122,7 +122,7 @@
      </div>
      <div class="infoValue">
      	<span><#if shipGroupAssoc?has_content>${shipGroupAssoc.quantity}</#if></span>
-     	<a href="#TODO" ><#if shipGroup?has_content>[${shipGroup.shipGroupSeqId}]</#if></a>
+     	<a href="<@ofbizUrl>orderShippingDetail?orderId=${orderId}</@ofbizUrl>" ><#if shipGroup?has_content>[${shipGroup.shipGroupSeqId}]</#if></a>
      </div>
    </div>
 </div>

@@ -2,7 +2,7 @@
   <th class="nameCol firstCol">${uiLabelMap.FileNameLabel}</th>
   <th class="actionCol"></th>
   <th class="actionCol"></th>
-  <th class="typeCol">${uiLabelMap.TypeLabel}</th>
+  <th class="typeCol">${uiLabelMap.MediaFolderLabel}</th>
   <th class="sizeCol">${uiLabelMap.SizeLabel}</th>
   <th class="sizeCol">${uiLabelMap.HeightLabel}</th>
   <th class="sizeCol">${uiLabelMap.WidthLabel}</th>
@@ -13,7 +13,7 @@
   <#list resultList as fileName>
     <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
       <#if fileListMap?exists && fileListMap?has_content>
-        <#assign fileAttrMap = fileListMap.get("${fileName}")!""/>
+        <#assign fileAttrMap = fileListMap.get("${StringUtil.wrapString(fileName)}")!""/>
       </#if>
       <td class="descCol firstCol" ><a href="<@ofbizUrl>mediaContentDetail?mediaName=${fileName?if_exists}&mediaType=${fileAttrMap.parentDirName!}</@ofbizUrl>">${fileName}</a></td>
       <td class="actionCol">
@@ -40,7 +40,8 @@
       <td class="sizeCol" >${fileAttrMap.height}px</td>
       <td class="sizeCol" >${fileAttrMap.width}px</td>
       <td class="actionCol">
-       <a href="javascript:setConfirmDialogContent('${fileName?html}:${fileAttrMap.parentDirName!}','${uiLabelMap.deleteMediaAssetConfirmText}','deleteMediaContentFromList');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a>
+        <#assign deleteMediaAssetConfirmText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "DeleteMediaAssetConfirmListText", Static["org.ofbiz.base.util.UtilMisc"].toMap("fileName", "${fileName?html}"), locale)/>
+        <a href="javascript:setConfirmDialogContent('${fileName?html}:${fileAttrMap.parentDirName!}','${deleteMediaAssetConfirmText}','deleteMediaContentFromList');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a>
       </td>      
     </tr>
     <#if rowClass == "2">

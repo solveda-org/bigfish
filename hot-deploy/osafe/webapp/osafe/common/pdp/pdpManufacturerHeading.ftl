@@ -1,3 +1,5 @@
-<div class="pdpManufacturerHeading">
+<li class="${request.getAttribute("attributeClass")!}">
+  <div>
     <h2>${uiLabelMap.ManufacturerPDPProfileHeading!""}</h2>
-</div>
+  </div>
+</li>

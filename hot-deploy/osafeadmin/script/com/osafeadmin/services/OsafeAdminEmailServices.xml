@@ -6,25 +6,25 @@
     <simple-method method-name="updateProdStoreEmailSetAndEnum" short-description="This Service Update ProductStoreEmailSettings and Description in Enumeration">
         <if-empty field="parameters.fromAddress">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankFromAddressError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="FROMADDRESS" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="fromAddress" list="error_list"/>
         <else>
             <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isEmail" ret-field="emailValid">
                 <field field="parameters.fromAddress"/>
             </call-class-method>
             <if-compare field="emailValid" operator="equals"  value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidFromAddressError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="FROMADDRESS" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="fromAddress" list="error_list"/>
             </if-compare>
         </else>
         </if-empty>
         
         <if-empty field="parameters.subject">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankSubjectError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="SUBJECT" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="subject" list="error_list"/>
         </if-empty>
         
-        <property-to-field field="delim" resource="osafeAdmin" property="email-address-seperator"/>
-        <set field="del" from-field="delim" default-value=";"/>
+        <property-to-field field="delim" resource="osafeAdmin" property="email-address-separator"/>
+        <set field="del" from-field="delim" default-value=","/>
         <if-not-empty field="parameters.ccAddress">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkMultiEmailAddress" ret-field="emailValid">
                 <field field="parameters.ccAddress"/>
@@ -32,7 +32,7 @@
             </call-class-method>
             <if-compare field="emailValid" operator="equals"  value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCCEmailAddressError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="CCADDRESS" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="ccAddress" list="error_list"/>
             </if-compare>
         </if-not-empty>
         
@@ -43,7 +43,7 @@
             </call-class-method>
             <if-compare field="emailValid" operator="equals"  value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBCCEmailAddressError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="BCCADDRESS" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="bccAddress" list="error_list"/>
             </if-compare>
         </if-not-empty>
         <check-errors/>
@@ -60,12 +60,12 @@
 
         <if-empty field="parameters.simpleTest">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTestModeError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="simpleTest" list="error_list"/>
         <else>
             <if-compare field="parameters.simpleTest" operator="equals" value="N">
                 <if-empty field="parameters.templateId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTemplateIdError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="templateId" list="error_list"/>
                 <else>
                      <if>
                          <condition>
@@ -78,7 +78,7 @@
                          <then>
                              <if-empty field="parameters.customerId">
                                  <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCustomerIdError"/>
-                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                 <string-to-list string="${tempErrorMessage}" message-field="customerId" list="error_list"/>
                              <else>
                                  <entity-one value-field="party" entity-name="Party">
                                      <field-map field-name="partyId" from-field="parameters.customerId"/>
@@ -86,7 +86,7 @@
                                  <if-empty field="party">
 					                 <set field="argListNames[]" from-field="parameters.customerId"/>
 					                 <property-to-field resource="OSafeAdminUiLabels" property="CustomerIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
-                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                     <string-to-list string="${tempErrorMessage}" message-field="customerId" list="error_list"/>
                                  </if-empty>
                              </else>
                              </if-empty>
@@ -104,7 +104,7 @@
                          <then>
                              <if-empty field="parameters.orderId">
                                  <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderIdError"/>
-                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                 <string-to-list string="${tempErrorMessage}" message-field="orderId" list="error_list"/>
                              <else>
                                  <entity-one value-field="orderHeader" entity-name="OrderHeader">
                                      <field-map field-name="orderId" from-field="parameters.orderId"/>
@@ -112,7 +112,7 @@
                                  <if-empty field="orderHeader">
                                      <set field="argListNames[]" from-field="parameters.orderId"/>
                                      <property-to-field resource="OSafeAdminUiLabels" property="OrderIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
-                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                     <string-to-list string="${tempErrorMessage}" message-field="orderId" list="error_list"/>
                                  </if-empty>
                              </else>
                              </if-empty>
@@ -126,28 +126,28 @@
         </if-empty>
         <if-empty field="parameters.fromAddress">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankFromEmailAddressError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="FROMADDRESS" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="fromAddress" list="error_list"/>
         <else>
             <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isEmail" ret-field="emailValid">
                 <field field="parameters.fromAddress"/>
             </call-class-method>
             <if-compare field="emailValid" operator="equals"  value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidFromEmailAddressError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="FROMADDRESS" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="fromAddress" list="error_list"/>
             </if-compare>
         </else>
         </if-empty>
         
         <if-empty field="parameters.toAddress">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankToEmailAddressError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="TOADDRESS" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="toAddress" list="error_list"/>
         <else>
             <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isEmail" ret-field="emailValid">
                 <field field="parameters.toAddress"/>
             </call-class-method>
             <if-compare field="emailValid" operator="equals"  value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidToEmailAddressError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="TOADDRESS" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="toAddress" list="error_list"/>
             </if-compare>
         </else>
         </if-empty>
@@ -228,11 +228,11 @@
                 <if-not-empty field="mailSendErrorMessage">
                     <set field="argListNames[]" from-field="mailSendErrorMessage"/>
                  <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TestEmailSendFailError" arg-list-name="argListNames"/>
-                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                 <string-to-list string="${tempErrorMessage}"  message-field="simpleTest" list="error_list"/>
              <else>
                   <if-not-empty field="mailSendErrorMessageList">
                          <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TestEmailSendFailError" arg-list-name="mailSendErrorMessageList"/>
-                         <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                         <string-to-list string="${tempErrorMessage}" message-field="simpleTest" list="error_list"/>
                   </if-not-empty>
              </else>
              </if-not-empty>
@@ -364,12 +364,12 @@
         </call-class-method>
         <if-empty field="msgMethod">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MessageMethodError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="productStoreId" list="error_list"/>
         <else>
             <call-object-method method-name="toUpperCase" obj-field="msgMethod" ret-field="msgMethodInUpCase"/>
             <if-compare operator="equals" value="NONE" field="msgMethodInUpCase">
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MessageMethodError"/>
-	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="productStoreId" list="error_list"/>
             </if-compare>
         </else>
         </if-empty>
@@ -377,12 +377,12 @@
 
         <if-empty field="parameters.simpleTest">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTestModeError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="simpleTest" list="error_list"/>
         <else>
             <if-compare field="parameters.simpleTest" operator="equals" value="N">
                 <if-empty field="parameters.templateId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTemplateIdError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="templateId" list="error_list"/>
                 <else>
                      <if>
                          <condition>
@@ -395,7 +395,7 @@
                          <then>
                              <if-empty field="parameters.customerId">
                                  <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCustomerIdError"/>
-                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                 <string-to-list string="${tempErrorMessage}" message-field="customerId" list="error_list"/>
                              <else>
                                  <entity-one value-field="party" entity-name="Party">
                                      <field-map field-name="partyId" from-field="parameters.customerId"/>
@@ -403,7 +403,7 @@
                                  <if-empty field="party">
 					                 <set field="argListNames[]" from-field="parameters.customerId"/>
 					                 <property-to-field resource="OSafeAdminUiLabels" property="CustomerIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
-                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                     <string-to-list string="${tempErrorMessage}" message-field="customerId" list="error_list"/>
                                  </if-empty>
                              </else>
                              </if-empty>
@@ -420,7 +420,7 @@
                          <then>
                              <if-empty field="parameters.orderId">
                                  <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderIdError"/>
-                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                 <string-to-list string="${tempErrorMessage}" message-field="orderId" list="error_list"/>
                              <else>
                                  <entity-one value-field="orderHeader" entity-name="OrderHeader">
                                      <field-map field-name="orderId" from-field="parameters.orderId"/>
@@ -428,7 +428,7 @@
                                  <if-empty field="orderHeader">
                                      <set field="argListNames[]" from-field="parameters.orderId"/>
                                      <property-to-field resource="OSafeAdminUiLabels" property="OrderIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
-                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                     <string-to-list string="${tempErrorMessage}" message-field="orderId" list="error_list"/>
                                  </if-empty>
                              </else>
                              </if-empty>
@@ -443,14 +443,14 @@
 
         <if-empty field="parameters.toCell">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankToCellError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="TOCELL" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="toCell" list="error_list"/>
         <else>
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isNumber" ret-field="isNumber">
                 <field field="parameters.toCell"/>
             </call-class-method>
             <if-compare field="isNumber" operator="equals"  value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidToCellError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="TOCELL" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="toCell" list="error_list"/>
             <else>
                 <call-object-method method-name="length" obj-field="parameters.toCell" ret-field="toCellLength"/>
                 <if>
@@ -464,7 +464,7 @@
                     </condition>
                     <then>
 		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidToCellError"/>
-		                <string-to-list string="${tempErrorMessage}" message-field="TOCELL" list="error_list"/>
+		                <string-to-list string="${tempErrorMessage}" message-field="toCell" list="error_list"/>
                     </then>
                 </if>
             </else>
@@ -534,11 +534,11 @@
 	                 <set field="argListNames[]" from-field="txtMsgSendErrorMessage"/>
 	                 <set field="argListNames[]" from-field="txtMsgSendErrorMessage"/>
 	                 <property-to-field resource="OSafeAdminUiLabels" property="TestTxtMsgSendFailError" field="tempErrorMessage" arg-list-name="argListNames"/>
-	                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                 <string-to-list string="${tempErrorMessage}" message-field="txtMsgSendErrorMessage" list="error_list"/>
                   <else>
 	                  <if-not-empty field="txtMsgSendErrorMessageList">
 	                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TestTxtMsgSendFailError" arg-list-name="txtMsgSendErrorMessageList"/>
-	                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                     <string-to-list string="${tempErrorMessage}" message-field="txtMsgSendErrorMessageList" list="error_list"/>
 	                  </if-not-empty>
                   </else>
                   </if-not-empty>

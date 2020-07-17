@@ -16,13 +16,5 @@
 	            <p class="errorMessage">${uiLabelMap.CODNotAvailableInfo!}</p>
 	        </div>
 	    </#if>
-	<#else>
-	    <div class="deliveryInfo">
-	        <div class="errorImage"></div>
-	        <p class="errorMessage">${uiLabelMap.DeliveryNotAvailableInfo!}</p>
-	    </div>
 	</#if>
 </#if>
-<div class="pinCodeCheckercloseButton">
-    <a href="javascript:void(0);" class="standardBtn cancelPinCodeChecker">${uiLabelMap.CloseBtn!}</a>
-</div>

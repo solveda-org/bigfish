@@ -111,6 +111,7 @@
         <description>Import XML Elements, generate xml files in given directory using importDefinitionNames</description>
         <attribute name="xmlDataFile" mode="IN" type="String" optional="false"/>
         <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="true"/>
         <attribute name="productLoadImagesDir" mode="IN" type="String" optional="true"/>
         <attribute name="imageUrl" mode="IN" type="String" optional="true"/>
         <attribute name="removeAll" mode="IN" type="Boolean" optional="true" />
@@ -222,5 +223,81 @@
         <attribute name="removeAll" mode="IN" type="Boolean" optional="true" />
         <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
         <attribute name="messages" type="List" mode="OUT" optional="false"/>
+    </service>
+    
+    <service name="validateProductData" engine="java" location="com.osafe.services.ImportServices" invoke="validateProductData" auth="false" use-transaction="false">
+        <description>Validate the Product Data</description>
+        <attribute name="productCatDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="productDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="productAssocDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="productFeatureSwatchDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="manufacturerDataList" mode="IN" type="List" optional="true"/>
+        
+        <attribute name="prodCatErrorList" mode="OUT" type="List" optional="true"/>
+        <attribute name="prodCatWarningList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productErrorList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productWarningList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productAssocErrorList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productAssocWarningList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productFeatureSwatchErrorList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productFeatureSwatchWarningList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productManufacturerErrorList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productManufacturerWarningList" mode="OUT" type="List" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+    </service>
+    
+    <service name="getProductDataListFromFile" engine="java" location="com.osafe.services.ImportServices" invoke="getProductDataListFromFile" auth="false" use-transaction="false">
+        <description>Get the Product Data List from File</description>
+        <attribute name="productFilePath" mode="IN" type="String" optional="false"/>
+        <attribute name="productFileName" mode="IN" type="String" optional="false"/>
+        <attribute name="productCatDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productAssocDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productFeatureSwatchDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="manufacturerDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+    </service>
+    
+    <service name="getOrderStatusDataListFromFile" engine="java" location="com.osafe.services.ImportServices" invoke="getOrderStatusDataListFromFile" auth="false" use-transaction="false">
+        <description>Get the Order Status Update Data List from File</description>
+        <attribute name="orderStatusFilePath" mode="IN" type="String" optional="false"/>
+        <attribute name="orderStatusFileName" mode="IN" type="String" optional="false"/>
+        <attribute name="orderStatusDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+    </service>
+    
+    <service name="validateOrderStatusData" engine="java" location="com.osafe.services.ImportServices" invoke="validateOrderStatusData" auth="false" use-transaction="false">
+        <description>Validate the Order Status Update Data</description>
+        <attribute name="orderStatusDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+    </service>
+    
+    <service name="getProductRatingDataListFromFile" engine="java" location="com.osafe.services.ImportServices" invoke="getProductRatingDataListFromFile" auth="false" use-transaction="false">
+        <description>Get the Product Rating Data List from File</description>
+        <attribute name="productRatingFilePath" mode="IN" type="String" optional="false"/>
+        <attribute name="productRatingFileName" mode="IN" type="String" optional="false"/>
+        <attribute name="productRatingDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+    </service>
+    
+    <service name="validateProductRatingData" engine="java" location="com.osafe.services.ImportServices" invoke="validateProductRatingData" auth="false" use-transaction="false">
+        <description>Validate the Product Rating Data</description>
+        <attribute name="productRatingDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+    </service>
+    
+    <service name="getCustomerDataListFromFile" engine="java" location="com.osafe.services.ImportServices" invoke="getCustomerDataListFromFile" auth="false" use-transaction="false">
+        <description>Get the Product Rating Data List from File</description>
+        <attribute name="customerFilePath" mode="IN" type="String" optional="false"/>
+        <attribute name="customerFileName" mode="IN" type="String" optional="false"/>
+        <attribute name="customerDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+    </service>
+    
+    <service name="validateCustomerData" engine="java" location="com.osafe.services.ImportServices" invoke="validateCustomerData" auth="false" use-transaction="false">
+        <description>Validate the Product Rating Data</description>
+        <attribute name="customerDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
     </service>
 </services>

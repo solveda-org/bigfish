@@ -73,6 +73,6 @@
         <#if productStore?has_content>
            <#assign storeName=productStore.storeName!""/>
         </#if>
-        ${StringUtil.wrapString(custRequest.custRequestId?if_exists)},${storeName!},${custRequest.custRequestDate!},${lname!},${fname!},${address1!},${address2!},${address3!},${city!},${state!},${zip!},${country!},${email!},${phone!},${comment!},${exported!},${downloadedDate!}
+        ${storeName!},${StringUtil.wrapString(custRequest.custRequestId?if_exists)},${custRequest.custRequestDate!},${lname!},${fname!},${address1!},${address2!},${address3!},${city!},${state!},${zip!},${country!},${email!},${phone!},${comment!},${exported!},${downloadedDate!}
   </#list>
 </#if>

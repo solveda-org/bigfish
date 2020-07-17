@@ -15,88 +15,238 @@ import java.util.Map;
 import org.ofbiz.base.util.UtilHttp;
 import java.math.BigDecimal;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.base.util.UtilMisc;
 
 if (UtilValidate.isNotEmpty(parameters.orderId)) 
 {
 	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : parameters.orderId]);
 }
-BigDecimal orderItemAdjustmentTotal = BigDecimal.ZERO;
-BigDecimal totalReturns = BigDecimal.ZERO;
+
+statusId = parameters.statusId;
+BigDecimal originalOrderShippingAmount = BigDecimal.ZERO;
+BigDecimal originalOrderTaxAmount = BigDecimal.ZERO;
+BigDecimal originalOrderPromoAmount = BigDecimal.ZERO;
+
+BigDecimal priorItemAdjustmentTotal = BigDecimal.ZERO;
+BigDecimal priorPromoAdjustmentTotal = BigDecimal.ZERO;
+BigDecimal priorShippingAdjustmentTotal = BigDecimal.ZERO;
+BigDecimal priorTaxAdjustmentTotal = BigDecimal.ZERO;
+List<String> processedReturnIds = FastList.newInstance();
+
 if (UtilValidate.isNotEmpty(orderHeader)) 
 {
+	
 	orderReadHelper = new OrderReadHelper(orderHeader);
+	orderAdjustments = orderReadHelper.getAdjustments();
+	context.orderAdjustments = orderAdjustments;
+
+	currencyUomId = orderReadHelper.getCurrency();
 	orderItems = orderReadHelper.getOrderItems();
 	context.orderReadHelper = orderReadHelper;
+	context.orderHeader = orderHeader;
+	orderShippingAdjustments = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SHIPPING_CHARGES"));
+	if(UtilValidate.isNotEmpty(orderShippingAdjustments))
+	{
+		for(GenericValue orderShippingAdjustment : orderShippingAdjustments)
+		{
+			if(!((orderShippingAdjustment.getBigDecimal("amount")).compareTo(BigDecimal.ZERO) < 0))
+			{
+				originalOrderShippingAmount = originalOrderShippingAmount.add(orderShippingAdjustment.getBigDecimal("amount"));
+			}
+		}
+	}
+	orderTaxAdjustments = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SALES_TAX"));
+	if(UtilValidate.isNotEmpty(orderTaxAdjustments))
+	{
+		for(GenericValue orderTaxAdjustment : orderTaxAdjustments)
+		{
+			if(UtilValidate.isNotEmpty(orderTaxAdjustment.getString("taxAuthorityRateSeqId")))
+			{
+				originalOrderTaxAmount = originalOrderTaxAmount.add(orderTaxAdjustment.getBigDecimal("amount"));
+			}
+		}
+	}
 	
-	orderPayments = orderReadHelper.getOrderPayments();
-    for(GenericValue orderPayment : orderPayments)
-    {
-        if((orderPayment.statusId).equals("PMNT_SENT"))
-        {
-            totalReturns = totalReturns.add(orderPayment.amount);
-        }	
-    }
-	//totalReturns = orderReadHelper.getOrderReturnedTotal();
+	orderPromoAdjustments = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"));
+	if(UtilValidate.isNotEmpty(orderPromoAdjustments))
+	{
+		for(GenericValue orderPromoAdjustment : orderPromoAdjustments)
+		{
+			if(UtilValidate.isNotEmpty(orderPromoAdjustment.getString("productPromoId")))
+			{
+				originalOrderPromoAmount = originalOrderPromoAmount.add(orderPromoAdjustment.getBigDecimal("amount"));
+			}
+		}
+	}
+	if(statusId.equalsIgnoreCase("PRODUCT_RETURN"))
+	{
+		List<GenericValue> returnOrderItems = orderReadHelper.getOrderReturnItems();
+		if(UtilValidate.isNotEmpty(returnOrderItems))
+		{
+			for(GenericValue returnOrderItem : returnOrderItems)
+			{
+				priorItemAdjustmentTotal = priorItemAdjustmentTotal.add((returnOrderItem.returnQuantity).multiply(returnOrderItem.returnPrice));
+				
+				//Calculate Return Adjustments
+				if(!processedReturnIds.contains(returnOrderItem.returnId))
+				{
+					List<GenericValue> returnAdjustmets = delegator.findByAnd("ReturnAdjustment", UtilMisc.toMap("returnId", returnOrderItem.returnId));
+					if(UtilValidate.isNotEmpty(returnAdjustmets))
+					{
+						//Shipping Adjustments
+						List<GenericValue> returnAdjustmetsShipping = EntityUtil.filterByAnd(returnAdjustmets, UtilMisc.toMap("returnId",returnOrderItem.returnId, "returnTypeId", "RTN_REFUND", "returnAdjustmentTypeId", "RET_SHIPPING_ADJ"));
+						if(UtilValidate.isNotEmpty(returnAdjustmetsShipping))
+						{
+							for(GenericValue returnAdjustmetShipping : returnAdjustmetsShipping)
+							{
+								priorShippingAdjustmentTotal = priorShippingAdjustmentTotal.add(returnAdjustmetShipping.amount);
+							}
+						}
+						
+						//Promo Adjustments
+						List<GenericValue> returnAdjustmetsPromo = EntityUtil.filterByAnd(returnAdjustmets, UtilMisc.toMap("returnId",returnOrderItem.returnId, "returnTypeId", "RTN_REFUND", "returnAdjustmentTypeId", "RET_PROMOTION_ADJ"));
+						if(UtilValidate.isNotEmpty(returnAdjustmetsPromo))
+						{
+							for(GenericValue returnAdjustmetPromo : returnAdjustmetsPromo)
+							{
+								priorPromoAdjustmentTotal = priorPromoAdjustmentTotal.add(returnAdjustmetPromo.amount);
+							}
+						}
+						
+						//Sales Tax Adjustments
+						List<GenericValue> returnAdjustmetsTax = EntityUtil.filterByAnd(returnAdjustmets, UtilMisc.toMap("returnId",returnOrderItem.returnId, "returnTypeId", "RTN_REFUND", "returnAdjustmentTypeId", "RET_SALES_TAX_ADJ"));
+						if(UtilValidate.isNotEmpty(returnAdjustmetsTax))
+						{
+							for(GenericValue returnAdjustmetTax : returnAdjustmetsTax)
+							{
+								priorTaxAdjustmentTotal = priorTaxAdjustmentTotal.add(returnAdjustmetTax.amount);
+							}
+						}
+					}
+					processedReturnIds.add(returnOrderItem.returnId);
+				}
+			}
+		}
+	}
 	
-	returnedQuantityMap = orderReadHelper.getOrderItemReturnedQuantities();
-	
-	orderItems
 }
-BigDecimal remainingQuantityPriceTotal = BigDecimal.ZERO;
-Map returnedQunatityParmMap = FastMap.newInstance();
+
+BigDecimal originalOrderItemSubtotal = BigDecimal.ZERO;
+
+BigDecimal cancelOrderItemSubtotal = BigDecimal.ZERO;
+BigDecimal returnOrderItemSubtotal = BigDecimal.ZERO;
+
+List orderItemSequenceIds = FastList.newInstance();
+Map returnItemSeqIdQuantityMap = FastMap.newInstance();
+List<GenericValue> returnItems = FastList.newInstance();
+
 for(int i = 0; i < orderItems.size() ; i++)
 {
-	BigDecimal returnedQuantity = BigDecimal.ZERO;
-	BigDecimal returningQuantity = BigDecimal.ZERO;
-	BigDecimal remainingQuantity = BigDecimal.ZERO;
-	BigDecimal remainingQuantityPrice = BigDecimal.ZERO;
+	originalOrderItem = orderItems.get(i);
+	
 	String orderItemSeqId = parameters.get("orderItemSeqId-"+i);
+	
+	String returnQuantity = parameters.get("returnQuantity_"+i);
+	
+	originalOrderItemTotal = (originalOrderItem.quantity).multiply(originalOrderItem.unitPrice);
+	
+	originalOrderItemSubtotal = originalOrderItemSubtotal + originalOrderItemTotal;
 	
 	if(UtilValidate.isNotEmpty(orderItemSeqId))
 	{
+		orderItemSequenceIds.add(orderItemSeqId);
+		
 		orderItem = delegator.findByPrimaryKey("OrderItem", [orderId : parameters.orderId, orderItemSeqId: orderItemSeqId]);
-		orderItemAdjustmentTotal = orderItemAdjustmentTotal.add(orderReadHelper.getOrderItemAdjustmentsTotal(orderItem));
-		
-		returnedQuantity = returnedQuantityMap.get(orderItemSeqId);
-		
-		try
+
+		//CALCULATE FOR ITEM CANCEL
+		if(statusId.equalsIgnoreCase("ORDER_CANCELLED"))
 		{
-			if(parameters.get("statusId").equals("PRODUCT_RETURN"))
-			{
-				returningQuantity = new BigDecimal(parameters.get("returnQuantity_"+i));
-			}
-			else if(parameters.get("statusId").equals("ORDER_CANCELLED"))
-			{
-				returningQuantity = orderItem.quantity;
-			}
-				
-		}
-		catch(Exception e)
-		{
-			returningQuantity = BigDecimal.ZERO;
+		    orderItemTotal = (orderItem.quantity).multiply(orderItem.unitPrice);
+		    cancelOrderItemSubtotal = cancelOrderItemSubtotal + orderItemTotal;
 		}
 		
-		remainingQuantity = orderItem.quantity.subtract(returnedQuantity.add(returningQuantity));
 		
-		remainingQuantityPrice = remainingQuantity.multiply(orderItem.unitPrice);
-		
-		remainingQuantityPriceTotal = remainingQuantityPriceTotal.add(remainingQuantityPrice);
-		
-		returnedQunatityParmMap.put(orderItemSeqId, returnedQuantity);
-		
+		//CALCULATE FOR ITEM RETURN
+		if(statusId.equalsIgnoreCase("PRODUCT_RETURN") && UtilValidate.isNotEmpty(returnQuantity))
+		{
+			BigDecimal returnQuantityBD = BigDecimal.ZERO;
+			try
+			{
+				returnQuantityBD = new BigDecimal(returnQuantity);
+			}
+			catch(NumberFormatException nfe)
+			{
+				// Exception Handelled
+			}
+			returnOrderItemTotal = (returnQuantityBD).multiply(orderItem.unitPrice);
+			returnOrderItemSubtotal = returnOrderItemSubtotal + returnOrderItemTotal;
+			returnItems.add(orderItem);
+			returnItemSeqIdQuantityMap.put(orderItem.orderItemSeqId, returnQuantityBD);
+		}
 	}
-	
 }
 
-for(GenericValue orderItem : orderItems)
+//Calculate the Adjust Shipping Amount
+BigDecimal adjustmentAmountTotalShipping = BigDecimal.ZERO;
+if(statusId.equalsIgnoreCase("ORDER_CANCELLED"))
 {
-	if(!returnedQunatityParmMap.containsKey(orderItem.orderItemSeqId))
-	{
-		remainingQuantityPriceTotal = remainingQuantityPriceTotal.add((orderItem.quantity.subtract(returnedQuantityMap.get(orderItem.orderItemSeqId))).multiply(orderItem.unitPrice));
-	}
+	Map svcShippingCtx = FastMap.newInstance();
+	svcShippingCtx.put("orderId", parameters.orderId);
+	svcShippingCtx.put("orderItemSequenceIds", orderItemSequenceIds);
+	
+	recalcOrderShippingAmountRes = dispatcher.runSync("recalcOrderShippingAmount", svcShippingCtx);
+	adjustmentAmountTotalShipping = recalcOrderShippingAmountRes.get("adjustmentAmountTotal");
 }
 
+//Calculate the Adjust Tax Amount
+BigDecimal adjustmentAmountTotalTax = BigDecimal.ZERO;
+if(statusId.equalsIgnoreCase("ORDER_CANCELLED"))
+{
+	Map svcTaxCtx = FastMap.newInstance();
+	svcTaxCtx.put("orderId", parameters.orderId);
+	svcTaxCtx.put("orderItemSequenceIds", orderItemSequenceIds);
 
-context.orderItemAdjustmentTotal = orderItemAdjustmentTotal;
-context.totalReturns = totalReturns;
-context.remainingQuantityPriceTotal = remainingQuantityPriceTotal;
+	recalcOrderTaxAmountRes = dispatcher.runSync("recalcOrderTaxAmount", svcTaxCtx);
+	adjustmentAmountTotalTax = recalcOrderTaxAmountRes.get("adjustmentAmountTotal");
+}
+
+//Calculate the Adjust Promo Amount
+BigDecimal adjustmentAmountTotalPromo = BigDecimal.ZERO;
+Map svcPromoCtx = FastMap.newInstance();
+svcPromoCtx.put("orderId", parameters.orderId);
+svcPromoCtx.put("orderItemSequenceIds", orderItemSequenceIds);
+
+
+recalcOrderPromoAmountRes = dispatcher.runSync("recalcOrderPromoAmount", svcPromoCtx);
+adjustmentAmountTotalPromo = recalcOrderPromoAmountRes.get("adjustmentAmountTotal");
+
+typeMap = [:];
+returnItemTypeMap = delegator.findByAnd("ReturnItemTypeMap", [returnHeaderTypeId : "CUSTOMER_RETURN"]);
+returnItemTypeMap.each { value ->
+    typeMap[value.returnItemMapKey] = value.returnItemTypeId;
+}
+context.returnItemTypeMap = typeMap;
+
+
+context.adjustmentAmountTotalShipping = adjustmentAmountTotalShipping;
+context.adjustmentAmountTotalTax = adjustmentAmountTotalTax;
+context.adjustmentAmountTotalPromo = adjustmentAmountTotalPromo; 
+
+context.cancelOrderItemSubtotal = cancelOrderItemSubtotal;
+context.returnOrderItemSubtotal = returnOrderItemSubtotal;
+
+context.originalOrderItemSubtotal = originalOrderItemSubtotal;
+context.originalOrderShippingAmount = originalOrderShippingAmount;
+context.originalOrderTaxAmount = originalOrderTaxAmount;
+context.originalOrderPromoAmount = originalOrderPromoAmount;
+
+context.priorItemAdjustmentTotal = priorItemAdjustmentTotal;
+context.priorShippingAdjustmentTotal = priorShippingAdjustmentTotal;
+context.priorPromoAdjustmentTotal = priorPromoAdjustmentTotal;
+context.priorTaxAdjustmentTotal = priorTaxAdjustmentTotal;
+
+context.orderItems = orderItems;
+context.currencyUomId = currencyUomId;
+context.statusId = statusId;
+context.returnItems = returnItems;
+context.returnItemSeqIdQuantityMap = returnItemSeqIdQuantityMap;

@@ -1,14 +1,20 @@
 package email;
 
-import java.util.*;
-import org.ofbiz.base.util.*;
-import org.ofbiz.entity.*;
-import org.ofbiz.entity.condition.*;
-import org.ofbiz.entity.util.*;
-import org.ofbiz.product.store.ProductStoreWorker;
-import org.ofbiz.webapp.control.*;
-import java.math.BigDecimal;
-import org.ofbiz.order.order.*;
+import org.ofbiz.base.util.*
+import org.ofbiz.entity.*
+import org.ofbiz.entity.condition.*
+import org.ofbiz.entity.util.*
+import org.ofbiz.order.order.*
+import org.ofbiz.webapp.control.*
+
+emailParameters = UtilProperties.getResourceBundleMap("parameters_email_styles.xml", locale);
+if (UtilValidate.isNotEmpty(emailParameters))
+{
+    for (Map.Entry emailParameterEntry : emailParameters.entrySet()) 
+    {
+        globalContext.put(emailParameterEntry.getKey(),emailParameterEntry.getValue());
+    }
+}
 
 partyId = context.partyId;
 person = context.person;
@@ -172,7 +178,8 @@ if (UtilValidate.isNotEmpty(orderId))
        globalContext.put("ORDER_ADJUSTMENTS",headerAdjustmentsToShow);
        globalContext.put("ORDER_SHIP_ADDRESS",shippingAddress);
        globalContext.put("ORDER_BILL_ADDRESS",billingAddress);
-       globalContext.put("ORDER_PAYMENTS",paymentMethods);
+       //Not sure why these were populated with payment methods opposed to preferences
+       globalContext.put("ORDER_PAYMENTS",orderReadHelper.getPaymentPreferences());
        globalContext.put("ORDER_PAY_PREFERENCES",orderPaymentPreferences);
        globalContext.put("ORDER_PAYMENT_TYPE",paymentMethodType);
        globalContext.put("ORDER_SHIPPING_INFO",orderShipmentInfoSummaryList);
