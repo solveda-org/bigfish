@@ -17,11 +17,12 @@ public class Constants {
                                                            "OrderShipment", "ItemIssuance", "ShipmentPackageContent",
                                                            "ShipmentPackageRouteSeg", "ShipmentRouteSegment", "ShipmentPackage",
                                                            "ShipmentStatus", "ShipmentItem", "Shipment", "ReturnHeader",
-                                                           "OrderContent", "OrderHeaderNote", "OrderNotification", "OrderItemChange",
-                                                           "OrderItemShipGroupAssoc","OrderItemAttribute","OrderItemRole","OrderItem","OrderItemShipGroup",
+                                                           "OrderContent", "OrderHeaderNote", "OrderNotification", "OrderItemChange","OrderItemAssoc",
+                                                           "OrderItemShipGroupAssoc","OrderItemAttribute","OrderItemRole","OrderItemPriceInfo","OrderItem","OrderItemShipGroup",
                                                            "OrderAdjustmentTypeAttr","OrderAdjustmentAttribute","OrderAdjustment","OrderContactMech","OrderAttribute",
-                                                           "Payment", "PaymentGatewayRespMsg", "PaymentGatewayResponse", "CommunicationEventOrder",
-                                                           "OrderPaymentPreference","OrderRole","OrderStatus","OrderProductPromoCode","ProductPromoUse","OrderHeader",
+                                                           "FinAccountTrans","FinAccountAuth","FinAccountStatus","FinAccountRole",
+                                                           "Payment", "PaymentGatewayRespMsg", "PaymentGatewayResponse", "PaymentApplication","CommunicationEventOrder",
+                                                           "OrderPaymentPreference","FinAccount","OrderRole","OrderStatus","OrderProductPromoCode","ProductPromoUse","OrderHeader",
                                                            "ProductAttribute", "ProductCalculatedInfo",
                                                            "ProductAverageCost", "ProductConfig", "ProductConfigProduct",
                                                            "ProductConfigStats", "ProductCostComponentCalc", "ProductFacilityLocation", "ProductFacility",
@@ -86,6 +87,10 @@ public class Constants {
     public static final String PRODUCT_DEFAULT_PRICE_CUR_DATA_KEY = "defaultPriceCurrency";
     public static final String PRODUCT_DEFAULT_PRICE_FROM_DATA_KEY = "defaultPriceFromDate";
     public static final String PRODUCT_DEFAULT_PRICE_THRU_DATA_KEY = "defaultPriceThruDate";
+    public static final String PRODUCT_RECURRING_PRICE_DATA_KEY = "recurringPrice";
+    public static final String PRODUCT_RECURRING_PRICE_CUR_DATA_KEY = "recurringPriceCurrency";
+    public static final String PRODUCT_RECURRING_PRICE_FROM_DATA_KEY = "recurringPriceFromDate";
+    public static final String PRODUCT_RECURRING_PRICE_THRU_DATA_KEY = "recurringPriceThruDate";
     public static final String PRODUCT_SLCT_FEAT_TYPE_ID_DATA_KEY = "selectFeature_${count}_type_Id";
     public static final String PRODUCT_SLCT_FEAT_TYPE_DESC_DATA_KEY = "selectFeature_${count}_type_Desc";
     public static final String PRODUCT_SLCT_FEAT_DESC_DATA_KEY = "selectFeature_${count}_description";
@@ -138,6 +143,7 @@ public class Constants {
     public static final String PRODUCT_XTRA_DETAIL_IMG_THRU_DATA_KEY = "xtraDetailImageThruDate_${count}";
     public static final String PRODUCT_ATTACH_URL_DATA_KEY = "productAttachment_${count}";
     public static final String PRODUCT_ATTACH_URL_THRU_DATA_KEY = "productAttachmentThruDate_${count}";
+    public static final String PRODUCT_ATTRIBUTES_DATA_KEY = "productAttributes";
 
     public static final String PRODUCT_ASSOC_ID_DATA_KEY = "assocProductId";
     public static final String PRODUCT_ASSOC_ID_TO_DATA_KEY = "assocProductIdTo";
@@ -176,6 +182,9 @@ public class Constants {
     public static final String MANUFACTURER_LONG_DESC_DATA_KEY = "manufacturerLongDescription";
     public static final String MANUFACTURER_IMG_DATA_KEY = "manufacturerImage";
     public static final String MANUFACTURER_IMG_THRU_DATA_KEY = "manufacturerImageThruDate";
+    
+    public static final String ATTR_NAME_DATA_KEY = "attrName";
+    public static final String ATTR_VALUE_DATA_KEY = "attrValue";
 
 }
 

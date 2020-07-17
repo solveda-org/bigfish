@@ -1,4 +1,6 @@
 <input type="hidden" name="productId" id="productId" maxlength="20" value="${product.productId!""}"/>
+<#assign currencyUomId = CURRENCY_UOM_DEFAULT!currencyUomId />
+<input type="hidden" name="currencyUomId" value="${parameters.currencyUomId!currencyUomId!}" />
 <#if resultList?exists && resultList?has_content>
 <table class="osafe" cellspacing="0">
   <thead>
@@ -57,14 +59,12 @@
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VirtualListPriceInfo",pricesMap, locale )+"</p>">
 	  	</#if>
         <td class="dollarCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">
-        	<#if productListPrice?has_content>
-	          <@ofbizCurrency amount=listPrice isoCode=productListPrice.currencyUomId rounding=globalContext.currencyRounding/>
-	        </#if>
+        	<input type="text"  class="textEntry textAlignRight" name="variantListPrice_${variantProduct.productIdTo!""}" id="variantListPrice_${variantProduct.productIdTo!""}" value="${parameters.get("variantListPrice_${variantProduct.productIdTo!}")!listPrice!}"/>
         </td>
         <#assign productVariantSalePrice = Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, variantProdDetail.productId, "DEFAULT_PRICE")!>
         <#if productVariantSalePrice?has_content>
 	    	<#assign defaultPrice = productVariantSalePrice.price!"" />
-	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("variantSalePrice", globalContext.currencySymbol+""+defaultPrice, "virtualSalePrice", globalContext.currencySymbol+""+defaultPrice!)>
+	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("variantSalePrice", globalContext.currencySymbol+""+defaultPrice, "virtualSalePrice", globalContext.currencySymbol+""+productDefaultPrice.price!)>
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VariantOverrideDefaultPriceInfo",pricesMap, locale )+"</p>">
 	    <#elseif productDefaultPrice?has_content>
 	    	<#assign defaultPrice = productDefaultPrice.price!"" />
@@ -72,9 +72,7 @@
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VirtualDefaultPriceInfo",pricesMap, locale )+"</p>">
 	  	</#if>
         <td class="dollarCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">
-        	<#if productListPrice?has_content>
-	          <@ofbizCurrency amount=defaultPrice isoCode=productListPrice.currencyUomId rounding=globalContext.currencyRounding/>
-	        </#if>
+	    	<input type="text"  class="textEntry textAlignRight" name="variantDefaultPrice_${variantProduct.productIdTo!""}" id="variantDefaultPrice_${variantProduct.productIdTo!""}" value="${parameters.get("variantDefaultPrice_${variantProduct.productIdTo!}")!defaultPrice!}"/>
         </td>
         <#if productInStoreOnlyAttribute?has_content && productInStoreOnlyAttribute.attrValue?upper_case == 'Y'>
             <#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+uiLabelMap.StoreOnlyProductInfo>
@@ -93,8 +91,12 @@
         <#if bfWHInventoryProductAttribute?exists>
           <#assign bfWHInventory = bfWHInventoryProductAttribute.attrValue!>
         </#if>
-        <td class="qtyCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">${bfTotalInventory!}</td>
-        <td class="qtyCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">${bfWHInventory!}</td>
+        <td class="qtyCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">
+        	<input type="text"  class="textEntry textAlignRight" name="bfTotalInventory_${variantProduct.productIdTo!""}" id="bfTotalInventory_${variantProduct.productIdTo!""}" value="${parameters.get("bfTotalInventory_${variantProduct.productIdTo!}")!bfTotalInventory!}"/>
+        </td>
+        <td class="qtyCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">
+        	<input type="text"  class="textEntry textAlignRight" name="bfWHInventory_${variantProduct.productIdTo!""}" id="bfWHInventory_${variantProduct.productIdTo!""}" value="${parameters.get("bfWHInventory_${variantProduct.productIdTo!}")!bfWHInventory!}"/>
+        </td>
         <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists, "productFeatureApplTypeId", "STANDARD_FEATURE"}, Static["org.ofbiz.base.util.UtilMisc"].toList("productFeatureTypeId"))/>
         <#if productFeatureAndAppls?exists && productFeatureAndAppls?has_content>
           <#list productFeatureAndAppls as productFeatureAndAppl>

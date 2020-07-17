@@ -268,7 +268,12 @@
         } else if (mode == "BBK") {
             <#-- Browser Back Action -->
             window.history.back();
-        } 
+        } else if (mode == "GM") {
+            <#-- update gift message action -->
+            giftMessageConvertApostrophe();
+            form.action="<@ofbizUrl>${doneAction!""}</@ofbizUrl>";
+            form.submit();
+        }
     }
     function setCheckoutFormAction(form, mode, value) 
     {
@@ -965,4 +970,26 @@
             return false;
         }
     }
+
+    function giftMessageConvertApostrophe()
+    {
+    	jQuery('.js_giftMessageFrom').each(function() 
+        {
+            var giftMessageFromInputId = jQuery(this).attr('id');
+            convertApostrophe(giftMessageFromInputId);
+        });
+        
+        jQuery('.js_giftMessageTo').each(function() 
+        {
+            var giftMessageToInputId = jQuery(this).attr('id');
+            convertApostrophe(giftMessageToInputId);
+        });
+        
+    	jQuery('.js_giftMessageText').each(function() 
+        {
+            var giftMessageInputId = jQuery(this).attr('id');
+            convertApostrophe(giftMessageInputId);
+        });
+    }
+    
 </script>

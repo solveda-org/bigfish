@@ -9,6 +9,8 @@
         <#assign currencyUomId = orderReadHelper.getCurrency()>
         <#assign rowClass = "1"/>
         <#if orderReadHelper?has_content>
+            <#assign orderHeader = orderReadHelper.getOrderHeader()/>
+            <#assign orderHeaderStatusId = orderHeader.statusId />
             <#assign orderItems = orderReadHelper.getOrderItems()/>
             <#assign orderAdjustments = orderReadHelper.getAdjustments()/>
             <#assign orderOpenAmount = orderReadHelper.getOrderGrandTotal(orderItems, orderAdjustments)/>
@@ -78,7 +80,7 @@
                             </#list>
                         </#if>
                     </#list>
-                    <#if orderOpenAmount?has_content && orderOpenAmount &gt; 0  && isStorePickup?has_content && isStorePickup == "Y">
+                    <#if (orderOpenAmount?has_content && orderOpenAmount &gt; 0)>
                         <tr class="dataRow <#if rowClass == "2">even<#else>odd></#if>">
                             <td class="dateCol firstCol">&nbsp;</td>
                             <td class="nameCol total">${uiLabelMap.BalanceDueLabel}</td>

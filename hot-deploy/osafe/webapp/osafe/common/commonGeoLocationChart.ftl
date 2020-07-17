@@ -104,7 +104,7 @@
           <#if geoChart.points?has_content>
             <#list geoChart.points as point>
               <#if point.userLocation?has_content && point.userLocation == "Y">
-                  map.setCenter(new google.maps.LatLng(${point.lat?c}, ${point.lon?c}));
+                  map.setCenter(new google.maps.LatLng(${point.lat}, ${point.lon}));
               </#if>
             </#list>
           <#else>
@@ -114,7 +114,7 @@
           <#if geoChart.points?has_content>
             <#list geoChart.points as point>
               var GMarkerOptions = {
-                position: new google.maps.LatLng(${point.lat?c}, ${point.lon?c}),
+                position: new google.maps.LatLng(${point.lat}, ${point.lon}),
                 map: map
               };
               var marker_${point_index} = new google.maps.Marker(GMarkerOptions);

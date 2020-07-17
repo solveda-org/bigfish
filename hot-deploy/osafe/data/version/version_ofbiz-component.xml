@@ -94,6 +94,7 @@
     <entity-resource type="data" reader-name="version" loader="main" location="data/bigFishParameters.xml"/>
     <entity-resource type="data" reader-name="version" loader="main" location="data/seed/bigFishTypes.xml"/> 
     <entity-resource type="data" reader-name="version" loader="main" location="data/seed/bigFishContentMenu.xml"/>
+    <entity-resource type="data" reader-name="version" loader="main" location="data/seed/eCommercePaymentCustomMethods.xml"/>
 
     <!-- BigFish Extended Store Content -->
     <entity-resource type="data" reader-name="extendedstore" loader="main" location="data/bigFishExtendedStore.xml"/>

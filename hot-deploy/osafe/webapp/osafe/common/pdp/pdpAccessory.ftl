@@ -54,8 +54,8 @@
             <#if isPlpPdpInStoreOnly?exists>
                 <script language="JavaScript" type="text/javascript">eval(checkProductInStorePlp('${isPlpPdpInStoreOnly}', '${uiSequenceScreen}_${accessoryProduct.productIdTo}'));</script>
             </#if>
-            ${virtualJavaScript?if_exists}
-            ${virtualDefaultJavaScript?if_exists}
+            ${plpVirtualJavaScript?if_exists}
+            ${plpVirtualDefaultJavaScript?if_exists}
             <#-- Prefill first select box (virtual products only) -->
             <#if plpVariantTree?exists && 0 < plpVariantTree.size()>
               <#assign rowNo = 0/>

@@ -6363,6 +6363,8 @@
                 <set field="helperFileName" value ="parameterDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminSystemParamNav"/>
+                <set field="warningText" value="${uiLabelMap.SysParmCacheResetHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="parameterDetail"/>
@@ -6385,6 +6387,8 @@
                 <set field="helperFileName" value ="parameterDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminSystemParamNav"/>
+                <set field="warningText" value="${uiLabelMap.SysParmCacheResetHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="parameterDetail"/>
@@ -6609,6 +6613,7 @@
                       <actions>
                         <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/product/productIdentification.groovy"/>
                         <set field="warningText" value="${uiLabelMap.SolrReIndexProductHelperInfo}"/>
+                        <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
                       </actions>
                       <widgets>
                         <container id="productDetail" style="productDetail">
@@ -7082,6 +7087,7 @@
                 <set field="ExportToXMLAction" value="downloadFile"/>
                 <set field="ExportToXMLParam" value="fileToExport"/>
                 <set field="ExportToXMLParamValue" value="uiLabelFile"/>
+                <set field="detailAction" value="manageUiLabelDetail"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -7149,7 +7155,6 @@
     <screen name="manageUiLabelList">
         <section>
             <actions>
-                <set field="detailAction" value="manageUiLabelDetail"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -7177,6 +7182,7 @@
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminLabelCaptionNav"/>
                 <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="uiLabelDetail" />
@@ -7216,6 +7222,7 @@
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminLabelCaptionNav"/>
                 <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="uiLabelDetail" />
@@ -7319,6 +7326,7 @@
                         <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/product/productFeatureList.groovy"/>
                         <set field="detailInfoBoxHeading" value="${uiLabelMap.ProductFeaturesHeading} ${product.productId}: ${productDetailHeading}"/>
                         <set field="warningText" value="${uiLabelMap.ProductFeatureUpdateWarning}"/>
+                        <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
                       </actions>
                       <widgets>
                         <container id="productFeatureList" style="commonSearchList">
@@ -7390,6 +7398,7 @@
                         <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/product/productFeatureDetail.groovy"/>
                         <set field="detailInfoBoxHeading" value="${uiLabelMap.ProductFeaturesDetailHeading} ${product.productId}: ${productDetailHeading}"/>
                         <set field="warningText" value="${uiLabelMap.ProductFeatureUpdateWarning}"/>
+                        <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
                       </actions>
                       <widgets>
                         <container id="productFeatureDetail" style="commonDetail">
@@ -7442,6 +7451,7 @@
                 <set field="addAction" value="addProductVariant"/>
                 <set field="commonAction" value="productVariantsGroup"/>
                 <set field="commonActionBtn" value="${uiLabelMap.EditGroupBtn}"/>
+                <set field="updateAction" value="updateProductVariantListGroup"/>
                 <set field="detailParamKey" value="productId"/>
                 <set field="detailId" from-field="parameters.productId"/>
                 <set field="detailFormName" value="editVariantGroupFORM"/>
@@ -7451,6 +7461,8 @@
                 <set field="activeSubMenuItem" value="CatalogProductNav"/>
                 <set field="addToCartAction" value="addToCart"/>
                 <set field="addToCartFrom" value="productVariants"/>
+                <set field="warningText" value="${uiLabelMap.SolrReIndexProductHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -7473,6 +7485,9 @@
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonDetailActionButton">
                                              <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailWarningIcon">
+                                            <include-screen name="commonDetailWarningIcon" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonDetailLinkButton">
                                             <include-screen name="commonProductLinkButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
@@ -7509,6 +7524,7 @@
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/product/productDetail.groovy"/>
                 <set field="productInfoBoxHeading" value="${uiLabelMap.ProductVariantGroupDetailsHeading} ${product.productId}: ${productDetailHeading}"/>
                 <set field="warningText" value="${uiLabelMap.SolrReIndexProductHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
             </actions>
             <widgets>
                 <include-screen name="commonProductDetail"/>
@@ -7971,6 +7987,7 @@
                       <actions>
                         <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/facetValueDetail.groovy"/>
                         <set field="warningText" value="${uiLabelMap.FacetValueDetailWarningInfo}"/>
+                        <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
                       </actions>
                       <widgets>
                         <container id="facetValueDetail" style="commonDetail">
@@ -8028,6 +8045,8 @@
                 <set field="activeSubMenuItem" value="SolrConfigNav"/>
                 <set field="usePreviousParams" value="Y"/>
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_FACET_GROUP"/>
+                <set field="warningText" value="${uiLabelMap.SolrReIndexProductHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -8055,6 +8074,9 @@
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonDetailActionButton">
                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailWarningIcon">
+                                            <include-screen name="commonDetailWarningIcon" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonConfirm">
                                             <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
@@ -8088,6 +8110,8 @@
                 <set field="activeSubMenuItem" value="SolrConfigNav"/>
                 <set field="usePreviousParams" value="Y"/>
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_FACET_GROUP"/>
+                <set field="warningText" value="${uiLabelMap.SolrReIndexProductHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -8116,6 +8140,9 @@
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonDetailActionButton">
                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailWarningIcon">
+                                            <include-screen name="commonDetailWarningIcon" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonConfirm">
                                             <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
@@ -8148,6 +8175,8 @@
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="SolrConfigNav"/>
                 <set field="usePreviousParams" value="Y"/>
+                <set field="warningText" value="${uiLabelMap.SolrReIndexProductHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -8180,6 +8209,12 @@
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonDetailActionButton">
                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailWarningIcon">
+                                            <include-screen name="commonDetailWarningIcon" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
                                     </html-template-decorator>
                                 </html>
@@ -8318,6 +8353,8 @@
                 <set field="helperFileName" value ="facetGroupDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="SolrConfigNav"/>
+                <set field="warningText" value="${uiLabelMap.SolrReIndexProductHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -8346,6 +8383,9 @@
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonDetailActionButton">
                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailWarningIcon">
+                                            <include-screen name="commonDetailWarningIcon" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonConfirm">
                                             <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
@@ -8698,6 +8738,7 @@
                             <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/product/productPriceDetail.groovy"/>
                             <set field="detailInfoBoxHeading" value="${uiLabelMap.ProductPricingHeading} ${product.productId}: ${productDetailHeading}"/>
                             <set field="warningText" value="${uiLabelMap.ProdPricingSolrReIndexHelperInfo}"/>
+                            <set field="warningUrl" value="adminToolDetail?detailScreen=solrReIndexDetail"/>
                       </actions>
                       <widgets>
                         <container id="productPriceDetail" style="productPriceDetail">
@@ -12000,6 +12041,11 @@
                                                     <html-template location="component://osafeadmin/webapp/osafeadmin/admin/manufacturarDataList.ftl"/>
                                                 </html>
                                             </platform-specific>
+                                            <platform-specific>
+                                                <html>
+                                                    <html-template location="component://osafeadmin/webapp/osafeadmin/admin/productAttributesDataList.ftl"/>
+                                                </html>
+                                            </platform-specific>
                                         </html-template-decorator-section>
                                        <html-template-decorator-section name="commonDetailActionButton">
                                            <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
@@ -12793,6 +12839,7 @@
                             <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/manageDivSequence.groovy"/>
                             <set field="detailId" value="${parameters.screenType}"/>
                             <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+                            <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
                       </actions>
                       <widgets>
                         <container id="manageDivSequenceDetail" style="commonSearchList">
@@ -12868,6 +12915,7 @@
                 <set field="addAction" value ="addCustomPartyAttributeItem"/>
                 <set field="fileToExport" value = "customPartyAttributeFile"/>
                 <set field="warningText" value="${uiLabelMap.CacheHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -12929,6 +12977,7 @@
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminToolsNav"/>
                 <set field="warningText" value="${uiLabelMap.CacheHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="customPartyAttributeItemDetail" />
@@ -12950,6 +12999,8 @@
                 <set field="helperFileName" value ="manageDivSeqDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminLabelCaptionNav"/>
+                <set field="warningText" value="${uiLabelMap.CacheHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="customPartyAttributeItemDetail" />
@@ -13158,6 +13209,14 @@
                         <include-screen name="payNetzConfigDetail"/>  
                     </widgets>
                 </section>
+                <section>
+                    <condition>
+                        <if-compare operator="equals" value = "FDGG_CONFIG" field="detailScreenName" />
+                    </condition>
+                    <widgets>
+                        <include-screen name="fdggConfigDetail"/>  
+                    </widgets>
+                </section>
             </widgets>
         </section>
     </screen>
@@ -13318,7 +13377,58 @@
             </widgets>
         </section>
     </screen>
-       <screen name="pixelTrackingManagement">
+    <screen name="fdggConfigDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.PaymentGateWayListTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="detailInfoBoxHeading" value="${detailScreenName}"/>
+                <set field="updateAction" value="updateFdggConfigDetail"/>
+                <set field="detailFormName" value="fdggConfigForm"/>
+                <entity-one entity-name="PaymentGatewayFdgg" value-field="paymentGatewayFdgg">
+                    <field-map field-name="paymentGatewayConfigId" from-field="parameters.configId"/>
+                </entity-one>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                      </actions>
+                      <widgets>
+                        <container id="fdggConfigDetail" style="commonDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDetail.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="detailInfoBoxBody">
+                                            <platform-specific>
+                                                <html>
+                                                    <html-template location="component://osafeadmin/webapp/osafeadmin/admin/fdggConfigDetail.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailActionButton">
+                                            <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonConfirm">
+                                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pixelTrackingManagement">
         <section>
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
@@ -13388,6 +13498,7 @@
                 <set field="createAction" value="createPixelTracking"/>
                 <set field="detailFormName" value="createPixelTrackingForm"/>
                 <set field="warningText" value="${uiLabelMap.CacheResetWarningInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -13458,6 +13569,7 @@
                 <set field="keyMap.pixelId" from-field="parameters.pixelId"/>
                 <set field="confirmDialogText" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;deletePixelTrackingConfirmText&quot;, keyMap, locale)}"/>
                 <set field="warningText" value="${uiLabelMap.CacheResetWarningInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -13799,6 +13911,8 @@
             <set field="activeTopMenuItem" value="AdminNav"/>
             <set field="activeSubMenuItem" value="AdminToolsNav"/>
             <set field="helperText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+            <set field="warningText" value="${uiLabelMap.DivSeqCacheResetHelperInfo}"/>
+            <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="commonDivSeqItem" />
@@ -13822,6 +13936,7 @@
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminToolsNav"/>
                 <set field="warningText" value="${uiLabelMap.DivSeqCacheResetHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="commonCompareDivSeqItem" />
@@ -13847,6 +13962,7 @@
             <set field="activeTopMenuItem" value="AdminNav"/>
             <set field="activeSubMenuItem" value="AdminToolsNav"/>
             <set field="warningText" value="${uiLabelMap.DivSeqCacheResetHelperInfo}"/>
+            <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="commonDivSeqItem" />
@@ -15711,6 +15827,7 @@
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminLabelCaptionNav"/>
                 <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="uiLabelDetail" />
@@ -16203,6 +16320,7 @@
                             <set field="fileToExport" from-field="parameterFileName"/>
                             <set field="detailId" value="${parameters.parameterFileName}"/>
                             <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+                            <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
                       </actions>
                       <widgets>
                         <container id="manageBigfishParameter" style="commonSearchList">
@@ -16278,6 +16396,8 @@
             <set field="activeTopMenuItem" value="AdminNav"/>
             <set field="activeSubMenuItem" value="AdminToolsNav"/>
             <set field="helperText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+            <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+            <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="commonBigfishParameter" />
@@ -16304,6 +16424,7 @@
             <set field="activeTopMenuItem" value="AdminNav"/>
             <set field="activeSubMenuItem" value="AdminToolsNav"/>
             <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+            <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
             </actions>
             <widgets>
                 <include-screen name="commonBigfishParameter" />
@@ -17093,4 +17214,294 @@
             </widgets>
         </section>
     </screen>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <screen name="productAttributeDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ProductAttributeTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="generalInfoBoxHeading" value="${uiLabelMap.OrderDetailInfoHeading}"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.NoteHeading}"/>
+                <set field="orderStatusChangeBtnVisible" value="Y"/>
+                <set field="orderStatusChangeAction" value="orderStatusDetail"/>
+                <set field="updateAction" value="updateProductAttribute"/>
+                <set field="detailId" value="${parameters.productId}"/>
+                <set field="detailFormName" value="updateOrderNoteNote"/>
+                <set field="mode" value="edit"/>
+                <set field="showProductStoreInfo" value ="Y"/>
+                <set field="helperFileName" value ="orderNoteDetailHelp.htm"/>
+                <set field="activeTopMenuItem" value="OrderMgmntNav"/>
+                <set field="activeSubMenuItem" value="OrderViewNav"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                        
+                        <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderNoteDetail.groovy"/>
+                        <set field="argListNames[]" from-field="notesCount"/>
+                        <property-to-field resource="OSafeAdminUiLabels" property="OrderNotesLabel" field="orderNotesTooltipText" arg-list-name="argListNames"/>
+                      </actions>
+                      <widgets>
+                        <container id="orderNoteDetail" style="commonOrderDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDetail.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="generalInfoBoxBody">
+                                             <include-screen name="orderDetailGeneralInfo"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="detailInfoBoxBody">
+                                            <platform-specific>
+                                                <html>
+                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderNoteDetail.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailActionButton">
+                                            <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailLinkButton">
+                                            <include-screen name="commonOrderLinkButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    
+    <screen name="productAttributeDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ProductAttributeTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="updateAction" value="updateProductAttribute"/>
+                <set field="detailFormName" value="updateProductAttributeForm"/>
+                <set field="helperFileName" value ="productAttributeHelp.htm"/>
+                <set field="activeTopMenuItem" value="CatalogNav"/>
+                <set field="activeSubMenuItem" value="CatalogProductNav"/>
+                <set field="addToCartAction" value="addToCart"/>
+                <set field="addToCartFrom" value="productAttributeDetail"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                        <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/product/productAttributeDetail.groovy"/>
+                        <set field="detailInfoBoxHeading" value="${uiLabelMap.ProductAttributeDetailHeading} ${product.productId}: ${productDetailHeading}"/>
+                      </actions>
+                      <widgets>
+                        <container id="productMetaTagDetail" style="productMetaTagDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDetail.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="detailInfoBoxBody">
+                                            <platform-specific>
+                                                <html>
+                                                    <html-template location="component://osafeadmin/webapp/osafeadmin/product/productAttributeDetail.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailActionButton">
+                                            <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailLinkButton">
+                                            <include-screen name="commonProductLinkButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonConfirm">
+                                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="manageAdminUiLabel">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-to-field resource="osafeAdmin" property="admin-UiLabel-xml-file" field="XmlFilePath"/>
+                <set field="pageTitle" value="${uiLabelMap.AdminLabelsCaptionsListTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="searchBoxHeading" value="${uiLabelMap.SearchHeading}"/>
+                <set field="listBoxHeading" value="${uiLabelMap.ManageUiLabelHeading}"/>
+                <set field="searchRequest" value="manageAdminUiLabelSearch"/>
+                <set field="searchFormName" value="manageAdminUiLabelSearch"/>
+                <set field="preRetrieved" value ="${parameters.preRetrieved}" default-value="Y"/>
+                <set field="initializedCB" value ="N"/>
+                <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_LABEL"/>
+                <set field="addAction" value="addAdminUiLabel"/>
+                <set field="helperFileName" value ="manageAdminUiLabelHelp.htm"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="AdminToolsNav"/>
+                <set field="ExportToXMLAction" value="downloadFile"/>
+                <set field="ExportToXMLParam" value="fileToExport"/>
+                <set field="ExportToXMLParamValue" value="adminUiLabelFile"/>
+                <set field="detailAction" value="manageAdminUiLabelDetail"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                            <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/manageUiLabelList.groovy"/>
+                      </actions>
+                      <widgets>
+                        <container id="manageAdminUiLabelList" style="commonSearchList">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonSearchList.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="searchBoxBody">
+                                             <include-screen name="manageUiLabelSearch"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonSearchButton">
+                                             <include-screen name="commonSearchButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="listPagingBody">
+                                             <include-screen name="ListPaging" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="listBoxBody">
+                                             <include-screen name="manageUiLabelList"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonListButton">
+                                             <include-screen name="commonListButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="listNoResultBody">
+                                             <include-screen name="ListNoResult" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                        <container>
+                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addAdminUiLabel">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-to-field resource="osafeAdmin" property="admin-UiLabel-xml-file" field="XmlFilePath"/>
+                <set field="pageTitle" value="${uiLabelMap.AdminLabelsCaptionsDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.AddLabelCaptionDetailHeading}"/>
+                <set field="mode" value="add"/>
+                <set field="backAction" value="${backAction}" default-value="manageAdminUiLabel"/>
+                <set field="createAction" value="${createAction}" default-value="createAdminUiLabel"/>
+                <set field="detailFormName" value="createAdminUiLabelForm"/>
+                <set field="helperFileName" value ="manageAdminUiLabelDetailHelp.htm"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="AdminToolsNav"/>
+                <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
+                <set field="labelFileProperty" value="admin-UiLabel-xml-file"/>
+                <set field="deploymentLabelFileProperty" value="admin-deployment-UiLabel-xml-file"/>
+            </actions>
+            <widgets>
+                <include-screen name="uiLabelDetail" />
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="manageAdminUiLabelDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-to-field resource="osafeAdmin" property="admin-UiLabel-xml-file" field="XmlFilePath"/>
+                <set field="pageTitle" value="${uiLabelMap.AdminLabelsCaptionsDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.ManageUiLabelDetailHeading}: ${parameters.key}"/>
+                <set field="mode" value="edit"/>
+                <set field="updateAction" value="updateAdminUiLabel"/>
+                <set field="detailFormName" value="updateAdminUiLabelForm"/>
+                <set field="confirmAction" value="deleteAdminUiLabel"/>
+                <set field="confirmActionBtn" value="${uiLabelMap.DeleteBtn}"/>
+                <set field="keyMap.key" from-field="parameters.key"/>
+                <set field="confirmDialogText" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;deleteAdminUiLabelConfirmText&quot;, keyMap, locale)}"/>
+                <set field="helperFileName" value ="manageUiLabelDetailHelp.htm"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="AdminToolsNav"/>
+                <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
+                <set field="warningUrl" value="adminToolDetail?detailScreen=clearCacheDetail"/>
+                <set field="labelFileProperty" value="admin-UiLabel-xml-file"/>
+                <set field="deploymentLabelFileProperty" value="admin-deployment-UiLabel-xml-file"/>
+            </actions>
+            <widgets>
+                <include-screen name="uiLabelDetail" />
+            </widgets>
+        </section>
+    </screen>
+
+    
+    
+    
+    
+    
+    
 </screens>

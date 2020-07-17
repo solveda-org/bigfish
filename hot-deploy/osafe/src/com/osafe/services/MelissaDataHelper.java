@@ -250,7 +250,18 @@ public class MelissaDataHelper {
     	List<AddressDocument> responseAddresseList = FastList.newInstance();
     	AddressDocument responseAddress = new AddressDocument();
     	responseAddress.setAddress1(ao.GetAddress());
-    	responseAddress.setAddress2(ao.GetAddress2());
+    	String addressLine2 = "";
+    	String suite = ao.GetSuite();
+    	if (UtilValidate.isNotEmpty(suite))
+    	{
+    		addressLine2 = suite + " ";
+    	}
+    	String address2 = ao.GetAddress2();
+    	if (UtilValidate.isNotEmpty(address2))
+    	{
+    		addressLine2 = addressLine2 + address2;
+    	}
+    	responseAddress.setAddress2(addressLine2);
     	responseAddress.setCity(ao.GetCity());
     	responseAddress.setStateProvinceGeoId(ao.GetState());
     	responseAddress.setPostalCode(ao.GetZip());
@@ -352,17 +363,44 @@ public class MelissaDataHelper {
 				//get address1
 				nodeList =  eElement.getElementsByTagName("Address1").item(0).getChildNodes();
 				responseAddresse.setAddress1(nodeList.item(0).getNodeValue());
+				String addressLine2 = "";
+				//get Suite
+				nodeList =  eElement.getElementsByTagName("Suite").item(0).getChildNodes();
+				String suite = nodeList.item(0).getNodeValue();
+				if (UtilValidate.isNotEmpty(suite))
+				{
+					addressLine2 = suite + " ";
+					
+				}
 				//get address2
 				nodeList =  eElement.getElementsByTagName("Address2").item(0).getChildNodes();
 				String address2 = nodeList.item(0).getNodeValue();
-				if (UtilValidate.isEmpty(address2) || "NULL".equalsIgnoreCase(address2)) 
+				if (UtilValidate.isNotEmpty(address2) && !"NULL".equalsIgnoreCase(address2))
+				{
+					addressLine2 = addressLine2 + address2 + " ";
+					
+				}
+				nodeList =  eElement.getElementsByTagName("Garbage").item(0).getChildNodes();
+				String garbage = nodeList.item(0).getNodeValue();
+				if (UtilValidate.isNotEmpty(garbage))
+				{
+					addressLine2 = addressLine2 + garbage;
+					
+				}
+				if (UtilValidate.isNotEmpty(addressLine2))
+				{
+					addressLine2 = addressLine2.trim();
+				}
+
+				if (UtilValidate.isEmpty(addressLine2) || "NULL".equalsIgnoreCase(addressLine2)) 
 				{
 					responseAddresse.setAddress2("");
-                                }
-                                else
-                                {
-					responseAddresse.setAddress2(address2);
-                                }
+				}
+				else
+                {
+					responseAddresse.setAddress2(addressLine2);
+                }
+				
 				//get City
 				nodeList =  eElement.getElementsByTagName("City").item(0).getChildNodes();
 				responseAddresse.setCity(nodeList.item(0).getChildNodes().item(0).getNodeValue());

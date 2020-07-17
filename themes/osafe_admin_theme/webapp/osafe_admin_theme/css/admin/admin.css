@@ -2783,6 +2783,14 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 }
 
+.productAttributeIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/productAttribute.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
 .addIcon {
     background-image: url(/osafe_admin_theme/images/classic/icon/addIcon.gif);
     background-repeat:no-repeat;

@@ -31,12 +31,27 @@ if(UtilValidate.isNotEmpty(fileList))
              infoMap.put("file", releaseFile);
              infoMap.put("fileName", releaseFile.getName());
              infoMap.put("fileNameUpperCase", releaseFile.getName().toUpperCase());
+             String releaseFileName = releaseFile.getName();
+             releaseFileName = releaseFileName.replaceAll("BF-Version-Release-V", "");
+             releaseFileName = releaseFileName.replaceAll("doc", "");
+             releaseFileNameArr = releaseFileName.split("\\.");
+             
+             String sortKey = "";
+             for(String releaseFileNamePart : releaseFileNameArr)
+             {
+             	if(releaseFileNamePart.length() < 2)
+             	{
+             		sortKey = sortKey + "0";
+             	}
+             	sortKey = sortKey + releaseFileNamePart;
+             }
+             infoMap.put("sortKey", Integer.parseInt(sortKey));
              releaseFileList.add(infoMap);
          }
      }
 	 if(UtilValidate.isNotEmpty(releaseFileList))
 	 {
-	     releaseFileList = UtilMisc.sortMaps(releaseFileList, ["fileNameUpperCase"]);
+	     releaseFileList = UtilMisc.sortMaps(releaseFileList, ["sortKey"]);
 		 latestReleaseFile = releaseFileList.first();
 		 if (releaseFileList.size() > 1)
 		 {

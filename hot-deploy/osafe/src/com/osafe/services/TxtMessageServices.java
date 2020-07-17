@@ -176,7 +176,8 @@ public class TxtMessageServices {
                         {
                             String msgStatusId = responseQueryMsg.substring(responseQueryMsg.lastIndexOf(":")+1);
                             msgStatusId = msgStatusId.replaceAll("^\\s+", "");
-                            Debug.logError("msgStatusId:" + msgStatusId +"end", module);
+                            msgStatusId = msgStatusId.trim();
+                            Debug.logError("msgStatusId:" + msgStatusId.trim() +"end", module);
                             //See Appendix B in api pdf for status codes. 
                             // Results Codes
                             if (msgStatusId.equals("001"))
@@ -246,7 +247,12 @@ public class TxtMessageServices {
                             else
                             {
                               errMsg= msgStatusId + ":" + "Unknown Status Code.";
-                            }                            
+                            }
+                            if (UtilValidate.isNotEmpty(errMsg))
+                            {
+                                Debug.logError("Clickatell Error Message:" + errMsg + " Message Status:" + msgStatusId , module);
+
+                            }
                         }
                         
                     }

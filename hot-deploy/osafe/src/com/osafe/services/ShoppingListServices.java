@@ -37,6 +37,7 @@ import org.ofbiz.order.shoppingcart.CartItemModifyException;
 import org.ofbiz.order.shoppingcart.ItemNotFoundException;
 import org.ofbiz.order.shoppingcart.CheckOutHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
+import org.ofbiz.order.order.OrderChangeHelper;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
@@ -73,7 +74,6 @@ public class ShoppingListServices {
         Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
-
         boolean beganTransaction = false;
         try {
             beganTransaction = TransactionUtil.begin();
@@ -176,19 +176,34 @@ public class ShoppingListServices {
                         if (payRes != null && ServiceUtil.isError(payRes)) 
                         {
                             Debug.logError("Payment processing problems with shopping list - " + shoppingList, module);
+                            try {
+                                OrderChangeHelper.orderStatusChanges(dispatcher, userLogin, orderId, "ORDER_HOLD", null, "ITEM_HOLD", null);
+                            	
+                            }
+                             catch (Exception e)
+                             {
+                             	Debug.logError("Problem with order stattus change - " + orderId,module);
+                             	Debug.logError(e,module);
+                            	 
+                             }
+                        }
+                        else
+                        {
+                            // send Order Confirm Notification
+                            try 
+                            {
+                                Map<String, String> emailContext = UtilMisc.toMap("orderId", orderId, "userLogin", userLogin);
+                                dispatcher.runAsync("sendOrderConfirmation",emailContext);
+                            } catch (GenericServiceException e) 
+                            {
+                                Debug.logError(e, module);
+                            }
+                        	
                         }
 
                         shoppingList.set("lastOrderedDate", UtilDateTime.nowTimestamp());
                         shoppingList.store();
 
-                        // send notification
-                        try 
-                        {
-                            dispatcher.runAsync("sendOrderPayRetryNotification", UtilMisc.toMap("orderId", orderId));
-                        } catch (GenericServiceException e) 
-                        {
-                            Debug.logError(e, module);
-                        }
 
                         // increment the recurrence
                         recurrence.incrementCurrentCount();
@@ -252,6 +267,20 @@ public class ShoppingListServices {
         {
             String productStoreId = shoppingList.getString("productStoreId");
             String currencyUom = shoppingList.getString("currencyUom");
+            String webSiteId = null;
+            try {
+                List <GenericValue>lWebsites = delegator.findByAnd("WebSite", UtilMisc.toMap("productStoreId", productStoreId));
+                if (UtilValidate.isNotEmpty(lWebsites)) 
+                {
+                	GenericValue webSite = EntityUtil.getFirst(lWebsites);
+                	webSiteId = webSite.getString("webSiteId");
+                }
+            }
+            catch (GenericEntityException e) 
+            {
+                Debug.logError(e, module);
+            }
+            
             if (currencyUom == null) 
             {
                 GenericValue productStore = ProductStoreWorker.getProductStore(productStoreId, delegator);
@@ -281,7 +310,7 @@ public class ShoppingListServices {
             {
                 if (UtilValidate.isEmpty(listCart)) 
                 {
-                    listCart = new ShoppingCart(delegator, productStoreId, locale, currencyUom);
+                    listCart = new ShoppingCart(delegator, productStoreId,webSiteId, locale, currencyUom);
                     listCart.setOrderPartyId(shoppingList.getString("partyId"));
                     listCart.setAutoOrderShoppingListId(shoppingList.getString("shoppingListId"));
                 } 

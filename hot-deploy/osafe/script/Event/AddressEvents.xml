@@ -109,6 +109,11 @@
         		<return response-code="eCommerceRecurrenceOrderDetail"/>
         	</if-compare>
         </if-not-empty>
+        <!-- If a paymentMethodId was passed to the update address method set the parameter back into the request context -->
+        <if-not-empty field="parameters.paymentMethodId">
+        		<set field="paymentMethodId" from-field="parameters.paymentMethodId"/>
+        		<field-to-request field="paymentMethodId"/>
+        </if-not-empty>
      </simple-method>
 
      <simple-method method-name="deleteAddress" short-description="delete Address And Telephone" login-required="false">

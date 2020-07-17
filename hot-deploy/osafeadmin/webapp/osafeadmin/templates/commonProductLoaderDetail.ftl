@@ -104,6 +104,18 @@ ${sections.render('tooltipBody')?if_exists}
 </div>
 </#if>
 
+<#if productAttributesErrorList?has_content>
+<div id="productAttributesError" class="content-messages eCommerceErrorMessage commonDivHide" style="display:none">
+  <span class="errorImageIcon errorImage"></span>
+  <p class="errorMessage">${uiLabelMap.FollowingErrorsOccurredError}</p>
+  <#if productAttributesErrorList?exists && productAttributesErrorList?has_content>
+    <#list productAttributesErrorList as productAttributesError>
+      <p class="errorMessage">${productAttributesError!}</p>
+    </#list>
+  </#if>
+</div>
+</#if>
+
 <form method="post" name="${detailFormName!""}" <#if detailFormId?exists>id="${detailFormId!}"</#if>>
 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHiddenFields")}
   <#if (prodCatErrorList?exists && prodCatErrorList?has_content) || (productErrorList?exists && productErrorList?has_content) || (productAssocErrorList?exists && productAssocErrorList?has_content) || (productManufacturerErrorList?exists && productManufacturerErrorList?has_content) || (errorMessageList?exists && errorMessageList?has_content)>

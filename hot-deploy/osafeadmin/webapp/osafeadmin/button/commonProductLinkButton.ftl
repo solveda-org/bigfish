@@ -38,6 +38,9 @@
   <#if !showProductContentLink?has_content>
       <#assign showProductContentLink = "true"/>
   </#if>
+  <#if !showProductAttributeLink?has_content>
+      <#assign showProductAttributeLink = "true"/>
+  </#if>
   
   <#if showDetailLink == 'true'>
     <#if product.isVirtual?if_exists == 'Y'>
@@ -213,6 +216,10 @@
   
   <#if showProductContentLink == 'true'>
     <a href="<@ofbizUrl>productContentSpotList?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductContentSpotTooltip}');" onMouseout="hideTooltip()"><span class="contentSpotIcon"></span></a>
+  </#if>
+  
+  <#if showProductAttributeLink == 'true'>
+    <a href="<@ofbizUrl>productAttributeDetail?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductAttributeDetailTooltip}');" onMouseout="hideTooltip()"><span class="productAttributeIcon"></span></a>
   </#if>
 </div>
 </#if>

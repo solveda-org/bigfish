@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+    To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+    Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+--><resource xmlns:xsi="http://www.w3.org/01/XMLSchema-instance">
+
+    <property key="PT_TEXT_COLOR">
+        <value xml:lang="en">#622F10</value>
+        <description>Color of the text</description>
+    </property>
+    <property key="PT_FONT_WEIGHT">
+        <value xml:lang="en">bold</value>
+        <description>Font weight</description>
+    </property>
+    <property key="PT_TEXT_LINES_NUM">
+        <value xml:lang="en">3</value>
+        <description>Number of lines of text</description>
+    </property>
+    <property key="PT_DEFAULT_FONT">
+        <value xml:lang="en">FONT_ARIAL</value>
+        <description>Font</description>
+    </property>
+    <property key="PT_DEFAULT_FONT_SIZE">
+        <value xml:lang="en">FONT_SIZE_1</value>
+        <description>Font size</description>
+    </property>
+    <property key="PT_DEFAULT_TEXT_ALIGN">
+        <value xml:lang="en">TEXT_ALIGN_CENTER</value>
+        <description>Text alignment</description>
+    </property>
+    <property key="PT_AREA_HEIGHT">
+        <value xml:lang="en">46%</value>
+        <description>Height of the text area</description>
+    </property>
+    <property key="PT_AREA_POS_LEFT">
+        <value xml:lang="en">50px</value>
+        <description>Left position of the text area</description>
+    </property>
+    <property key="PT_AREA_POS_RIGHT">
+        <value xml:lang="en">50px</value>
+        <description>Right position of the text area</description>
+    </property>
+    <property key="PT_AREA_POS_BOTTOM">
+        <value xml:lang="en">13%</value>
+        <description>Bottom position of the text area</description>
+    </property>
+    
+    <!-- We currently support defining line bottom margins for 7 (enumerated) font size values -->
+    <property key="PT_MARG_BOTTOM_FNT_1">
+        <value xml:lang="en">-3px</value>
+        <description>Bottom margin for Font Size 1</description>
+    </property>
+    <property key="PT_MARG_BOTTOM_FNT_2">
+        <value xml:lang="en">-4px</value>
+        <description>Bottom margin for Font Size 2</description>
+    </property>
+    <property key="PT_MARG_BOTTOM_FNT_3">
+        <value xml:lang="en">-5px</value>
+        <description>Bottom margin for Font Size 3</description>
+    </property>
+    <property key="PT_MARG_BOTTOM_FNT_4">
+        <value xml:lang="en">-7px</value>
+        <description>Bottom margin for Font Size 4</description>
+    </property>
+    <property key="PT_MARG_BOTTOM_FNT_5">
+        <value xml:lang="en">-8px</value>
+        <description>Bottom margin for Font Size 5</description>
+    </property>
+    <property key="PT_MARG_BOTTOM_FNT_6">
+        <value xml:lang="en">-9px</value>
+        <description>Bottom margin for Font Size 6</description>
+    </property>
+    <property key="PT_MARG_BOTTOM_FNT_7">
+        <value xml:lang="en">-10px</value>
+        <description>Bottom margin for Font Size 7</description>
+    </property>
+    
+    <property key="PT_UPLOAD_IMAGE_TYPE">
+        <value xml:lang="en">IMAGE</value>
+        <description>Type of file that is uploaded. Valid values are IMAGE and DOC</description>
+    </property>
+    <property key="PT_UPLOAD_IMAGE_H">
+        <value xml:lang="en">100px</value>
+        <description>Height of the uploaded image.</description>
+    </property>
+    <property key="PT_UPLOAD_IMAGE_W">
+        <value xml:lang="en">auto</value>
+        <description>Width of the uploaded image.</description>
+    </property>
+    
+</resource>

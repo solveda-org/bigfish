@@ -21,7 +21,7 @@
      	  <input type="hidden" name="productCategoryId_${lineIndex}" value="${cartLine.getProductCategoryId()!}"/>
      	  <input type="hidden" name="prodCatelogId_${lineIndex}" value="${cartLine.getProdCatalogId()!}"/>
      	  <input type="hidden" name="unitPrice_${lineIndex}" value="${cartLine.getBasePrice()!}"/>
-     	  <input type="hidden" name="cartLineIndex_${lineIndex}" value="${cartLineIndex!}"/>
+     	  <input type="hidden" name="cartLineIndex_${lineIndex}" value="${cartLineMultiIndex!}"/>
 	  </div>
 	</li>			
 	<li class="string itemDescription multiAddressItemDescription<#if lineIndex == 0> firstRow</#if>">
@@ -78,7 +78,7 @@
    <ul class="displayList shipItemList multiAddressItems">
     <li class="container itemAddress multiAddressItemAddress firstRow">
 	  <div>
-        <label>${uiLabelMap.ChooseShipAddressLabel}</label>
+          <label>${uiLabelMap.ChooseShipAddressLabel}</label>
         <#if shippingContactMechList?has_content>
              <#if defaultShipAddr?has_content>
                 <#assign index=0/>
@@ -99,49 +99,19 @@
   		        </#if>
   		     </#if>
              
-	         <#assign paramChosenShippingContactMechId= parameters.get("shippingContactMechId_${lineIndex}")!defaultShipAddr!""/>
-             <#assign checkoutAddressStyle = Static["com.osafe.util.Util"].getProductStoreParm(request,"CHECKOUT_ADDRESS_STYLE")!"RADIOBUTTON"/>
-	         <#if "DROPDOWN" == checkoutAddressStyle.toUpperCase()>
-		         <div class="entry selectOption">
-	               <select name="shippingContactMechId_${lineIndex}">
-			         <#list shippingContactMechList as shippingContactMech>
-				        <#assign postalAddress = shippingContactMech.getRelatedOneCache("PostalAddress")>
-				        <#if paramChosenShippingContactMechId?has_content>
-			                <#assign chosenShippingContactMechId= paramChosenShippingContactMechId/>
-			            <#else>
-			  	           <#if !chosenShippingContactMechId?has_content>
-			                <#assign chosenShippingContactMechId= postalAddress.contactMechId/>
-			               </#if>
-				        </#if>
-					    ${setRequestAttribute("PostalAddress", postalAddress)}
-					    ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_STREET_CITY")}
-	                     <option value="${postalAddress.contactMechId}" <#if chosenShippingContactMechId == postalAddress.contactMechId> selected </#if>>${screens.render("component://osafe/widget/CommonScreens.xml#displayPostalAddress")}</option>
-				     </#list>
-				   </select>
-	             </div>
-	         <#else>
-		         <#list shippingContactMechList as shippingContactMech>
-			        <#assign postalAddress = shippingContactMech.getRelatedOneCache("PostalAddress")>
-			        <#if paramChosenShippingContactMechId?has_content>
-		                <#assign chosenShippingContactMechId= paramChosenShippingContactMechId/>
-		            <#else>
-		  	           <#if !chosenShippingContactMechId?has_content>
-		                <#assign chosenShippingContactMechId= postalAddress.contactMechId/>
-		               </#if>
-			        </#if>
-			        <div class="entry radioOption">
-			        <label class="radioOptionLabel">
-			         <input type="radio" name="shippingContactMechId_${lineIndex}" value="${postalAddress.contactMechId}" <#if (chosenShippingContactMechId == postalAddress.contactMechId)> checked</#if> />
-	                 <span class="radioOptionText">
-					    ${setRequestAttribute("PostalAddress", postalAddress)}
-					    ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_STREET_CITY")}
-					    ${screens.render("component://osafe/widget/CommonScreens.xml#displayPostalAddress")}
-					 </span>
-				    </label>
-			        </div>
-			     </#list>
-			 </#if>
-		  </#if>
+             
+		    <#assign paramChosenShippingContactMechId= parameters.get("shippingContactMechId_${lineIndex}")!defaultShipAddr!""/>
+		    ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_STREET_CITY")}
+		    ${setRequestAttribute("contactMechList", shippingContactMechList!)}
+		    ${setRequestAttribute("addressFieldPurpose","SHIPPING")}
+		    ${setRequestAttribute("addressSelectionInputName","shippingContactMechId_${lineIndex}")}
+		    ${setRequestAttribute("addressSelectionCaption","")}
+		    ${setRequestAttribute("addAddressAction","")}
+		    ${setRequestAttribute("paymentMethodId","")}
+		    ${setRequestAttribute("selectedContactMechId",paramChosenShippingContactMechId!)}
+		    ${screens.render("component://osafe/widget/CommonScreens.xml#postalAddressSelection")}
+	    </#if>
+
       </div>
     </li>
    </ul>

@@ -214,6 +214,7 @@
                     </decorator-section>
                 </decorator-screen>
 <!--                 <include-screen name="viewLargeImageDialog" location="component://osafe/widget/DialogScreens.xml" /> -->
+				<include-screen name="uploadFileDialog" location="component://osafe/widget/DialogScreens.xml"/>
             </widgets>
         </section>
     </screen>
@@ -1023,7 +1024,16 @@
                 <set field="formContinueButton" value="${uiLabelMap.SaveBtn}" />
                 <set field="formName" value="creditCardInfoform" />
                 <set field="partySecurityCheck" value="Y" />
+                <set field="paymentMethodType" value="CREDIT_CARD"/>
+                <set field="fieldPurpose" value="BILLING" />
+                <set field="purposeType" value="BILLING_LOCATION"/>
+                <set field="addAddressAction" value="editCreditCardNewAddress"/>
+                <set field="addAddressDonePage" value="eCommerceEditCreditCardInfo"/>
+                <set field="addressSelectionCaption" value="${uiLabelMap.SelectBillingAddressCaption}"/>
+                <set field="addressSelectionDisplayFormat" value="SINGLE_LINE_STREET_CITY"/>
+                <set field="addressSelectionInputName" value="contactMechId"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/paymentmethod/paymentMethodPartySecurity.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1074,6 +1084,69 @@
             </widgets>
         </section>
     </screen>
+    <screen name="editCreditCardNewAddress">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="editCreditCardNewAddress" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${groovy:if(parameters.contactMechPurposeTypeId.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
+                <set field="title" from-field="pageTitle" />
+
+                <set field="formName" value="creditCardInfoForm" />
+                <set field="formAction" value="editCreditCardValidateNewAddress" />
+                <set field="donePage" value="eCommerceEditCreditCardInfo?paymentMethodId=${parameters.paymentMethodId}" />
+                <set field="fieldPurpose" value="BILLING" />
+
+                <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="prevButtonUrl" value="eCommerceEditCreditCardInfo?paymentMethodId=${parameters.paymentMethodId}" />
+                <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="prevButtonVisible" value="N" />
+                <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <actions>
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCountry.groovy" />
+                            </actions>
+                            <widgets>
+                                <container id="creditCardNewAddress">
+					                <platform-specific>
+					                    <html>
+					                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+					                            <html-template-decorator-section name="entryFormJS">
+					                                <platform-specific>
+					                                    <html>
+					                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+					                                    </html>
+					                                </platform-specific>
+					                            </html-template-decorator-section>
+					                            <html-template-decorator-section name="entryForm">
+					                                <include-screen name="contactMechEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+					                            </html-template-decorator-section>
+					                            <html-template-decorator-section name="capturePlusJs">
+					                                <include-screen name="capturePlusJs" location="component://osafe/widget/EntryScreens.xml" />
+					                            </html-template-decorator-section>
+					                        </html-template-decorator>
+					                    </html>
+					                </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+        
     <screen name="eCommerceCreateCreditCardInfo">
         <section>
             <actions>
@@ -1087,6 +1160,13 @@
                 <set field="backAction" value="eCommercePaymentMethodInfo" />
                 <set field="formContinueButton" value="${uiLabelMap.SaveBtn}" />
                 <set field="formName" value="creditCardInfoform" />
+                <set field="fieldPurpose" value="BILLING" />
+                <set field="purposeType" value="BILLING_LOCATION"/>
+                <set field="addAddressAction" value="createCreditCardNewAddress"/>
+                <set field="addAddressDonePage" value="eCommerceCreateCreditCardInfo"/>
+                <set field="addressSelectionCaption" value="${uiLabelMap.SelectBillingAddressCaption}"/>
+                <set field="addressSelectionDisplayFormat" value="SINGLE_LINE_STREET_CITY"/>
+                <set field="addressSelectionInputName" value="contactMechId"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1097,6 +1177,7 @@
                         <section>
                             <actions>
                                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCountry.groovy" />
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
                             </actions>
                             <widgets>
                                 <container id="eCommerceEditCustomerInfoContainer">
@@ -1129,7 +1210,70 @@
         </section>
     </screen>
     
+    <screen name="createCreditCardNewAddress">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="createCreditCardNewAddress" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${groovy:if(parameters.contactMechPurposeTypeId.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
+                <set field="title" from-field="pageTitle" />
+
+                <set field="formName" value="checkoutInfoForm" />
+                <set field="formAction" value="createCreditCardValidateNewAddress" />
+                <set field="donePage" value="eCommerceCreateCreditCardInfo" />
+                <set field="fieldPurpose" value="BILLING" />
+
+                <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="prevButtonUrl" value="eCommerceCreateCreditCardInfo" />
+                <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="prevButtonVisible" value="N" />
+                <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <actions>
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCountry.groovy" />
+                            </actions>
+                            <widgets>
+                                <container id="creditCardNewAddress">
+					                <platform-specific>
+					                    <html>
+					                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+					                            <html-template-decorator-section name="entryFormJS">
+					                                <platform-specific>
+					                                    <html>
+					                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+					                                    </html>
+					                                </platform-specific>
+					                            </html-template-decorator-section>
+					                            <html-template-decorator-section name="entryForm">
+					                                <include-screen name="contactMechEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+					                            </html-template-decorator-section>
+					                            <html-template-decorator-section name="capturePlusJs">
+					                                <include-screen name="capturePlusJs" location="component://osafe/widget/EntryScreens.xml" />
+					                            </html-template-decorator-section>
+					                        </html-template-decorator>
+					                    </html>
+					                </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
     
+
     <screen name="eCommerceEftPaymentMethodInfo">
         <section>
             <actions>
@@ -1184,7 +1328,16 @@
                 <set field="formContinueButton" value="${uiLabelMap.SaveBtn}" />
                 <set field="formName" value="eftAccountInfoform" />
                 <set field="partySecurityCheck" value="Y" />
+                <set field="paymentMethodType" value="EFT_ACCOUNT"/>
+                <set field="fieldPurpose" value="BILLING" />
+                <set field="purposeType" value="BILLING_LOCATION"/>
+                <set field="addAddressAction" value="editEftNewAddress"/>
+                <set field="addAddressDonePage" value="eCommerceEditEftAccountInfo"/>
+                <set field="addressSelectionCaption" value="${uiLabelMap.SelectBillingAddressCaption}"/>
+                <set field="addressSelectionDisplayFormat" value="SINGLE_LINE_STREET_CITY"/>
+                <set field="addressSelectionInputName" value="contactMechId"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/paymentmethod/paymentMethodPartySecurity.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1236,6 +1389,68 @@
         </section>
     </screen>
     
+        <screen name="editEftNewAddress">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="editEftNewAddress" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${groovy:if(parameters.contactMechPurposeTypeId.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
+                <set field="title" from-field="pageTitle" />
+
+                <set field="formName" value="eftInfoForm" />
+                <set field="formAction" value="editEftValidateNewAddress" />
+                <set field="donePage" value="eCommerceEditEftAccountInfo?paymentMethodId=${parameters.paymentMethodId}" />
+                <set field="fieldPurpose" value="BILLING" />
+
+                <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="prevButtonVisible" value="N" />
+                <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <actions>
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCountry.groovy" />
+                            </actions>
+                            <widgets>
+                                <container id="eftNewAddress">
+					                <platform-specific>
+					                    <html>
+					                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+					                            <html-template-decorator-section name="entryFormJS">
+					                                <platform-specific>
+					                                    <html>
+					                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+					                                    </html>
+					                                </platform-specific>
+					                            </html-template-decorator-section>
+					                            <html-template-decorator-section name="entryForm">
+					                                <include-screen name="contactMechEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+					                            </html-template-decorator-section>
+					                            <html-template-decorator-section name="capturePlusJs">
+					                                <include-screen name="capturePlusJs" location="component://osafe/widget/EntryScreens.xml" />
+					                            </html-template-decorator-section>
+					                        </html-template-decorator>
+					                    </html>
+					                </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="eCommerceCreateFftAccountInfo">
         <section>
             <actions>
@@ -1249,6 +1464,13 @@
                 <set field="backAction" value="eCommerceEftPaymentMethodInfo" />
                 <set field="formContinueButton" value="${uiLabelMap.SaveBtn}" />
                 <set field="formName" value="eftAccountInfoform" />
+                <set field="fieldPurpose" value="BILLING" />
+                <set field="purposeType" value="BILLING_LOCATION"/>
+                <set field="addAddressAction" value="createEftNewAddress"/>
+                <set field="addAddressDonePage" value="eCommerceCreateFftAccountInfo"/>
+                <set field="addressSelectionCaption" value="${uiLabelMap.SelectBillingAddressCaption}"/>
+                <set field="addressSelectionDisplayFormat" value="SINGLE_LINE_STREET_CITY"/>
+                <set field="addressSelectionInputName" value="contactMechId"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1259,9 +1481,10 @@
                         <section>
                             <actions>
                                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCountry.groovy" />
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
                             </actions>
                             <widgets>
-                                <container id="eCommerceEditCustomerInfoContainer">
+                                <container id="eCommerceCreateFftAccountInfo">
                                     <include-screen name="PTS_PMT_METHOD_EDIT" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                     <platform-specific>
                                         <html>
@@ -1291,6 +1514,68 @@
         </section>
     </screen>
     
+    <screen name="createEftNewAddress">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="createEftNewAddress" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${groovy:if(parameters.contactMechPurposeTypeId.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
+                <set field="title" from-field="pageTitle" />
+
+                <set field="formName" value="checkoutInfoForm" />
+                <set field="formAction" value="createEftValidateNewAddress" />
+                <set field="donePage" value="eCommerceCreateFftAccountInfo" />
+                <set field="fieldPurpose" value="BILLING" />
+
+                <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="prevButtonVisible" value="N" />
+                <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <actions>
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCountry.groovy" />
+                            </actions>
+                            <widgets>
+                                <container id="eftNewAddress">
+					                <platform-specific>
+					                    <html>
+					                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+					                            <html-template-decorator-section name="entryFormJS">
+					                                <platform-specific>
+					                                    <html>
+					                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+					                                    </html>
+					                                </platform-specific>
+					                            </html-template-decorator-section>
+					                            <html-template-decorator-section name="entryForm">
+					                                <include-screen name="contactMechEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+					                            </html-template-decorator-section>
+					                            <html-template-decorator-section name="capturePlusJs">
+					                                <include-screen name="capturePlusJs" location="component://osafe/widget/EntryScreens.xml" />
+					                            </html-template-decorator-section>
+					                        </html-template-decorator>
+					                    </html>
+					                </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+        
     <screen name="eCommerceEditAddressBook">
         <section>
             <actions>
@@ -2377,6 +2662,50 @@
             </actions>
             <widgets>
                 <include-screen name="eCommerceConfirm" />
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="eCommerceUploadFile">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="fileUpload" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.FileUploadTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="fieldLevelErrors" value="${groovy:if(request.getAttribute('setFieldLevelErrors') == 'N')return '' else return 'Y';}" />
+                <set field="formAction" value="uploadFileFromPdp" />
+                <set field="formName" value="entryForm" />
+                <set field="encTypeMulti" value="Y"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <platform-specific>
+                                    <html>
+                                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                            <html-template-decorator-section name="entryFormJS">
+                                                <platform-specific>
+                                                    <html>
+                                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+                                                    </html>
+                                                </platform-specific>
+                                            </html-template-decorator-section>
+                                            <html-template-decorator-section name="entryForm">
+                                                <include-screen name="fileUploadEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+                                            </html-template-decorator-section>
+                                        </html-template-decorator>
+                                    </html>
+                                </platform-specific>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>

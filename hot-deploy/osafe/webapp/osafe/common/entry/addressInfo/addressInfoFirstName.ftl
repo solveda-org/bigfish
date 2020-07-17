@@ -16,12 +16,13 @@
   <#assign firstName= parameters.fbFirst_name!""/>
 </#if>
 
+<#assign firstNameFromSession = session.getAttribute(fieldPurpose+"_FIRST_NAME")!/>  
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <div class="${request.getAttribute("attributeClass")!}">
     <!-- address first name -->
       <label for="${fieldPurpose?if_exists}_FIRST_NAME"><#if mandatory == "Y"><@required/></#if>${uiLabelMap.FirstNameCaption}</label>
       <div class="entryField">
-      	<input type="text" maxlength="100" class="addressFirstName" name="${fieldPurpose?if_exists}_FIRST_NAME" id="js_${fieldPurpose?if_exists}_FIRST_NAME" value="${requestParameters.get(fieldPurpose+"_FIRST_NAME")!firstName!}" />
+      	<input type="text" maxlength="100" class="addressFirstName" name="${fieldPurpose?if_exists}_FIRST_NAME" id="js_${fieldPurpose?if_exists}_FIRST_NAME" value="${requestParameters.get(fieldPurpose+"_FIRST_NAME")!firstNameFromSession!firstName!}" />
       	<input type="hidden" id="${fieldPurpose?if_exists}_FIRST_NAME_MANDATORY" name="${fieldPurpose?if_exists}_FIRST_NAME_MANDATORY" value="${mandatory}"/>
       	<@fieldErrors fieldName="${fieldPurpose?if_exists}_FIRST_NAME"/>
       </div>

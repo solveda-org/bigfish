@@ -64,6 +64,8 @@ public class SolrIndexDocument {
     @Field
     private Date salesDiscontinuationDate;
     @Field
+    private int salesDiscontinuationDateNullFlag;
+    @Field
     private Date introductionDate;
 
     public SolrIndexDocument() {
@@ -291,6 +293,13 @@ public class SolrIndexDocument {
 
     public void setSalesDiscontinuationDate(Date salesDiscontinuationDate) {
         this.salesDiscontinuationDate = salesDiscontinuationDate;
+    }
+    public int getSalesDiscontinuationDateNullFlag() {
+        return salesDiscontinuationDateNullFlag;
+    }
+
+    public void setSalesDiscontinuationDateNullFlag(int salesDiscontinuationDateNullFlag) {
+        this.salesDiscontinuationDateNullFlag = salesDiscontinuationDateNullFlag;
     }
     public Date getIntroductionDate() {
         return introductionDate;

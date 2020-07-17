@@ -872,6 +872,35 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="pdpPersonalizedText">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpPersonalizedText.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpFileUpload">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpFileUpload.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	
 	<!-- ********************************************************************** -->
 	<!-- Sequence Screen : (PDP) TABS Sequencer Type : PDPTabs -->
 	<!-- ********************************************************************** -->
@@ -1699,6 +1728,35 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="pdpTabsPersonalizedText">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpPersonalizedText.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpTabsFileUpload">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpTabsFileUpload.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	
 	<!-- ********************************************************************** -->
 	<!-- Sequence Screen : Quicklook Dialog Sequencer Type : Quicklook -->
 	<!-- ********************************************************************** -->
@@ -2579,6 +2637,35 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="quicklookPersonalizedText">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpPersonalizedText.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="quicklookFileUpload">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/quicklookFileUpload.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
 
 	<!-- ********************************************************************** -->
 	<!-- Sequence Screen : PDP Review List Sequencer Type : PDPReviewList -->
@@ -4348,6 +4435,76 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/plp/plpAddToWishlist.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpContent01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpContent01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpContent02">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpContent02.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpContent03">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpContent03.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpContent04">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpContent04.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpContent05">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpContent05.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>

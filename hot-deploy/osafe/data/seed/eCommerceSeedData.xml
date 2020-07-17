@@ -115,4 +115,9 @@
     <PaymentGatewayConfig paymentGatewayConfigId="PAYNETZ_CONFIG" paymentGatewayConfigTypeId="PAYNETZ" description="Atom PayNetz Config"/>
     <PaymentGatewayPayNetz paymentGatewayConfigId="PAYNETZ_CONFIG" apiUrl="" loginId="160" password="Test@123" productId="NSE" payNetzMode="TEST" redirectUrl="http://203.114.240.183/paynetz/epi/fts" returnUrl="https://www.yourdomainname.com/payNetzCheckoutReturn" transactionType="NBFundTransfer"/>
 
+    <!-- First Data Global Gateway CC Payment Gateway Config -->
+    <PaymentGatewayConfigType paymentGatewayConfigTypeId="FDGG" hasTable="N" description="First Data Global Gateway E4 Payment Gateway"/>
+    <PaymentGatewayConfig paymentGatewayConfigId="FDGG_CONFIG" paymentGatewayConfigTypeId="FDGG" description="First Data Global Gateway E4 Payment Gateway"/>
+    <PaymentGatewayFdgg paymentGatewayConfigId="FDGG_CONFIG" gatewayId="[gatewayId]" apiVersion="[apiVersion]" apiVersionUrl="[apiVersionUrl]" apiPassword="[apiPassword]" apiKeyId="[apiKeyId]" apiHmacKey="[apiHmacKey]"/>
+
 </entity-engine-xml>

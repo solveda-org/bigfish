@@ -481,6 +481,7 @@
         <field name="totalQuantityOrdered" type="float" indexed="true" stored="true" required="false"/>
         <field name="introductionDate" type="date" indexed="true" stored="true" required="false" datetimeformat="yyyy-MM-dd'T'HH:mm:sss'Z'"/>
         <field name="salesDiscontinuationDate" type="date" indexed="true" stored="true" required="false" datetimeformat="yyyy-MM-dd'T'HH:mm:sss'Z'"/>
+        <field name="salesDiscontinuationDateNullFlag" type="int" indexed="true" stored="true" required="false"/>
         <field name="manufacturerName" type="string" indexed="true" stored="true" required="false"/>
         <field name="manufacturerIdNo" type="string" indexed="true" stored="true" required="false"/>
         <!-- fields for finding facet grouping  -->

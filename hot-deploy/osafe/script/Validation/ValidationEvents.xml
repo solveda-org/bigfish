@@ -266,63 +266,11 @@
                     </condition>
                     <then>
                         <!-- Show general error if Home Phone is required -->
-                        <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
-                            <simple-map-processor name="newTelecomNumber">
-                                    <make-in-string field="contactNumber">
-                                        <in-field field="PHONE_HOME_CONTACT3"/>
-                                        <in-field field="PHONE_HOME_CONTACT4"/>
-                                    </make-in-string>
-                                    <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
-                            </simple-map-processor>
-                        </call-map-processor>
-                        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                            <field field="parameters.PHONE_HOME_AREA"/>
-                            <field field="contactHomePhoneMap.contactHomePhoneContact"/>
-                            <field field="parameters.PHONE_HOME_MANDATORY"/>
-                        </call-class-method>
-                        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                            <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
-                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_AREA" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_HOME_CONTACT3" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_HOME_CONTACT4" list="error_list"/>
-                            </if-compare>
-                            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_AREA" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_HOME_CONTACT3" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_HOME_CONTACT4" list="error_list"/>
-                            </if-compare>
-                        </if-compare>
+                        <call-simple-method method-name="validatePhoneHome"/>
+
                     </then>
                     <else>
-                        <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
-                            <simple-map-processor name="newTelecomNumber">
-                                    <!--make-in-string field="contactNumber">
-                                        <in-field field="PHONE_HOME_CONTACT_OTHER3"/>
-                                        <in-field field="PHONE_HOME_CONTACT_OTHER4"/>
-                                    </make-in-string-->
-                                    <process field="PHONE_HOME_CONTACT_OTHER"><copy to-field="contactHomeOtherPhoneContact"/></process>
-                            </simple-map-processor>
-                        </call-map-processor>
-                        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                            <string value=""/>
-                            <field field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
-                            <string value="false"/>
-                        </call-class-method>
-                        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
-                            </if-compare>
-                        </if-compare>
-                        <if-compare field="parameters.PHONE_HOME_MANDATORY" operator="equals" value="Y">
-                            <if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
-                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
-                            </if-empty>
-                        </if-compare>
-                        
+                        <call-simple-method method-name="validatePhoneHomeOther"/>
                     </else>
                 </if>
 
@@ -335,54 +283,10 @@
                         </or>
                     </condition>
                     <then>
-                        <call-map-processor in-map-name="parameters" out-map-name="contactMobilePhoneMap">
-                            <simple-map-processor name="newTelecomNumber">
-                                    <make-in-string field="contactNumber">
-                                        <in-field field="PHONE_MOBILE_CONTACT3"/>
-                                        <in-field field="PHONE_MOBILE_CONTACT4"/>
-                                    </make-in-string>
-                                    <process field="contactNumber"><copy to-field="contactMobilePhoneContact"/></process>
-                            </simple-map-processor>
-                        </call-map-processor>
-                        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                            <field field="parameters.PHONE_MOBILE_AREA"/>
-                            <field field="contactMobilePhoneMap.contactMobilePhoneContact"/>
-                            <field field="parameters.PHONE_MOBILE_MANDATORY"/>
-                        </call-class-method>
-                        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                            <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
-	                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_AREA" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_MOBILE_CONTACT3" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_MOBILE_CONTACT4" list="error_list"/>
-	                        </if-compare>
-                            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_AREA" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_MOBILE_CONTACT3" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_MOBILE_CONTACT4" list="error_list"/>
-                            </if-compare>
-                        </if-compare>
+                        <call-simple-method method-name="validatePhoneMobile"/>
                     </then>
                     <else>
-                        <set field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact" from-field="parameters.PHONE_MOBILE_CONTACT_OTHER"/>
-                        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                            <string value=""/>
-                            <field field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
-                            <string value="false"/>
-                        </call-class-method>
-                        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
-                            </if-compare>
-                        </if-compare>
-                        <if-compare field="parameters.PHONE_MOBILE_MANDATORY" operator="equals" value="Y">
-                            <if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact">
-                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
-                            </if-empty>
-                        </if-compare>
+                        <call-simple-method method-name="validatePhoneMobileOther"/>
                     </else>
                 </if>
     
@@ -395,63 +299,10 @@
                         </or>
                     </condition>
                     <then>
-                        <call-map-processor in-map-name="parameters" out-map-name="contactWorkPhoneMap">
-                            <simple-map-processor name="newTelecomNumber">
-                                    <make-in-string field="contactNumber">
-                                        <in-field field="PHONE_WORK_CONTACT3"/>
-                                        <in-field field="PHONE_WORK_CONTACT4"/>
-                                    </make-in-string>
-                                    <process field="contactNumber"><copy to-field="contactWorkPhoneContact"/></process>
-                            </simple-map-processor>
-                        </call-map-processor>
-                        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                            <field field="parameters.PHONE_WORK_AREA"/>
-                            <field field="contactWorkPhoneMap.contactWorkPhoneContact"/>
-                            <field field="parameters.PHONE_WORK_EXT"/>
-                            <field field="parameters.PHONE_WORK_MANDATORY"/>
-                        </call-class-method>
-                        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                            <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
-	                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="WorkPhoneMissingError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_AREA" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_WORK_CONTACT3" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_WORK_CONTACT4" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_WORK_EXT" list="error_list"/>
-	                        </if-compare>
-                            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_AREA" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_WORK_CONTACT3" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_WORK_CONTACT4" list="error_list"/>
-                                <string-to-list string="" message-field="PHONE_WORK_EXT" list="error_list"/>
-                            </if-compare>
-                        </if-compare>
+                        <call-simple-method method-name="validatePhoneWork"/>
                     </then>
                     <else>
-                        <if-not-empty field="parameters.PHONE_WORK_CONTACT_OTHER">
-                            <set field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact" from-field="parameters.PHONE_WORK_CONTACT_OTHER"/>
-                            <set field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContactExt" from-field="parameters.PHONE_WORK_EXT_OTHER"/>
-                            <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                                <string value=""/>
-                                <field field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact"/>
-                                <field field="parameters.PHONE_WORK_EXT_OTHER"/>
-                                <string value="false"/>
-                            </call-class-method>
-                            <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                                <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                    <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT_OTHER" list="error_list"/>
-                                    <string-to-list string="" message-field="PHONE_WORK_EXT_OTHER" list="error_list"/>
-                                </if-compare>
-                            </if-compare>
-                            <if-compare field="parameters.PHONE_WORK_MANDATORY" operator="equals" value="Y">
-	                            <if-empty field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact">
-	                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="WorkPhoneMissingError"/>
-	                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT_OTHER" list="error_list"/>
-                                    <string-to-list string="" message-field="PHONE_WORK_EXT_OTHER" list="error_list"/>
-	                            </if-empty>
-                            </if-compare>
-                        </if-not-empty>
+                        <call-simple-method method-name="validatePhoneWorkOther"/>
                     </else>
                 </if>
 
@@ -604,55 +455,31 @@
             </if-compare>
             
             <!-- Check the Mobile Phone For Part Text Preference -->
-	        <if>
-	            <condition>
-	                <or>
-	                    <if-compare value="CAN" operator="equals" field="parameters.USER_COUNTRY"></if-compare>
-	                    <if-compare value="USA" operator="equals" field="parameters.USER_COUNTRY"></if-compare>
-	                </or>
-	            </condition>
-	            <then>
-	                <call-map-processor in-map-name="parameters" out-map-name="contactMobilePhoneMap">
-	                    <simple-map-processor name="newTelecomNumber">
-	                            <make-in-string field="contactNumber">
-	                                <in-field field="PHONE_MOBILE_CONTACT3"/>
-	                                <in-field field="PHONE_MOBILE_CONTACT4"/>
-	                            </make-in-string>
-	                            <process field="contactNumber"><copy to-field="contactMobilePhoneContact"/></process>
-	                    </simple-map-processor>
-	                </call-map-processor>
-	                
-	                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-	                    <field field="parameters.PHONE_MOBILE_AREA"/>
-	                    <field field="contactMobilePhoneMap.contactMobilePhoneContact"/>
-	                    <field field="parameters.PARTY_TEXT_PREFERENCE"/>
-	                </call-class-method>
-	                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-	                    <if-compare field="parameters.PHONE_MOBILE_MANDATORY" operator="not-equals" value="Y">
-		                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
-		                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
-		                        <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
-		                    </if-compare>
-		                </if-compare>
-	                </if-compare>
-	            </then>
-	            <else>
-	                <set field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact" from-field="parameters.PHONE_MOBILE_CONTACT_OTHER"/>
-	                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-	                    <string value=""/>
-	                    <field field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
-	                    <string value="false"/>
-	                </call-class-method>
-	                <if-compare field="parameters.PHONE_MOBILE_MANDATORY" operator="not-equals" value="Y">
-	                    <if-compare field="parameters.PARTY_TEXT_PREFERENCE" operator="equals" value="Y">
-		                    <if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact">
-		                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
-		                        <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
-		                    </if-empty>
-	                    </if-compare>
-	                </if-compare>
-	            </else>
-	        </if>
+            <if-compare field="parameters.PARTY_TEXT_PREFERENCE" operator="equals" value="Y">
+		        <if>
+		            <condition>
+		                <or>
+		                    <if-compare value="CAN" operator="equals" field="parameters.USER_COUNTRY"></if-compare>
+		                    <if-compare value="USA" operator="equals" field="parameters.USER_COUNTRY"></if-compare>
+		                </or>
+		            </condition>
+		            <then>
+	                        <call-simple-method method-name="validatePhoneMobile"/>
+		            </then>
+		            <else>
+		                <set field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact" from-field="parameters.PHONE_MOBILE_CONTACT_OTHER"/>
+		                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+		                    <string value=""/>
+		                    <field field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
+		                    <string value="false"/>
+		                </call-class-method>
+	                    <if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact">
+	                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
+	                        <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
+	                    </if-empty>
+		            </else>
+		        </if>
+            </if-compare>
             
             <!-- DOB Short(MMDD) validation -->
             <call-class-method class-name="com.osafe.util.Util"  method-name="checkDateOfBirth" ret-field="checkDateOfBirthResult">
@@ -1759,55 +1586,11 @@
                 </or>
             </condition>
             <then>
-                <!-- Show general error if Home Phone is required -->
-                <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
-                    <simple-map-processor name="newTelecomNumber">
-                            <make-in-string field="contactNumber">
-                                <in-field field="contactPhoneContact3"/>
-                                <in-field field="contactPhoneContact4"/>
-                            </make-in-string>
-                            <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
-                    </simple-map-processor>
-                </call-map-processor>
-                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                    <field field="parameters.contactPhoneArea"/>
-                    <field field="contactHomePhoneMap.contactHomePhoneContact"/>
-                    <field field="parameters.contactPhoneNumber_MANDATORY"/>
-                </call-class-method>
-                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                    </if-compare>
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                    </if-compare>
-                </if-compare>
+                <!-- Show general error if Phone is required -->
+                <call-simple-method method-name="validatePhoneGeneral"/>
             </then>
             <else>
-                <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
-                    <simple-map-processor name="newTelecomNumber">
-                            <process field="contactPhoneNumber"><copy to-field="contactHomeOtherPhoneContact"/></process>
-                    </simple-map-processor>
-                </call-map-processor>
-                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                    <string value=""/>
-                    <field field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
-                    <string value="false"/>
-                </call-class-method>
-                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                    </if-compare>
-                </if-compare>
-               <if-compare field="parameters.contactPhoneNumber_MANDATORY" operator="equals" value="Y">
-                   <if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
-                       <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                       <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                   </if-empty>
-              </if-compare>
+                <call-simple-method method-name="validatePhoneGeneralOther"/>
             </else>
         </if>
 
@@ -2091,6 +1874,13 @@
     	</if-not-empty>
     </simple-method>
 
+    <simple-method method-name="checkUserLoginSessionAndValidateAddress" short-description="Check User Session and Validate Address" login-required="false">
+    	<call-simple-method method-name="checkUserLoginSession" xml-resource="component://osafe/script/Event/CheckoutEvents.xml"/>
+    	<if-not-empty field="userLogin">
+    		<call-simple-method method-name="validateAddress"/>
+    	</if-not-empty>
+    </simple-method>
+
     <simple-method method-name="validateCreditCard" short-description="Validate Credit Card fields" login-required="false">
         <log level="info" message="${parameters.fieldLevelErrors}"></log>
         <if-compare field="parameters.fieldLevelErrors" operator="equals" value="Y">
@@ -2336,55 +2126,11 @@
                 </or>
             </condition>
             <then>
-                <!-- Show general error if Home Phone is required -->
-                <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
-                    <simple-map-processor name="newTelecomNumber">
-                            <make-in-string field="contactNumber">
-                                <in-field field="contactPhoneContact3"/>
-                                <in-field field="contactPhoneContact4"/>
-                            </make-in-string>
-                            <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
-                    </simple-map-processor>
-                </call-map-processor>
-                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                    <field field="parameters.contactPhoneArea"/>
-                    <field field="contactHomePhoneMap.contactHomePhoneContact"/>
-                    <field field="parameters.contactPhoneNumber_MANDATORY"/>
-                </call-class-method>
-                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                    </if-compare>
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                    </if-compare>
-                </if-compare>
+                <!-- Show general error if Phone is required -->
+                <call-simple-method method-name="validatePhoneGeneral"/>
             </then>
             <else>
-                <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
-                    <simple-map-processor name="newTelecomNumber">
-                            <process field="contactPhoneNumber"><copy to-field="contactHomeOtherPhoneContact"/></process>
-                    </simple-map-processor>
-                </call-map-processor>
-                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                    <string value=""/>
-                    <field field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
-                    <string value="false"/>
-                </call-class-method>
-                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                    </if-compare>
-                </if-compare>
-               <if-compare field="parameters.contactPhoneNumber_MANDATORY" operator="equals" value="Y">
-                   <if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
-                       <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                       <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                   </if-empty>
-              </if-compare>
+                <call-simple-method method-name="validatePhoneGeneralOther"/>
             </else>
         </if>
         <check-errors/>
@@ -2624,8 +2370,48 @@
          <if-not-empty field="parameters.BILLING_LAST_NAME">
          	<set field="parameters.lastNameOnCard" from-field="parameters.BILLING_LAST_NAME"/>
          </if-not-empty>
-        
-        
+         
+         <if>
+          <condition>
+            <and>
+                  <if-empty field="parameters.firstNameOnCard"/>
+                  <if-empty field="parameters.lastNameOnCard"/>
+            </and>
+          </condition>
+          <then>
+           <if-not-empty field="parameters.BILLING_FULL_NAME">
+	     	   <call-class-method class-name="org.ofbiz.base.util.StringUtil" method-name="split" ret-field="billingNamesList">
+	     		 <field field="parameters.BILLING_FULL_NAME" type="String"/>
+	             <string value=" "/>
+	     	   </call-class-method>
+	     	   <call-object-method method-name="size" obj-field="billingNamesList" ret-field="billingNamesListSize"/>
+	           <set field="nameCount" value="1" type="Integer"/>
+	            <iterate list="billingNamesList" entry="billingName">
+	   				<if-compare field="nameCount" operator="equals" value="1" type="Integer">
+	           	       <set field="parameters.firstNameOnCard" from-field="billingName"/>
+	   				</if-compare>
+	   				<if-compare field="nameCount" operator="greater" value="1" type="Integer">
+	           	       <set field="parameters.lastNameOnCard" from-field="billingName"/>
+	   				</if-compare>
+       				<calculate field="nameCount">
+                       <calcop operator="add" >
+                           <calcop operator="get" field="nameCount"/>
+                           <number value="1"/>
+                       </calcop>
+                    </calculate>
+	     		</iterate>
+	       <else>
+	         <if-not-empty field="parameters.USER_FIRST_NAME">
+	         	<set field="parameters.firstNameOnCard" from-field="parameters.USER_FIRST_NAME"/>
+	         </if-not-empty>
+	         
+	         <if-not-empty field="parameters.USER_LAST_NAME">
+	         	<set field="parameters.lastNameOnCard" from-field="parameters.USER_LAST_NAME"/>
+	         </if-not-empty>
+	     	</else>
+           </if-not-empty>
+          </then>
+         </if>
     </simple-method>
     
     
@@ -2650,6 +2436,7 @@
                 <set field="eftAccountContext.routingNumber" from-field="savedEftAccountGv.routingNumber"/>
                 <set field="eftAccountContext.accountNumber" from-field="savedEftAccountGv.accountNumber"/>
                 <set field="eftAccountContext.accountType" from-field="savedEftAccountGv.accountType"/>
+                <set field="eftAccountContext.contactMechId" from-field="savedEftAccountGv.contactMechId"/>
             </else>
             </if-empty>
         <else>
@@ -2708,6 +2495,7 @@
             <set field="eftAccountContext.routingNumber" from-field="parameters.routingNumber"/>
             <set field="eftAccountContext.accountNumber" from-field="parameters.accountNumber"/>
             <set field="eftAccountContext.accountType" from-field="parameters.accountType"/>
+            <set field="eftAccountContext.contactMechId" from-field="parameters.contactMechId"/>
         </else>
         </if-compare>
     </simple-method>
@@ -2775,65 +2563,291 @@
                 </or>
             </condition>
             <then>
-                <!-- Show general error if Home Phone is required -->
-                <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
-                    <simple-map-processor name="newTelecomNumber">
-                            <make-in-string field="contactNumber">
-                                <in-field field="contactPhoneContact3"/>
-                                <in-field field="contactPhoneContact4"/>
-                            </make-in-string>
-                            <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
-                    </simple-map-processor>
-                </call-map-processor>
-                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                    <field field="parameters.contactPhoneArea"/>
-                    <field field="contactHomePhoneMap.contactHomePhoneContact"/>
-                    <field field="parameters.contactPhoneNumber_MANDATORY"/>
-                </call-class-method>
-                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                        <string-to-list string="" message-field="contactPhoneArea" list="error_list"/>
-                        <string-to-list string="" message-field="contactPhoneContact3" list="error_list"/>
-                        <string-to-list string="" message-field="contactPhoneContact4" list="error_list"/>
-                    </if-compare>
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                        <string-to-list string="" message-field="contactPhoneArea" list="error_list"/>
-                        <string-to-list string="" message-field="contactPhoneContact3" list="error_list"/>
-                        <string-to-list string="" message-field="contactPhoneContact4" list="error_list"/>
-                    </if-compare>
-                </if-compare>
+                <!-- Show general error if Phone is required -->
+                <call-simple-method method-name="validatePhoneGeneral"/>
             </then>
             <else>
-                <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
-                    <simple-map-processor name="newTelecomNumber">
-                            <process field="contactPhoneNumber"><copy to-field="contactHomeOtherPhoneContact"/></process>
-                    </simple-map-processor>
-                </call-map-processor>
-                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                    <string value=""/>
-                    <field field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
-                    <string value="false"/>
-                </call-class-method>
-                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                        <string-to-list string="" message-field="contactPhoneNumber" list="error_list"/>
-                    </if-compare>
-                </if-compare>
-               <if-compare field="parameters.contactPhoneNumber_MANDATORY" operator="equals" value="Y">
-                   <if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
-                       <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                       <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
-                       <string-to-list string="" message-field="contactPhoneNumber" list="error_list"/>
-                   </if-empty>
-              </if-compare>
+                <call-simple-method method-name="validatePhoneGeneralOther"/>
             </else>
         </if>
         <check-errors/>
     </simple-method>
+    
+    <simple-method method-name="validatePhoneHome" short-description="validate Phone Home" login-required="false">
+        <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
+            <simple-map-processor name="newTelecomNumber">
+                    <make-in-string field="contactNumber">
+                        <in-field field="PHONE_HOME_CONTACT3"/>
+                        <in-field field="PHONE_HOME_CONTACT4"/>
+                    </make-in-string>
+                    <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+        <if>
+            <condition>
+              <or>
+                <not><if-empty field="parameters.PHONE_HOME_AREA"></if-empty></not>
+                <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
+              </or>
+            </condition>
+            <then>
+                              <set field="parameters.PHONE_HOME_MANDATORY" value="Y"/>
+            </then>
+        </if>
+        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+            <field field="parameters.PHONE_HOME_AREA"/>
+            <field field="contactHomePhoneMap.contactHomePhoneContact"/>
+            <field field="parameters.PHONE_HOME_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+            <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_AREA" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_HOME_CONTACT3" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_HOME_CONTACT4" list="error_list"/>
+            </if-compare>
+            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_AREA" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_HOME_CONTACT3" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_HOME_CONTACT4" list="error_list"/>
+            </if-compare>
+        </if-compare>    
+    </simple-method>
+    <simple-method method-name="validatePhoneHomeOther" short-description="validate Phone Home Other" login-required="false">
+        <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
+            <simple-map-processor name="newTelecomNumber">
+                    <!--make-in-string field="contactNumber">
+                        <in-field field="PHONE_HOME_CONTACT_OTHER3"/>
+                        <in-field field="PHONE_HOME_CONTACT_OTHER4"/>
+                    </make-in-string-->
+                    <process field="PHONE_HOME_CONTACT_OTHER"><copy to-field="contactHomeOtherPhoneContact"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+            <string value=""/>
+            <field field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
+            <string value="false"/>
+        </call-class-method>
+        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_CONTACT_OTHER" list="error_list"/>
+            </if-compare>
+        </if-compare>
+        <if-compare field="parameters.PHONE_HOME_MANDATORY" operator="equals" value="Y">
+            <if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_CONTACT_OTHER" list="error_list"/>
+            </if-empty>
+        </if-compare>
+    </simple-method>
+    <simple-method method-name="validatePhoneMobile" short-description="validate Phone Mobile" login-required="false">
+       <call-map-processor in-map-name="parameters" out-map-name="contactMobilePhoneMap">
+           <simple-map-processor name="newTelecomNumber">
+                   <make-in-string field="contactNumber">
+                       <in-field field="PHONE_MOBILE_CONTACT3"/>
+                       <in-field field="PHONE_MOBILE_CONTACT4"/>
+                   </make-in-string>
+                   <process field="contactNumber"><copy to-field="contactMobilePhoneContact"/></process>
+           </simple-map-processor>
+       </call-map-processor>
+      <if>
+          <condition>
+            <or>
+              <not><if-empty field="parameters.PHONE_MOBILE_AREA"></if-empty></not>
+              <not><if-empty field="contactMobilePhoneMap.contactMobilePhoneContact"></if-empty></not>
+            </or>
+          </condition>
+          <then>
+               <set field="parameters.PHONE_MOBILE_MANDATORY" value="Y"/>
+          </then>
+      </if>
+      <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+          <field field="parameters.PHONE_MOBILE_AREA"/>
+          <field field="contactMobilePhoneMap.contactMobilePhoneContact"/>
+          <field field="parameters.PHONE_MOBILE_MANDATORY"/>
+      </call-class-method>
+      <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+          <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+           <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
+              <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_AREA" list="error_list"/>
+              <string-to-list string="" message-field="PHONE_MOBILE_CONTACT3" list="error_list"/>
+              <string-to-list string="" message-field="PHONE_MOBILE_CONTACT4" list="error_list"/>
+          </if-compare>
+          <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+              <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+              <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_AREA" list="error_list"/>
+              <string-to-list string="" message-field="PHONE_MOBILE_CONTACT3" list="error_list"/>
+              <string-to-list string="" message-field="PHONE_MOBILE_CONTACT4" list="error_list"/>
+          </if-compare>
+      </if-compare>
+    </simple-method>
+    <simple-method method-name="validatePhoneMobileOther" short-description="validate Phone Mobile Other" login-required="false">
+       <set field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact" from-field="parameters.PHONE_MOBILE_CONTACT_OTHER"/>
+       <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+           <string value=""/>
+           <field field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
+           <string value="false"/>
+       </call-class-method>
+       <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+           <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+               <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+               <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
+           </if-compare>
+       </if-compare>
+       <if-compare field="parameters.PHONE_MOBILE_MANDATORY" operator="equals" value="Y">
+           <if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact">
+               <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
+               <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
+           </if-empty>
+       </if-compare>
+    </simple-method>
+    
+    <simple-method method-name="validatePhoneWork" short-description="validate Phone Work" login-required="false">
+       <call-map-processor in-map-name="parameters" out-map-name="contactWorkPhoneMap">
+           <simple-map-processor name="newTelecomNumber">
+                   <make-in-string field="contactNumber">
+                       <in-field field="PHONE_WORK_CONTACT3"/>
+                       <in-field field="PHONE_WORK_CONTACT4"/>
+                   </make-in-string>
+                   <process field="contactNumber"><copy to-field="contactWorkPhoneContact"/></process>
+           </simple-map-processor>
+       </call-map-processor>
+        <if>
+            <condition>
+              <or>
+                <not><if-empty field="parameters.PHONE_WORK_AREA"></if-empty></not>
+                <not><if-empty field="parameters.PHONE_WORK_EXT"></if-empty></not>
+                <not><if-empty field="contactWorkPhoneMap.contactWorkPhoneContact"></if-empty></not>
+              </or>
+            </condition>
+            <then>
+                              <set field="parameters.PHONE_WORK_MANDATORY" value="Y"/>
+            </then>
+        </if>
+        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+            <field field="parameters.PHONE_WORK_AREA"/>
+            <field field="contactWorkPhoneMap.contactWorkPhoneContact"/>
+            <field field="parameters.PHONE_WORK_EXT"/>
+            <field field="parameters.PHONE_WORK_MANDATORY"/>
+        </call-class-method>
+        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+            <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="WorkPhoneMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_AREA" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_WORK_CONTACT3" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_WORK_CONTACT4" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_WORK_EXT" list="error_list"/>
+         </if-compare>
+            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_AREA" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_WORK_CONTACT3" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_WORK_CONTACT4" list="error_list"/>
+                <string-to-list string="" message-field="PHONE_WORK_EXT" list="error_list"/>
+            </if-compare>
+        </if-compare>
+    </simple-method>
+    <simple-method method-name="validatePhoneWorkOther" short-description="validate Phone Work Other" login-required="false">
+        <if-not-empty field="parameters.PHONE_WORK_CONTACT_OTHER">
+            <set field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact" from-field="parameters.PHONE_WORK_CONTACT_OTHER"/>
+            <set field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContactExt" from-field="parameters.PHONE_WORK_EXT_OTHER"/>
+	        <if>
+	            <condition>
+	              <or>
+	                <not><if-empty field="parameters.PHONE_WORK_CONTACT_OTHER"></if-empty></not>
+	                <not><if-empty field="parameters.PHONE_WORK_EXT_OTHER"></if-empty></not>
+	              </or>
+	            </condition>
+	            <then>
+	                 <set field="parameters.PHONE_WORK_MANDATORY" value="Y"/>
+	            </then>
+	        </if>
+            <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                <string value=""/>
+                <field field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact"/>
+                <field field="parameters.PHONE_WORK_EXT_OTHER"/>
+                <string value="false"/>
+            </call-class-method>
+            <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT_OTHER" list="error_list"/>
+                    <string-to-list string="" message-field="PHONE_WORK_EXT_OTHER" list="error_list"/>
+                </if-compare>
+            </if-compare>
+            <if-compare field="parameters.PHONE_WORK_MANDATORY" operator="equals" value="Y">
+             <if-empty field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact">
+                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="WorkPhoneMissingError"/>
+                 <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT_OTHER" list="error_list"/>
+                    <string-to-list string="" message-field="PHONE_WORK_EXT_OTHER" list="error_list"/>
+             </if-empty>
+            </if-compare>
+       </if-not-empty>
+    </simple-method>
+
+    <simple-method method-name="validatePhoneGeneral" short-description="validate Phone General Other" login-required="false">
+         <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
+             <simple-map-processor name="newTelecomNumber">
+                     <make-in-string field="contactNumber">
+                         <in-field field="contactPhoneContact3"/>
+                         <in-field field="contactPhoneContact4"/>
+                     </make-in-string>
+                     <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
+             </simple-map-processor>
+         </call-map-processor>
+	       <if>
+	           <condition>
+	             <or>
+	               <not><if-empty field="parameters.contactPhoneArea"></if-empty></not>
+	               <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
+	             </or>
+	           </condition>
+	           <then>
+	                             <set field="parameters.contactPhoneNumber_MANDATORY" value="Y"/>
+	           </then>
+	       </if>
+           <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+               <field field="parameters.contactPhoneArea"/>
+               <field field="contactHomePhoneMap.contactHomePhoneContact"/>
+               <field field="parameters.contactPhoneNumber_MANDATORY"/>
+           </call-class-method>
+           <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+               <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                   <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                   <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
+               </if-compare>
+               <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                   <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                   <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
+               </if-compare>
+           </if-compare>
+    </simple-method>
+
+    <simple-method method-name="validatePhoneGeneralOther" short-description="validate Phone General Other" login-required="false">
+           <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
+               <simple-map-processor name="newTelecomNumber">
+                       <process field="contactPhoneNumber"><copy to-field="contactHomeOtherPhoneContact"/></process>
+               </simple-map-processor>
+           </call-map-processor>
+           <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+               <string value=""/>
+               <field field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
+               <string value="false"/>
+           </call-class-method>
+           <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+               <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                   <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                   <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
+               </if-compare>
+           </if-compare>
+          <if-compare field="parameters.contactPhoneNumber_MANDATORY" operator="equals" value="Y">
+              <if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
+                  <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                  <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
+              </if-empty>
+         </if-compare>
+    </simple-method>
+    
 </simple-methods>

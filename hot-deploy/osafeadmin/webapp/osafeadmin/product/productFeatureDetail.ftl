@@ -4,6 +4,7 @@
       <thead>
         <tr class="heading">
           <th class="idCol firstCol">${uiLabelMap.FeatureIDLabel}</th>
+          <th class="idCol firstCol">${uiLabelMap.DescriptionLabel}</th>
           <th class="radioCol">${uiLabelMap.HideShowLabel}</th>
           <th class="seqCol">${uiLabelMap.SeqNumberLabel}</th>
         </tr>
@@ -19,6 +20,9 @@
               <input type="hidden" name="fromDate_${productFeatureAndAppl_index}" value="${productFeatureAndAppl.fromDate!}"/>
               <input type="hidden" name="productFeatureId_${productFeatureAndAppl_index}" value="${productFeatureAndAppl.productFeatureId!}"/>
               ${productFeatureAndAppl.productFeatureId!}
+            </td>
+            <td class="descCol">
+              ${productFeatureAndAppl.description!}
             </td>
             <td class="radioCol">
               <#assign yesterday=Static["org.ofbiz.base.util.UtilDateTime"].getDayStart(nowTimestamp, -1)/>

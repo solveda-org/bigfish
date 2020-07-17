@@ -70,12 +70,12 @@
         <name xml:lang="en">Reevoo Product Rating Update</name>
         <sequenceNum>160</sequenceNum>
     </property>
-    <property key="shipReviewEmail">
-        <name xml:lang="en">Ship Review Email</name>
-        <sequenceNum>170</sequenceNum>
-    </property>
     <property key="purgeOldJobs">
         <name xml:lang="en">Purge Old Jobs</name>
         <sequenceNum>180</sequenceNum>
+    </property>
+    <property key="createOrdersFromAutoShoppingList">
+        <name xml:lang="en">Create Recurring Orders</name>
+        <sequenceNum>190</sequenceNum>
     </property>
 </resource>

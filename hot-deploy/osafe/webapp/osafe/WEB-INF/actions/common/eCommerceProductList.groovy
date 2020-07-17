@@ -358,3 +358,69 @@ if (UtilValidate.isNotEmpty(productScrollerUrlList))
 {
 	session.setAttribute("productScrollerUrlList",productScrollerUrlList);
 }
+
+
+//Pagination next and previous url
+plpPagingLinkPrev = "";
+plpPagingLinkNext = "";
+nextPrevUrl = ""
+sortResults = request.getAttribute("sortResults");
+if(UtilValidate.isEmpty(sortResults))
+{
+	sortResults = parameters.sortResults;
+}
+if(UtilValidate.isNotEmpty(productCategoryId))
+{
+	nextPrevUrl = "?productCategoryId=" + productCategoryId;
+	if (UtilValidate.isNotEmpty(filterGroup))
+	{
+		nextPrevUrl = nextPrevUrl+ "&filterGroup=" + filterGroup;
+	}
+	nextPrevUrl = SeoUrlHelper.makeSeoFriendlyUrl(request, "eCommerceProductList"+nextPrevUrl, false);
+	if (UtilValidate.isNotEmpty(sortResults))
+	{
+		if (nextPrevUrl.contains("?"))
+		{
+			nextPrevUrl = nextPrevUrl+ "&sortResults=" + sortResults;
+		}
+		else
+		{
+			nextPrevUrl = nextPrevUrl+ "?sortResults=" + sortResults;
+		}
+	}
+}
+else
+{
+	nextPrevUrl = request.getRequestURI() + previousParams;
+	if (UtilValidate.isNotEmpty(sortResults))
+	{
+		nextPrevUrl = nextPrevUrl+ "&sortResults=" + sortResults;
+	}
+}
+
+numFound = request.getAttribute("numFound");
+if(UtilValidate.isEmpty(numFound))
+{
+	numFound = 0;
+}
+start = request.getAttribute("start");
+if(UtilValidate.isEmpty(start))
+{
+	start = 0;
+}
+pageSize = request.getAttribute("pageSize");
+if(UtilValidate.isEmpty(pageSize))
+{
+	pageSize = 10;
+}
+if (pageSize < numFound)
+{
+	if ((start - pageSize) >= 0)
+	{
+		context.plpPagingLinkPrev = nextPrevUrl+ "&start=" +(start - pageSize);
+	}
+	if ((start + pageSize) < numFound)
+	{
+		context.plpPagingLinkNext = nextPrevUrl+ "&start=" +(start + pageSize);
+	}
+}

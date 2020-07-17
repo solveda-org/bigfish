@@ -31,6 +31,15 @@
 	            </if-compare>
 	        </else>
 	        </if-empty>
+	        <if-not-empty field="parameters.recurringPrice">
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isFloat" ret-field="checkFloatResult">
+	                <field field="parameters.recurringPrice"/>
+	            </call-class-method>
+	            <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductRecurringPriceError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="recurringPrice" list="error_list"/>
+	            </if-compare>
+	        </if-not-empty>
 	    </if-compare>
 	    <if-compare field="parameters.isVariant" operator="equals" value="Y">
 	        <if-not-empty field="parameters.variantListPrice">
@@ -49,6 +58,15 @@
 		        <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
 		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductVariantSalePriceError"/>
 		            <string-to-list string="${tempErrorMessage}" message-field="variantSalePrice" list="error_list"/>
+		        </if-compare>
+		    </if-not-empty>
+		    <if-not-empty field="parameters.variantRecurringPrice">
+		        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="checkFloatResult">
+		            <field field="parameters.variantRecurringPrice"/>
+		        </call-class-method>
+		        <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductVariantRecurringPriceError"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="variantRecurringPrice" list="error_list"/>
 		        </if-compare>
 		    </if-not-empty>
 	    </if-compare>
@@ -75,6 +93,38 @@
             <call-service service-name="createUpdateProdPrice" in-map-name="createUpdateProdPriceCtx"/>
         </if-not-empty>
         
+        <if-not-empty field="parameters.recurringPrice">
+            <set field="createUpdateProdPriceCtx.productId" from-field="parameters.productId"/>
+            <set field="createUpdateProdPriceCtx.newPrice" from-field="parameters.recurringPrice" type="BigDecimal"/>
+            <set field="createUpdateProdPriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
+            <set field="createUpdateProdPriceCtx.isVariant" from-field="parameters.isVariant"/>
+            <set field="createUpdateProdPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+            <set field="createUpdateProdPriceCtx.productPricePurposeId" value="RECURRING_CHARGE"/>
+            <set field="createUpdateProdPriceCtx.productStoreGroupId" value="_NA_"/>
+            <call-service service-name="createUpdateProdPrice" in-map-name="createUpdateProdPriceCtx"/>
+        <else>
+        		<entity-and entity-name="ProductPrice" list="productPriceList" filter-by-date="true">
+	                <field-map field-name="productId" from-field="parameters.productId"/>
+	                <field-map field-name="productPriceTypeId" value="DEFAULT_PRICE"/>
+	                <field-map field-name="productPricePurposeId" value="RECURRING_CHARGE"/>
+		            <field-map field-name="currencyUomId" from-field="parameters.currencyUomId"/>
+		            <field-map field-name="productStoreGroupId" value="_NA_"/>
+	                <order-by field-name="-fromDate"/>
+	            </entity-and>
+	            <if-not-empty field="productPriceList">
+	            	<first-from-list entry="productPrice" list="productPriceList"/>
+            		<set field="deleteProductVariantListPriceCtx.productId" from-field="productPrice.productId"/>
+	                <set field="deleteProductVariantListPriceCtx.productPriceTypeId" from-field="productPrice.productPriceTypeId"/>
+	                <set field="deleteProductVariantListPriceCtx.productPricePurposeId" from-field="productPrice.productPricePurposeId"/>
+	                <set field="deleteProductVariantListPriceCtx.currencyUomId" from-field="productPrice.currencyUomId"/>
+	                <set field="deleteProductVariantListPriceCtx.productStoreGroupId" from-field="productPrice.productStoreGroupId"/>
+	                <set field="deleteProductVariantListPriceCtx.fromDate" from-field="productPrice.fromDate" type="Timestamp"/>
+	                <call-service service-name="deleteProductPrice" in-map-name="deleteProductVariantListPriceCtx"/>
+	            </if-not-empty>
+        </else>
+
+        </if-not-empty>
+
         <if-compare field="parameters.isVariant" operator="equals" value="Y">
         	<set field="createUpdateProdPriceCtx.productId" from-field="parameters.productId"/>
             <set field="createUpdateProdPriceCtx.newPrice" from-field="parameters.variantListPrice" type="BigDecimal"/>
@@ -93,7 +143,42 @@
             <set field="createUpdateProdPriceCtx.productPricePurposeId" value="PURCHASE"/>
             <set field="createUpdateProdPriceCtx.productStoreGroupId" value="_NA_"/>
             <call-service service-name="createUpdateProdPrice" in-map-name="createUpdateProdPriceCtx"/>
+
+		    <if-not-empty field="parameters.variantRecurringPrice">
+	            <set field="createUpdateProdPriceCtx.productId" from-field="parameters.productId"/>
+	            <set field="createUpdateProdPriceCtx.newPrice" from-field="parameters.variantRecurringPrice" type="BigDecimal"/>
+	            <set field="createUpdateProdPriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
+	            <set field="createUpdateProdPriceCtx.isVariant" from-field="parameters.isVariant"/>
+	            <set field="createUpdateProdPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+	            <set field="createUpdateProdPriceCtx.productPricePurposeId" value="RECURRING_CHARGE"/>
+	            <set field="createUpdateProdPriceCtx.productStoreGroupId" value="_NA_"/>
+	            <call-service service-name="createUpdateProdPrice" in-map-name="createUpdateProdPriceCtx"/>
+	        <else>
+	        		<entity-and entity-name="ProductPrice" list="productPriceList" filter-by-date="true">
+		                <field-map field-name="productId" from-field="parameters.productId"/>
+		                <field-map field-name="productPriceTypeId" value="DEFAULT_PRICE"/>
+		                <field-map field-name="productPricePurposeId" value="RECURRING_CHARGE"/>
+			            <field-map field-name="currencyUomId" from-field="parameters.currencyUomId"/>
+			            <field-map field-name="productStoreGroupId" value="_NA_"/>
+		                <order-by field-name="-fromDate"/>
+		            </entity-and>
+		            <if-not-empty field="productPriceList">
+		            	<first-from-list entry="productPrice" list="productPriceList"/>
+	            		<set field="deleteProductVariantListPriceCtx.productId" from-field="productPrice.productId"/>
+		                <set field="deleteProductVariantListPriceCtx.productPriceTypeId" from-field="productPrice.productPriceTypeId"/>
+		                <set field="deleteProductVariantListPriceCtx.productPricePurposeId" from-field="productPrice.productPricePurposeId"/>
+		                <set field="deleteProductVariantListPriceCtx.currencyUomId" from-field="productPrice.currencyUomId"/>
+		                <set field="deleteProductVariantListPriceCtx.productStoreGroupId" from-field="productPrice.productStoreGroupId"/>
+		                <set field="deleteProductVariantListPriceCtx.fromDate" from-field="productPrice.fromDate" type="Timestamp"/>
+		                <call-service service-name="deleteProductPrice" in-map-name="deleteProductVariantListPriceCtx"/>
+		            </if-not-empty>
+	        </else>
+	        </if-not-empty>
+
         </if-compare>
+        
+        <property-to-field resource="OSafeAdminUiLabels" property="ProductGenericSavedSuccess" field="productGenericSavedSuccessMessage"/>
+	    <string-to-list string="${productGenericSavedSuccessMessage}" list="successMessageList"/>
         
     </simple-method>
 

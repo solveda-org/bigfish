@@ -21,7 +21,12 @@ if(UtilValidate.isNotEmpty(paymentMethodId))
 	}
 	if(UtilValidate.isNotEmpty(partyId))
 	{
-	    paymentMethods = delegator.findByAndCache("PaymentMethod", UtilMisc.toMap("partyId", partyId,"paymentMethodId",paymentMethodId), UtilMisc.toList("lastUpdatedStamp"));
+		fieldMap = UtilMisc.toMap("partyId", partyId,"paymentMethodId",paymentMethodId);
+		if(UtilValidate.isNotEmpty(context.paymentMethodType))
+		{
+    		fieldMap.put("paymentMethodTypeId",context.paymentMethodType);
+		}
+	    paymentMethods = delegator.findByAndCache("PaymentMethod", fieldMap, UtilMisc.toList("lastUpdatedStamp"));
 	    if(UtilValidate.isNotEmpty(paymentMethods))
 	    {
 	    	partySecurityCheck="Y";

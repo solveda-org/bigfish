@@ -302,6 +302,8 @@
 		                    <if-compare operator="equals" value="false" field="orderAdjustmentAmountVaild" type="Boolean">
 	                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OrderAdjustmentAmountValidInvalidNumberError"/>
 					            <string-to-list string="${tempErrorMessage}" message-field="orderAdjustmentAmount" list="error_list"/>
+					            <!-- If this is not a valid number then we cannot do any of the calculations so return an error -->
+					            <check-errors/>
 					        </if-compare>
 					        <!-- Reverse the amount entered on the screen since the Gui is showing The total adjustment as a negative
 					         -->
@@ -1098,7 +1100,7 @@
                        <set field="orderPaymentPreference.statusId" value="PAYMENT_SETTLED"/>
                        <store-value value-field="orderPaymentPreference"/>
                  </iterate>
-		          
+                 
 		          <set field="refundAmount" from-field="currentOrderRefundAmount" type="BigDecimal"/>
 	              <set field="refundAmountTotal" value="${groovy:org.ofbiz.base.util.UtilFormatOut.formatCurrency(refundAmount, orderHeader.currencyUom, parameters.locale)}"/>
 	              <string-append field="insertNote" string="Refund: Amount: ${refundAmountTotal}${eol}"/>
@@ -1109,13 +1111,6 @@
       
       
       
-        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="reviewActiveFlag">
-            <field field="parameters.productStoreId" type="String"/>
-            <string value="REVIEW_ACTIVE_FLAG"/>
-        </call-class-method>
-        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="isProductStoreParmTrue" ret-field="isReviewActive">
-            <field field="reviewActiveFlag"/>
-        </call-class-method>
         <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="reviewSendEmail">
             <field field="parameters.productStoreId" type="String"/>
             <string value="REVIEW_SEND_EMAIL"/>
@@ -1126,7 +1121,6 @@
         <if>
             <condition>
                 <and>
-                    <if-compare field="isReviewActive" operator="equals" value="true" type="Boolean"/>
                     <if-compare field="isReviewSendEmailActive" operator="equals" value="true" type="Boolean"/>
                     <if-compare field="newItemStatusId" operator="equals" value="ITEM_COMPLETED"/>
                 </and>
@@ -1204,20 +1198,6 @@
                             </calcop>
                         </calculate>
 
-                        <!--  
-    	                <set-service-fields service-name="createOrderPaymentPreference" to-map="createOrderPaymentPreferenceCtx" map="createOrderPaymentPreference"/>
-    	                <set field="createOrderPaymentPreferenceCtx.orderId" from-field="orderPaymentPreference.orderId"/>
-    	                <set field="createOrderPaymentPreferenceCtx.paymentMethodTypeId" from-field="orderPaymentPreference.paymentMethodTypeId"/>
-    	                <set field="createOrderPaymentPreferenceCtx.paymentMethodId" from-field="orderPaymentPreference.paymentMethodId"/>
-    	                <set field="createOrderPaymentPreferenceCtx.statusId" from-field="orderPaymentPreference.statusId"/>
-    	                <set field="createOrderPaymentPreferenceCtx.maxAmount" from-field="totalOrderRefundAmount" type="BigDecimal"/>
-    	                <call-service service-name="createOrderPaymentPreference" in-map-name="createOrderPaymentPreferenceCtx">
-    	                    <result-to-field result-name="orderPaymentPreferenceId" field="parameters.orderPaymentPreferenceId"/>
-    	                </call-service>
-    	                <entity-one value-field="orderPaymentPreferenceGV" entity-name="OrderPaymentPreference">
-    	                    <field-map field-name="orderPaymentPreferenceId" from-field="parameters.orderPaymentPreferenceId"/>
-    	                </entity-one>
-                        -->
                         <set field="refundOrderPaymentCtx.orderPaymentPreference" from-field="orderPaymentPreference"/>
                         <set field="refundOrderPaymentCtx.refundAmount" from-field="amountToRefund" type="BigDecimal"/>
                         <call-service service-name="refundPayment" in-map-name="refundOrderPaymentCtx">
@@ -1235,7 +1215,7 @@
                     </if-compare>
                 </iterate>
 	          
-	          <set field="refundedAmountTotal" value="${groovy:org.ofbiz.base.util.UtilFormatOut.formatCurrency(totalOrderRefundAmount, orderHeader.currencyUom, parameters.locale)}"/>
+	          <set field="refundedAmountTotal" value="${groovy:org.ofbiz.base.util.UtilFormatOut.formatCurrency(amountToRefund, orderHeader.currencyUom, parameters.locale)}"/>
 	          <string-append field="insertNote" string="Refund: Amount: ${refundedAmountTotal}${eol}"/>
                 
             </if-compare>

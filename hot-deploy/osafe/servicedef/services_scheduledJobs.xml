@@ -22,11 +22,6 @@
         <attribute name="intervalHours" mode="IN" type="Integer" optional="true"></attribute>
         <attribute name="emailCount" mode="IN" type="Integer" optional="true"></attribute>
     </service>
-    <service name="shipReviewEmail" engine="java" location="com.osafe.services.EmailServices" invoke="shipReviewEmail" auth="false" transaction-timeout="7200">
-        <description>Send Ship Review Emails </description>
-        <implements service="sendScheduledJobNotificationInterface"/>
-        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
-    </service>
     <service name="reevooGetProductRatingScore" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="reevooGetProductRatingScore" auth="false" transaction-timeout="7200">
         <description>down load xml feed</description>
         <attribute name="productStoreId" type="String" mode="IN" optional="false" />

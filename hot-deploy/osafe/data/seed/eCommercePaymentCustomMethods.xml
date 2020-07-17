@@ -47,4 +47,10 @@
 <CustomMethod customMethodId="FIN_REFUND_OFBIZ" customMethodTypeId="FIN_REFUND" customMethodName="ofbFaRefund" description="FIN account refund"/>
 <CustomMethod customMethodId="FIN_RELEASE_OFBIZ" customMethodTypeId="FIN_RELEASE" customMethodName="ofbFaRelease" description="FIN account release"/>
 
+<!-- First Data Global Gateway Credit Card Custom Method -->
+<CustomMethod customMethodId="CC_AUTH_FDGG" customMethodTypeId="CC_AUTH" customMethodName="fdggCCAuth" description="First Data Global Gateway authorize"/>
+<CustomMethod customMethodId="CC_CAPTURE_FDGG" customMethodTypeId="CC_CAPTURE" customMethodName="fdggCCCapture" description="First Data Global Gateway capture"/>
+<CustomMethod customMethodId="CC_REFUND_FDGG" customMethodTypeId="CC_REFUND" customMethodName="fdggCCRefund" description="First Data Global Gateway refund"/>
+<CustomMethod customMethodId="CC_RELEASE_FDGG" customMethodTypeId="CC_RELEASE" customMethodName="fdggCCRelease" description="First Data Global Gateway release"/>
+
 </entity-engine-xml>

@@ -11,25 +11,28 @@
     }
     function setProductStockPlp(name, selectFeatureDiv) 
     {
-        var elm = document.getElementById("js_plpAddtoCart_"+selectFeatureDiv);
-        if(VARSTOCK[name]=="outOfStock")
-        {
-            elm.setAttribute("onClick","javascript:void(0)");
-            jQuery('#js_plpAddtoCart_'+selectFeatureDiv).addClass("inactiveAddToCart");
-        } 
-        else 
-        {
-            jQuery('#js_plpAddtoCart_'+selectFeatureDiv).removeClass("inactiveAddToCart");
-            elm.setAttribute("onClick","javascript:addItemPlpToCart('"+ selectFeatureDiv+"')");
+    	var elm = document.getElementById("js_plpAddtoCart_"+selectFeatureDiv);
+    	if(jQuery(elm).length)
+    	{
+	        if(VARSTOCK[name]=="outOfStock")
+	        {
+	            elm.setAttribute("onClick","javascript:void(0)");
+	            jQuery('#js_plpAddtoCart_'+selectFeatureDiv).addClass("inactiveAddToCart");
+	        } 
+	        else 
+	        {
+	            jQuery('#js_plpAddtoCart_'+selectFeatureDiv).removeClass("inactiveAddToCart");
+	            elm.setAttribute("onClick","javascript:addItemPlpToCart('"+ selectFeatureDiv+"')");
+	        }
+	        var elm = document.getElementById("js_addToWishlist_"+selectFeatureDiv);
+	        if (elm !=null )
+	        {
+	            elm.setAttribute("onClick","javascript:addItemPlpToWishlist('"+ selectFeatureDiv+"')");
+	            jQuery('#js_addToWishlist_'+selectFeatureDiv).removeClass("inactiveAddToWishlist");
+	        }
+	        
+	        checkProductInStorePlp(VARINSTORE[name], selectFeatureDiv);
         }
-        var elm = document.getElementById("js_addToWishlist_"+selectFeatureDiv);
-        if (elm !=null )
-        {
-            elm.setAttribute("onClick","javascript:addItemPlpToWishlist('"+ selectFeatureDiv+"')");
-            jQuery('#js_addToWishlist_'+selectFeatureDiv).removeClass("inactiveAddToWishlist");
-        }
-        
-        checkProductInStorePlp(VARINSTORE[name], selectFeatureDiv);
         
     }
     

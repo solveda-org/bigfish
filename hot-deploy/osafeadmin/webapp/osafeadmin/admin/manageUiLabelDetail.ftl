@@ -5,6 +5,9 @@
     <#assign category = uiLabelEntry.category!"" />
     <#assign value = uiLabelEntry.value!"" />
   </#if>
+  
+  <input type="hidden" name="labelFileProperty" value="${labelFileProperty!"ecommerce-UiLabel-xml-file"}"/>
+  <input type="hidden" name="deploymentLabelFileProperty" value="${deploymentLabelFileProperty!"ecommerce-deployment-UiLabel-xml-file"}"/>
     
         <div class="infoRow">
         <#-- ==== Spot Name === -->
@@ -20,6 +23,7 @@
                </div>
             </div>
         </div>
+        
         <div class="infoRow">
         <#-- ==== Category === -->
             <div class="infoEntry">
@@ -33,6 +37,7 @@
                </div>
             </div>
         </div>
+        
         <div class="infoRow">
         <#-- ==== Description === -->
             <div class="infoEntry">
@@ -43,6 +48,7 @@
                </div>
             </div>
         </div>
+        
         <#-- ====== Value ==== -->
         <div class="infoRow">
             <div class="infoEntry long">

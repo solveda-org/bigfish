@@ -62,6 +62,7 @@ public class SiteMapServices {
     public static String PRODUCT_LIST_URL = null;
     public static String PRODUCT_CATEGORY_LIST_URL = null;
     public static String STATIC_PAGE_URL = null;
+    public static String HTTP_HOST = null;
     public static String SITEMAP_VARIANT_FEATURES = null;
     private static ResourceBundleMapWrapper OSAFE_FRIENDLY_URL = null;
     private static final ResourceBundle OSAFE_PROP = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
@@ -71,10 +72,12 @@ public class SiteMapServices {
 
         Map<String, Object> result = ServiceUtil.returnSuccess();
         Delegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         String productStoreId = (String) context.get("productStoreId");
         String browseRootProductCategoryId = (String) context.get("browseRootProductCategoryId");
         String siteMapOutputDir = (String) context.get("siteMapOutputDir");
+        ProductContentWrapper productContentWrapper = null;
         OSAFE_FRIENDLY_URL = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("OSafeSeoUrlMap", Locale.getDefault());        	
         
         PRODUCT_DETAIL_URL = (String) context.get("productDetailUrl");
@@ -96,6 +99,11 @@ public class SiteMapServices {
             STATIC_PAGE_URL = Util.getProductStoreParm(delegator, productStoreId, "SITEMAP_STATIC_URL");
         }
         
+        HTTP_HOST = (String) context.get("httpHost");
+        if (UtilValidate.isEmpty(HTTP_HOST)) {
+        	HTTP_HOST = Util.getProductStoreParm(delegator, productStoreId, "HTTP_HOST");
+        }
+        
         SITEMAP_VARIANT_FEATURES = (String) context.get("siteMapVariantFeatures");
         if (UtilValidate.isEmpty(SITEMAP_VARIANT_FEATURES)) {
         	SITEMAP_VARIANT_FEATURES = Util.getProductStoreParm(delegator, productStoreId, "SITEMAP_VARIANT_FEATURES");
@@ -104,6 +112,7 @@ public class SiteMapServices {
         rootElement = document.createElement("urlset");
         document.appendChild(rootElement);
         rootElement.setAttribute("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
+        rootElement.setAttribute("xmlns:image", "http://www.google.com/schemas/sitemap-image/1.1");
         
         String url=null;
 
@@ -174,7 +183,13 @@ public class SiteMapServices {
                                 if (ProductWorker.isSellable(product)) 
                                 {
                                     url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null,null);
-                                    createSiteMapNode(url, usedUrlList);
+                                    productContentWrapper = new ProductContentWrapper(dispatcher, product, locale, "text/html");
+                                    String detailImageUrl = "";
+                                    if (UtilValidate.isNotEmpty(productContentWrapper.get("DETAIL_IMAGE_URL")))
+                                    {
+                                        detailImageUrl = productContentWrapper.get("DETAIL_IMAGE_URL").toString();
+                                    }
+                                    createSiteMapNode(url, detailImageUrl, usedUrlList);
                                     if (UtilValidate.isNotEmpty(SITEMAP_VARIANT_FEATURES))
                                     {
                                        List<GenericValue> lProductFeatureAndAppl = delegator.findByAndCache("ProductFeatureAndAppl",UtilMisc.toMap("productId", product.getString("productId"),"productFeatureTypeId",SITEMAP_VARIANT_FEATURES.toUpperCase(),"productFeatureApplTypeId","SELECTABLE_FEATURE"));
@@ -185,7 +200,7 @@ public class SiteMapServices {
                                             {
                                                 String featureDescription = productFeatureAndAppl.getString("description"); 
                                                 url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null,SITEMAP_VARIANT_FEATURES.toUpperCase() + ":" + featureDescription);
-                                                createSiteMapNode(url, usedUrlList);
+                                                createSiteMapNode(url, detailImageUrl, usedUrlList);
                                             }
                                         }
                                     }
@@ -410,6 +425,11 @@ public class SiteMapServices {
 
     private static void createSiteMapNode (String URL, List<String> usedUrlList)
     {
+    	createSiteMapNode(URL, null, usedUrlList);
+    }
+
+    private static void createSiteMapNode (String URL, String imageURL, List<String> usedUrlList)
+    {
         StringBuilder urlBuilder = new StringBuilder();
     	
     	try {
@@ -440,6 +460,14 @@ public class SiteMapServices {
 	            Element newChildElement = document.createElement("loc");
 	            newChildElement.appendChild(document.createTextNode(urlBuilder.toString()));
 	            newElement.appendChild(newChildElement);
+	        	if (UtilValidate.isNotEmpty(imageURL))
+	        	{
+		            Element imageElement = document.createElement("image:image");
+		            Element imageLocElement = document.createElement("image:loc");
+		            imageLocElement.appendChild(document.createTextNode(HTTP_HOST+imageURL));
+		            imageElement.appendChild(imageLocElement);
+		            newElement.appendChild(imageElement);
+	        	}
 	            rootElement.appendChild(newElement);
             }
     		

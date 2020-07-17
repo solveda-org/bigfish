@@ -1,6 +1,11 @@
 package com.osafe.events;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -18,17 +23,22 @@ import javax.servlet.http.HttpSession;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+
+import org.jdom.JDOMException;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.FileUtil;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.MessageString;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -45,9 +55,15 @@ import org.ofbiz.order.shoppingcart.ShoppingCart.CartShipInfo;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.product.config.ProductConfigWrapper;
 import org.ofbiz.security.Security;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.order.shoppingcart.ShoppingCartHelper;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.product.product.ProductContentWrapper;  
 import org.ofbiz.product.store.ProductStoreWorker;
@@ -63,6 +79,7 @@ public class ShoppingCartEvents {
     public static final String label_resource = "OSafeUiLabels";
     public static String module = ShoppingCartEvents.class.getName();
     public static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
+    private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
 
     public static String setPaymentMethodOnCart(HttpServletRequest request, HttpServletResponse response) 
     {
@@ -521,7 +538,8 @@ public class ShoppingCartEvents {
             		{
                 		for(Entry<String, String> itemAttr : mOrderItemAttributeAdd.entrySet()) 
                 		{
-                			cartItem.setOrderItemAttribute((String)itemAttr.getKey(), (String)itemAttr.getValue());
+                			String itemAttrValue = (String)itemAttr.getValue().replaceAll("&#39;", "'");
+                			cartItem.setOrderItemAttribute((String)itemAttr.getKey(), itemAttrValue);
                 		}
             			
             		}
@@ -958,7 +976,16 @@ public class ShoppingCartEvents {
         ShoppingCart shoppingCart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         ShoppingCartHelper cartHelper = new ShoppingCartHelper(delegator, dispatcher, shoppingCart); 
         Locale locale = UtilHttp.getLocale(request);
-        ResourceBundle PARAMETERS_RECURRENCE = UtilProperties.getResourceBundle("parameters_recurrence.xml", Locale.getDefault());
+        ResourceBundle PARAMETERS_RECURRENCE = null;
+        try
+        {
+        	PARAMETERS_RECURRENCE = UtilProperties.getResourceBundle("parameters_recurrence.xml", Locale.getDefault());
+        }
+        catch(IllegalArgumentException e)
+        {
+        	Debug.logWarning(e, "parameters_recurrence does not exist");
+        	PARAMETERS_RECURRENCE = null;
+        }
         //validate quantity value
         BigDecimal quantity = BigDecimal.ZERO;
         if (UtilValidate.isNotEmpty(quantityStr)) 
@@ -1003,7 +1030,19 @@ public class ShoppingCartEvents {
             			}
                 		sci.setIsModifiedPrice(true);
                 		sci.setShoppingList("SLT_AUTO_REODR", "00001");
-                		sci.setOrderItemAttribute("RECURRENCE_FREQ", PARAMETERS_RECURRENCE.getString("RECURRENCE_FREQ_DEFAULT"));
+                		
+                		
+                		String sRecurrenceFreq= "90";
+                        if (UtilValidate.isNotEmpty(PARAMETERS_RECURRENCE))
+                        {
+	                      	  String parameterRecurrenceFreqDefault = PARAMETERS_RECURRENCE.getString("RECURRENCE_FREQ_DEFAULT");
+	                      	  if (UtilValidate.isNotEmpty(parameterRecurrenceFreqDefault) && Util.isNumber(parameterRecurrenceFreqDefault))
+	                          {
+	                      		sRecurrenceFreq = parameterRecurrenceFreqDefault;
+	                          }
+                        }
+                        
+                		sci.setOrderItemAttribute("RECURRENCE_FREQ", sRecurrenceFreq);
             		}
             		break;
             	}
@@ -1453,7 +1492,18 @@ public class ShoppingCartEvents {
         String cartItemIndex = (String) paramMap.get("cartLineIndex");
         GenericValue autoUserLogin = (GenericValue)session.getAttribute("autoUserLogin");
         Map priceMap = FastMap.newInstance();
-        ResourceBundle PARAMETERS_RECURRENCE = UtilProperties.getResourceBundle("parameters_recurrence.xml", Locale.getDefault());
+        ResourceBundle PARAMETERS_RECURRENCE = null;
+        try
+        {
+        	PARAMETERS_RECURRENCE = UtilProperties.getResourceBundle("parameters_recurrence.xml", Locale.getDefault());
+        }
+        catch(IllegalArgumentException e)
+        {
+        	Debug.logWarning(e, "parameters_recurrence does not exist");
+        	PARAMETERS_RECURRENCE = null;
+        }
+        
+        
         try 
         	{
         	  if (shoppingCart.items().size() == 0)
@@ -1489,10 +1539,14 @@ public class ShoppingCartEvents {
                   cartItem.setDisplayPrice((BigDecimal)priceMap.get("price"));
                   cartItem.setIsModifiedPrice(true);
                   cartItem.setShoppingList("SLT_AUTO_REODR", "00001");
-                  String sIntervalNumber = PARAMETERS_RECURRENCE.getString("RECURRENCE_FREQ_DEFAULT");
-                  if (UtilValidate.isEmpty(sIntervalNumber))
+                  String sIntervalNumber= "90";
+                  if (UtilValidate.isNotEmpty(PARAMETERS_RECURRENCE))
                   {
-                  	 sIntervalNumber= "90";
+                	  String parameterRecurrenceFreqDefault = PARAMETERS_RECURRENCE.getString("RECURRENCE_FREQ_DEFAULT");
+                	  if (UtilValidate.isNotEmpty(parameterRecurrenceFreqDefault) && Util.isNumber(parameterRecurrenceFreqDefault))
+                      {
+                		  sIntervalNumber = parameterRecurrenceFreqDefault;
+                      }
                   }
 
             	  cartItem.setOrderItemAttribute("RECURRENCE_FREQ",sIntervalNumber);
@@ -1575,6 +1629,358 @@ public class ShoppingCartEvents {
         }
         
         return "success";
+    }
+    
+    /** Update personalizationMap */
+    public static void updatePersonalizationMap(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	Locale locale = UtilHttp.getLocale(request);
+        LocalDispatcher dispatcher = (LocalDispatcher)request.getAttribute("dispatcher");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue)session.getAttribute("userLogin");
+        ShoppingCart cart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
+        String productId = (String)request.getAttribute("product_id");
+        
+        Map<String, Object> params = UtilHttp.getParameterMap(request);
+        String inputName = (String)params.get("inputName");
+        
+        Map<String,Object> personalizationMap = (Map<String,Object>) session.getAttribute("personalizationMap");
+        if(UtilValidate.isEmpty(personalizationMap))
+        {
+        	personalizationMap = FastMap.newInstance();
+        }
+        
+        String textLinesNum = (String) params.get("textLinesNum");
+        String textLine = "";
+        String fontSize = "";
+        if(UtilValidate.isNotEmpty(textLinesNum))
+        {
+	    	for(int i = 0; i < new Integer(textLinesNum).intValue(); i++)
+	    	{
+	    		textLine = (String)params.get("textLine_" + i);
+	    		if(UtilValidate.isNotEmpty(textLine))
+	            {
+	    			personalizationMap.put("textLine_" + i, textLine);
+	            }
+	    		fontSize = (String)params.get("fontSize_" + i);
+	    		if(UtilValidate.isNotEmpty(fontSize))
+	            {
+	    			personalizationMap.put("fontSize_" + i, fontSize);
+	            }
+	    	}
+        }
+        String fontEnum = (String) params.get("fontEnum");
+        if(UtilValidate.isNotEmpty(fontEnum))
+        {
+        	personalizationMap.put("fontEnum", fontEnum);
+        }
+        String textAlign = (String) params.get("textAlign");
+        if(UtilValidate.isNotEmpty(textAlign))
+        {
+        	personalizationMap.put("textAlign", textAlign);
+        }
+        
+        if(UtilValidate.isNotEmpty(inputName))
+        {
+        	String updatedInputValue = (String)params.get(inputName);
+        	if(UtilValidate.isEmpty(updatedInputValue))
+            {
+        		personalizationMap.put(inputName, "");
+            }
+        }
+        
+        session.setAttribute("personalizationMap", personalizationMap);
+    }
+    
+    /** Upload a file and store it in the session */
+    public static String uploadFileToSession(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	Locale locale = UtilHttp.getLocale(request);
+        LocalDispatcher dispatcher = (LocalDispatcher)request.getAttribute("dispatcher");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue)session.getAttribute("userLogin");
+        ShoppingCart cart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
+        String productId = (String)request.getAttribute("product_id");
+        
+        List<MessageString> error_list = new ArrayList<MessageString>();
+        MessageString tmp = null;
+        ResourceBundle OSAFE_UI_LABELS = UtilProperties.getResourceBundle("OSafeUiLabels.xml", Locale.getDefault());
+        
+        try 
+        {            
+            ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, FileUtil.getFile("runtime/tmp")));
+            java.util.List lst = null;
+            try 
+            {
+                lst = dfu.parseRequest(request);
+            } 
+            catch (FileUploadException e) 
+            {
+                Debug.logError("uploadFileToSession ServletFileUpload" + e.getMessage(), module);
+                return "error";
+            }
+            
+            Map passedParams = FastMap.newInstance();
+            FileItem fi = null;
+            FileItem uploadedContent = null;
+            byte[] imageBytes = {};
+            String fileName = "";
+            String fileContentType = "";
+
+            for (int i = 0; i < lst.size(); i++) 
+            {
+                fi = (FileItem) lst.get(i);
+                String fieldName = fi.getFieldName();
+                if (fi.isFormField()) 
+                {
+                    String fieldStr = fi.getString();
+                    passedParams.put(fieldName, fieldStr);
+                } 
+                else if (fieldName.equals("fileUpload")) 
+                {
+                	uploadedContent = fi;
+                    imageBytes = uploadedContent.get();
+                    fileName = uploadedContent.getName();
+                    fileContentType = uploadedContent.getContentType();
+                }
+            }
+            
+            if(UtilValidate.isNotEmpty(passedParams))
+            {
+            	productId = (String)passedParams.get("fileUpload_productId");
+            	if(UtilValidate.isNotEmpty(productId))
+                {
+            		request.setAttribute("product_id", productId);
+                }
+            }
+            
+            ByteBuffer fileUpload = null;
+            if(UtilValidate.isNotEmpty(imageBytes))
+            {
+            	fileUpload = ByteBuffer.wrap(imageBytes);
+            }
+            
+            Map<String,Object> fileUploadMap = (Map<String,Object>) session.getAttribute("fileUploadMap");
+            if(UtilValidate.isEmpty(fileUploadMap))
+            {
+            	fileUploadMap = FastMap.newInstance();
+            }
+            
+            if(UtilValidate.isNotEmpty(imageBytes))
+            {
+            	if(UtilValidate.isNotEmpty(fileUpload))
+                {
+            		fileUploadMap.put("fileUpload", fileUpload);
+                }
+            	if(UtilValidate.isNotEmpty(fileName))
+                {
+            		fileUploadMap.put("fileName", fileName);
+                }
+            	if(UtilValidate.isNotEmpty(fileContentType))
+                {
+            		fileUploadMap.put("fileContentType", fileContentType);
+                }
+            	
+            	if(UtilValidate.isNotEmpty(fileUploadMap))
+                {
+                    if (UtilValidate.isNotEmpty(fileName))
+                    {
+            			String detailImagePathOsafe = "/osafe_theme/images/user_content/uploads/";
+            			String uploadContentPath = detailImagePathOsafe + "/" + UtilDateTime.nowAsString() + "/" + productId + "/";
+                        
+                        Map mResult =FastMap.newInstance();
+                        request.setAttribute("uploadedFile", fileUpload);
+                        request.setAttribute("_uploadedFile_fileName", fileName);
+                        request.setAttribute("_uploadedFile_contentType", fileContentType);
+                        request.setAttribute("imageResourceType", "file");
+                        request.setAttribute("imageFilePath", uploadContentPath);
+                        mResult = storeFileUpload(request, response);
+                        String imageUploadUrl = (String)mResult.get("imageUploadUrl");
+                        if (UtilValidate.isNotEmpty(imageUploadUrl))
+                        {
+                        	fileUploadMap.put("imageUploadUrl", imageUploadUrl);
+                        }
+                    }
+                    session.setAttribute("fileUploadMap", fileUploadMap);
+                }
+            }
+            
+            if(UtilValidate.isNotEmpty(productId))
+            {
+        		request.setAttribute("product_id", productId);
+            }
+            if (error_list.size() > 0)
+            {
+            	request.setAttribute("_ERROR_MESSAGE_LIST_", error_list);
+                return "error";
+            }
+            else
+            {
+            	
+            }
+        } 
+        catch (Exception e) 
+        {
+            Debug.logError(e, "uploadFileToSession " , module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return "success";
+    }
+    
+    /** Add customized functionality to addToCart */
+    public static String addToCartCustom(HttpServletRequest request, HttpServletResponse response) 
+    {
+        ShoppingCart cart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
+        HttpSession session = request.getSession();
+        //default ofbiz add to cart
+        String addToCartResult = org.ofbiz.order.shoppingcart.ShoppingCartEvents.addToCart(request, response);
+        
+        Integer itemIdInteger = (Integer) request.getAttribute("itemId");
+        
+        List<MessageString> error_list = new ArrayList<MessageString>();
+        MessageString tmp = null;
+        ResourceBundle OSAFE_UI_LABELS = UtilProperties.getResourceBundle("OSafeUiLabels.xml", Locale.getDefault());
+        
+        try 
+        {
+        	if(UtilValidate.isNotEmpty(itemIdInteger))
+            {
+        		int itemId = itemIdInteger.intValue();
+            	ShoppingCartItem cartItem = cart.findCartItem(itemId);
+            	if(UtilValidate.isNotEmpty(cartItem))
+                {
+            		String productId = cartItem.getProductId();
+            		String textLinesNum = request.getParameter("textLinesNum");
+            		if(UtilValidate.isNotEmpty(textLinesNum))
+                    {
+	            		String textLine = "";
+	                	String fontSize = "";
+	                	for(int i = 0; i < new Integer(textLinesNum).intValue(); i++)
+	                	{
+	                		textLine = (String)request.getParameter("textLine_" + i);
+	                		if(UtilValidate.isNotEmpty(textLine))
+	                        {
+	                			cartItem.setOrderItemAttribute("TEXT_LINE_" + i, textLine);
+	                        }
+	                		fontSize = (String)request.getParameter("fontSize_" + i);
+	                		if(UtilValidate.isNotEmpty(fontSize))
+	                        {
+	                			cartItem.setOrderItemAttribute("FONT_SIZE_" + i, fontSize);
+	                        }
+	                	}
+	            		
+	            		String fontEnum = request.getParameter("fontEnum");
+	            		if(UtilValidate.isNotEmpty(fontEnum))
+	                    {
+	            			cartItem.setOrderItemAttribute("FONT_FAMILY", fontEnum);
+	                    }
+	            		String textAlign = request.getParameter("textAlign");
+	            		if(UtilValidate.isNotEmpty(textAlign))
+	                    {
+	            			cartItem.setOrderItemAttribute("TEXT_ALIGN", textAlign);
+	                    }
+	                }
+            		
+            		String uploadFileName = request.getParameter("uploadFileName");
+            		if(UtilValidate.isNotEmpty(uploadFileName))
+                    {
+            			Map<String,Object> fileUploadMap = (Map<String,Object>) session.getAttribute("fileUploadMap");
+	                    if(UtilValidate.isNotEmpty(fileUploadMap))
+	                    {
+	                        String  imageUploadUrl = (String) fileUploadMap.get("imageUploadUrl");
+	                        if (UtilValidate.isNotEmpty(imageUploadUrl))
+	                        {
+	                            if (UtilValidate.isNotEmpty(imageUploadUrl))
+	                            {
+	                            	cartItem.setOrderItemAttribute("IMAGE_UPLOAD_URL", imageUploadUrl);
+	                            }
+	                        }
+	                    }
+                    }
+            		
+            		//empty session maps after adding to cart
+            		Map<String,Object> emptyMap = FastMap.newInstance();
+                    session.setAttribute("fileUploadMap", emptyMap);
+                    session.setAttribute("personalizationMap", emptyMap);            		
+                }
+            }
+        } 
+        catch (Exception e) 
+        {
+            Debug.logError(e, "addToCartCustom " , module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return addToCartResult;
+    }
+    
+    /* Stores uploaded file to the server */
+    public static Map<String, Object> storeFileUpload(HttpServletRequest request, HttpServletResponse response) throws IOException, JDOMException 
+    {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        ByteBuffer imageData = (ByteBuffer)request.getAttribute("uploadedFile");
+        String fileName = (String)request.getAttribute("_uploadedFile_fileName");
+        String contentType = (String)request.getAttribute("_uploadedFile_contentType");
+        String imageResourceType = (String)request.getAttribute("imageResourceType");
+        String imageFilePath = (String)request.getAttribute("imageFilePath");
+        Map<String, Object> results = FastMap.newInstance();
+        Map<String, Object> context = FastMap.newInstance();
+        
+        String imageUrl = "";
+        String filenameToUse = "";
+        
+        if (imageResourceType.equals("file")) 
+        {
+            String osafeThemeServerPath = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("osafeThemeServer"), context);
+            int extensionIndex = fileName.lastIndexOf(".");
+            if (extensionIndex == -1) {
+            	filenameToUse = fileName;
+            } else {
+            	filenameToUse = fileName.substring(0, extensionIndex);
+            }
+            filenameToUse = StringUtil.replaceString(filenameToUse, " ", "_");
+            
+            List<GenericValue> fileExtension = FastList.newInstance();
+            try {
+                fileExtension = delegator.findByAnd("FileExtension", UtilMisc.toMap("mimeTypeId", contentType));
+            } catch (GenericEntityException e) {
+                Debug.logError(e, module);
+                return ServiceUtil.returnError(e.getMessage());
+            }
+
+            GenericValue extension = EntityUtil.getFirst(fileExtension);
+            if (extension != null) {
+                filenameToUse += "." + extension.getString("fileExtensionId");
+            }
+
+            File file = new File(osafeThemeServerPath + imageFilePath + filenameToUse);
+            
+            if (!new File(osafeThemeServerPath + imageFilePath).exists()) {
+            	new File(osafeThemeServerPath + imageFilePath).mkdirs();
+    	    }
+            
+            try {
+                RandomAccessFile out = new RandomAccessFile(file, "rw");
+                out.write(imageData.array());
+                out.close();
+            } catch (FileNotFoundException e) {
+                Debug.logError(e, module);
+                return ServiceUtil.returnError("Unable to open file for writing: " + file.getAbsolutePath());
+            } catch (IOException e) {
+                Debug.logError(e, module);
+                return ServiceUtil.returnError("Unable to write binary data to: " + file.getAbsolutePath());
+            }
+
+            imageUrl = imageFilePath + filenameToUse;
+        }
+        
+        results.put("imageUploadUrl", imageUrl);
+        results.put("result", "success");
+        return results;
     }
     
 }

@@ -14,12 +14,19 @@
 <#assign setAsDefaultAccount= parameters.setAsDefaultAccount?if_exists/>
 <#if paymentMethodId?has_content>
     <#assign eftAccount = delegator.findOne("EftAccount", Static["org.ofbiz.base.util.UtilMisc"].toMap("paymentMethodId", paymentMethodId), true)/>
-    <#assign nameOnAccount = eftAccount.nameOnAccount!""/>
-    <#assign bankName = eftAccount.bankName!""/>
-    <#assign routingNumber = eftAccount.routingNumber!""/>
-    <#assign accountNumber = eftAccount.accountNumber!""/>
-    <#assign accountType = eftAccount.accountType!""/>
-    <input type="hidden" name="mode" value="${mode!""}"/>
+    <#if eftAccount?has_content>
+       <#assign mode= "edit"/>
+	   <#assign nameOnAccount = eftAccount.nameOnAccount!""/>
+	   <#assign bankName = eftAccount.bankName!""/>
+	   <#assign routingNumber = eftAccount.routingNumber!""/>
+	   <#assign accountNumber = eftAccount.accountNumber!""/>
+	   <#assign accountType = eftAccount.accountType!""/>
+       <#assign postalAddressData = eftAccount.getRelatedOne("PostalAddress")!"" />
+       <#if postalAddressData?has_content>
+         <#assign postalAddressContactMechId = postalAddressData.contactMechId!"" />
+       </#if>
+	   <input type="hidden" name="mode" value="${mode!""}"/>
+	</#if>
 </#if>
 <input type="hidden" name="paymentMethodId" value="${paymentMethodId!""}"/>
 <#if paymentMethodId?has_content && userLogin?has_content && mode == "edit">
@@ -74,7 +81,7 @@
 	            <#assign accountNumberDisplay = accountNumber>
 	          </#if>
 	          <input type="text" readonly="readonly" class="accountNumber" maxlength="30" id="accountNumber"  name="accountNumberDisplay" value="${accountNumberDisplay!""}"/>
-	          <input type="hidden"  id="accountNumber"  name="accountNumber" value="${accountNumber!""}"/>
+	          <input type="hidden"  id="accountNumber"  name="accountNumber" value="${accountNumberDisplay!""}"/>
 	      <#else>
 	          <input type="text" class="accountNumber" maxlength="255" id="accountNumber"  name="accountNumber" value="${requestParameters.accountNumber!accountNumber!""}"/>
 	      </#if>
@@ -98,5 +105,19 @@
       <label class="radioOptionLabel"><input type="radio" id="setAsDefaultAccount" name="setAsDefaultAccount" value="Y" <#if ((setAsDefaultAccount?exists && setAsDefaultAccount?string == "Y"))>checked="checked"</#if>/><span>${uiLabelMap.YesLabel}</span></label>
       <label class="radioOptionLabel"><input type="radio" id="setAsDefaultAccount" name="setAsDefaultAccount" value="N" <#if ((setAsDefaultAccount?exists && setAsDefaultAccount?string == "N")|| !(setAsDefaultAccount?has_content))>checked="checked"</#if>/><span>${uiLabelMap.NoLabel}</span></label>
     </div>
-  </div>
+
+    <#assign contactMechList = context.get(fieldPurpose+"ContactMechList") />
+    <#if contactMechList?has_content>
+	    ${setRequestAttribute("DISPLAY_FORMAT", addressSelectionDisplayFormat!)}
+	    ${setRequestAttribute("contactMechList", contactMechList!)}
+	    ${setRequestAttribute("addressFieldPurpose",fieldPurpose!)}
+	    ${setRequestAttribute("addressSelectionInputName",addressSelectionInputName!)}
+	    ${setRequestAttribute("addressSelectionCaption",addressSelectionCaption!)}
+	    ${setRequestAttribute("addAddressAction",addAddressAction!)}
+	    ${setRequestAttribute("paymentMethodId",paymentMethodId!)}
+	    ${setRequestAttribute("selectedContactMechId",postalAddressContactMechId!)}
+	    ${screens.render("component://osafe/widget/CommonScreens.xml#postalAddressSelection")}
+    </#if>
+
+   </div>
 </div>

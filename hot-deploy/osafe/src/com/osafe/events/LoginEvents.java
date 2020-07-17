@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -24,6 +25,10 @@ import org.ofbiz.common.login.LoginServices;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityFunction;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 import org.ofbiz.party.contact.ContactHelper;
@@ -89,9 +94,13 @@ public class LoginEvents {
 
         GenericValue supposedUserLogin = null;
 
-        try {
-            supposedUserLogin = delegator.findOne("UserLogin", false, "userLoginId", userLoginId);
-        } catch (GenericEntityException gee) {
+        try 
+        {
+            String userLoginIdNameUpCase = userLoginId.toUpperCase();
+        	List<GenericValue> userLoginList = delegator.findList("UserLogin", EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("userLoginId"), EntityOperator.EQUALS, userLoginIdNameUpCase), null, null, null, false);
+        	supposedUserLogin = EntityUtil.getFirst(userLoginList);
+        } 
+        catch (GenericEntityException gee) {
             Debug.logWarning(gee, "", module);
         }
         if (supposedUserLogin == null) {
@@ -154,8 +163,11 @@ public class LoginEvents {
         GenericValue supposedUserLogin = null;
         String passwordToSend = null;
 
-        try {
-            supposedUserLogin = delegator.findOne("UserLogin", false, "userLoginId", userLoginId);
+        try 
+        {
+            String userLoginIdNameUpCase = userLoginId.toUpperCase();
+        	List<GenericValue> userLoginList = delegator.findList("UserLogin", EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("userLoginId"), EntityOperator.EQUALS, userLoginIdNameUpCase), null, null, null, false);
+        	supposedUserLogin = EntityUtil.getFirst(userLoginList);
             if (supposedUserLogin == null) {
                 // the Username was not found
                 errMsg = UtilProperties.getMessage(resource, "loginevents.username_not_found_reenter", UtilHttp.getLocale(request));

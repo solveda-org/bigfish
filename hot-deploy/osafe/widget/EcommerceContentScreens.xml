@@ -550,6 +550,73 @@
             </widgets>
         </section>
     </screen>
+
+    <screen name="PLP_CONTENT_01">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PLP_CONTENT_01}"/>
+                <set field="contentContainerId" value="plpContent01"/>
+                <set field="contentContainerStyle" value="plpContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PLP_CONTENT_02">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PLP_CONTENT_02}"/>
+                <set field="contentContainerId" value="plpContent02"/>
+                <set field="contentContainerStyle" value="plpContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PLP_CONTENT_03">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PLP_CONTENT_03}"/>
+                <set field="contentContainerId" value="plpContent03"/>
+                <set field="contentContainerStyle" value="plpContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PLP_CONTENT_04">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PLP_CONTENT_04}"/>
+                <set field="contentContainerId" value="plpContent04"/>
+                <set field="contentContainerStyle" value="plpContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PLP_CONTENT_05">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PLP_CONTENT_05}"/>
+                <set field="contentContainerId" value="plpContent05"/>
+                <set field="contentContainerStyle" value="plpContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="CHECKOUT_CC_VERIFY">
         <section>
             <actions>

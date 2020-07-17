@@ -45,6 +45,9 @@
 <ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="EXT_PAYPAL" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL" paymentGatewayConfigId="PAYPAL_CONFIG" applyToAllProducts="Y"/>
 <ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="EXT_PAYPAL" paymentServiceTypeEnumId="PRDS_PAY_RELEASE" paymentGatewayConfigId="PAYPAL_CONFIG" paymentCustomMethodId="PAYPAL_RELEASE"/>
 
+<!-- COMPANY Product Store Role  -->
+<ProductStoreRole partyId="@store.storePrefix@_COMPANY" productStoreId="@store.productStoreId@" roleTypeId="INTERNAL_ORGANIZATIO" fromDate="2012-10-05 12:37:06.000"></ProductStoreRole>
+
 <!-- Website -->
 <WebSite webSiteId="@store.webSiteId@" siteName="@store.storePrefix@ Site" httpHost="@url.http.host@" httpPort="@url.port.http@" httpsHost="@url.https.host@" httpsPort="@url.port.https@" enableHttps="Y" standardContentPrefix="" secureContentPrefix="" cookieDomain="" visualThemeSetId="ECOMMERCE" productStoreId="@store.productStoreId@" allowProductStoreChange="N" />
 <WebSite webSiteId="@store.storePrefix@_admin_site" siteName="@store.storePrefix@ Admin Site" httpHost="@url.http.host@" httpPort="@url.port.http@" httpsHost="@url.https.host@" httpsPort="@url.port.https@" enableHttps="Y" standardContentPrefix="" secureContentPrefix="" cookieDomain="" visualThemeSetId="ECOMMERCE" productStoreId="@store.productStoreId@" allowProductStoreChange="N" />
@@ -213,6 +216,12 @@
 <DataResource dataResourceId="PDP_CONTENT_04@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_04@extendedStore.suffix@" localeString="en_US"/>
 <DataResource dataResourceId="PDP_CONTENT_05@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
 
+<DataResource dataResourceId="PLP_CONTENT_01@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_01@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PLP_CONTENT_02@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_02@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PLP_CONTENT_03@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_03@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PLP_CONTENT_04@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_04@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PLP_CONTENT_05@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
+
 <DataResource dataResourceId="CHECKOUT_CC_VRFY@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="CHECKOUT_CC_VRFY@extendedStore.suffix@" localeString="en_US"/>
 <DataResource dataResourceId="CHECKOUT_EFT@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="CHECKOUT_EFT@extendedStore.suffix@" localeString="en_US"/>
 <DataResource dataResourceId="MULTI_ADDR@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_ADDR@extendedStore.suffix@" localeString="en_US"/>
@@ -278,6 +287,12 @@
 <ElectronicText dataResourceId="PDP_CONTENT_03@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PDP_CONTENT_04@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PDP_CONTENT_05@extendedStore.suffix@"/>
+
+<ElectronicText dataResourceId="PLP_CONTENT_01@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PLP_CONTENT_02@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PLP_CONTENT_03@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PLP_CONTENT_04@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PLP_CONTENT_05@extendedStore.suffix@"/>
 
 <ElectronicText dataResourceId="CHECKOUT_CC_VRFY@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="CHECKOUT_EFT@extendedStore.suffix@"/>
@@ -345,6 +360,12 @@
 <Content contentId="PDP_CONTENT_04@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_04@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="PDP_CONTENT_05@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
 
+<Content contentId="PLP_CONTENT_01@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_01@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PLP_CONTENT_02@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_02@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PLP_CONTENT_03@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_03@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PLP_CONTENT_04@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_04@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PLP_CONTENT_05@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
+
 <Content contentId="CHECKOUT_CC_VRFY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout CC VRFY Content" contentName="Checkout CC VRFY Content" dataResourceId="CHECKOUT_CC_VRFY@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="CHECKOUT_EFT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Special check-out page content to show where EFT account can be found" contentName="EFT account Helper" dataResourceId="CHECKOUT_EFT@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="MULTI_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout Multi Address Content" contentName="Checkout Multi Address Content" dataResourceId="MULTI_ADDR@extendedStore.suffix@" localeString="en_US"/>
@@ -409,6 +430,12 @@
 <ContentRole contentId="PDP_CONTENT_03@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_04@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_05@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+
+<ContentRole contentId="PLP_CONTENT_01@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PLP_CONTENT_02@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PLP_CONTENT_03@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PLP_CONTENT_04@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PLP_CONTENT_05@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 
 <ContentRole contentId="CHECKOUT_CC_VRFY@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="CHECKOUT_EFT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -699,6 +726,12 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_03" contentId="PDP_CONTENT_03@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_04" contentId="PDP_CONTENT_04@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_05" contentId="PDP_CONTENT_05@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_01" contentId="PLP_CONTENT_01@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_02" contentId="PLP_CONTENT_02@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_03" contentId="PLP_CONTENT_03@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_04" contentId="PLP_CONTENT_04@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_05" contentId="PLP_CONTENT_05@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="CHECKOUT_CC_VERIFY" contentId="CHECKOUT_CC_VRFY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="CHECKOUT_EFT_GUIDE" contentId="CHECKOUT_EFT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>

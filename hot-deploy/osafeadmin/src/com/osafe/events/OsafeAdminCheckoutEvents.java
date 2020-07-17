@@ -28,6 +28,7 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderChangeHelper;
+import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.CartItemModifyException;
 import org.ofbiz.order.shoppingcart.CheckOutHelper;
 import org.ofbiz.order.shoppingcart.ItemNotFoundException;
@@ -836,6 +837,28 @@ public class OsafeAdminCheckoutEvents {
 		    		request.setAttribute("_ERROR_MESSAGE_LIST_", error_list);
 	            	return "error";
 	            }
+		    	else
+		    	{
+		    		//If Order is fully captured and order status is ORDER_HOLD change status to ORDER_APPROVED
+		    		try {
+		    			GenericValue orderHeader = OrderReadHelper.getOrderHeader(delegator, orderId);
+		    			if ("ORDER_HOLD".equals(orderHeader.getString("statusId")))
+		    			{
+		                    OrderChangeHelper.orderStatusChanges(dispatcher, sysUserLogin, orderId, "ORDER_APPROVED", null, "ITEM_APPROVED", null);
+                            Map<String, String> emailContext = UtilMisc.toMap("orderId", orderId, "userLogin", sysUserLogin);
+                            dispatcher.runAsync("sendOrderConfirmation",emailContext);
+		    			}
+		    			
+		    		}
+                    catch (Exception e)
+                    {
+                    	Debug.logError("Problem with order status change - " + orderId,module);
+                    	Debug.logError(e,module);
+                   	 
+                    }
+
+
+		    	}
 	    	}
     	}
         return "sucess";

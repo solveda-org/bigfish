@@ -27,11 +27,13 @@ if (UtilValidate.isNotEmpty(parameters.productId))
     {
         productVariantListPrice =  OsafeAdminUtil.getProductPrice(request, product.productId, "LIST_PRICE");
         productVariantSalePrice = OsafeAdminUtil.getProductPrice(request, product.productId, "DEFAULT_PRICE");
+        productVariantRecurringPrice = OsafeAdminUtil.getProductPrice(request, product.productId, "DEFAULT_PRICE","RECURRING_CHARGE");
         GenericValue parent = ProductWorker.getParentProduct(product.productId, delegator);
         if (UtilValidate.isNotEmpty(parent))
          {
             productListPrice =  OsafeAdminUtil.getProductPrice(request, parent.productId, "LIST_PRICE");
             productDefaultPrice = OsafeAdminUtil.getProductPrice(request, parent.productId, "DEFAULT_PRICE");
+            productRecurringPrice = OsafeAdminUtil.getProductPrice(request, parent.productId, "DEFAULT_PRICE","RECURRING_CHARGE");
 			productContentWrapper = new ProductContentWrapper(parent, request);
          }
          if (productVariantListPrice) 
@@ -42,6 +44,10 @@ if (UtilValidate.isNotEmpty(parameters.productId))
          if (productVariantSalePrice) 
          {
              context.productVariantSalePrice = productVariantSalePrice;
+         }
+         if (productVariantRecurringPrice) 
+         {
+             context.productVariantRecurringPrice = productVariantRecurringPrice;
          }
          
        // get QUANTITY price break rules for virtual
@@ -75,6 +81,7 @@ if (UtilValidate.isNotEmpty(parameters.productId))
     {
         productListPrice =  OsafeAdminUtil.getProductPrice(request, product.productId, "LIST_PRICE");
         productDefaultPrice = OsafeAdminUtil.getProductPrice(request, product.productId, "DEFAULT_PRICE");
+        productRecurringPrice = OsafeAdminUtil.getProductPrice(request, product.productId, "DEFAULT_PRICE","RECURRING_CHARGE");
         productContentWrapper = new ProductContentWrapper(product, request);
     }
     String productDetailHeading = "";
@@ -98,9 +105,14 @@ if (UtilValidate.isNotEmpty(parameters.productId))
         context.productListPrice = productListPrice;
     }
     
-    if (productDefaultPrice) 
+    if (UtilValidate.isNotEmpty(productDefaultPrice)) 
     {
         context.productDefaultPrice = productDefaultPrice;
+    }
+    
+    if (UtilValidate.isNotEmpty(productRecurringPrice)) 
+    {
+        context.productRecurringPrice = productRecurringPrice;
     }
     
    // get QUANTITY price break rules to show

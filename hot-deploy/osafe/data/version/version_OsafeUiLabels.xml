@@ -2787,6 +2787,11 @@
         <category>MESSAGE_INFO</category>
         <description>SelectAddressCaption</description>
     </property>
+    <property key="SelectBillingAddressCaption">
+        <value xml:lang="en">Select Billing Address:</value>
+        <category>MESSAGE_INFO</category>
+        <description>SelectBillingAddressCaption</description>
+    </property>
     <property key="CatalogNameInfo">
         <value xml:lang="en">Catalog Name: </value>
         <category>MESSAGE_INFO</category>
@@ -4503,11 +4508,6 @@
         <description>ReOrderCheckBoxCaption</description>
     </property>
     <!-- === Recurring Order Items ===== -->
-    <property key="OrderNoRecurringOrderFoundInfo">
-        <value xml:lang="en">There are no Recurring Orders on file</value>
-        <category>RECURRING_ORDER</category>
-        <description>OrderNoOrderFoundInfo</description>
-    </property>
     <property key="CartCheckBoxCaption">
         <value xml:lang="en">Check to Add:</value>
         <category>CART</category>
@@ -4974,6 +4974,66 @@
         <value xml:lang="en">We are sorry but you do not have permission to view this information!</value>
         <category>MESSAGE_ERROR</category>
         <description>SecurityAccessError</description>
+    </property>
+    <property key="PersonalizedTextInstructions">
+        <value xml:lang="en">Enter up to ${textLinesNum} lines of text below:</value>
+        <category>MULTI_USE</category>
+        <description>PersonalizedTextInstructions</description>
+    </property>
+    <property key="LineNumberCaption">
+        <value xml:lang="en">Line ${idx}:</value>
+        <category>MULTI_USE</category>
+        <description>LineNumberCaption</description>
+    </property>
+    <property key="FontSizeLabel">
+        <value xml:lang="en">Font Size</value>
+        <category>MULTI_USE</category>
+        <description>FontSizeLabel</description>
+    </property>
+    <property key="ChooseFontAlignmentInstructions">
+        <value xml:lang="en">Choose Your Font and Alignment</value>
+        <category>MULTI_USE</category>
+        <description>ChooseFontAlignmentInstructions</description>
+    </property>
+    <property key="FontCaption">
+        <value xml:lang="en">Font:</value>
+        <category>MULTI_USE</category>
+        <description>FontCaption</description>
+    </property>
+    <property key="FontAlignmentCaption">
+        <value xml:lang="en">Alignment:</value>
+        <category>MULTI_USE</category>
+        <description>FontAlignmentCaption</description>
+    </property>
+    <property key="UploadFileInstructions">
+        <value xml:lang="en">Upload Your Photograph or Image:</value>
+        <category>MULTI_USE</category>
+        <description>UploadFileInstructions</description>
+    </property>
+    <property key="UploadImageBtn">
+        <value xml:lang="en">Upload Image</value>
+        <category>MULTI_USE</category>
+        <description>UploadImageBtn</description>
+    </property>
+    <property key="ReplaceImageBtn">
+        <value xml:lang="en">Replace Image</value>
+        <category>MULTI_USE</category>
+        <description>ReplaceImageBtn</description>
+    </property> 
+    <property key="FileCaption">
+        <value xml:lang="en">File:</value>
+        <category>MULTI_USE</category>
+        <description>FileCaption</description>
+    </property>
+    <property key="FileUploadTitle">
+        <value xml:lang="en">Upload File</value>
+        <category>MULTI_USE</category>
+        <description>FileUploadTitle</description>
+    </property>
+    <property key="UploadFileInformation">
+        <value xml:lang="en">Please note that your uploaded image will not be displayed on the image of the product seen on this page. However, you can rest assure that Memorable Dogs will use YOUR photograph or YOUR Memorable Dog, and we know you are going to LOVE the final product! WE GUARANTEE IT!</value>
+        <category>MULTI_USE</category>
+        <description>UploadFileInformation</description>
     </property>
     
 </resource>

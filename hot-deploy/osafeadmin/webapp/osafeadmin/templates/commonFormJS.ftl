@@ -17,26 +17,37 @@
         if(jQuery('#ckeditor').length)
         {
             CKEDITOR.disableAutoInline = true;
-            CKEDITOR.replace( 'ckeditor' );
+            CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
+            var editor = CKEDITOR.replace( 'ckeditor',{
+              toolbar: [
+		        { name: 'document',items:['Cut','Copy','Paste','-','Undo','Redo']},	
+		        { name: 'basicstyles',items:[ 'Bold', 'Italic','Underline' ]},
+                { name: 'paragraph',items:[ 'NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl']},
+                { name: 'colors',items:['TextColor','BGColor']},
+                { name: 'styles',items:['Font','FontSize']}
+	          ]
+            });
         }
 		<#if errorMessageList?has_content>
-          <#list errorMessageList as errorMsg>           
-            try
-            { 				
-                <#if errorMsg.getClass().getName() == "org.ofbiz.base.util.MessageString">
-                	var fld="${errorMsg.getFieldName()}";
-    				if(fld!="" || fld!=undefined)
-    				{
-    		  			jQuery('[name='+fld+']').addClass("inError");
-    		  			
-    		  			<#-- For Custom Attributes Error Field -->
-    		  			if(fld.startsWith("FIELD_ERROR_"))
-    		  			{
-    		  			    jQuery('.'+fld).addClass("inError");
-    		  			}
-    				}            
-				</#if>
-			}catch(e){}    
+          <#list errorMessageList as errorMsg> 
+          	<#if errorMsg?has_content && errorMsg.getClass()?has_content>         
+	            try
+	            { 				
+	                <#if errorMsg.getClass().getName() == "org.ofbiz.base.util.MessageString">
+	                	var fld="${errorMsg.getFieldName()}";
+	    				if(fld!="" || fld!=undefined)
+	    				{
+	    		  			jQuery('[name='+fld+']').addClass("inError");
+	    		  			
+	    		  			<#-- For Custom Attributes Error Field -->
+	    		  			if(fld.startsWith("FIELD_ERROR_"))
+	    		  			{
+	    		  			    jQuery('.'+fld).addClass("inError");
+	    		  			}
+	    				}            
+					</#if>
+				}catch(e){} 
+			</#if>   
             </#list>
         </#if>
     
@@ -162,7 +173,7 @@
         		jQuery("#orderAdjustmentDescription").val("${orderAdjustmentDesc}");
         	</#if>
         	<#if orderAdjustmentAmount?has_content>
-        		jQuery("#orderAdjustmentAmount").val("${orderAdjustmentAmount}");
+        		jQuery("#orderAdjustmentAmount").val("${StringUtil.wrapString(orderAdjustmentAmount!)}");
         	</#if>
         }
         
@@ -2632,6 +2643,8 @@ function setRowNo(rowNo) {
     jQuery(document).ready(function () 
     {
     	<#if mode?exists && mode?has_content && mode=="add">
+    	   if(jQuery('#divSequenceKey').length)
+           {
     		var newKeyText = jQuery('#divSequenceKey').val();
 	    	jQuery('input[name="key"]').val(newKeyText);
 			jQuery('#divSequenceKey').change(function () 
@@ -2640,6 +2653,7 @@ function setRowNo(rowNo) {
 	    		jQuery('input[name="key"]').val(newKeyText);
 	    		
 	    	});
+	       }
     	</#if>
     	
     	

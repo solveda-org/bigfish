@@ -5,12 +5,18 @@
   <#if productDefaultPrice?has_content>
     <#assign defaultPrice = productDefaultPrice.price!"" />
   </#if>
+  <#if productRecurringPrice?has_content>
+    <#assign recurringPrice = productRecurringPrice.price!"" />
+  </#if>
   
   <#if productVariantListPrice?has_content>
     <#assign variantListPrice = productVariantListPrice.price!"" />
   </#if>
   <#if productVariantSalePrice?has_content>
     <#assign variantSalePrice = productVariantSalePrice.price!"" />
+  </#if>
+  <#if productVariantRecurringPrice?has_content>
+    <#assign variantRecurringPrice = productVariantRecurringPrice.price!"" />
   </#if>
   
   <#if currentProduct.introductionDate?has_content>
@@ -76,25 +82,7 @@
       </div>
    </#if>
    
-   <div class="infoRow column">
-        <div class="infoEntry">
-            <div class="infoCaption">
-                <label>${uiLabelMap.ProductHeightCaption}</label>
-            </div>
-            <div class="infoValue">
-                <#if (mode?has_content)>
-                    <input class="textEntry textAlignRight" maxlength="10" type="text" id="productHeight" name="productHeight" value="${parameters.productHeight!productHeight!""}"/>
-                </#if>
-            </div>
-            <div class="infoIcon">
-                <#if lengthUom?has_content>
-                    ${lengthUom.abbreviation!""}
-  					<input type="hidden" name="heightUomId" id="heightUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
-                </#if>
-            </div>
-        </div>
-    </div>
-    
+  
    <#if (mode?has_content && mode =='edit' && isVariant != 'Y') || (mode?has_content && mode =='add' && !virtualProduct?has_content)>
        <div class="infoRow column">
            <div class="infoEntry">
@@ -128,25 +116,64 @@
         <#if productPriceCondList?has_content><span class="pricingInfo">${uiLabelMap.PricingRulesApplyInfo}</span></#if>
       </div>
     </#if>
+
+   <#if (mode?has_content && mode =='edit' && isVariant != 'Y') || (mode?has_content && mode =='add' && !virtualProduct?has_content)>
+       <div class="infoRow column">
+           <div class="infoEntry">
+               <div class="infoCaption">
+                   <label>${uiLabelMap.RecurringPriceCaption}</label>
+               </div>
+               <div class="infoValue">
+                   <#if (mode?has_content && mode == "add")>
+                     <input type="text"  class="textEntry textAlignRight" name="recurringPrice" id="defaultPrice" value="${parameters.recurringPrice!recurringPrice!}"/>
+                   <#elseif mode?has_content && mode == "edit">
+                     <input type="text"  class="textEntry textAlignRight" name="recurringPrice" id="recurringPrice" value="<#if parameters.recurringPrice?has_content || recurringPrice?has_content>${parameters.recurringPrice!recurringPrice!}</#if>"/>
+                   </#if>
+               </div>
+            </div>
+        </div>
+    <#else>
+       <div class="infoRow column">
+           <div class="infoEntry">
+               <div class="infoCaption"></div>
+               <div class="infoValue"></div>
+           </div>
+        </div>
+     <!-- Place Holder for Variant Recurrence Price
+      <div class="infoRow column">
+        <div class="infoEntry">
+          <div class="infoCaption">
+            <label>${uiLabelMap.RecurringPriceCaption}</label>
+          </div>
+          <div class="infoValue">
+            <input type="text"  class="textEntry textAlignRight" name="variantRecurringPrice" id="variantRecurringPrice" value="<#if parameters.variantRecurringPrice?has_content || variantRecurringPrice?has_content>${parameters.variantRecurringPrice!variantRecurringPrice!}</#if>"/>
+          </div>
+          <div class="infoIcon">
+              <#assign tooltipData = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "VariantRecurringPriceInfo", Static["org.ofbiz.base.util.UtilMisc"].toList("${globalContext.currencySymbol!}${recurringPrice!}"), locale)/>
+              <a href="javascript:void(0);" onMouseover="showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+          </div>
+        </div>
+      </div>
+     -->
+    </#if>
     
     <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label>${uiLabelMap.ProductWidthCaption}</label>
+                <label>${uiLabelMap.IntroducedDateCaption}</label>
             </div>
             <div class="infoValue">
-                <#if (mode?has_content)>
-                    <input class="textEntry textAlignRight" maxlength="10" type="text" id="productWidth" name="productWidth" value="${parameters.productWidth!productWidth!""}"/>
-                </#if>
-            </div>
-            <div class="infoIcon">
-                <#if lengthUom?has_content>
-                    ${lengthUom.abbreviation!""}
-  					<input type="hidden" name="widthUomId" id="widthUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
-                </#if>
+                <div class="entryInput from">
+                  <#if (mode?has_content && mode == "add")>
+                    <input class="dateEntry datePicker" type="text" id="introductionDate" name="introductionDate" maxlength="40" value="${parameters.introductionDate!""}"/>
+                  <#elseif mode?has_content && mode == "edit">
+                    <input class="dateEntry datePicker" type="text" id="introductionDate" name="introductionDate" maxlength="40" value="${parameters.introductionDate!introductionDate!""}"/>
+                  </#if>
+                </div>
             </div>
         </div>
     </div>
+    
     
     <div class="infoRow column">
         <div class="infoEntry">
@@ -184,23 +211,26 @@
         </div>
     </div>    
     
-   <div class="infoRow column">
+        <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label>${uiLabelMap.IntroducedDateCaption}</label>
+                <label>${uiLabelMap.ProductWidthCaption}</label>
             </div>
             <div class="infoValue">
-                <div class="entryInput from">
-                  <#if (mode?has_content && mode == "add")>
-                    <input class="dateEntry datePicker" type="text" id="introductionDate" name="introductionDate" maxlength="40" value="${parameters.introductionDate!""}"/>
-                  <#elseif mode?has_content && mode == "edit">
-                    <input class="dateEntry datePicker" type="text" id="introductionDate" name="introductionDate" maxlength="40" value="${parameters.introductionDate!introductionDate!""}"/>
-                  </#if>
-                </div>
+                <#if (mode?has_content)>
+                    <input class="textEntry textAlignRight" maxlength="10" type="text" id="productWidth" name="productWidth" value="${parameters.productWidth!productWidth!""}"/>
+                </#if>
+            </div>
+            <div class="infoIcon">
+                <#if lengthUom?has_content>
+                    ${lengthUom.abbreviation!""}
+  					<input type="hidden" name="widthUomId" id="widthUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
+                </#if>
             </div>
         </div>
     </div>
     
+   
     <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
@@ -242,6 +272,27 @@
         <#assign pdpInStoreOnly = pdpInStoreOnlyProductAttribute.attrValue!>
       </#if>
     </#if>
+   <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label>${uiLabelMap.ProductHeightCaption}</label>
+            </div>
+            <div class="infoValue">
+                <#if (mode?has_content)>
+                    <input class="textEntry textAlignRight" maxlength="10" type="text" id="productHeight" name="productHeight" value="${parameters.productHeight!productHeight!""}"/>
+                </#if>
+            </div>
+            <div class="infoIcon">
+                <#if lengthUom?has_content>
+                    ${lengthUom.abbreviation!""}
+  					<input type="hidden" name="heightUomId" id="heightUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
+                </#if>
+            </div>
+        </div>
+    </div>
+    
+   
+    <div class="infoRow Row">
     <div class="infoRow column">
       <div class="infoEntry long">
         <div class="infoCaption">
@@ -256,7 +307,21 @@
         </div>
       </div>
     </div>
-    
+
+   <div class="infoRow column">
+       <div class="infoEntry">
+           <div class="infoCaption">
+               <label>${uiLabelMap.BFWareHouseInventoryCaption}</label>
+           </div>
+           <div class="infoValue">
+             <#if (mode?has_content && mode == "add")>
+               <input type="text" class="textEntry textAlignRight" name="bfWHInventory" id="bfWHInventory" value="${parameters.bfWHInventory!""}" />
+             <#elseif mode?has_content && mode == "edit">
+               <input type="text" class="textEntry textAlignRight" name="bfWHInventory" id="bfWHInventory" value="${parameters.bfWHInventory!bfWHInventory!""}" />
+             </#if>
+           </div>
+       </div>
+   </div>
     <div class="infoRow column">
       <div class="infoEntry long">
         <div class="infoCaption">
@@ -277,18 +342,5 @@
         </div>
       </div>
     </div>
-    
-    <div class="infoRow Row">
-       <div class="infoEntry">
-           <div class="infoCaption">
-               <label>${uiLabelMap.BFWareHouseInventoryCaption}</label>
-           </div>
-           <div class="infoValue">
-             <#if (mode?has_content && mode == "add")>
-               <input type="text" class="textEntry textAlignRight" name="bfWHInventory" id="bfWHInventory" value="${parameters.bfWHInventory!""}" />
-             <#elseif mode?has_content && mode == "edit">
-               <input type="text" class="textEntry textAlignRight" name="bfWHInventory" id="bfWHInventory" value="${parameters.bfWHInventory!bfWHInventory!""}" />
-             </#if>
-           </div>
-       </div>
+
    </div>

@@ -48,4 +48,10 @@ under the License.
         <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
         <store-value value-field="lookedUpValue"/>
     </simple-method>
+
+    <simple-method method-name="updatePaymentGatewayFdgg" short-description="Update Payment Gateway Config First Data Global Gateway">
+        <entity-one entity-name="PaymentGatewayFdgg" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/>
+    </simple-method>
 </simple-methods>

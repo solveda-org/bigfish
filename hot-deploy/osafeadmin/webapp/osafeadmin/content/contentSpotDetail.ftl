@@ -100,7 +100,7 @@
 	   		<div class="infoEntry long">
 	      		<div class="infoCaption"><label>${uiLabelMap.ContentCaption}</label></div>
 	     		    <div class="infoValue">
-	        		     <textarea class="largeArea <#if maxLengthContent?has_content>characterLimit</#if>" <#if wysiwygEditor?exists && wysiwygEditor == "Y">id="ckeditor"</#if> name="textData" cols="50" rows="5" <#if maxLengthContent?has_content> maxlength="${maxLengthContent}"</#if>>${StringUtil.wrapString(parameters.textData!eText!"")}</textarea>
+	        		     <textarea class="largeArea <#if maxLengthContent?has_content>characterLimit</#if>" <#if wysiwygEditor?exists && wysiwygEditor == "Y">id="ckeditor"</#if> name="textData" cols="50" rows="5" <#if maxLengthContent?has_content> maxlength="${maxLengthContent}"</#if>>${parameters.textData!eText!""}</textarea>
                          <#if maxLengthContent?has_content>
             		       <span class="textCounter"></span>
             		     </#if>

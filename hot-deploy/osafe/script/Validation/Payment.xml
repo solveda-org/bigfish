@@ -111,6 +111,15 @@
         </if-compare>
     </simple-method>
     <simple-method method-name="updateCreditCardInfo" short-description="Update Credit Card">
+        <if-not-empty field="parameters.paymentMethodId">
+       		<entity-one entity-name="CreditCard" value-field="creditCardUpdate">
+                <field-map field-name="paymentMethodId" from-field="parameters.paymentMethodId"/>
+            </entity-one>
+      		<if-not-empty field="creditCardUpdate">
+      			<!-- In Edit Mode the card number is masked for security, set the parameters field to card number on file -->
+                 <set field="parameters.cardNumber" from-field="creditCardUpdate.cardNumber"/>
+           </if-not-empty>
+        </if-not-empty>
         <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         <check-errors/>
         <set field="creditCardContext.paymentMethodId" from-field="parameters.paymentMethodId"/>
@@ -142,6 +151,21 @@
     <simple-method method-name="createCreditCardInfo" short-description="Create Credit Card">
         <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         <check-errors/>
+
+        <if-not-empty field="parameters.contactMechId">
+	        <if-compare field="parameters.contactMechId" operator="equals" value="_NEW_">
+	            <set value="address" field="_response_code_"/>
+	            <set value="POSTAL_ADDRESS" field="preContactMechTypeId"/>
+	            <set value="BILLING_LOCATION" field="contactMechPurposeTypeId"/>
+	            <field-to-request field="DONE_PAGE"/>
+	            <field-to-request field="preContactMechTypeId"/>
+	            <field-to-request field="contactMechPurposeTypeId"/>
+	        <else>
+               <set field="creditCardContext.contactMechId" from-field="parameters.contactMechId"/>
+	        </else>
+	        </if-compare>
+        </if-not-empty>
+
         <set field="creditCardContext.firstNameOnCard" from-field="parameters.firstNameOnCard"/>
         <set field="creditCardContext.lastNameOnCard" from-field="parameters.lastNameOnCard"/>
         <set field="creditCardContext.cardType" from-field="parameters.cardType"/>
@@ -163,14 +187,6 @@
            <set field="partyProfileDefaultsCtx.partyId" from-field="userLogin.partyId"/>
            <set field="partyProfileDefaultsCtx.productStoreId" from-field="productStoreId"/>
            <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
-        </if-compare>
-        <if-compare field="parameters.contactMechId" operator="equals" value="_NEW_">
-            <set value="address" field="_response_code_"/>
-            <set value="POSTAL_ADDRESS" field="preContactMechTypeId"/>
-            <set value="BILLING_LOCATION" field="contactMechPurposeTypeId"/>
-            <field-to-request field="DONE_PAGE"/>
-            <field-to-request field="preContactMechTypeId"/>
-            <field-to-request field="contactMechPurposeTypeId"/>
         </if-compare>
         
         <if-not-empty field="parameters.DONE_PAGE">
@@ -246,6 +262,15 @@
     </simple-method>
     
     <simple-method method-name="updateEftAccountInfo" short-description="Update Eft Account">
+        <if-not-empty field="parameters.paymentMethodId">
+       		<entity-one entity-name="EftAccount" value-field="eftAccountUpdate">
+                <field-map field-name="paymentMethodId" from-field="parameters.paymentMethodId"/>
+            </entity-one>
+      		<if-not-empty field="eftAccountUpdate">
+      			<!-- In Edit Mode the account number is masked for security, set the parameters field to account number on file -->
+                 <set field="parameters.accountNumber" from-field="eftAccountUpdate.accountNumber"/>
+           </if-not-empty>
+        </if-not-empty>
         <call-simple-method method-name="validateEftAccount" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         <check-errors/>
         
@@ -255,7 +280,8 @@
         <set field="eftAccountContext.routingNumber" from-field="parameters.routingNumber"/>
         <set field="eftAccountContext.accountNumber" from-field="parameters.accountNumber"/>
         <set field="eftAccountContext.accountType" from-field="parameters.accountType"/>
-        
+        <set field="eftAccountContext.contactMechId" from-field="parameters.contactMechId"/>
+
         <call-service service-name="updateEftAccount" in-map-name="eftAccountContext">
             <default-message>Credit Card Info successfully updated.</default-message>
             <result-to-request result-name="paymentMethodId" request-name="paymentMethodId"/>
@@ -292,6 +318,20 @@
         <set field="eftAccountContext.accountNumber" from-field="parameters.accountNumber"/>
         <set field="eftAccountContext.accountType" from-field="parameters.accountType"/>
         
+        <if-not-empty field="parameters.contactMechId">
+	        <if-compare field="parameters.contactMechId" operator="equals" value="_NEW_">
+	            <set value="address" field="_response_code_"/>
+	            <set value="POSTAL_ADDRESS" field="preContactMechTypeId"/>
+	            <set value="BILLING_LOCATION" field="contactMechPurposeTypeId"/>
+	            <field-to-request field="DONE_PAGE"/>
+	            <field-to-request field="preContactMechTypeId"/>
+	            <field-to-request field="contactMechPurposeTypeId"/>
+	        <else>
+               <set field="eftAccountContext.contactMechId" from-field="parameters.contactMechId"/>
+	        </else>
+	        </if-compare>
+        </if-not-empty>
+        
        <call-service service-name="createEftAccount" in-map-name="eftAccountContext">
             <default-message>EFT Account successfully created.</default-message>
             <result-to-request result-name="paymentMethodId"/>
@@ -308,15 +348,7 @@
            <set field="partyProfileDefaultsCtx.productStoreId" from-field="productStoreId"/>
            <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
         </if-compare>
-        <if-compare field="parameters.contactMechId" operator="equals" value="_NEW_">
-            <set value="address" field="_response_code_"/>
-            <set value="POSTAL_ADDRESS" field="preContactMechTypeId"/>
-            <set value="BILLING_LOCATION" field="contactMechPurposeTypeId"/>
-            <field-to-request field="DONE_PAGE"/>
-            <field-to-request field="preContactMechTypeId"/>
-            <field-to-request field="contactMechPurposeTypeId"/>
-        </if-compare>
-        
+
         <if-not-empty field="parameters.DONE_PAGE">
         	<if-compare operator="equals" value="eCommerceRecurrenceOrderDetail" field="parameters.DONE_PAGE">
         		<if-not-empty field="parameters.shoppingListId">

@@ -49,10 +49,36 @@ public class InventoryServices {
     	return ineventoryLevelMap;
     }
     
-    public static Map<String, Object> getProductInventoryLevel(List<GenericValue> productAttributes, ServletRequest request) {
-    	String productStoreId = ProductStoreWorker.getProductStoreId(request);
-    	Delegator delegator = (Delegator)request.getAttribute("delegator");
+    public static Map<String, Object> getProductInventoryLevel(List<GenericValue> productAttributes, ServletRequest request) 
+    {
+    	return getProductInventoryLevel(productAttributes, request, null);
+    }
+    
+    public static Map<String, Object> getProductInventoryLevel(List<GenericValue> productAttributes, Map<String, Object> context) 
+    {
+    	return getProductInventoryLevel(productAttributes, null, context);
+    }
+    
+    public static Map<String, Object> getProductInventoryLevel(List<GenericValue> productAttributes, ServletRequest request, Map<String, Object> context) {
+    	String productStoreId = "";
+    	Delegator delegator = null;
+    	if(UtilValidate.isNotEmpty(request))
+    	{
+    		productStoreId = ProductStoreWorker.getProductStoreId(request);
+        	delegator = (Delegator)request.getAttribute("delegator");
+    	}
+    	else
+    	{
+    		productStoreId = (String)context.get("productStoreId");
+        	delegator = (Delegator)context.get("delegator");
+    	}
     	Map<String, Object> ineventoryLevelMap = new HashMap<String, Object>();
+    	if(UtilValidate.isEmpty(request) && UtilValidate.isEmpty(productStoreId))
+    	{
+    		Debug.logInfo("Could not get product inventory level.  Missing request and context.", "InventoryServices.java");
+    		return ineventoryLevelMap;
+    	}
+    	
     	//get the Inventory Product Store Parameters
     	String inventoryMethod = Util.getProductStoreParm(productStoreId, "INVENTORY_METHOD");
     	

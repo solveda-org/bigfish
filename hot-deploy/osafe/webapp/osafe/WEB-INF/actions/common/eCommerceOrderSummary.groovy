@@ -79,9 +79,12 @@ if (UtilValidate.isNotEmpty(shoppingCart))
 		{
 		  billingContactMechAddressList = ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false);
 		  billingContactMechAddress = EntityUtil.getFirst(billingContactMechAddressList);
-		  billingAddress=billingContactMechAddress.getRelatedOneCache("PostalAddress");
-		  billingAddress = billingAddress;
-		  billingContactMechId = billingAddress.contactMechId;
+		  if(UtilValidate.isNotEmpty(billingContactMechAddress))
+		  {
+			  billingAddress=billingContactMechAddress.getRelatedOneCache("PostalAddress");
+			  billingAddress = billingAddress;
+			  billingContactMechId = billingAddress.contactMechId;
+		  }
 		}
 	}
 	
@@ -179,7 +182,7 @@ if (UtilValidate.isNotEmpty(shoppingCart))
 					promoCodesEntered = shoppingCart.getProductPromoCodesEntered();
 					if(UtilValidate.isNotEmpty(promoCodesEntered))
 					{
-						for (GenericValue promoCodeEntered : promoCodesEntered)
+						for (String promoCodeEntered : promoCodesEntered)
 						{
 							if(UtilValidate.isNotEmpty(promoCodeEntered))
 							{

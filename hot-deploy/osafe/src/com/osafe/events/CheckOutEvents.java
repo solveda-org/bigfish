@@ -84,8 +84,6 @@ import com.osafe.services.TaxServices;
 public class CheckOutEvents {
 
     public static final String module = CheckOutEvents.class.getName();
-    private static final ResourceBundle PARAMETERS_RECURRENCE = UtilProperties.getResourceBundle("parameters_recurrence.xml", Locale.getDefault());
-    private static final ResourceBundle OSAFE_UI_LABELS = UtilProperties.getResourceBundle("OSafeUiLabels.xml", Locale.getDefault());
     public static final int scale = UtilNumber.getBigDecimalScale("order.decimals");
     public static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
     public static final int taxCalcScale = UtilNumber.getBigDecimalScale("salestax.calc.decimals");
@@ -255,12 +253,23 @@ public class CheckOutEvents {
         
     }
     
-    public static String processCartRecurrenceItems(HttpServletRequest request, HttpServletResponse response) {
+    public static String processCartRecurrenceItems(HttpServletRequest request, HttpServletResponse response) 
+    {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         ShoppingCart sc = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         String orderId = sc.getOrderId();
+        ResourceBundle PARAMETERS_RECURRENCE = null;
+        try
+        {
+        	PARAMETERS_RECURRENCE = UtilProperties.getResourceBundle("parameters_recurrence.xml", Locale.getDefault());
+        }
+        catch(IllegalArgumentException e)
+        {
+        	Debug.logWarning(e, "parameters_recurrence does not exist");
+        	PARAMETERS_RECURRENCE = null;
+        }
         
         try 
         {
@@ -287,7 +296,17 @@ public class CheckOutEvents {
                         Map shoppingListItemCtx = UtilMisc.toMap("userLogin", userLogin);
                         shoppingListItemCtx.put("shoppingListId", shoppingListId);
                         String productId = sci.getProductId();
-                        String shoppingListItemSuffix = PARAMETERS_RECURRENCE.getString("SHOPPING_LIST_ITEM_SUFFIX");
+                        
+                        String shoppingListItemSuffix= "";
+                        if (UtilValidate.isNotEmpty(PARAMETERS_RECURRENCE))
+                        {
+	                      	  String parametersShoppingListItemSuffix = PARAMETERS_RECURRENCE.getString("SHOPPING_LIST_ITEM_SUFFIX");
+	                      	  if (UtilValidate.isNotEmpty(parametersShoppingListItemSuffix) && Util.isNumber(parametersShoppingListItemSuffix))
+	                          {
+	                      		shoppingListItemSuffix = parametersShoppingListItemSuffix;
+	                          }
+                        }
+                        
                         if (UtilValidate.isNotEmpty(shoppingListItemSuffix))
                         {
                         	productId = productId.concat(shoppingListItemSuffix);
@@ -322,11 +341,15 @@ public class CheckOutEvents {
                         String sIntervalNumber = sci.getOrderItemAttribute("RECURRENCE_FREQ");
                         if (UtilValidate.isEmpty(sIntervalNumber))
                         {
-                        	sIntervalNumber= PARAMETERS_RECURRENCE.getString("RECURRENCE_FREQ_DEFAULT");
-                        }
-                        if (UtilValidate.isEmpty(sIntervalNumber))
-                        {
                         	sIntervalNumber= "90";
+                            if (UtilValidate.isNotEmpty(PARAMETERS_RECURRENCE))
+                            {
+    	                      	  String parameterRecurrenceFreqDefault = PARAMETERS_RECURRENCE.getString("RECURRENCE_FREQ_DEFAULT");
+    	                      	  if (UtilValidate.isNotEmpty(parameterRecurrenceFreqDefault) && Util.isNumber(parameterRecurrenceFreqDefault))
+    	                          {
+    	                      		sIntervalNumber = parameterRecurrenceFreqDefault;
+    	                          }
+                            }
                         }
                         shoppingListCtx.put("intervalNumber", new Integer(sIntervalNumber));
                         shoppingListCtx.put("shoppingListId", shoppingListId);
@@ -782,6 +805,7 @@ public class CheckOutEvents {
         Map cartLineQtyMap = FastMap.newInstance();
         Map cartLineProductInfoMap  = FastMap.newInstance();
         Map cartItemQtyMap = FastMap.newInstance();
+        ResourceBundle OSAFE_UI_LABELS = UtilProperties.getResourceBundle("OSafeUiLabels.xml", Locale.getDefault());
         List<MessageString> error_list = new ArrayList<MessageString>();
         MessageString messageString = null;
         String message = null;
@@ -1302,91 +1326,92 @@ public class CheckOutEvents {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
-    	
-    	try 
-    	{
-           	List<CartShipInfo> lCartShipGroups =  cart.getShipGroups();
-            for (int i = 0; i < lCartShipGroups.size(); i++) 
-            {
-                CartShipInfo shipGroupShipInfo = cart.getShipInfo(i);
-                Set shipItems = shipGroupShipInfo.getShipItems();
-                if (UtilValidate.isNotEmpty(shipItems) && shipItems.size() > 1)
-                {
-            		StringBuffer sbProductStoreShipMethIdKey= new StringBuffer();
-                    Map<String, String> mShipGroupTempIndexShipMethods = FastMap.newInstance();
-                    Map<String, String> mShipMethodKeys = FastMap.newInstance();
-                    Iterator shipItemsIterator = shipItems.iterator();
-                    
-                    int iShipItemIdx=0;
-                    while(shipItemsIterator.hasNext()) 
-                    {
-                        ShoppingCartItem cartItem = (ShoppingCartItem) shipItemsIterator.next();
-                    	BigDecimal cartItemQty = cart.getItemShipGroupQty(cartItem,i);
 
-	                    /* Create a temp ShipGroup to send to the Shipping Estimate Wrapper
-	                     * with just the single item in the group
+
+        Boolean isCheckoutSplitShipGroups = Util.isProductStoreParmTrue(request, "CHECKOUT_SPLIT_SHIP_GROUPS");
+        if(isCheckoutSplitShipGroups)
+        {
+	    	try 
+	    	{
+	           	List<CartShipInfo> lCartShipGroups =  cart.getShipGroups();
+	            for (int i = 0; i < lCartShipGroups.size(); i++) 
+	            {
+	                CartShipInfo shipGroupShipInfo = cart.getShipInfo(i);
+	                Set shipItems = shipGroupShipInfo.getShipItems();
+	                if (UtilValidate.isNotEmpty(shipItems) && shipItems.size() > 1)
+	                {
+	            		StringBuffer sbProductStoreShipMethIdKey= new StringBuffer();
+	                    Map<String, String> mShipGroupTempIndexShipMethods = FastMap.newInstance();
+	                    Map<String, String> mShipMethodKeys = FastMap.newInstance();
+	                    Iterator shipItemsIterator = shipItems.iterator();
+	                    
+	                    int iShipItemIdx=0;
+	                    while(shipItemsIterator.hasNext()) 
+	                    {
+	                        ShoppingCartItem cartItem = (ShoppingCartItem) shipItemsIterator.next();
+	                    	BigDecimal cartItemQty = cart.getItemShipGroupQty(cartItem,i);
+	
+		                    /* Create a temp ShipGroup to send to the Shipping Estimate Wrapper
+		                     * with just the single item in the group
+		                   	 */
+	                		int iTempShipGroupIndex = cart.addShipInfo();
+	                        CartShipInfo tempCartShipInfo = cart.getShipInfo(iTempShipGroupIndex);
+	                        tempCartShipInfo.setContactMechId(shipGroupShipInfo.getContactMechId());
+	                    	
+	                        cart.positionItemToGroup(cartItem, cartItemQty, i, iTempShipGroupIndex, false);
+	                		sbProductStoreShipMethIdKey.setLength(0);
+	
+	                		ShippingEstimateWrapper shippingEstWrapper = new ShippingEstimateWrapper(dispatcher, cart, iTempShipGroupIndex);
+	                        List<GenericValue> lCarrierShipmentMethods = shippingEstWrapper.getShippingMethods();
+	                        for (GenericValue carrierShipmentMethod : lCarrierShipmentMethods)
+	                        {
+	                        	sbProductStoreShipMethIdKey.append(carrierShipmentMethod.getString("productStoreShipMethId"));
+	                        }
+	                        String sProductStoreShipMethIdKey = sbProductStoreShipMethIdKey.toString();
+	                        if (iShipItemIdx == 0)
+	                        {
+	                            cart.positionItemToGroup(cartItem, cartItemQty, iTempShipGroupIndex, i, false);
+	                            mShipGroupTempIndexShipMethods.put(sProductStoreShipMethIdKey, ""+i);
+	                        	
+	                        }
+	                        else
+	                        {
+	                        	if (mShipGroupTempIndexShipMethods.containsKey(sProductStoreShipMethIdKey))
+	                        	{
+	                        		String sTempShipGroupIndex = mShipGroupTempIndexShipMethods.get(sProductStoreShipMethIdKey);
+	                        		int iTempGroupIdx=Integer.valueOf(sTempShipGroupIndex).intValue();
+	                                cart.positionItemToGroup(cartItem, cartItemQty, iTempShipGroupIndex,iTempGroupIdx, false);
+	                        		
+	                        	}
+	                        	else
+	                        	{
+	                               mShipGroupTempIndexShipMethods.put(sProductStoreShipMethIdKey, ""+iTempShipGroupIndex);
+	                        	}
+	
+	                        }
+	                        
+	                        iShipItemIdx++;
+	
+	                    }
+	                    
+	                    
+	                    /* Clean Up any empty Ship Groups
 	                   	 */
-                		int iTempShipGroupIndex = cart.addShipInfo();
-                        CartShipInfo tempCartShipInfo = cart.getShipInfo(iTempShipGroupIndex);
-                        tempCartShipInfo.setContactMechId(shipGroupShipInfo.getContactMechId());
-                    	
-                        cart.positionItemToGroup(cartItem, cartItemQty, i, iTempShipGroupIndex, false);
-                		sbProductStoreShipMethIdKey.setLength(0);
-
-                		ShippingEstimateWrapper shippingEstWrapper = new ShippingEstimateWrapper(dispatcher, cart, iTempShipGroupIndex);
-                        List<GenericValue> lCarrierShipmentMethods = shippingEstWrapper.getShippingMethods();
-                        for (GenericValue carrierShipmentMethod : lCarrierShipmentMethods)
-                        {
-                        	sbProductStoreShipMethIdKey.append(carrierShipmentMethod.getString("productStoreShipMethId"));
-                        }
-                        String sProductStoreShipMethIdKey = sbProductStoreShipMethIdKey.toString();
-                        if (iShipItemIdx == 0)
-                        {
-                            cart.positionItemToGroup(cartItem, cartItemQty, iTempShipGroupIndex, i, false);
-                            mShipGroupTempIndexShipMethods.put(sProductStoreShipMethIdKey, ""+i);
-                        	
-                        }
-                        else
-                        {
-                        	if (mShipGroupTempIndexShipMethods.containsKey(sProductStoreShipMethIdKey))
-                        	{
-                        		String sTempShipGroupIndex = mShipGroupTempIndexShipMethods.get(sProductStoreShipMethIdKey);
-                        		int iTempGroupIdx=Integer.valueOf(sTempShipGroupIndex).intValue();
-                                cart.positionItemToGroup(cartItem, cartItemQty, iTempShipGroupIndex,iTempGroupIdx, false);
-                        		
-                        	}
-                        	else
-                        	{
-                               mShipGroupTempIndexShipMethods.put(sProductStoreShipMethIdKey, ""+iTempShipGroupIndex);
-                        	}
-
-                        }
-                        
-                        iShipItemIdx++;
-
-                    }
-                    
-                    
-                    /* Clean Up any empty Ship Groups
-                   	 */
-                   	cart.cleanUpShipGroups();
-                	
-                }
-            }
-           	lCartShipGroups =  cart.getShipGroups();
-           	if (UtilValidate.isNotEmpty(lCartShipGroups) && (lCartShipGroups.size() > 1))
-           	{
-           		return "multiShipGroups";
-           	}
-            
-            
-            
-    	}
-    	catch (Exception e)
-    	{
-       	  Debug.logError(e,"Error: splitShipGroupbyShipOptions", module);
-    		
-    	}
+	                   	cart.cleanUpShipGroups();
+	                	
+	                }
+	            }
+	           	lCartShipGroups =  cart.getShipGroups();
+	           	if (UtilValidate.isNotEmpty(lCartShipGroups) && (lCartShipGroups.size() > 1))
+	           	{
+	           		return "multiShipGroups";
+	           	} 
+	    	}
+	    	catch (Exception e)
+	    	{
+	       	  Debug.logError(e,"Error: splitShipGroupbyShipOptions", module);
+	    	}
+        }
         return "success";
     	
     }

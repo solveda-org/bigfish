@@ -278,7 +278,7 @@
         </if-empty>
         <if-empty field="parameters.category">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCategoryError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="key" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="category" list="error_list"/>
         </if-empty>
         <if-empty field="parameters.description">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionError"/>
@@ -1300,6 +1300,22 @@
     </simple-method>
     <simple-method method-name="deleteOrderAttribute" short-description="delete a OrderAttribute">
         <entity-one entity-name="OrderAttribute" value-field="lookedUpValue"/>
+        <remove-value value-field="lookedUpValue"/>
+    </simple-method>
+
+    <simple-method method-name="createOrderItemAttribute" short-description="create a OrderItemAttribute">
+        <make-value entity-name="OrderItemAttribute" value-field="newEntity"/>
+        <set-pk-fields map="parameters" value-field="newEntity"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>
+    </simple-method>
+    <simple-method method-name="updateOrderItemAttribute" short-description="update a OrderItemAttribute">
+        <entity-one entity-name="OrderItemAttribute" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/>
+    </simple-method>
+    <simple-method method-name="deleteOrderItemAttribute" short-description="delete a OrderItemAttribute">
+        <entity-one entity-name="OrderItemAttribute" value-field="lookedUpValue"/>
         <remove-value value-field="lookedUpValue"/>
     </simple-method>
 
@@ -2530,6 +2546,10 @@
 
         <field-to-result field="newEntity.pixelId" result-name="pixelId"/>
         <field-to-result field="newEntity.productStoreId" result-name="productStoreId"/>
+        
+        <set field="editPixelId" from-field="parameters.pixelId"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="EditPixelTrackingSuccess" field="editPixelTrackingSuccessMessage"/>
+        <string-to-list string="${editPixelTrackingSuccessMessage}" list="successMessageList"/>
     </simple-method>
 
     <simple-method method-name="updatePixelTracking" short-description="Update Pixel Tracking">
@@ -2595,6 +2615,10 @@
             <result-to-result result-name="pixelId"/>
             <result-to-result result-name="productStoreId"/>
         </call-service>
+        
+        <set field="editPixelId" from-field="parameters.pixelId"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="EditPixelTrackingSuccess" field="editPixelTrackingSuccessMessage"/>
+        <string-to-list string="${editPixelTrackingSuccessMessage}" list="successMessageList"/>
     </simple-method>
     
     <simple-method method-name="deletePixelTracking" short-description="delete Pixel Tracking">

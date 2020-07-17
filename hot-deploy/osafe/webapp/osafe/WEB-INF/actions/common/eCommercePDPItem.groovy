@@ -176,14 +176,14 @@ String buildNextLi(Map map, List order, String current, String prefix, Map produ
                     stockClass = "lowStock";
                 }
             }
-            buf.append("VARSTOCK['" + optValue + "'] = \"" + stockClass + "\";");
+            buf.append("VARSTOCKPDPITEM['" + optValue + "'] = \"" + stockClass + "\";");
             def plpPdpInStoreOnly = "N";
             variantProductAttribute = productVariantProductAttributeMap.get(optValue);
 	        if(UtilValidate.isNotEmpty(variantProductAttribute) && UtilValidate.isNotEmpty(variantProductAttribute.PDP_IN_STORE_ONLY))
 	        {
 	        	plpPdpInStoreOnly = variantProductAttribute.PDP_IN_STORE_ONLY;
 			}
-            buf.append("VARINSTORE['" + optValue + "'] = \"" + plpPdpInStoreOnly + "\";");
+            buf.append("VARINSTOREPDPITEM['" + optValue + "'] = \"" + plpPdpInStoreOnly + "\";");
         } 
         else 
         {
@@ -438,8 +438,8 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
     def nextFeatureJsBuf = new StringBuffer();
     def buf = new StringBuffer();
     topLevelName = featureOrder[0];
-    buf.append("var VARSTOCK = new Object();");
-    buf.append("var VARINSTORE = new Object();");
+    buf.append("var VARSTOCKPDPITEM = new Object();");
+    buf.append("var VARINSTOREPDPITEM = new Object();");
     
     buf.append("function getFormOption" + uiSequenceScreen+"_"+productId + "() {");
     buf.append("var OPT = new Array(" + featureOrder.size() + ");");
@@ -496,14 +496,14 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
                 }
             }
             //ADD STOCK LEVEL CLASSES TO THE MAP IF THERE IS ONLY ONE SELECTABLE FEATURE FOR THAT PRODUCT.
-            buf.append("VARSTOCK['" + opt + "'] = \"" + stockClass + "\";");
+            buf.append("VARSTOCKPDPITEM['" + opt + "'] = \"" + stockClass + "\";");
             def plpPdpInStoreOnly = "N";
             variantProductAttribute = productVariantProductAttributeMap.get(opt);
 	        if(UtilValidate.isNotEmpty(variantProductAttribute) && UtilValidate.isNotEmpty(variantProductAttribute.PDP_IN_STORE_ONLY))
 	        {
 	        	plpPdpInStoreOnly = variantProductAttribute.PDP_IN_STORE_ONLY;
 			}
-            buf.append("VARINSTORE['" + opt + "'] = \"" + plpPdpInStoreOnly + "\";");
+            buf.append("VARINSTOREPDPITEM['" + opt + "'] = \"" + plpPdpInStoreOnly + "\";");
         } 
         else 
         {
@@ -1235,6 +1235,22 @@ if(UtilValidate.isNotEmpty(productId))
 	context.plpVariantTree = null;
     plpFeatureOrder = [];
     // Special Variant Code
+    List productFeatureAndApplSelectList = FastList.newInstance();
+    Map plpProductFeatureAndApplSelectMap = FastMap.newInstance();
+    Map plpProductVariantStandardFeatureMap = FastMap.newInstance();
+    Map plpProductVariantProductMap = FastMap.newInstance();
+    Map plpProductVariantInventoryMap = FastMap.newInstance();
+    Map plpProductFeatureFirstVariantIdMap = FastMap.newInstance();
+    jsBuf = new StringBuffer();
+    jsBufDefault = new StringBuffer();
+    context.plpVirtualJavaScript = jsBuf;
+    context.plpVirtualDefaultJavaScript = jsBufDefault;
+    context.plpProductVariantProductMap = plpProductVariantProductMap;
+    context.plpProductVariantMapKeys = plpProductVariantProductMap.keySet();
+    context.plpProductVariantInventoryMap = plpProductVariantInventoryMap;
+    context.plpProductFeatureAndApplSelectMap = plpProductFeatureAndApplSelectMap;
+    context.plpProductVariantStandardFeatureMap = plpProductVariantStandardFeatureMap;
+    context.plpProductFeatureFirstVariantIdMap = plpProductFeatureFirstVariantIdMap;
     if (UtilValidate.isNotEmpty((product).isVirtual) && ((product).isVirtual).toUpperCase()== "Y") 
     {
         if ("VV_FEATURETREE".equals(product.getString("virtualVariantMethodEnum"))) 
@@ -1284,12 +1300,6 @@ if(UtilValidate.isNotEmpty(productId))
                 	plpFeatureSetAll.add(plpFeatureType);
                 }
                 String lastProductFeatureTypeId="";
-                List productFeatureAndApplSelectList = FastList.newInstance();
-                Map plpProductFeatureAndApplSelectMap = FastMap.newInstance();
-                Map plpProductVariantStandardFeatureMap = FastMap.newInstance();
-                Map plpProductVariantProductMap = FastMap.newInstance();
-                Map plpProductVariantInventoryMap = FastMap.newInstance();
-                Map plpProductFeatureFirstVariantIdMap = FastMap.newInstance();
                 
 
                 
@@ -1358,7 +1368,7 @@ if(UtilValidate.isNotEmpty(productId))
 				
                 List<String> items = FastList.newInstance();
                 variantFeatureIdExist = [];
-                
+
                 if (UtilValidate.isNotEmpty(productAssocVariant)) 
                 {
                     //BUILD PRODUCT VARIANT MAPS FOR CONTENT
@@ -1464,8 +1474,8 @@ if(UtilValidate.isNotEmpty(productId))
                     //END - CRAETING VIRTUAL JS
                     
                     // PUT VARIANT MAPS INTO CONTEXT
-                    context.virtualJavaScript = jsBuf;
-                    context.virtualDefaultJavaScript = jsBufDefault;
+                    context.plpVirtualJavaScript = jsBuf;
+                    context.plpVirtualDefaultJavaScript = jsBufDefault;
                     context.plpProductVariantProductMap = plpProductVariantProductMap;
                     context.plpProductVariantMapKeys = plpProductVariantProductMap.keySet();
                     context.plpProductVariantInventoryMap = plpProductVariantInventoryMap;

@@ -43,7 +43,7 @@
           <div class="entry checkbox medium">
             <input class="checkBoxEntry" type="radio" <#if orderHeader.statusId == "ORDER_COMPLETED">disabled="disabled"</#if> id="actionIdCancel" name="actionId"  value="cancelOrder" checked="checked" />${uiLabelMap.CancelAnOrderLabel}<br/>
             <input class="checkBoxEntry" type="radio" disabled="disabled" id="actionIdChaneQty" name="actionId" value="changeOrderQty" <#if (parameters.actionId?exists && parameters.actionId?string == "changeOrderQty")>checked="checked"</#if> />${uiLabelMap.ChangeOrderQtyLabel}<br/>
-            <input class="checkBoxEntry" type="radio" <#if orderHeader.statusId == "ORDER_COMPLETED">disabled="disabled"</#if> id="actionIdComplete" name="actionId" value="completeOrder" <#if (parameters.actionId?exists && parameters.actionId?string == "completeOrder")>checked="checked"</#if> />${uiLabelMap.CompleteAnOrderLabel}<br/>
+            <input class="checkBoxEntry" type="radio" <#if orderHeader.statusId != "ORDER_APPROVED">disabled="disabled"</#if> id="actionIdComplete" name="actionId" value="completeOrder" <#if (parameters.actionId?exists && parameters.actionId?string == "completeOrder")>checked="checked"</#if> />${uiLabelMap.CompleteAnOrderLabel}<br/>
             <input class="checkBoxEntry" type="radio" id="actionIdReturn" name="actionId" value="productReturn" <#if (parameters.actionId?exists && parameters.actionId?string == "productReturn")>checked="checked"</#if> />${uiLabelMap.ProductReturnsLabel}
           </div>
         </div>

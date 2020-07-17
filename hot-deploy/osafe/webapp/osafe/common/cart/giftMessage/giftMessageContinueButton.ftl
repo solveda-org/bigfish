@@ -1,6 +1,6 @@
 <#-- Continue button -->
 <#assign localNextButtonVisible = nextButtonVisible!"Y">
-<#assign localNextButtonUrl = nextButtonUrl!"javascript:submitCheckoutForm(document.${formName!}, 'DN', '');">
+<#assign localNextButtonUrl = nextButtonUrl!"javascript:submitCheckoutForm(document.${formName!}, 'GM', '');">
 <#assign localNextButtonClass = nextButtonClass!"standardBtn positive">
 <#assign localNextButtonDescription = nextButtonDescription!uiLabelMap.ContinueBtn>
 

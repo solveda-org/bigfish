@@ -478,6 +478,22 @@
         <group>0</group>
         <description>Product Attachment Link</description>
     </property>
+    <property key="pdpPersonalizedText">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Personalized Text component</description>
+    </property>
+    <property key="pdpFileUpload">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>File Upload component</description>
+    </property>
 
 <!-- *************************************** -->
 <!-- PDPTabs-->
@@ -945,6 +961,22 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>Product Attachment Link</description>
+    </property>
+    <property key="pdpTabsPersonalizedText">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Personalized Text component</description>
+    </property>
+    <property key="pdpTabsFileUpload">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>File Upload component</description>
     </property>
 <!-- *************************************** -->
 <!-- Quicklook -->
@@ -1429,6 +1461,22 @@
         <group>0</group>
         <description>Product Attachment Link</description>
     </property>
+    <property key="quicklookPersonalizedText">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Personalized Text component</description>
+    </property>
+    <property key="quicklookFileUpload">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>File Upload component</description>
+    </property>
 <!-- *************************************** -->
 <!-- PLP -->
 <!-- *************************************** -->
@@ -1688,6 +1736,47 @@
         <group>0</group>
         <description>Add To Wishlist. The actual action button that adds the Product to the Wish List.</description>
     </property>
+    <property key="plpContent01">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>General additional PLP content</description>
+    </property>
+    <property key="plpContent02">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>General additional PLP content</description>
+    </property>
+    <property key="plpContent03">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>General additional PLP content</description>
+    </property>
+    <property key="plpContent04">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>General additional PLP content</description>
+    </property>
+    <property key="plpContent05">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>General additional PLP content</description>
+    </property>
+
 <!-- *************************************** -->
 <!-- PLPFlyout -->
 <!-- *************************************** -->

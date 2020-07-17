@@ -1,162 +1,11 @@
+<#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
+
 <#assign FACET_VALUE_STYLE = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_STYLE")!"NORMAL"/>
 <#if !FACET_VALUE_STYLE?has_content>
 	<#assign FACET_VALUE_STYLE = "NORMAL"/>
 <#else>
 	<#assign FACET_VALUE_STYLE = FACET_VALUE_STYLE?string?upper_case/>
 </#if>
-
-<#macro facetLine facet facetType refinementValueName refinementValue multiFacetRefinedExist multiFacetRefined multiFacetInitialType facetGroupParamList allSelected showItemCount>
-
-    <#assign facetShowItemCount = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"FACET_SHOW_ITEM_CNT")/>
-    <#if showItemCount?has_content && showItemCount == "N">
-    	<#assign facetShowItemCount = false />
-    </#if>
-    <#assign filterGroupParamMap = parameters.filterGroupParamMap!requestAttributes.filterGroupParamMap! />
-    <#assign categoryId = ""/>
-    <#if currentProductCategory?exists>
-        <#assign categoryId = currentProductCategory.productCategoryId!"">
-    </#if>
-    <#if !categoryId?has_content>
-        <#assign categoryId = parameters.productCategoryId?if_exists />
-    </#if>
-    <#assign catOrSearchText = ""/>
-    <#if parameters.searchText?has_content>
-        <#assign catOrSearchText = "eCommerceProductList?searchText=" + parameters.searchText/>
-    <#else>
-        <#assign catOrSearchText = "siteSearch?productCategoryId=" + categoryId/>
-    </#if>
-    <#assign refinementValueDisplayName = "">
-    <#assign refinementURL = "">
-    <#if refinementValue?has_content>
-    	<#assign refinementValueDisplayName = refinementValue.displayName/>
-    	<#assign refinementURL = refinementValue.refinementURL/>
-    </#if>
-    <#assign productCategoryUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${refinementURL}')/>
-    
-    <#-- Determine count -->
-    <#if refinementValue?has_content>
-	    <#assign scalarCount = refinementValue.scalarCount/>
-	    <#assign useDisable = true/>
-	    <#if multiFacetInitialType?has_content && multiFacetInitialType.equalsIgnoreCase(facetType)>
-	        <#assign useDisable = false/>
-	    </#if>
-	    <#if useDisable>
-	        <#assign disabled = true/>
-	    <#else>
-	        <#assign disabled = false/>
-	    </#if>
-	    <#if multiFacetRefinedExist>
-	        <#if multiFacetRefined?has_content>
-	            <#list multiFacetRefined as facetResultRefined>
-	                <#if facetResultRefined.refinementValues?has_content>
-	                    <#list facetResultRefined.refinementValues as refinementValueRefined>
-	                        <#if refinementValueRefined.name == refinementValue.name && facet.type == facetResultRefined.type>
-	                            <#assign disabled = false/>
-	                            <#assign scalarCount = refinementValueRefined.scalarCount/>
-	                        </#if>
-	                    </#list>
-	                </#if>
-	            </#list>
-	        </#if>
-	    <#else>
-	        <#assign disabled = false/>
-	    </#if>
-	    <#if disabled>
-	        <#assign scalarCount = 0/>
-	    </#if>
-    </#if>
-    
-    <#if FACET_VALUE_STYLE == "CHECKBOX">
-    	<#-- CHECKBOX -->
-        <#assign removeUrl = catOrSearchText/>
-        <#assign removeFilterGroupValue = ""/>
-        <#if filterGroupParamMap?has_content>
-              <#list filterGroupParamMap.entrySet() as entry>
-                  <#list entry.value as value>
-                      <#if !(refinementValueName.equals(value))>
-                          <#assign removeFilterGroupValue = removeFilterGroupValue+entry.key+":"+StringUtil.wrapString(value)+"|"/>
-                      </#if>
-                  </#list>
-              </#list>
-              <#if removeFilterGroupValue?has_content>
-                  <#assign removeUrl = removeUrl+"&filterGroup=${removeFilterGroupValue}"/>
-              </#if>
-        </#if>
-        <#assign removeUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${removeUrl}')/>
-		<span class="facetValue">
-            <input type="checkbox" name="facetValue_${refinementValueName}" id="facetValue_${refinementValueName}" value="Y" onclick="solrSearch(this, '${productCategoryUrl!}', '${removeUrl!}', 'checkbox')" <#if facetGroupParamList.contains(refinementValueName)>checked</#if> <#if disabled>disabled='true'</#if>/>
-            <span class="facetValueName <#if disabled>disabled</#if>">
-                <#if facetType?exists && facetType == "CUSTOMER_RATING">
-                    <img alt="${refinementValueDisplayName}" src="/osafe_theme/images/user_content/images/rating_facet_bar_${refinementValue.start}.gif" class="ratingFacetBar">
-                </#if>
-                ${refinementValueDisplayName} <#if facetShowItemCount>(${scalarCount!})</#if>
-            </span>
-        </span>
-     	<#-- END CHECKBOX -->
-    <#elseif FACET_VALUE_STYLE == "DROPDOWN">  
-    	<#-- DROPDOWN -->   
-    	<#assign newUrl = catOrSearchText/>
-        <#assign newFilterGroupValue = ""/>
-        <#if filterGroupParamMap?has_content>
-        	  <#assign updatedRefinementValueInUrl = false />
-              <#list filterGroupParamMap.entrySet() as entry>
-                  <#if facetType != entry.key?string>
-                      	<#list entry.value as value>
-                      		<#assign newFilterGroupValue = newFilterGroupValue+entry.key+":"+StringUtil.wrapString(value)+"|"/>
-                      	</#list>
-                  <#else>
-                  	<#if allSelected != "Y">
-                  		<#assign newFilterGroupValue = newFilterGroupValue+entry.key+":"+StringUtil.wrapString(refinementValueName)+"|"/>
-                  		<#assign updatedRefinementValueInUrl = true />
-                  	</#if>
-                  </#if>
-              </#list>
-              <#if allSelected != "Y" && !updatedRefinementValueInUrl>
-              		<#assign newFilterGroupValue = newFilterGroupValue+facetType+":"+StringUtil.wrapString(refinementValueName)+"|"/>
-              </#if>
-        </#if>
-        
-        <#if newFilterGroupValue?has_content>
-	        	<#assign newUrl = newUrl+"&filterGroup=${newFilterGroupValue}"/>
-	          	<#assign newUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${newUrl}')/>
-	    <#elseif allSelected == "Y">
-	    		<#assign newUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${newUrl}')/>
-	    <#else>
-	      		<#assign newUrl = productCategoryUrl/>
-	    </#if>
-        
-    	<#assign isSelected = false/>
-    	<#if facetGroupParamList?has_content && facetGroupParamList.contains(refinementValueName)>
-    		<#assign isSelected = true/>
-    	</#if>
-    	<#if allSelected != "Y">
-    		<#if scalarCount?number &gt; 0>
-    			<option value='${newUrl!}'<#if isSelected>selected=selected</#if>>${refinementValueDisplayName} <#if facetShowItemCount>(${scalarCount})</#if></option>
-    		</#if>
-    	<#else>
-    		<option class="js_allOptionDD" value='${newUrl!}'>${uiLabelMap.CommonAll}</option>
-    	</#if>
-    	<#-- END DROPDOWN -->  
-    <#else>
-    	<#-- DEFAULT -->  
-    	<span class="facetValue">
-            <#if facet.refinementValues?size == 1>
-                <#if facetType?exists && facetType == "CUSTOMER_RATING">
-                    <img alt="${refinementValueDisplayName}" src="/osafe_theme/images/user_content/images/rating_facet_bar_${refinementValue.start}.gif" class="ratingFacetBar">
-                </#if>
-                ${refinementValueDisplayName} <#if facetShowItemCount>(${refinementValue.scalarCount})</#if>
-            <#else>
-                <a class="facetValueLink" title="${refinementValueName}" href="${productCategoryUrl}">
-                    <#if facetType?exists && facetType == "CUSTOMER_RATING">
-                        <img alt="${refinementValueDisplayName}" src="/osafe_theme/images/user_content/images/rating_facet_bar_${refinementValue.start}.gif" class="ratingFacetBar">
-                    </#if>
-                    ${refinementValueDisplayName} <#if facetShowItemCount>(${refinementValue.scalarCount})</#if>
-                </a>
-            </#if>
-        </span>
-        <#-- END DEFAULT -->  
-    </#if>
-</#macro>
 
 <#assign categoryId = ""/>
 <#if currentProductCategory?exists>
@@ -269,7 +118,7 @@
 	                                    <#assign code = refinementValue.name>
 	                                    <#assign refinementURL = refinementValue.refinementURL>
 	                                    <#assign productCategoryUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${refinementURL}')/>
-	                                    <option value='${productCategoryUrl!}'<#if code?has_content && parameters.productCategoryId?has_content && code == parameters.productCategoryId>selected=selected</#if>>${refinementValueName} <#if facetShowItemCount>(${refinementValue.scalarCount})</#if></option>
+	                                    <option value='${productCategoryUrl!}'<#if code?has_content && parameters.productCategoryId?has_content && code == parameters.productCategoryId>selected=selected</#if>>${refinementValueName?html} <#if facetShowItemCount>(${refinementValue.scalarCount})</#if></option>
                     				</#list>
                     			</select>
                     		<#else>
@@ -296,8 +145,8 @@
 	                                    <#assign code = refinementValue.name>
 	                                    <#assign refinementURL = refinementValue.refinementURL>
 	                                    <#assign productCategoryUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${refinementURL}')/>
-		                                <li class="js_facetValue ${refinementValueName} ${hideClass}" <#if hideClass == "js_hideThem">style="display:none;"</#if>>
-		                                    <a class="facetValueLink<#if code?has_content && parameters.productCategoryId?has_content && code == parameters.productCategoryId> selected</#if>" title="${refinementValueName}" href="${productCategoryUrl}">${refinementValueName} <#if facetShowItemCount>(${refinementValue.scalarCount})</#if></a>
+		                                <li class="js_facetValue ${refinementValueName?html} ${hideClass}" <#if hideClass == "js_hideThem">style="display:none;"</#if>>
+		                                    <a class="facetValueLink<#if code?has_content && parameters.productCategoryId?has_content && code == parameters.productCategoryId> selected</#if>" title="${refinementValueName?html}" href="${productCategoryUrl}">${refinementValueName?html} <#if facetShowItemCount>(${refinementValue.scalarCount})</#if></a>
 		                                </li>
 		                                <#if valueSize! lt facetMaxValue>
 		                                    <#assign facetMaxValue = valueSize>
@@ -359,12 +208,7 @@
 									  </#if>
 							        </#list>
 							    </#if>
-	                    		
-							    
-							    
-	                    		
-	                    		
-	                    		
+
 	                    		<#assign multiFacetRefinedExist = false/>
 	                            <#if multiFacetPriceRangeRefined?exists>
 	                                <#assign multiFacetRefinedExist = true/>
@@ -437,7 +281,7 @@
 	                                </#if>
 	                                <#assign refinementValueName = refinementValue.name>
 	                                <#assign refinementValueName = refinementValueName.replaceAll("price:", "")>
-	                                <li class="js_facetValue ${refinementValueName}">
+	                                <li class="js_facetValue ${refinementValueName?html}">
 	                                    <@facetLine facet=facet facetType=facetTypeValue refinementValueName=refinementValueName refinementValue=refinementValue multiFacetRefinedExist=multiFacetRefinedExist multiFacetRefined=multiFacetPriceRangeRefined?if_exists multiFacetInitialType=multiFacetInitialType?if_exists facetGroupParamList=facetGroupParamList allSelected="N" showItemCount=""/>
 	                                </li>
 	                            </#list>
@@ -478,7 +322,7 @@
 	                                </#if>
 	                                <#assign refinementValueName = refinementValue.name>
 	                                <#assign refinementValueName = refinementValueName.replaceAll("customerRating:", "")>
-	                                <li class="js_facetValue ${refinementValueName}">
+	                                <li class="js_facetValue ${refinementValueName?html}">
 	                                    <@facetLine facet=facet facetType=facetTypeValue refinementValueName=refinementValueName refinementValue=refinementValue multiFacetRefinedExist=multiFacetRefinedExist multiFacetRefined=multiFacetCustomerRatingRefined?if_exists multiFacetInitialType=multiFacetInitialType?if_exists facetGroupParamList=facetGroupParamList allSelected="N" showItemCount=""/>
 	                                </li>
 	                            </#list>
@@ -548,7 +392,7 @@
 	                                                <#assign multiFacetRefinedExist = true/>
 	                                            </#if>
 	                                            <#assign refinementValueName = refinementValue.name>
-	                                            <li class="js_facetValue ${refinementValueName} ${hideClass}" <#if hideClass == "js_hideThem">style="display:none;"</#if>>
+	                                            <li class="js_facetValue ${refinementValueName?html} ${hideClass}" <#if hideClass == "js_hideThem">style="display:none;"</#if>>
 	                                                <@facetLine facet=facet facetType=facet.type refinementValueName=refinementValueName refinementValue=refinementValue multiFacetRefinedExist=multiFacetRefinedExist multiFacetRefined=multiFacetGroupRefined?if_exists multiFacetInitialType=multiFacetInitialType?if_exists facetGroupParamList=facetGroupParamList allSelected="N" showItemCount=""/>
 	                                            </li>
 	                                            <#if valueSize! lt facetMaxValue>
@@ -624,7 +468,7 @@
 	                                                <#assign multiFacetRefinedExist = true/>
 	                                            </#if>
 	                                            <#assign refinementValueName = refinementValue.name>
-	                                            <li class="js_facetValue ${refinementValueName} ${hideClass}" <#if hideClass == "js_hideThem">style="display:none;"</#if>>
+	                                            <li class="js_facetValue ${refinementValueName?html} ${hideClass}" <#if hideClass == "js_hideThem">style="display:none;"</#if>>
 	                                                <@facetLine facet=facet facetType=facet.type refinementValueName=refinementValueName refinementValue=refinementValue multiFacetRefinedExist=multiFacetRefinedExist multiFacetRefined=multiFacetGroupRefined?if_exists multiFacetInitialType=multiFacetInitialType?if_exists facetGroupParamList=facetGroupParamList allSelected="N" showItemCount=""/>
 	                                            </li>
 	                                            <#if valueSize! lt facetMaxValue>

@@ -39,6 +39,7 @@ ${sections.render('tooltipBody')?if_exists}
     </div>
     <div class="infoDetailIcon">
       ${sections.render('commonDetailLinkButton')!}
+      ${sections.render('commonDetailWarningIcon')!}
     </div>
   </div>
 </form>

@@ -320,6 +320,53 @@
         </response>
         <response name="error" type="view" value="eCommerceCreateCreditCardInfo"/>
     </request-map>
+
+    <request-map uri="createCreditCardNewAddress">
+      <security https="true" auth="false"/>
+      <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="checkUserSession"/>
+      <response name="success" type="view" value="createCreditCardNewAddress"/>
+      <response name="sessionExpire" type="request-redirect" value="MyAccount"/>
+    </request-map>
+
+    <request-map uri="createCreditCardValidateNewAddress">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Validation/ValidationEvents.xml" invoke="checkUserSessionAndValidateAddress"/>
+        <response name="success" type="request" value="createCreditCardUpdateNewAddress"/>
+        <response name="error" type="view" value="createCreditCardNewAddress"/>
+        <response name="sessionExpire" type="request-redirect" value="MyAccount"/>
+    </request-map>
+
+    <request-map uri="createCreditCardUpdateNewAddress">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Event/AddressEvents.xml" invoke="updateAddress"/>
+        <response name="success" type="request" value="eCommerceCreateCreditCardInfo"/>
+        <response name="error" type="view" value="createCreditCardNewAddress"/>
+    </request-map>
+
+    <request-map uri="editCreditCardNewAddress">
+      <security https="true" auth="false"/>
+      <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="checkUserLoginSession"/>
+      <response name="success" type="view" value="editCreditCardNewAddress"/>
+      <response name="sessionExpire" type="request-redirect" value="MyAccount"/>
+    </request-map>
+
+    <request-map uri="editCreditCardValidateNewAddress">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Validation/ValidationEvents.xml" invoke="checkUserLoginSessionAndValidateAddress"/>
+        <response name="success" type="request" value="editCreditCardUpdateNewAddress"/>
+        <response name="error" type="view" value="editCreditCardNewAddress"/>
+        <response name="sessionExpire" type="request-redirect" value="MyAccount"/>
+    </request-map>
+
+    <request-map uri="editCreditCardUpdateNewAddress">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Event/AddressEvents.xml" invoke="updateAddress"/>
+        <response name="success" type="request-redirect" value="eCommerceEditCreditCardInfo">
+        	<redirect-parameter name="paymentMethodId"/>
+        </response>
+        <response name="error" type="view" value="editCreditCardNewAddress"/>
+    </request-map>
+
     <request-map uri="deletePaymentMethod">
         <security https="true" auth="true"/>
         <event type="simple" path="component://osafe/script/Validation/Payment.xml" invoke="deletePaymentMethod"/>
@@ -370,6 +417,52 @@
         <response name="error" type="view" value="eCommerceCreateFftAccountInfo"/>
     </request-map>
     
+    <request-map uri="createEftNewAddress">
+      <security https="true" auth="false"/>
+      <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="checkUserLoginSession"/>
+      <response name="success" type="view" value="createEftNewAddress"/>
+      <response name="sessionExpire" type="request-redirect" value="MyAccount"/>
+    </request-map>
+
+    <request-map uri="createEftValidateNewAddress">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Validation/ValidationEvents.xml" invoke="checkUserLoginSessionAndValidateAddress"/>
+        <response name="success" type="request" value="createEftUpdateNewAddress"/>
+        <response name="error" type="view" value="createEftNewAddress"/>
+        <response name="sessionExpire" type="request-redirect" value="MyAccount"/>
+    </request-map>
+
+    <request-map uri="createEftUpdateNewAddress">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Event/AddressEvents.xml" invoke="updateAddress"/>
+        <response name="success" type="request" value="eCommerceCreateFftAccountInfo"/>
+        <response name="error" type="view" value="createEftNewAddress"/>
+    </request-map>
+
+    <request-map uri="editEftNewAddress">
+      <security https="true" auth="false"/>
+      <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="checkUserSession"/>
+      <response name="success" type="view" value="editEftNewAddress"/>
+      <response name="sessionExpire" type="request-redirect" value="MyAccount"/>
+    </request-map>
+
+    <request-map uri="editEftValidateNewAddress">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Validation/ValidationEvents.xml" invoke="checkUserSessionAndValidateAddress"/>
+        <response name="success" type="request" value="editEftUpdateNewAddress"/>
+        <response name="error" type="view" value="editEftNewAddress"/>
+        <response name="sessionExpire" type="request-redirect" value="MyAccount"/>
+    </request-map>
+
+    <request-map uri="editEftUpdateNewAddress">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Event/AddressEvents.xml" invoke="updateAddress"/>
+        <response name="success" type="request-redirect" value="eCommerceEditEftAccountInfo">
+        	<redirect-parameter name="paymentMethodId"/>
+        </response>
+        <response name="error" type="view" value="editEftNewAddress"/>
+    </request-map>
+
     <request-map uri="deleteEFTPaymentMethod">
         <security https="true" auth="true"/>
         <event type="simple" path="component://osafe/script/Validation/Payment.xml" invoke="deleteEFTPaymentMethod"/>
@@ -783,7 +876,7 @@
     
     <request-map uri="addItemToCart">
         <security https="true" auth="false"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <event type="java" path="com.osafe.events.ShoppingCartEvents" invoke="addToCartCustom"/>
         <response name="success" type="request" value="setProductCategory"/>
         <response name="survey" type="view" value="survey"/>
         <response name="product" type="view" value="product"/>
@@ -794,7 +887,7 @@
 <!-- Add item to cart and redirect to checkout flow -->    
     <request-map uri="addItemToCartCheckout">
         <security https="true" auth="false"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <event type="java" path="com.osafe.events.ShoppingCartEvents" invoke="addToCartCustom"/>
         <response name="success" type="request" value="setProductCategoryCheckout"/>
         <response name="survey" type="view" value="survey"/>
         <response name="product" type="view" value="product"/>
@@ -974,6 +1067,26 @@
         <event type="java" path="com.osafe.events.WishListEvents" invoke="addPlpItemToWishList"/>
         <response name="success" type="request-redirect" value="eCommerceProductDetail"/>
         <response name="error" type="view-last" value="main"/>
+    </request-map>
+    
+    <request-map uri="uploadFileFromPdp">
+        <security https="false" auth="false"/>
+        <event type="java" path="com.osafe.events.ShoppingCartEvents" invoke="uploadFileToSession"/>
+        <response name="success" type="request-redirect" value="eCommerceProductDetail"/>
+        <response name="error" type="view-last" value="eCommerceProductDetail"/>
+    </request-map>
+    
+    <request-map uri="eCommerceUploadFile">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="eCommerceUploadFile"/>
+        <response name="error" type="view" value="eCommerceUploadFile"/>
+    </request-map>
+    
+    <request-map uri="updatePersonalizationMap">
+        <security https="false" auth="false"/>
+        <event type="java" path="com.osafe.events.ShoppingCartEvents" invoke="updatePersonalizationMap"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
     </request-map>
 
     <request-map uri="setProductCategory">
@@ -3469,7 +3582,9 @@
     
     <view-map name="eCommerceEditCustomerInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditCustomerInfo"/>
     <view-map name="eCommerceEditCreditCardInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditCreditCardInfo"/>
+    <view-map name="editCreditCardNewAddress" type="screen" page="component://osafe/widget/EcommerceScreens.xml#editCreditCardNewAddress"/>
     <view-map name="eCommerceCreateCreditCardInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceCreateCreditCardInfo"/>
+    <view-map name="createCreditCardNewAddress" type="screen" page="component://osafe/widget/EcommerceScreens.xml#createCreditCardNewAddress"/>
     <view-map name="eCommerceEditLoginInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditLoginInfo"/>
     <view-map name="eCommerceEditCustomerLogin" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditCustomerLogin"/>
     <view-map name="eCommerceEditCustomerPassword" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditCustomerPassword"/>
@@ -3486,7 +3601,9 @@
 
     <view-map name="eCommerceEftPaymentMethodInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEftPaymentMethodInfo"/>
     <view-map name="eCommerceEditEftAccountInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditEftAccountInfo"/>
+    <view-map name="editEftNewAddress" type="screen" page="component://osafe/widget/EcommerceScreens.xml#editEftNewAddress"/>
     <view-map name="eCommerceCreateFftAccountInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceCreateFftAccountInfo"/>
+    <view-map name="createEftNewAddress" type="screen" page="component://osafe/widget/EcommerceScreens.xml#createEftNewAddress"/>
 
     <!-- EMAIL  -->
 
@@ -3511,6 +3628,7 @@
     <view-map name="ratingsTermsAndConditions" type="screen" page="component://osafe/widget/EcommerceScreens.xml#ratingsTermsAndConditions"/>
     <view-map name="ratingsGuideLines" type="screen" page="component://osafe/widget/EcommerceScreens.xml#ratingsGuideLines"/>
     <view-map name="eCommerceManufacturerDetail" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceManufacturerDetail"/>
+    <view-map name="eCommerceUploadFile" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceUploadFile"/>
 
     <!-- SHOPPING CART -->
     <view-map name="eCommerceShowcart" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#eCommerceShowcart"/>

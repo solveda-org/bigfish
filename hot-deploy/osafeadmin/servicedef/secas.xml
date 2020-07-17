@@ -43,6 +43,13 @@
     <eca service="deleteBigfishParameterXml" event="in-validate">
         <action service="copyBigfishParameterXml" mode="sync"/>
     </eca>
+    <!-- THIS ECA BY SERVICE NAME generates a order ship review email when the order status is changed -->  
+    <eca service="changeOrderStatus" event="global-commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_COMPLETED"/>
+        <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="scheduleOrderReviewNotification" mode="sync"/>
+    </eca>
+
     <!-- THIS ECA BY SERVICE NAME generates a order status change when the order is generated  
     <eca service="changeOrderStatus" event="global-commit" run-on-error="false">
         <condition field-name="statusId" operator="not-equals" value="ORDER_COMPLETED"/>
@@ -59,6 +66,13 @@
     </eca>
     -->
 
+    <eca service="genProductsIndex" event="invoke" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="genProductsIndex"/>
+        <set field-name="scheduledJobMessage" value="genProductsIndex  Started"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+
     <eca service="genProductsIndex" event="return" run-on-failure="true" run-on-error="true">
         <condition field-name="productStoreId" operator="is-not-empty"/>
         <set field-name="scheduledJobName" value="genProductsIndex"/>
@@ -67,11 +81,6 @@
     <eca service="abandonCartEmail" event="return" run-on-failure="true" run-on-error="true">
         <condition field-name="productStoreId" operator="is-not-empty"/>
         <set field-name="scheduledJobName" value="abandonCartEmail"/>
-        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
-    </eca>
-    <eca service="shipReviewEmail" event="return" run-on-failure="true" run-on-error="true">
-        <condition field-name="productStoreId" operator="is-not-empty"/>
-        <set field-name="scheduledJobName" value="shipReviewEmail"/>
         <action service="sendScheduledJobNotification" mode="async" persist="true"/>
     </eca>
     <eca service="reevooGetProductRatingScore" event="return" run-on-failure="true" run-on-error="true">

@@ -103,7 +103,11 @@
         <!-- Check that a user with the name passed exists -->
         <if-not-empty field="loginContext['login.username']">
             <set from-field="loginContext['login.username']" field="userLoginExistsMap.userLoginId"/>
-            <find-by-primary-key entity-name="UserLogin" map="userLoginExistsMap" value-field="existingUserLogin"/>
+            <entity-condition list="userLoginList" entity-name="UserLogin">
+            	<condition-expr field-name="userLoginId" from-field="parameters.USERNAME" ignore-case="true"/>
+			</entity-condition>
+            <first-from-list entry="existingUserLogin" list="userLoginList"/>
+            
             <if-empty field="existingUserLogin" >
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="InvalidForgotPasswordUsernameError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="USERNAME" list="error_list"/>

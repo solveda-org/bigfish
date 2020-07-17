@@ -167,6 +167,64 @@
        </div>
       </li>
    </ul> 
+ <#elseif displayFormat == "MULTI_LINE_STREET_CITY_POSTAL_CODE">
+    <ul class="displayList address">
+        <#if postalAddress.address1?has_content>
+            <li>
+                <div>
+                    <span>${postalAddress.address1},</span>
+                </div>
+            </li>
+        </#if>
+        <#if postalAddress.city?has_content  && postalAddress.city != '_NA_'>
+	        <li>
+	            <div>
+	                    <span>${postalAddress.city!}</span>
+	           </div>
+	        </li>
+        </#if>
+        <#if postalAddress.postalCode?has_content && postalAddress.postalCode != '_NA_'>
+	        <li>
+	            <div>
+                    <span>
+                        <#if ZIP?has_content && ZIP == 'LONG'>
+                            ${postalAddress.postalCode} 
+                            <#if postalAddress.postalCodeExt?has_content && postalAddress.postalCodeExt != '_NA_'>
+                            - ${postalAddress.postalCodeExt} 
+                            </#if>
+                        <#else>
+                            ${postalAddress.postalCode}
+                        </#if>
+                    </span>
+	           </div>
+	        </li>
+        </#if>
+   </ul> 
+ <#elseif displayFormat == "SINGLE_LINE_STREET_CITY_POSTAL_CODE">
+    <ul class="displayList address">
+      <li>
+       <div>
+        <#if postalAddress.address1?has_content>
+                    <span>${postalAddress.address1},</span>
+        </#if>
+        <#if postalAddress.city?has_content && postalAddress.city != '_NA_'>
+                    <span>${postalAddress.city!} </span>
+        </#if>
+        <#if postalAddress.postalCode?has_content && postalAddress.postalCode != '_NA_'>
+            <span>
+                <#if ZIP?has_content && ZIP == 'LONG'>
+                    ${postalAddress.postalCode} 
+                    <#if postalAddress.postalCodeExt?has_content && postalAddress.postalCodeExt != '_NA_'>
+                    - ${postalAddress.postalCodeExt} 
+                    </#if>
+                <#else>
+                    ${postalAddress.postalCode}
+                </#if>
+            </span>
+        </#if>
+       </div>
+      </li>
+   </ul> 
  <#elseif displayFormat == "SINGLE_LINE_NICKNAME">
     <ul class="displayList address">
       <li>

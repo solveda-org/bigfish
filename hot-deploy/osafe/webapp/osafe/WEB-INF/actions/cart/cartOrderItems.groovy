@@ -30,6 +30,7 @@ ShoppingCart shoppingCart = session.getAttribute("shoppingCart");
 ShoppingCartItem cartLine = request.getAttribute("cartLine");
 CartShipInfo cartShipInfo = request.getAttribute("cartShipInfo");
 Map lineIndexGiftMessageMap = request.getAttribute("lineIndexGiftMessageMap");
+Map lineIndexCartItemIndexMap = request.getAttribute("lineIndexCartItemIndexMap");
 lineIndex = request.getAttribute("lineIndex");
 rowClass = request.getAttribute("rowClass");
 context.shoppingCart=shoppingCart;
@@ -386,6 +387,16 @@ if (UtilValidate.isNotEmpty(lineIndexGiftMessageMap) && UtilValidate.isNotEmpty(
 		}
 		
 	}
+}
+
+//This is used for Shipping to Multiple Address
+//Insures the multi address items all have a cart line index including promotional items.
+//Reference shipMultiAddress.groovy where the cartitemIndexMap is built.
+if (UtilValidate.isNotEmpty(lineIndexCartItemIndexMap) && UtilValidate.isNotEmpty(lineIndex))
+{
+	cartLineMultiIndex = lineIndexCartItemIndexMap.get(""+lineIndex);
+	context.cartLineMultiIndex = cartLineMultiIndex;
+
 }
 
 

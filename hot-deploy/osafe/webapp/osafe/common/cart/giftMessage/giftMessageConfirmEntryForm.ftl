@@ -72,11 +72,13 @@
 
 	          <div class="entry fromName">
 	            <label>${uiLabelMap.FromCaption}</label>
-	            <input type="text" class="characterLimit" maxlength="${GIFT_MESSAGE_FROM_MAX_CHAR!"50"}" onblur="restrictTextLength(this);" name="from_${count}" id="from" value="${parameters.from!from!""}"/><span class="js_textCounter textCounter"></span>
+	            <#assign giftMessageFromNameVal = parameters.from!from!""/>
+	            <input type="text" class="characterLimit js_giftMessageFrom" maxlength="${GIFT_MESSAGE_FROM_MAX_CHAR!"50"}" onblur="restrictTextLength(this);" name="from_${count}" id="from" value="${StringUtil.wrapString(giftMessageFromNameVal)}"/><span class="js_textCounter textCounter"></span>
 	          </div>
 	          <div class="entry toName">
 	            <label>${uiLabelMap.ToCaption}</label>
-	            <input type="text" class="characterLimit" maxlength="${GIFT_MESSAGE_TO_MAX_CHAR!"50"}" onblur="restrictTextLength(this);" name="to_${count}" id="to" value="${parameters.to!to!""}"/><span class="js_textCounter textCounter"></span>
+	            <#assign giftMessageToNameVal = parameters.to!to!""/>
+	            <input type="text" class="characterLimit js_giftMessageTo" maxlength="${GIFT_MESSAGE_TO_MAX_CHAR!"50"}" onblur="restrictTextLength(this);" name="to_${count}" id="to" value="${StringUtil.wrapString(giftMessageToNameVal)}"/><span class="js_textCounter textCounter"></span>
 	          </div>
 	          <div class="entry giftType">
 	            <label>${uiLabelMap.GiftMessageLetUsHelpCaption}</label>
@@ -88,7 +90,8 @@
 	          <div class="entry giftMessage">
 	            <label>${uiLabelMap.GiftMessageTextCaption}</label>
 	            <div class="entryField">
-		            <textarea name="giftMessageText_${count}" id="js_giftMessageText_${count}" class="content characterLimit" id="js_content" cols="35" rows="5" maxlength="${GIFT_MESSAGE_TEXT_MAX_CHAR!"255"}">${parameters.giftMessageText!giftMessageText!""}</textarea>
+	            	<#assign giftMessageTextVal = parameters.giftMessageText!giftMessageText!""/>
+		            <textarea name="giftMessageText_${count}" id="js_giftMessageText_${count}" class="content characterLimit js_giftMessageText" id="js_content" cols="35" rows="5" maxlength="${GIFT_MESSAGE_TEXT_MAX_CHAR!"255"}">${StringUtil.wrapString(giftMessageTextVal)}</textarea>
 		            <span class="js_textCounter textCounter"></span>
 		        </div>
 	          </div>

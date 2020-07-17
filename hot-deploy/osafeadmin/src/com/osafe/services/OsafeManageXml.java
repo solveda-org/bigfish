@@ -284,8 +284,13 @@ public class OsafeManageXml
     public static Map<String, ?> copyLabelXml(DispatchContext dctx, Map<String, ?> context) 
     {
         Map<String, Object> resp = null;
-        String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-UiLabel-xml-file"), context);
-        String deploymentXmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-deployment-UiLabel-xml-file"), context);
+        
+        String labelFileProperty = (String)context.get("labelFileProperty");
+        String deploymentLabelFileProperty = (String)context.get("deploymentLabelFileProperty");
+        
+        String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", labelFileProperty), context);
+        String deploymentXmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", deploymentLabelFileProperty), context);
+            
         try
         {
             FileUtils.copyFile(new File(XmlFilePath), new File(deploymentXmlFilePath));
@@ -1070,8 +1075,14 @@ public class OsafeManageXml
                 Element newPropertyElement = UtilXml.addChildElement(xmlDocument.getDocumentElement(), "property", xmlDocument);
                 newPropertyElement.setAttribute("key", key);
                 UtilXml.addChildElementValue(newPropertyElement, "value", value, xmlDocument).setAttribute("xml:lang", "en");
-                UtilXml.addChildElementValue(newPropertyElement, "category", category, xmlDocument);
-                UtilXml.addChildElementValue(newPropertyElement, "description", description, xmlDocument);
+                if(UtilValidate.isNotEmpty(category))
+                {
+                	UtilXml.addChildElementValue(newPropertyElement, "category", category, xmlDocument);
+                }
+                if(UtilValidate.isNotEmpty(description))
+                {
+                	UtilXml.addChildElementValue(newPropertyElement, "description", description, xmlDocument);
+                }
                 context.put("xmlDocument", xmlDocument);
                 if (!writeUiLabelDocument(context))
                 {
@@ -1094,15 +1105,21 @@ public class OsafeManageXml
 
     public static Document readUiLabelDocument(Map<String, ?> context) 
     {
-        String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-UiLabel-xml-file"), context);
-        String deploymentXmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-deployment-UiLabel-xml-file"), context);
-        if (UtilURL.fromFilename(deploymentXmlFilePath) == null || !StringUtils.equalsIgnoreCase(FilenameUtils.getExtension(deploymentXmlFilePath), "xml")) return null;
+    	String labelFileProperty = (String)context.get("labelFileProperty");
+    	String deploymentLabelFileProperty = (String)context.get("deploymentLabelFileProperty");
+    	
+    	String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", labelFileProperty), context);
+    	String deploymentXmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", deploymentLabelFileProperty), context);
+        if (UtilURL.fromFilename(deploymentXmlFilePath) == null) return null;
+        
         return readXmlDocument(XmlFilePath);
     }
 
     public static boolean writeUiLabelDocument(Map context)
     {
-        String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-UiLabel-xml-file"), context);
+    	String labelFileProperty = (String)context.get("labelFileProperty");
+        String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", labelFileProperty), context);
+        
         return writeXmlDocument((Document)context.get("xmlDocument"), XmlFilePath);
     }
 

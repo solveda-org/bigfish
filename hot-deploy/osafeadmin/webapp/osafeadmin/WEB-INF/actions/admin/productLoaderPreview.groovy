@@ -30,6 +30,7 @@ List productAssocDataList = FastList.newInstance();
 List productFacetGroupDataList = FastList.newInstance();
 List productFacetValueDataList = FastList.newInstance();
 List manufacturerDataList = FastList.newInstance();
+List productAttributesDataList = FastList.newInstance();
 List errorMessageList = FastList.newInstance();
 
 
@@ -40,8 +41,13 @@ List productWarningList = FastList.newInstance();
 List productAssocErrorList = FastList.newInstance();
 List productAssocWarningList = FastList.newInstance();
 List productFacetGroupErrorList = FastList.newInstance();
+List productFacetGroupWarningList = FastList.newInstance();
 List productFacetValueErrorList = FastList.newInstance();
+List productFacetValueWarningList = FastList.newInstance();
 List productManufacturerErrorList = FastList.newInstance();
+List productManufacturerWarningList = FastList.newInstance();
+List productAttributesErrorList = FastList.newInstance();
+List productAttributesWarningList = FastList.newInstance();
 
 if (UtilValidate.isNotEmpty(filePath) && UtilValidate.isNotEmpty(xlsFileName)) 
 {
@@ -58,6 +64,7 @@ if (UtilValidate.isNotEmpty(filePath) && UtilValidate.isNotEmpty(xlsFileName))
 	productFacetGroupDataList = UtilGenerics.checkList(productDataListSvcRes.get("productFacetGroupDataList"), Map.class);
 	productFacetValueDataList = UtilGenerics.checkList(productDataListSvcRes.get("productFacetValueDataList"), Map.class);
 	manufacturerDataList = UtilGenerics.checkList(productDataListSvcRes.get("manufacturerDataList"), Map.class);
+	productAttributesDataList = UtilGenerics.checkList(productDataListSvcRes.get("productAttributesDataList"), Map.class);
 	
 	errorMessageList = UtilGenerics.checkList(productDataListSvcRes.get("errorMessageList"), String.class);
 }
@@ -69,6 +76,7 @@ svcCtx.put("productAssocDataList", productAssocDataList);
 svcCtx.put("productFacetGroupDataList", productFacetGroupDataList);
 svcCtx.put("productFacetValueDataList", productFacetValueDataList);
 svcCtx.put("manufacturerDataList", manufacturerDataList);
+svcCtx.put("productAttributesDataList", productAttributesDataList);
 
 //Call Service to Validate the Product File Data
 svcRes = dispatcher.runSync("validateProductData", svcCtx);
@@ -85,6 +93,8 @@ productFacetValueErrorList = UtilGenerics.checkList(svcRes.get("productFacetValu
 productFacetValueWarningList = UtilGenerics.checkList(svcRes.get("productFacetValueWarningList"), String.class);
 productManufacturerErrorList = UtilGenerics.checkList(svcRes.get("productManufacturerErrorList"), String.class);
 productManufacturerWarningList = UtilGenerics.checkList(svcRes.get("productManufacturerWarningList"), String.class);
+productAttributesErrorList = UtilGenerics.checkList(svcRes.get("productAttributesErrorList"), String.class);
+productAttributesWarningList = UtilGenerics.checkList(svcRes.get("productAttributesWarningList"), String.class);
 validationErrorMessageList = UtilGenerics.checkList(svcRes.get("errorMessageList"), String.class);
 if(UtilValidate.isNotEmpty(validationErrorMessageList))
 {
@@ -98,6 +108,7 @@ context.productAssocDataList = productAssocDataList;
 context.productFacetGroupDataList = productFacetGroupDataList;
 context.productFacetValueDataList = productFacetValueDataList;
 context.manufacturerDataList = manufacturerDataList;
+context.productAttributesDataList = productAttributesDataList;
 
 context.xlsFileName = xlsFileName;
 context.xlsFilePath = xlsFilePath;
@@ -109,6 +120,11 @@ context.productWarningList = productWarningList;
 context.productAssocErrorList = productAssocErrorList;
 context.productAssocWarningList = productAssocWarningList;
 context.productFacetGroupErrorList = productFacetGroupErrorList;
+context.productFacetGroupWarningList = productFacetGroupWarningList;
 context.productFacetValueErrorList = productFacetValueErrorList;
+context.productFacetValueWarningList = productFacetValueWarningList;
 context.productManufacturerErrorList = productManufacturerErrorList;
+context.productManufacturerWarningList = productManufacturerWarningList;
+context.productAttributesErrorList = productAttributesErrorList;
+context.productAttributesWarningList = productAttributesWarningList;
 context.errorMessageList = errorMessageList;

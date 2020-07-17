@@ -63,6 +63,12 @@
     <#if canonicalUrl?has_content>
         <link rel="canonical" href="${StringUtil.wrapString(canonicalUrl)}"/>
     </#if>
+    <#if plpPagingLinkPrev?has_content>
+        <link rel="prev" href="${StringUtil.wrapString(plpPagingLinkPrev)}"/>
+    </#if>
+    <#if plpPagingLinkNext?has_content>
+        <link rel="next" href="${StringUtil.wrapString(plpPagingLinkNext)}"/>
+    </#if>
   <#-- BF CUSTOM HEADER TAG CONTENT (SI_HEAD_TAG)- typically used for adding the mobile css-->
     ${screens.render("component://osafe/widget/EcommerceContentScreens.xml#SI_HEAD_TAG")}    
 

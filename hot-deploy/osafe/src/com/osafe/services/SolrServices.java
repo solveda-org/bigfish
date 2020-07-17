@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -225,16 +226,58 @@ public class SolrServices {
                                     	}
                                     }
                                     
-                                    
-                                    
                                     if(UtilValidate.isNotEmpty(product.getTimestamp("introductionDate")))
                                     {
                                     	productDocument.setIntroductionDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(product.getTimestamp("introductionDate").getTime())));
                                     }
-                                    if(UtilValidate.isNotEmpty(product.getTimestamp("salesDiscontinuationDate")))
+                                    
+                                    productDocument.setSalesDiscontinuationDateNullFlag(0);
+                                    Timestamp salesDiscoDateTs = product.getTimestamp("salesDiscontinuationDate");
+                                    if(UtilValidate.isNotEmpty(salesDiscoDateTs))
                                     {
-                                    	productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(product.getTimestamp("salesDiscontinuationDate").getTime())));
+                                    	productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(salesDiscoDateTs.getTime())));
+                                    	productDocument.setSalesDiscontinuationDateNullFlag(1);
                                     }
+                                    String SORT_OPTIONS  = Util.getProductStoreParm(productStoreId, "PLP_AVAILABLE_SORT");
+                                    if(UtilValidate.isNotEmpty(SORT_OPTIONS) && SORT_OPTIONS.contains("DISCO_DATE"))
+                                    {
+	                                    //if virtual then attempt to override disco date with variant disco date
+	                                    Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
+	                                    if(UtilValidate.isEmpty(salesDiscoDateTs) || (UtilValidate.isNotEmpty(salesDiscoDateTs) && !salesDiscoDateTs.before(nowTimestamp)))
+	                                    {
+		                                    String isVirtual = product.getString("isVirtual");
+		                                    if ("Y".equals(isVirtual)) 
+		                                    {
+		                                    	List<GenericValue> productAssocVariantList = product.getRelated("MainProductAssoc");
+		                                    	productAssocVariantList = EntityUtil.filterByAnd(productAssocVariantList, UtilMisc.toMap("productAssocTypeId", "PRODUCT_VARIANT")); 
+		                                    	List<GenericValue> assocProductVariantList = EntityUtil.getRelated("AssocProduct", productAssocVariantList);
+		                                    	assocProductVariantList = EntityUtil.orderBy(assocProductVariantList, UtilMisc.toList("salesDiscontinuationDate ASC"));
+		                                    	for(GenericValue productVariant : assocProductVariantList)
+		                                    	{
+	                                    			if(UtilValidate.isNotEmpty(productVariant.getTimestamp("salesDiscontinuationDate")))
+	                                                {
+	                                    				if(!productVariant.getTimestamp("salesDiscontinuationDate").before(nowTimestamp))
+	                                    				{
+	                                    					if(UtilValidate.isEmpty(salesDiscoDateTs))
+	                                                        {
+	                                    						salesDiscoDateTs = productVariant.getTimestamp("salesDiscontinuationDate");
+	                                    						productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(salesDiscoDateTs.getTime())));
+			                                                	productDocument.setSalesDiscontinuationDateNullFlag(1);
+	                                                        }
+	                                    					else if(UtilValidate.isNotEmpty(salesDiscoDateTs) && salesDiscoDateTs.after(productVariant.getTimestamp("salesDiscontinuationDate")))
+		                                    				{
+	                                    						salesDiscoDateTs = productVariant.getTimestamp("salesDiscontinuationDate");
+			                                                	productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(salesDiscoDateTs.getTime())));
+			                                                	productDocument.setSalesDiscontinuationDateNullFlag(1);
+		                                    				}
+	                                    					break;
+	                                    				}
+	                                                }
+		                                    	}
+		                                    }
+	                                    }
+                                    }
+                                    
                                     productDocument.setSequenceNum(productCategoryMember.getString("sequenceNum"));
                                     productDocument.setCategoryName(workingCategory.getString("categoryName"));
                                     
@@ -492,7 +535,6 @@ public class SolrServices {
                                         productCategoryId = productCategory.getString("productCategoryId");
                                         
                                         List<GenericValue> productFeatureCatGrpAppls = EntityUtil.filterByAnd(productFeatureCatGrpApplsList, UtilMisc.toMap("productCategoryId", productCategory.getString("productCategoryId")));
-                                        
                                         productFeatureCatGrpAppls = EntityUtil.orderBy(productFeatureCatGrpAppls, UtilMisc.toList("sequenceNum"));
 
                                         for (GenericValue productFeatureCatGrpAppl : productFeatureCatGrpAppls) 
@@ -643,7 +685,7 @@ public class SolrServices {
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo("")));
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
 		return cellProcessors;
 	}
@@ -660,7 +702,7 @@ public class SolrServices {
         headerColumns.addAll(UtilMisc.toList("totalTimesViewed","totalQuantityOrdered"));
         headerColumns.addAll(UtilMisc.toList("productFacilityIds"));
         headerColumns.addAll(UtilMisc.toList("introductionDate"));
-        headerColumns.addAll(UtilMisc.toList("salesDiscontinuationDate"));
+        headerColumns.addAll(UtilMisc.toList("salesDiscontinuationDate", "salesDiscontinuationDateNullFlag"));
         headerColumns.addAll(UtilMisc.toList("manufacturerName", "manufacturerIdNo"));
 		return headerColumns;
 	}
@@ -1199,10 +1241,55 @@ public class SolrServices {
 		{
 			productDocument.setIntroductionDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(product.getTimestamp("introductionDate").getTime())));
 		}
-		if(UtilValidate.isNotEmpty(product.getTimestamp("salesDiscontinuationDate")))
+		
+		productDocument.setSalesDiscontinuationDateNullFlag(0);
+        Timestamp salesDiscoDateTs = product.getTimestamp("salesDiscontinuationDate");
+        if(UtilValidate.isNotEmpty(salesDiscoDateTs))
         {
-        	productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(product.getTimestamp("salesDiscontinuationDate").getTime())));
+        	productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(salesDiscoDateTs.getTime())));
+        	productDocument.setSalesDiscontinuationDateNullFlag(1);
         }
+        
+        String SORT_OPTIONS  = Util.getProductStoreParm(productStoreId, "PLP_AVAILABLE_SORT");
+        if(UtilValidate.isNotEmpty(SORT_OPTIONS) && SORT_OPTIONS.contains("DISCO_DATE"))
+        {
+            //if virtual then attempt to override disco date with variant disco date
+            Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
+            if(UtilValidate.isEmpty(salesDiscoDateTs) || (UtilValidate.isNotEmpty(salesDiscoDateTs) && !salesDiscoDateTs.before(nowTimestamp)))
+            {
+                String isVirtual = product.getString("isVirtual");
+                if ("Y".equals(isVirtual)) 
+                {
+                	List<GenericValue> productAssocVariantList = product.getRelated("MainProductAssoc");
+                	productAssocVariantList = EntityUtil.filterByAnd(productAssocVariantList, UtilMisc.toMap("productAssocTypeId", "PRODUCT_VARIANT")); 
+                	List<GenericValue> assocProductVariantList = EntityUtil.getRelated("AssocProduct", productAssocVariantList);
+                	assocProductVariantList = EntityUtil.orderBy(assocProductVariantList, UtilMisc.toList("salesDiscontinuationDate ASC"));
+                	for(GenericValue productVariant : assocProductVariantList)
+                	{
+            			if(UtilValidate.isNotEmpty(productVariant.getTimestamp("salesDiscontinuationDate")))
+                        {
+            				if(!productVariant.getTimestamp("salesDiscontinuationDate").before(nowTimestamp))
+            				{
+            					if(UtilValidate.isEmpty(salesDiscoDateTs))
+                                {
+            						salesDiscoDateTs = productVariant.getTimestamp("salesDiscontinuationDate");
+            						productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(salesDiscoDateTs.getTime())));
+                                	productDocument.setSalesDiscontinuationDateNullFlag(1);
+                                }
+            					else if(UtilValidate.isNotEmpty(salesDiscoDateTs) && salesDiscoDateTs.after(productVariant.getTimestamp("salesDiscontinuationDate")))
+                				{
+            						salesDiscoDateTs = productVariant.getTimestamp("salesDiscontinuationDate");
+                                	productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(salesDiscoDateTs.getTime())));
+                                	productDocument.setSalesDiscontinuationDateNullFlag(1);
+                				}
+            					break;
+            				}
+                        }
+                	}
+                }
+            }
+        }
+        
 		productDocument.setSequenceNum(productCategoryMember.getString("sequenceNum"));
 		productDocument.setCategoryName(workingCategory.getString("categoryName"));
 		

@@ -171,6 +171,8 @@
         <attribute name="category" mode="IN" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="value" mode="IN" type="String" optional="true" allow-html="safe"/>
+        <attribute name="labelFileProperty" mode="IN" type="String" optional="true"/>
+        <attribute name="deploymentLabelFileProperty" mode="IN" type="String" optional="true"/>
     </service>
 
     <service name="deleteUiLabelGroup" engine="group" auth="false">
@@ -190,12 +192,16 @@
          Delete UiLabel.
         </description>
         <attribute name="key" mode="IN" type="String"/>
+        <attribute name="labelFileProperty" mode="IN" type="String" optional="true"/>
+        <attribute name="deploymentLabelFileProperty" mode="IN" type="String" optional="true"/>
     </service>
 
     <service name="deleteUiLabelXml" engine="java" transaction-timeout="300" auth="true"
             location="com.osafe.services.OsafeManageXml" invoke="deleteUiLabelXml">
         <description>Delete Ui Label from xml config file</description>
         <attribute name="key" mode="IN" type="String"/>
+        <attribute name="labelFileProperty" mode="IN" type="String" optional="true"/>
+        <attribute name="deploymentLabelFileProperty" mode="IN" type="String" optional="true"/>
     </service>
 
     <service name="createUiLabelGroup" engine="group" auth="false">
@@ -213,10 +219,13 @@
         <description>
          create Ui Label.
         </description>
+        <attribute name="propkey" mode="IN" type="String" optional="true"/>
         <attribute name="key" mode="INOUT" type="String" optional="true"/>
         <attribute name="category" mode="IN" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="value" mode="IN" type="String" optional="true" allow-html="safe"/>
+        <attribute name="labelFileProperty" mode="IN" type="String" optional="true"/>
+        <attribute name="deploymentLabelFileProperty" mode="IN" type="String" optional="true"/>
     </service>
     
     <service name="updateDivSeqXml" engine="java" transaction-timeout="300" auth="true"
@@ -394,11 +403,15 @@
         <attribute name="category" mode="IN" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="value" mode="IN" type="String" optional="true" allow-html="safe"/>
+        <attribute name="labelFileProperty" mode="IN" type="String" optional="true"/>
+        <attribute name="deploymentLabelFileProperty" mode="IN" type="String" optional="true"/>
     </service>
 
     <service name="copyLabelXml" engine="java" transaction-timeout="300" auth="true"
             location="com.osafe.services.OsafeManageXml" invoke="copyLabelXml">
         <description>Uses copy Label xml config file</description>
+        <attribute name="labelFileProperty" mode="IN" type="String" optional="true"/>
+        <attribute name="deploymentLabelFileProperty" mode="IN" type="String" optional="true"/>
     </service>
 
     <service name="copyDivSequenceXml" engine="java" transaction-timeout="300" auth="true"
@@ -563,6 +576,8 @@
         <attribute name="category" mode="IN" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="value" mode="IN" type="String" optional="true" allow-html="safe"/>
+        <attribute name="labelFileProperty" mode="IN" type="String" optional="true"/>
+        <attribute name="deploymentLabelFileProperty" mode="IN" type="String" optional="true"/>
     </service>
     <service name="updateDivSequenceGroup" engine="group" auth="false">
         <description>
@@ -662,6 +677,7 @@
         <attribute name="salesDiscontinuationDate" mode="IN" type="String" optional="true"/>
         <attribute name="listPrice" mode="IN" type="String" optional="true"/>
         <attribute name="defaultPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="recurringPrice" mode="IN" type="String" optional="true"/>
         <attribute name="variantListPrice" mode="IN" type="String" optional="true"/>
         <attribute name="variantSalePrice" mode="IN" type="String" optional="true"/>
         <attribute name="currencyUomId" mode="IN" type="String" optional="true"/>
@@ -723,7 +739,6 @@
             <invoke name="manageProductFeature" result-to-context="true"/>
             <invoke name="updateProductContent" result-to-context="true"/>
             <invoke name="updateProductIdentification" result-to-context="true"/>
-            <invoke name="genProductsIndexAdd" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
@@ -745,6 +760,7 @@
         <attribute name="salesDiscontinuationDate" mode="IN" type="String" optional="true"/>
         <attribute name="listPrice" mode="IN" type="String" optional="true"/>
         <attribute name="defaultPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="recurringPrice" mode="IN" type="String" optional="true"/>
         <attribute name="isVariant" mode="IN" type="String" optional="true"/>
         <attribute name="isVirtual" mode="IN" type="String" optional="true"/>
         <attribute name="productTypeId" mode="IN" type="String" optional="true"/>
@@ -939,7 +955,6 @@
             <invoke name="updateProductAndPrice" result-to-context="true"/>
             <invoke name="updateProductContent" result-to-context="true"/>
             <invoke name="updateProductIdentification" result-to-context="true"/>
-            <invoke name="genProductsIndexUpdate" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
@@ -1386,6 +1401,7 @@
         <attribute name="productId" mode="IN" type="String" optional="true"/>
         <attribute name="listPrice" mode="IN" type="String" optional="true"/>
         <attribute name="defaultPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="recurringPrice" mode="IN" type="String" optional="true"/>
         <attribute name="variantListPrice" mode="IN" type="String" optional="true"/>
         <attribute name="variantSalePrice" mode="IN" type="String" optional="true"/>
         <attribute name="currencyUomId" mode="IN" type="String" optional="true"/>
@@ -1969,6 +1985,25 @@
         <auto-attributes mode="IN" include="pk"/>
     </service>
     
+    <service name="createOrderItemAttribute" engine="simple" default-entity-name="OrderItemAttribute"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="createOrderItemAttribute">
+        <description>Create Order Item Attribute</description>
+        <auto-attributes mode="IN" include="pk"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>
+    
+    <service name="updateOrderItemAttribute" engine="simple" default-entity-name="OrderItemAttribute"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="updateOrderItemAttribute">
+        <description>Update Order Item Attribute</description>
+        <auto-attributes mode="IN" include="pk"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>
+
+    <service name="deleteOrderItemAttribute" engine="simple" default-entity-name="OrderItemAttribute"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="deleteOrderItemAttribute">
+        <description>Delete Order Item Attribute</description>
+        <auto-attributes mode="IN" include="pk"/>
+    </service>
     <service name="updateNoteDataGroup" engine="group" auth="false" transaction-timeout="7200">
         <description>
          Update Note Data and render success message
@@ -3408,6 +3443,15 @@
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
+    <service name="updateFdggConfigGroup" engine="group" auth="true">
+        <description>
+         update First Data Payment Gateway Config Group Settings
+        </description>
+        <group>
+            <invoke name="updatePaymentGatewayFdgg" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
 
     <service name="exportOrderXML" engine="java" transaction-timeout="7200" auth="true"
             location="com.osafe.services.ImportServices" invoke="exportOrderXML">
@@ -4722,5 +4766,66 @@
         <attribute mode="IN" name="groupName" optional="true" type="String"/>
         <attribute name="organizationEmployeeId" type="Map" string-map-prefix="organizationEmployeeId_" mode="IN" optional="true"/>
     </service>
+    
+    <service name="createUpdateProductAttributesGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Update product assoc and render success message.
+        </description>
+        <group>
+            <invoke name="createUpdateProductAttributes" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    
+    
+    
+    
+    
+     <service name="updateClassificationGroup" engine="group" auth="false">
+        <description>
+         Update the Organization
+        </description>
+        <group>
+            <invoke name="updateClassification" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateClassification" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCustomerServices.xml"
+            invoke="updateClassification">
+        <description>Update the Organization</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute mode="IN" name="partyId" optional="true" type="String"/>
+        <attribute mode="IN" name="groupName" optional="true" type="String"/>
+        <attribute name="organizationEmployeeId" type="Map" string-map-prefix="organizationEmployeeId_" mode="IN" optional="true"/>
+    </service>
 
+    <service name="createUpdateProductAttributes" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="createUpdateProductAttributes" auth="true">
+        <description>Update Product Attributes</description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="productAttrValue" type="Map" string-map-prefix="productAttrValue_" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateProductVariantListGroup" engine="group" auth="false">
+        <description>
+         Update variant Prices and Inventory on Variant List
+        </description>
+        <group>
+            <invoke name="updateProductVariantList" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateProductVariantList" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updateProductVariantList" auth="true">
+        <description>Update variant Prices and Inventory on Variant List</description>
+        <attribute name="productId" mode="INOUT" type="String" optional="false"/>
+        <attribute name="currencyUomId" mode="IN" type="String" optional="false"/>
+        <attribute name="variantListPrice" type="Map" string-map-prefix="variantListPrice_" mode="IN" optional="true"/>
+        <attribute name="variantDefaultPrice" type="Map" string-map-prefix="variantDefaultPrice_" mode="IN" optional="true"/>
+        <attribute name="bfTotalInventory" type="Map" string-map-prefix="bfTotalInventory_" mode="IN" optional="true"/>
+        <attribute name="bfWHInventory" type="Map" string-map-prefix="bfWHInventory_" mode="IN" optional="true"/>
+    </service>
+    
 </services>

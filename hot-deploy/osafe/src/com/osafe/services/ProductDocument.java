@@ -52,6 +52,7 @@ public class ProductDocument implements Serializable {
     private String productFacilityIds;
     private String introductionDate;
     private String salesDiscontinuationDate;
+    private int salesDiscontinuationDateNullFlag;
     private String manufacturerName;
     private String manufacturerIdNo;
 
@@ -339,6 +340,14 @@ public class ProductDocument implements Serializable {
 
     public void setSalesDiscontinuationDate(String salesDiscontinuationDate) {
         this.salesDiscontinuationDate = salesDiscontinuationDate;
+    }
+    
+    public int getSalesDiscontinuationDateNullFlag() {
+        return salesDiscontinuationDateNullFlag;
+    }
+
+    public void setSalesDiscontinuationDateNullFlag(int salesDiscontinuationDateNullFlag) {
+        this.salesDiscontinuationDateNullFlag = salesDiscontinuationDateNullFlag;
     }
 
 	public void setManufacturerName(String manufacturerName) {

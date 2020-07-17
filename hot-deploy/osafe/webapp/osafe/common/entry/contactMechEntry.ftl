@@ -12,6 +12,7 @@
 <input type="hidden" name="contactMechPurposeTypeId" value="${requestParameters.contactMechPurposeTypeId!"SHIPPING_LOCATION"}"/>
 <input type="hidden" name="DONE_PAGE" value="${requestParameters.DONE_PAGE!}"/>
 <input type="hidden" name="checkoutpage" value="${requestParameters.checkoutpage!}"/>
+<input type="hidden" name="paymentMethodId" value="${requestParameters.paymentMethodId!}"/>
 <#if requestParameters.shoppingListId?exists && requestParameters.shoppingListId?has_content>
 	<input type="hidden" name="shoppingListId" value="${requestParameters.shoppingListId!}"/>
 </#if>

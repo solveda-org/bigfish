@@ -6,6 +6,7 @@
     <simple-method method-name="validateCheckout" short-description="Validate Admin Order and setup shopping cart" login-required="false">
 
         <session-to-field field="shoppingCart"/>
+        <call-object-method obj-field="shoppingCart" method-name="getOrderPartyId" ret-field="orderPartyId"/>
 
         <call-simple-method method-name="validateAppliedGiftCardPayment" />
         <set field="remainingAmount" value="${groovy: return shoppingCart.getGrandTotal().subtract(shoppingCart.getPaymentTotal());}"/>
@@ -91,10 +92,10 @@
 	                    <set field="creditCardContext.suffixOnCard" from-field="savedCreditCard.suffixOnCard"/>
 	                    <set field="creditCardContext.cardNumber" from-field="savedCreditCard.cardNumber"/>
 	                    <set field="creditCardContext.contactMechId" from-field="parameters.BILLING_SELECT_ADDRESS"/>
-	                    
 	                    <set field="paymentMethodId" from-field="parameters.savedCard"/>
 	                </else>
 	            </if-empty>
+                 <set field="creditCardContext.partyId" from-field="orderPartyId"/>
 	             <set field="cardSecurityCode" from-field="parameters.savedVerificationNo" set-if-null="true" set-if-empty="true"/>
 	        </if-compare>
 	        <if-compare operator="equals" value="CCNew" field="parameters.paymentOption">
@@ -183,6 +184,7 @@
 	                    </if-empty>
 	                </else>
 	                </if-compare>
+	              <set field="creditCardContext.partyId" from-field="orderPartyId"/>
 	              <set field="cardSecurityCode" from-field="parameters.verificationNo" set-if-null="true" set-if-empty="true"/>
 	              <set field="creditCardContext.contactMechId" from-field="parameters.BILLING_SELECT_ADDRESS"/>
 	            </if-not-empty>

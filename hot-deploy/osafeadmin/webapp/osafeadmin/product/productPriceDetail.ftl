@@ -79,4 +79,30 @@
       </div>
     </div>
   </div>
+
+  <#if isVariant != 'Y'>
+  <div class="infoRow column">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.RecurringPriceCaption}</label>
+      </div>
+      <div class="infoValue">
+        <#if isVariant == 'Y'>
+ 	      <#assign variantRecurringPrice = "" />
+		  <#if productVariantRecurringPrice?has_content>
+		    <#assign variantRecurringPrice = productVariantRecurringPrice.price!"" />
+		  </#if>
+          <input type="text" class="textEntry textAlignRight" name="variantRecurringPrice" id="variantRecurringPrice" value="<#if parameters.variantRecurringPrice?has_content || productVariantRecurringPrice?has_content>${parameters.variantRecurringPrice!variantRecurringPrice!}</#if>"/>
+        <#else>
+   	      <#assign recurringPrice = "" />
+		  <#if productRecurringPrice?has_content>
+		    <#assign recurringPrice = productRecurringPrice.price!"" />
+		  </#if>
+          <input type="text" class="textEntry textAlignRight" name="recurringPrice" id="recurringPrice" value="${parameters.recurringPrice!recurringPrice!}"/>
+        </#if>
+      </div>
+    </div>
+  </div>
+ </#if>
+  
 </#if>

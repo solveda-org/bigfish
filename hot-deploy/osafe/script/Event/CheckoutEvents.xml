@@ -107,6 +107,17 @@
         </if-empty>
     </simple-method>
     
+    <simple-method method-name="checkUserLoginSession" short-description="If the session has expired then Return to the My Account page" login-required="false">
+
+        <session-to-field field="userLogin"/>
+
+        <if-empty field="userLogin">
+            <property-to-field field="warningMessage" resource="OSafeUiLabels" property="SessionExpireInfo"/>
+            <field-to-request field="warningMessage" request-name="_WARNING_MESSAGE_"/>
+            <return response-code="sessionExpire"/>
+        </if-empty>
+    </simple-method>
+
     <simple-method method-name="checkMyCartUserSession" short-description="If the session has expired while trying to navigate from my cart, then Return to the My Account page" login-required="false">
 		<set field="sessionHasExpired" value="false" type="Boolean"/>
 		<if-not-empty field="parameters.partyId">
@@ -286,7 +297,6 @@
 		        <call-object-method method-name="getOrderAttribute" obj-field="shoppingCart" ret-field="deliveryOption">
 		            <string value="DELIVERY_OPTION"/>
 		        </call-object-method>
-		        
 		        <if-compare operator="not-equals" value="SHIP_TO_MULTI" field="deliveryOption">
 		        	<!-- If SHIPPING DIVs are hidden, then use the Address(BILLING) DIVs inside of Personal Info -->
 		        	<if-not-empty field="parameters.SHIPPING_USE_SCREEN">
@@ -296,7 +306,6 @@
 			        		<clear-field field="shippingAddressContext.attnName"/>
 			        	</else>
 			        </if-not-empty>
-			        
 			        <!--  if shipping applies and there is no shipping option selected and no store selected then return error -->
 			        <if-compare operator="equals" value="true" field="shippingApplies">
 			            <if-empty field="parameters.shipping_method">
@@ -539,6 +548,7 @@
 	        <set field="userLoginContext.partyId" from-field="userLogin.partyId"/>
 	        <call-simple-method method-name="createUserLogin"/>
 	
+	        <call-simple-method method-name="createBillingAddressGeneralPurpose"/>
 	        <call-simple-method method-name="createShippingAddressPurpose"/>
 	        <call-simple-method method-name="setOrderContactMech"/>
 	
@@ -734,6 +744,7 @@
 	        <call-simple-method method-name="createUpdatePerson"/>
 	        <call-simple-method method-name="createPartyBillingAddress"/>
 	        <call-simple-method method-name="createBillingAddressPurpose"/>
+	        <call-simple-method method-name="createBillingAddressGeneralPurpose"/>
 	        <call-simple-method method-name="createPartyShippingAddress"/>
 	        <call-simple-method method-name="createShippingAddressPurpose"/>
 	        <call-simple-method method-name="setOrderContactMech"/>
@@ -799,7 +810,7 @@
 			    </if-compare>
 			    
 		        <check-errors/>
-		
+		        
 		        <call-simple-method method-name="createUpdatePerson"/>
 		        <call-simple-method method-name="createOrderContactMech"/>
 	        </if-compare>
@@ -927,6 +938,7 @@
 	        <call-simple-method method-name="createUpdatePerson"/>
 	        <call-simple-method method-name="createPartyBillingAddress"/>
 	        <call-simple-method method-name="createBillingAddressPurpose"/>
+	        <call-simple-method method-name="createBillingAddressGeneralPurpose"/>
 	        <call-simple-method method-name="createPartyShippingAddress"/>
 	        <call-simple-method method-name="createShippingAddressPurpose"/>
 	        <call-simple-method method-name="setOrderContactMech"/>
@@ -1074,6 +1086,7 @@
 	        <call-simple-method method-name="createUpdatePerson"/>
 	        <call-simple-method method-name="createPartyBillingAddress"/>
 	        <call-simple-method method-name="createBillingAddressPurpose"/>
+	        <call-simple-method method-name="createBillingAddressGeneralPurpose"/>
 	        <call-simple-method method-name="createPartyShippingAddress"/>
 	        <call-simple-method method-name="createShippingAddressPurpose"/>
 	        <call-simple-method method-name="setOrderContactMech"/>
@@ -1356,16 +1369,16 @@
 
         <session-to-field field="shoppingCart" session-name="shoppingCart"/>
         <if-not-empty field="shoppingCart">
-
             <!-- UPDATE SHIPPING Address based on values entered during checkout (shippingAddressContext)-->
             <call-object-method obj-field="shoppingCart" method-name="getShippingContactMechId" ret-field="shippingContactMechId"/>
-            <make-value entity-name="PostalAddress" value-field="postalAddress"/>
-            <set field="postalAddress.contactMechId" from-field="shippingContactMechId"/>
-            <find-by-primary-key map="postalAddress" value-field="lookedUpValue"/>
-            <set-nonpk-fields map="shippingAddressContext" value-field="lookedUpValue"/>
-            <store-value value-field="lookedUpValue"/>
-            <set field="shippingAddressPurposeContext.contactMechId" from-field="shippingContactMechId"/>
-            
+            <if-not-empty field="shippingContactMechId">
+	            <make-value entity-name="PostalAddress" value-field="postalAddress"/>
+	            <set field="postalAddress.contactMechId" from-field="shippingContactMechId"/>
+	            <find-by-primary-key map="postalAddress" value-field="lookedUpValue"/>
+	            <set-nonpk-fields map="shippingAddressContext" value-field="lookedUpValue"/>
+	            <store-value value-field="lookedUpValue"/>
+	            <set field="shippingAddressPurposeContext.contactMechId" from-field="shippingContactMechId"/>
+            </if-not-empty>
         </if-not-empty>
         <call-simple-method method-name="setOrderContactMech"/>
 
@@ -1416,6 +1429,12 @@
        <call-service service-name="createPartyPostalAddress" in-map-name="createPartyPostalAddressCtx">
            <result-to-field result-name="contactMechId" field="billAddressPurposeContext.contactMechId"/>
        </call-service>
+    </simple-method>    
+
+    <simple-method method-name="createBillingAddressGeneralPurpose" short-description="Create Billing Address with General Purpose" login-required="false">
+       <!-- CREATE GENERAL PURPOSE -->
+           <set value="GENERAL_LOCATION" field="billAddressPurposeContext.contactMechPurposeTypeId"/>
+           <call-service service-name="createPartyContactMechPurpose" in-map-name="billAddressPurposeContext"/>
     </simple-method>    
 
     <simple-method method-name="createBillingAddressPurpose" short-description="Create Billing Address Purpose" login-required="false">
@@ -1604,6 +1623,7 @@
 	        <call-simple-method method-name="deletePartyBillingLocations"/>
 	        <call-simple-method method-name="createPartyBillingAddress"/>
 	        <call-simple-method method-name="createBillingAddressPurpose"/>
+	        <call-simple-method method-name="createBillingAddressGeneralPurpose"/>
 	        <call-simple-method method-name="deletePartyShippingLocations"/>
 	        <call-simple-method method-name="createPartyShippingAddress"/>
 	        <call-simple-method method-name="createShippingAddressPurpose"/>
@@ -1633,12 +1653,23 @@
         <call-object-method method-name="getContactMech" obj-field="shoppingCart" ret-field="contactMechId">
             <string value="BILLING_LOCATION"/>
         </call-object-method>
+        
         <set field="creditCardContext.contactMechId" from-field="contactMechId"/>
-        <call-service service-name="createCreditCard" in-map-name="creditCardContext">
-            <default-message>Credit Card successfully created.</default-message>
-            <result-to-request result-name="paymentMethodId"/>
-            <result-to-field result-name="paymentMethodId" field="paymentMethodId"/>
-        </call-service>
+        <if-compare field="parameters.paymentOption" operator="equals" value="PAYOPT_CC_EXIST" type="String">
+            <set field="creditCardContext.paymentMethodId" from-field="parameters.savedCard"/>
+	        <call-service service-name="updateCreditCard" in-map-name="creditCardContext">
+	            <default-message>Credit Card successfully updated.</default-message>
+	            <result-to-request result-name="paymentMethodId"/>
+	            <result-to-field result-name="paymentMethodId" field="paymentMethodId"/>
+	        </call-service>
+        <else>
+	        <call-service service-name="createCreditCard" in-map-name="creditCardContext">
+	            <default-message>Credit Card successfully created.</default-message>
+	            <result-to-request result-name="paymentMethodId"/>
+	            <result-to-field result-name="paymentMethodId" field="paymentMethodId"/>
+	        </call-service>
+        </else>
+        </if-compare>
         <!-- Set Payment Method-->
          <if-not-empty field="paymentMethodId">
              <session-to-field field="shoppingCart" session-name="shoppingCart"/>

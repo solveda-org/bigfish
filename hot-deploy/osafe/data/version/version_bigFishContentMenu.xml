@@ -165,6 +165,13 @@
 <DataResource dataResourceId="PDP_CONTENT_03" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_03" localeString="en_US"/>
 <DataResource dataResourceId="PDP_CONTENT_04" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_04" localeString="en_US"/>
 <DataResource dataResourceId="PDP_CONTENT_05" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_05" localeString="en_US"/>
+
+<DataResource dataResourceId="PLP_CONTENT_01" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_01" localeString="en_US"/>
+<DataResource dataResourceId="PLP_CONTENT_02" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_02" localeString="en_US"/>
+<DataResource dataResourceId="PLP_CONTENT_03" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_03" localeString="en_US"/>
+<DataResource dataResourceId="PLP_CONTENT_04" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_04" localeString="en_US"/>
+<DataResource dataResourceId="PLP_CONTENT_05" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PLP_CONTENT_05" localeString="en_US"/>
+
 <DataResource dataResourceId="CHECKOUT_CC_VERIFY" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="CHECKOUT_CC_VERIFY" localeString="en_US"/>
 <DataResource dataResourceId="CHECKOUT_EFT_GUIDE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="CHECKOUT_EFT_GUIDE" localeString="en_US"/>
 <DataResource dataResourceId="MULTI_ADDR_ESPOT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_ADDR_ESPOT" localeString="en_US"/>
@@ -230,6 +237,12 @@
 <ElectronicText dataResourceId="PDP_CONTENT_03"/>
 <ElectronicText dataResourceId="PDP_CONTENT_04"/>
 <ElectronicText dataResourceId="PDP_CONTENT_05"/>
+
+<ElectronicText dataResourceId="PLP_CONTENT_01"/>
+<ElectronicText dataResourceId="PLP_CONTENT_02"/>
+<ElectronicText dataResourceId="PLP_CONTENT_03"/>
+<ElectronicText dataResourceId="PLP_CONTENT_04"/>
+<ElectronicText dataResourceId="PLP_CONTENT_05"/>
 
 <ElectronicText dataResourceId="CHECKOUT_CC_VERIFY"/>
 <ElectronicText dataResourceId="CHECKOUT_EFT_GUIDE"/>
@@ -300,6 +313,12 @@
 <Content contentId="PDP_CONTENT_04" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_04" localeString="en_US"/>
 <Content contentId="PDP_CONTENT_05" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_05" localeString="en_US"/>
 
+<Content contentId="PLP_CONTENT_01" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_01" localeString="en_US"/>
+<Content contentId="PLP_CONTENT_02" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_02" localeString="en_US"/>
+<Content contentId="PLP_CONTENT_03" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_03" localeString="en_US"/>
+<Content contentId="PLP_CONTENT_04" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_04" localeString="en_US"/>
+<Content contentId="PLP_CONTENT_05" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PLP content" contentName="PLP CONTENT" dataResourceId="PLP_CONTENT_05" localeString="en_US"/>
+
 <Content contentId="CHECKOUT_CC_VERIFY" contentTypeId="BF_PAGE_TOP_SPOT"  description="Special check-out page content to show where CC verification can be found" contentName="Credit Card Verification Helper" dataResourceId="CHECKOUT_CC_VERIFY" localeString="en_US"/>
 <Content contentId="CHECKOUT_EFT_GUIDE" contentTypeId="BF_PAGE_TOP_SPOT"  description="Special check-out page content to show where EFT account can be found" contentName="EFT account Helper" dataResourceId="CHECKOUT_EFT_GUIDE" localeString="en_US"/>
 <Content contentId="MULTI_ADDR_ESPOT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="MULTI_ADDR_ESPOT" description="Content Spot displayed on the TOP of the Multi Shipping Address page" contentName="Multi Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
@@ -367,6 +386,12 @@
 <ContentRole contentId="PDP_CONTENT_03" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_04" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_05" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+
+<ContentRole contentId="PLP_CONTENT_01" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PLP_CONTENT_02" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PLP_CONTENT_03" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PLP_CONTENT_04" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PLP_CONTENT_05" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 
 <ContentRole contentId="CHECKOUT_CC_VERIFY" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="CHECKOUT_EFT_GUIDE" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -654,6 +679,12 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_03" contentId="PDP_CONTENT_03" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_04" contentId="PDP_CONTENT_04" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_05" contentId="PDP_CONTENT_05" contentTypeId="BF_PAGE_TOP_SPOT"/>
+
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_01" contentId="PLP_CONTENT_01" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_02" contentId="PLP_CONTENT_02" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_03" contentId="PLP_CONTENT_03" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_04" contentId="PLP_CONTENT_04" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PLP_CONTENT_05" contentId="PLP_CONTENT_05" contentTypeId="BF_PAGE_TOP_SPOT"/>
 
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="CHECKOUT_CC_VERIFY" contentId="CHECKOUT_CC_VERIFY" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="CHECKOUT_EFT_GUIDE" contentId="CHECKOUT_EFT_GUIDE" contentTypeId="BF_PAGE_TOP_SPOT"/>

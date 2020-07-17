@@ -1,5 +1,5 @@
 <#if warningText?exists && warningText?has_content>
  <div class="warningText">
-  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${warningText!}');" onMouseout="hideTooltip()"><span class="warningIcon"></span></a>
+  <a href="<#if warningUrl?exists && warningUrl?has_content>${warningUrl!}<#else>javascript:void(0);</#if>" onMouseover="showTooltip(event,'${warningText!}');" onMouseout="hideTooltip()"><span class="warningIcon"></span></a>
  </div>
 </#if>

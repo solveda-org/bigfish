@@ -331,7 +331,10 @@ public class SeoUrlControlServlet extends ControlServlet
             } 
             else 
             {
-                Debug.logError(throwable, "Error in request handler: ", module);
+                if (Debug.verboseOn())
+                {
+                   Debug.logVerbose(throwable, "Error in request handler: ", module);
+                }
                 StringUtil.HtmlEncoder encoder = new StringUtil.HtmlEncoder();
                 request.setAttribute("_ERROR_MESSAGE_", encoder.encode(throwable.toString()));
                 errorPage = requestHandler.getDefaultErrorPage(request);

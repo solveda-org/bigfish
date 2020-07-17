@@ -11,11 +11,18 @@
 <#assign setAsDefaultCard= parameters.setAsDefaultCard?if_exists/>
 <#if paymentMethodId?has_content>
     <#assign creditCard = delegator.findOne("CreditCard", Static["org.ofbiz.base.util.UtilMisc"].toMap("paymentMethodId", paymentMethodId), true)/>
-    <#assign cardType= creditCard.cardType!""/>
-    <#assign cardNumber= creditCard.cardNumber!""/>
-    <#assign firstNameOnCard= creditCard.firstNameOnCard!""/>
-    <#assign lastNameOnCard= creditCard.lastNameOnCard!""/>
-    <input type="hidden" name="mode" value="${mode!""}"/>
+    <#if creditCard?has_content>
+      <#assign mode= "edit"/>
+      <#assign cardType= creditCard.cardType!""/>
+      <#assign cardNumber= creditCard.cardNumber!""/>
+      <#assign firstNameOnCard= creditCard.firstNameOnCard!""/>
+      <#assign lastNameOnCard= creditCard.lastNameOnCard!""/>
+      <#assign postalAddressData = creditCard.getRelatedOne("PostalAddress")!"" />
+      <#if postalAddressData?has_content>
+         <#assign postalAddressContactMechId = postalAddressData.contactMechId!"" />
+      </#if>
+      <input type="hidden" name="mode" value="${mode!""}"/>
+    </#if>
 </#if>
 <input type="hidden" name="paymentMethodId" value="${paymentMethodId!""}"/>
 <#if paymentMethodId?has_content && userLogin?has_content && mode == "edit">
@@ -86,7 +93,7 @@
 	            <#assign cardNumberDisplay = cardNumber>
 	          </#if>
 	          <input type="text" readonly="readonly" class="cardNumber" maxlength="30" id="cardNumber"  name="cardNumberDisplay" value="${cardNumberDisplay!""}"/>
-	          <input type="hidden"  id="cardNumber"  name="cardNumber" value="${cardNumber!""}"/>
+	          <input type="hidden"  id="cardNumber"  name="cardNumber" value="${cardNumberDisplay!""}"/>
 	      <#else>
 	          <input type="text" class="cardNumber" maxlength="30" id="cardNumber"  name="cardNumber" value="${requestParameters.cardNumber!cardNumber!""}"/>
 	      </#if>
@@ -145,5 +152,19 @@
       <label class="radioOptionLabel"><input type="radio" id="setAsDefaultCard" name="setAsDefaultCard" value="Y" <#if ((setAsDefaultCard?exists && setAsDefaultCard?string == "Y"))>checked="checked"</#if>/><span>${uiLabelMap.YesLabel}</span></label>
       <label class="radioOptionLabel"><input type="radio" id="setAsDefaultCard" name="setAsDefaultCard" value="N" <#if ((setAsDefaultCard?exists && setAsDefaultCard?string == "N")|| !(setAsDefaultCard?has_content))>checked="checked"</#if>/><span>${uiLabelMap.NoLabel}</span></label>
     </div>
+
+    <#assign contactMechList = context.get(fieldPurpose+"ContactMechList") />
+    <#if contactMechList?has_content>
+	    ${setRequestAttribute("DISPLAY_FORMAT", addressSelectionDisplayFormat!)}
+	    ${setRequestAttribute("contactMechList", contactMechList!)}
+	    ${setRequestAttribute("addressFieldPurpose",fieldPurpose!)}
+	    ${setRequestAttribute("addressSelectionInputName",addressSelectionInputName!)}
+	    ${setRequestAttribute("addressSelectionCaption",addressSelectionCaption!)}
+	    ${setRequestAttribute("addAddressAction",addAddressAction!)}
+	    ${setRequestAttribute("paymentMethodId",paymentMethodId!)}
+	    ${setRequestAttribute("selectedContactMechId",postalAddressContactMechId!)}
+	    ${screens.render("component://osafe/widget/CommonScreens.xml#postalAddressSelection")}
+    </#if>
+
   </div>
 </div>

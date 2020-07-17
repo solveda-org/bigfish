@@ -24,6 +24,10 @@ if(UtilValidate.isNotEmpty(parameters.fileToExport) && UtilValidate.isNotEmpty(p
     {
         XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-deployment-UiLabel-xml-file"), context);
     }
+    else if(parameters.fileToExport == "adminUiLabelFile")
+    {
+        XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "admin-deployment-UiLabel-xml-file"), context);
+    }
     else if(parameters.fileToExport == "XProductStoreParm")
     {
         efo = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);

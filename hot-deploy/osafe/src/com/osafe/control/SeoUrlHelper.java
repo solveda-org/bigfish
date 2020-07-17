@@ -157,11 +157,23 @@ public class SeoUrlHelper
 
 
         StringBuilder newURL = new StringBuilder();
-        newURL.append("http://");
+        newURL.append(request.getScheme() + "://");
         newURL.append(server);
-        if (!httpPort.equals("80")) 
+        if (request.isSecure())
         {
-            newURL.append(":").append(httpPort);
+            if (!httpsPort.equals("443")) 
+            {
+                newURL.append(":").append(httpsPort);
+            }
+        	
+        }
+        else
+        {
+            if (!httpPort.equals("80")) 
+            {
+                newURL.append(":").append(httpPort);
+            }
+        	
         }
         if (!url.startsWith("/")) {
             newURL.append("/");

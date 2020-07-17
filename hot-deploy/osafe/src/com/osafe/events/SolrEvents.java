@@ -568,7 +568,7 @@ public class SolrEvents
                             if ((UtilValidate.isNotEmpty(sortOptionAttrList)) && (sortOptionAttrList.size() > 1))
                             {
                                 Map<String,String> sortOptionMap = FastMap.newInstance();
-                                sortOptionMap.put("SORT_OPTION",sortOption );
+                                sortOptionMap.put("SORT_OPTION",sortOption);
                                 sortOptionMap.put("SOLR_VALUE", sortOptionAttrList.get(0));
                                 sortOptionMap.put("SORT_OPTION_LABEL", sortOptionAttrList.get(1));
                                 sortOptions.add(sortOptionMap);
@@ -606,7 +606,14 @@ public class SolrEvents
                 String[] sortResultsParts = StringUtils.split(sortResults, "-");
                 if (sortResultsParts.length > 1) 
                 {
-                    sortName = sortResultsParts[0];
+                	sortName = sortResultsParts[0];
+                	
+                	//Special Case: if sortName is salesDiscontinuationDate then we need to add this sort field to set null values to the end
+                	if(sortName.equalsIgnoreCase("salesDiscontinuationDate"))
+                	{
+                        solrQueryFacet.addSortField("salesDiscontinuationDateNullFlag", ORDER.desc);
+                	}
+
                     sortDir = sortResultsParts[1];
                     ORDER solrOrder = ORDER.asc;
                     if ("desc".equalsIgnoreCase(sortDir)) 

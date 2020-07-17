@@ -32,6 +32,7 @@ shippingContactMechList = FastList.newInstance();
 totalQuantity=0;
 numberOfItems=0;
 lineIndexGiftMessageMap = FastMap.newInstance();
+lineIndexCartItemIndexMap = FastMap.newInstance();
 
 if(UtilValidate.isNotEmpty(shoppingCart))
 {
@@ -44,6 +45,7 @@ if(UtilValidate.isNotEmpty(shoppingCart))
 		for (ShoppingCartItem shoppingCartItem : shoppingCartItems)
 		{
 			itemQuantity = shoppingCartItem.getQuantity();
+			cartLineIndex = shoppingCart.getItemIndex(shoppingCartItem);
 			for (int idx = 0; idx < itemQuantity; idx++) 
 			{
 				multiAddressList.add(shoppingCartItem)
@@ -74,6 +76,7 @@ if(UtilValidate.isNotEmpty(shoppingCart))
 						lineIndexGiftMessageMap.put(""+ iLineIdx,giftMsgMap);
 					}
 				}
+				lineIndexCartItemIndexMap.put(""+ iLineIdx,cartLineIndex);
 				iLineIdx=iLineIdx +1;
 				
 			}
@@ -116,6 +119,7 @@ if (UtilValidate.isNotEmpty(partyId))
 context.shoppingCart=shoppingCart;
 context.multiAddressList=multiAddressList;
 context.lineIndexGiftMessageMap=lineIndexGiftMessageMap;
+context.lineIndexCartItemIndexMap=lineIndexCartItemIndexMap;
 context.shippingContactMechList = shippingContactMechList;
 context.itemTotalQuantity = totalQuantity;
 context.numberOfItems = numberOfItems;

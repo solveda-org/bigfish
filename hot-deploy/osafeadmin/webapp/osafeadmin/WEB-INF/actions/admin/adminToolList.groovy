@@ -79,6 +79,14 @@ adminTool.put("toolDetail", "entitySyncDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.EntitySyncLabel).toUpperCase());
 adminToolsList.add(adminTool);*/
 
+//Admin Labels and Captions
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.AdminManageUiLabelLabel);
+adminTool.put("toolDesc", uiLabelMap.AdminManageUiLabelInfo);
+adminTool.put("toolDetail", "manageAdminUiLabel");
+adminTool.put("toolTypeUpperCase", (uiLabelMap.AdminManageUiLabel).toUpperCase());
+adminToolsList.add(adminTool);
+
 context.adminToolsList = UtilMisc.sortMaps(adminToolsList, UtilMisc.toList("toolTypeUpperCase"));
 // END OF ADMIN TOOLS
 

@@ -1,8 +1,12 @@
 <!-- start listBox -->
   <tr class="heading">
     <th class="idCol firstCol">${uiLabelMap.LabelLabel}</th>
-    <th class="statusCol">${uiLabelMap.CategoryLabel}</th>
-    <th class="descCol">${uiLabelMap.DescriptionLabel}</th>
+    <#if !(showLabelCategory?has_content) || showLabelCategory == "Y">
+    	<th class="statusCol">${uiLabelMap.CategoryLabel}</th>
+    </#if>
+    <#if !(showLabelDescription?has_content) || showLabelDescription == "Y">
+    	<th class="descCol">${uiLabelMap.DescriptionLabel}</th>
+    </#if>
     <th class="valueCol lastCol">${uiLabelMap.CaptionLabel}</th>
   </tr>
   <#if resultList?exists && resultList?has_content>

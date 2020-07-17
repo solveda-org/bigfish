@@ -104,7 +104,6 @@ textarea.largeArea {
     width: 100%;
 }
 
-ol,
 ul {
     list-style: none;
 }
@@ -1286,6 +1285,13 @@ a.submitOrder:active {
     float: left;
     position: relative;
     width: 100%;
+}
+
+.showNavBarMenu{
+    display: block;
+}
+.hideNavBarMenu{
+    display: block;
 }
 
 /* --- Default Nav Styles  --- */

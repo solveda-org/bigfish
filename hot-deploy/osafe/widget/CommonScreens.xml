@@ -23,6 +23,7 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/bigfishFieldLookup.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jssor.slider.mini.js" global="true"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <!-- Get the store VisualTheme -->
                 <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
@@ -132,6 +133,7 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/bigfishFieldLookup.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jssor.slider.mini.js" global="true"/>
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <!-- Get the store VisualTheme -->
@@ -484,6 +486,15 @@
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/displayPostalAddress.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="postalAddressSelection">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/entry/addressSelection.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>

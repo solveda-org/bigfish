@@ -1,4 +1,4 @@
-<div class="${request.getAttribute("attributeClass")!}">
+ <div id="js_${reviewScreenPrefix!}reviewPagingList" class="${request.getAttribute("attributeClass")!}">
   <div class="paginationContainer">
    <#if viewIndex?exists && viewIndex?has_content >
     <#if (viewIndex > 1)>

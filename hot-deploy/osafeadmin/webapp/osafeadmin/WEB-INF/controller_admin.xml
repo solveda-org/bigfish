@@ -1381,6 +1381,38 @@
         <response name="error" type="view" value="addMissingUiLabel"/>
     </request-map>
     
+    <request-map uri="manageAdminUiLabelSearch">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="manageAdminUiLabel"/>
+        <response name="error" type="view" value="manageAdminUiLabel"/>
+    </request-map>
+    <request-map uri="manageAdminUiLabelDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="manageAdminUiLabelDetail"/>
+    </request-map>
+    <request-map uri="updateAdminUiLabel">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateUiLabelGroup"/>
+        <response name="success" type="request-redirect" value="manageAdminUiLabelSearch"/>
+        <response name="error" type="view" value="manageAdminUiLabelDetail"/>
+    </request-map>
+    <request-map uri="addAdminUiLabel">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addAdminUiLabel"/>
+    </request-map>
+    <request-map uri="createAdminUiLabel">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createUiLabelGroup"/>
+        <response name="success" type="request-redirect" value="manageAdminUiLabelSearch"/>
+        <response name="error" type="view" value="addAdminUiLabel"/>
+    </request-map>
+    <request-map uri="deleteAdminUiLabel">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteUiLabelGroup"/>
+        <response name="success" type="request-redirect" value="manageAdminUiLabelSearch"/>
+        <response name="error" type="view" value="manageAdminUiLabelDetail"/>
+    </request-map>
+    
     <request-map uri="deleteUiLabel">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteUiLabelGroup"/>
@@ -1455,6 +1487,12 @@
         <response name="success" type="request-redirect" value="productVariants"/>
         <response name="error" type="view" value="productVariantsGroup"/>
     </request-map>
+    <request-map uri="updateProductVariantListGroup">
+        <security auth="true" https="true"/>
+        <event type="service"  invoke="updateProductVariantListGroup"/>
+        <response name="success" type="request-redirect" value="productVariants"/>
+        <response name="error" type="request" value="productVariants"/>
+    </request-map>
     <request-map uri="addProductVariant">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="addProductVariant"/>
@@ -1497,10 +1535,20 @@
         <response name="success" type="request-redirect" value="productManagement"/>
         <response name="error" type="view" value="productMetatagDetail"/>
     </request-map>
+    <request-map uri="productAttributeDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="productAttributeDetail"/>
+    </request-map>
+    <request-map uri="updateProductAttribute">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createUpdateProductAttributesGroup"/>
+        <response name="success" type="request-redirect" value="productManagement"/>
+        <response name="error" type="view" value="productAttributeDetail"/>
+    </request-map>
     
     <request-map uri="lookupManufacturer">
         <security auth="true" https="true"/>
-        <response name="success" type="view" value="lookupManufacturer"/>
+        <response name="success" type="view" value="productAttributeDetail"/>
     </request-map>
 
     <request-map uri="addProduct">
@@ -2605,6 +2653,11 @@
         <event type="service"  invoke="updatePayNetzConfigGroup"/>
         <response name="success" type="view" value="paymentGatewayConfigList"/>
     </request-map>
+    <request-map uri="updateFdggConfigDetail">
+        <security https="true" auth="true"/>
+        <event type="service"  invoke="updateFdggConfigGroup"/>
+        <response name="success" type="view" value="paymentGatewayConfigList"/>
+    </request-map>
 
     <!-- Payment Setting -->
     <request-map uri="paymentSettingManagement">
@@ -3576,6 +3629,10 @@
     <view-map name="addDivSeqItem" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addDivSeqItem"/>
     <view-map name="addMissingUiLabel" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addMissingUiLabel"/>
     <view-map name="addMissingDivSeqItem" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addMissingDivSeqItem"/>
+    
+    <view-map name="manageAdminUiLabel" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageAdminUiLabel"/>
+    <view-map name="manageAdminUiLabelDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageAdminUiLabelDetail"/>
+    <view-map name="addAdminUiLabel" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addAdminUiLabel"/>
     <!-- End of Manage UI Labels view -->
     <!-- Manage DIV sequencing screens -->
     <view-map name="manageDivSequenceDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageDivSequenceDetail"/>
@@ -3655,6 +3712,7 @@
 
     <view-map name="productPriceDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productPriceDetail"/>
     <view-map name="productMetatagDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productMetatagDetail"/>
+    <view-map name="productAttributeDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productAttributeDetail"/>
     
     <view-map name="mediaContentList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#mediaContentList"/>
     <view-map name="mediaContentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#mediaContentDetail"/>

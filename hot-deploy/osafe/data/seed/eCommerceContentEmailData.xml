@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
 <Content contentId="E_HEAD_TAG" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ABANDON_CART" statusId="CTNT_PUBLISHED"/>
@@ -142,8 +142,8 @@
 ]]>
   </textData>
  </ElectronicText>
-
-<!-- CREATE PARTY EMAIL -->
+ 
+ <!-- CREATE PARTY EMAIL -->
 <ElectronicText dataResourceId="E_NEW_CUSTOMER">
   <textData>
     <![CDATA[
@@ -929,7 +929,7 @@
    </textData>
 </ElectronicText>
 
-<!-- ORDER DETAIL -->
+<!--  ORDER DETAIL -->
 <ElectronicText dataResourceId="E_ORDER_DETAIL">
   <textData><![CDATA[
 <#if ORDER?has_content>
@@ -956,7 +956,7 @@
 		</#if>
     </#if>
     
-	 <#-- ORDER DETAIL TABLE -->
+	 <!-- ORDER DETAIL TABLE -->
 	 <table style="${ORDER_COMPONENT!}">
 	  <tr>
 	     <td colspan="2"><h3 style="${H3!}">${uiLabelMap.OrderInformationHeading}</h3></td>
@@ -978,6 +978,7 @@
   ]]>
   </textData>
 </ElectronicText>
+
 
 <!-- E_ORDER_PAYMENTS -->
 <ElectronicText dataResourceId="E_ORDER_PAYMENTS">
@@ -1029,7 +1030,7 @@
 
         <!-- Output retrieved values -->
         <tr>
-            <td style="${LABEL!""}">Payment Method:</td>
+            <td style="${E_LABEL!""}">Payment Method:</td>
             <#if payInStore == "Y" && paymentNumber?has_content>
                 <td>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</td>
             <#elseif payInStore == "Y" && paymentMethodType.paymentMethodTypeId == "EXT_COD">
@@ -1041,14 +1042,14 @@
 
         <#if paymentNumber?has_content>
             <tr>
-                <td style="${LABEL!""}">Card Number:</td>
-                <td>${paymentNumber}</td>
+                <td style="${E_LABEL!""}">Card Number:</td>
+                <td style="${PRICE!""}">${paymentNumber}</td>
             </tr> 
         </#if>
 
         <tr>
-            <td style="${LABEL!""}">Amount:</td>
-            <td><@ofbizCurrency amount=orderPaymentPreference.maxAmount isoCode=ORDER_HELPER.getCurrency() rounding=globalContext.currencyRounding/></td>
+            <td style="${E_LABEL!""}">Amount:</td>
+            <td><@ofbizCurrency amount=orderPaymentPreference.maxAmount isoCode=ORDER_CURRENCY rounding=CURRENCY_UOM_ROUNDING/></td>
         </tr>
 
     </#list>
@@ -1219,7 +1220,7 @@
                               </tr>
                               <#list orderItemShipGroupAssoc as shipGroupAssoc>                                                                                                                                                                                                                                                                                                  
                                   <#assign orderItem =shipGroupAssoc.getRelatedOne("OrderItem")!""/>
-                                  <#assign product = orderItem.getRelatedOne("Product")?if_exists/> <#-- should always exist because of FK constraint, but just in case -->
+                                  <#assign product = orderItem.getRelatedOne("Product")?if_exists/> <!-- should always exist because of FK constraint, but just in case -->
                                   <#assign urlProductId = product.productId>
                                   <#if product.isVariant?if_exists?upper_case == "Y">
                                       <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
@@ -1229,14 +1230,14 @@
                                   <#if (!productImageUrl?has_content && !(productImageUrl == "null")) && virtualProduct?has_content>
                                       <#assign productImageUrl = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "SMALL_IMAGE_URL", locale, dispatcher)?if_exists>
                                   </#if>
-                                  <#-- If the string is a literal "null" make it an "" empty string then all normal logic can stay the same -->
+                                  <!-- If the string is a literal "null" make it an "" empty string then all normal logic can stay the same -->
                                   <#if (productImageUrl?string?has_content && (productImageUrl == "null"))>
                                       <#assign productImageUrl = "">
                                   </#if>
                                   <#if !productImageUrl?has_content>
                                       <#assign productImageUrl = "/osafe_theme/images/icon/place_holder_small.jpg">
                                   </#if>
-                                  <#-- ITEM STATUS -->
+                                  <!-- ITEM STATUS -->
                                   <#assign itemStatus = orderItem.getRelatedOne("StatusItem")/>
                                   <#assign itemOrderStatus = delegator.findByAnd("OrderStatus", Static["org.ofbiz.base.util.UtilMisc"].toMap("orderId",orderItem.orderId,"statusId",orderItem.statusId,"orderItemSeqId",orderItem.orderItemSeqId))/>
                                   <#assign itemOrderStatus = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(itemOrderStatus)/>
@@ -1265,10 +1266,10 @@
                                       <#assign itemTotal = (orderItem.unitPrice?number) * (shipGroupAssoc.quantity?number)>
                                       <td style="${PRICE!""}"><@ofbizCurrency amount=itemTotal isoCode=ORDER_HELPER.getCurrency()/></td>                                                                                                                                                                                                                                                                                                                                                                             
                                   </tr>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-                                  <#-- GIFT MESSAGE INFO -->
+                                  <!-- GIFT MESSAGE INFO -->
 	                                  <#assign shipGroupAssocQty = shipGroupAssoc.quantity!1/>
 								      <#assign shipGroupSeqId = shipGroupAssoc.shipGroupSeqId!/>
-								      <#-- filter the OrderItem attributes which are in the same shipgroup -->
+								      <!-- filter the OrderItem attributes which are in the same shipgroup -->
 						              <#assign orderItemAttributes = orderItem.getRelatedCache("OrderItemAttribute")!""/>
 								      <#assign alreadyProcessedOrderItemAttributes = Static["javolution.util.FastList"].newInstance()/>
 								      <#assign orderItemAttributesChanged = Static["javolution.util.FastList"].newInstance()/>
@@ -1292,7 +1293,7 @@
 							              <#assign giftMessageText = ""/>
 							              <#assign seqId = ""/>
 							             
-							              <#-- Get the SeqId like '01, 02...' so that we get correct AttrName value for TO_01 FROM_01 and TEXT_01 attributes -->
+							              <!-- Get the SeqId like '01, 02...' so that we get correct AttrName value for TO_01 FROM_01 and TEXT_01 attributes -->
 								          <#list orderItemAttributesChanged as orderItemAttribute>
 								              <#assign attrName = orderItemAttribute.attrName!""/>
 								              <#if !seqId?has_content>
@@ -1324,7 +1325,7 @@
 									         </#if>
 									      </#list>
 									      
-								      <#-- Here put the sequenceId in the  alreadyProcessedOrderItemAttributes list so we wouldn't be get the sequId again -->
+								      <!-- Here put the sequenceId in the  alreadyProcessedOrderItemAttributes list so we wouldn't be get the sequId again -->
 								          <#assign changed = alreadyProcessedOrderItemAttributes.add(seqId)/>
 		
 								          <#list orderItemAttributes as orderItemAttribute>
@@ -1347,7 +1348,7 @@
 							                </td>
 							              </tr>
 								      </#list>
-	                                  <#-- END -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+	                                  <!-- END -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                               </#list>    
                           </table>
                       </td>
@@ -1381,7 +1382,7 @@
           </tr>
           
           <#list ORDER_ITEMS as orderItem>
-               <#assign product = orderItem.getRelatedOne("Product")?if_exists/> <#-- should always exist because of FK constraint, but just in case -->
+               <#assign product = orderItem.getRelatedOne("Product")?if_exists/> <!-- should always exist because of FK constraint, but just in case -->
                <#assign urlProductId = product.productId>
                <#if product.isVariant?if_exists?upper_case == "Y">
                     <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
@@ -1393,7 +1394,7 @@
                     <#assign productImageUrl = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "SMALL_IMAGE_URL", locale, dispatcher)?if_exists>
                </#if>
                
-               <#-- If the string is a literal "null" make it an "" empty string then all normal logic can stay the same -->
+               <!-- If the string is a literal "null" make it an "" empty string then all normal logic can stay the same -->
                <#if (productImageUrl?string?has_content && (productImageUrl == "null"))>
                     <#assign productImageUrl = "">
                </#if>
@@ -1402,7 +1403,7 @@
                     <#assign productImageUrl = "/osafe_theme/images/icon/place_holder_small.jpg">
                </#if>
                
-               <#-- ITEM STATUS -->
+               <!-- ITEM STATUS -->
 
                <#assign itemStatus = orderItem.getRelatedOne("StatusItem")/>
                <#assign itemOrderStatus = delegator.findByAnd("OrderStatus", Static["org.ofbiz.base.util.UtilMisc"].toMap("orderId",orderItem.orderId,"statusId",orderItem.statusId,"orderItemSeqId",orderItem.orderItemSeqId))/>
@@ -1562,7 +1563,7 @@
 
 						            <table align="center" cellpadding="0" cellspacing="0" style="${REVIEW_ITEMS!""}">
 						                <#list ORDER_ITEMS as orderItem>
-						                   <#assign product = orderItem.getRelatedOne("Product")?if_exists/> <#-- should always exist because of FK constraint, but just in case -->
+						                   <#assign product = orderItem.getRelatedOne("Product")?if_exists/> <!-- should always exist because of FK constraint, but just in case -->
 						                    <#assign urlProductId = product.productId>
 						                    <#if product.isVariant?if_exists?upper_case == "Y">
 						                        <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
@@ -1572,7 +1573,7 @@
 						                   <#if (!productImageUrl?has_content && !(productImageUrl == "null")) && virtualProduct?has_content>
 						                       <#assign productImageUrl = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "SMALL_IMAGE_URL", locale, dispatcher)?if_exists>
 						                   </#if>
-						                   <#-- If the string is a literal "null" make it an "" empty string then all normal logic can stay the same -->
+						                   <!-- If the string is a literal "null" make it an "" empty string then all normal logic can stay the same -->
 						                   <#if (productImageUrl?string?has_content && (productImageUrl == "null"))>
 						                       <#assign productImageUrl = "">
 						                   </#if>
@@ -1706,6 +1707,7 @@
 ]]>
    </textData>
 </ElectronicText>
+
 
 <!-- MAILING LIST EMAIL -->
 <ElectronicText dataResourceId="E_MAILING_LIST">
@@ -1963,5 +1965,9 @@
            ]]>
    </textData>
 </ElectronicText>
+
+
+
+
 
 </entity-engine-xml>

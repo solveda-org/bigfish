@@ -10,6 +10,7 @@
 		  ${setRequestAttribute("lineIndex", lineIndex)}
           ${setRequestAttribute("rowClass", rowClass)}
           ${setRequestAttribute("lineIndexGiftMessageMap", lineIndexGiftMessageMap)}
+          ${setRequestAttribute("lineIndexCartItemIndexMap", lineIndexCartItemIndexMap)}
 	      ${screens.render("component://osafe/widget/EcommerceCheckoutScreens.xml#shipMultiAddressCartItem")}
         <#if rowClass == "2">
             <#assign rowClass = "1">

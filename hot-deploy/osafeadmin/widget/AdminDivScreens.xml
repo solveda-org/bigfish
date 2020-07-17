@@ -229,7 +229,66 @@
 			</widgets>
 		</section>
 	</screen>
-
+	<screen name="personalInfoCountry">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="personalInfoCustomObject">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="personalInfoAddressSelector">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="personalInfoAddress1">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="personalInfoAddress2">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="personalInfoAddress3">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="personalInfoCityTown">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="personalInfoStateProvince">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="personalInfoZipPostcode">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="personalInfoSkipVerification">
+		<section>
+			<widgets>
+			</widgets>
+		</section>
+	</screen>
     
     
  </screens>

@@ -104,4 +104,10 @@ under the License.
         <attribute name="paymentMethodId" mode="INOUT" type="String" optional="false"/>
         <auto-attributes mode="IN" entity-name="PayNetzPaymentMethod" include="nonpk" optional="true"/>
     </service>
+
+    <service name="updatePaymentGatewayFdgg" engine="simple" location="component://osafe/script/services/PaymentGatewayConfigServices.xml" invoke="updatePaymentGatewayFdgg">
+        <description>Update Payment Gateway Config First Data Global Gateway e4</description>
+        <auto-attributes entity-name="PaymentGatewayFdgg" include="pk" mode="IN" optional="false"/>
+        <auto-attributes entity-name="PaymentGatewayFdgg" include="nonpk" mode="IN" optional="true"/>
+    </service>
 </services>

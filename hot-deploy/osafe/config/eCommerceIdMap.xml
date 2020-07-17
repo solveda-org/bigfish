@@ -241,6 +241,21 @@
     <property key="PDP_CONTENT_05">
         <value xml:lang="en">PDP_CONTENT_05</value>
     </property>
+    <property key="PLP_CONTENT_01">
+        <value xml:lang="en">PLP_CONTENT_01</value>
+    </property>
+    <property key="PLP_CONTENT_02">
+        <value xml:lang="en">PLP_CONTENT_02</value>
+    </property>
+    <property key="PLP_CONTENT_03">
+        <value xml:lang="en">PLP_CONTENT_03</value>
+    </property>
+    <property key="PLP_CONTENT_04">
+        <value xml:lang="en">PLP_CONTENT_04</value>
+    </property>
+    <property key="PLP_CONTENT_05">
+        <value xml:lang="en">PLP_CONTENT_05</value>
+    </property>
     <property key="CHECKOUT_CC_VERIFY">
         <value xml:lang="en">CHECKOUT_CC_VERIFY</value>
     </property>

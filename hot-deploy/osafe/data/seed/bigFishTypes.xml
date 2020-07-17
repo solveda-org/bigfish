@@ -119,6 +119,11 @@
 <ProductContentType productContentTypeId="PDP_SPC_CONTENT_01" description="PDP Specific Content 01" hasTable="N" parentTypeId=""/>
 <ProductContentType productContentTypeId="PDP_SPC_CONTENT_02" description="PDP Specific Content 01" hasTable="N" parentTypeId=""/>
 <ProductContentType productContentTypeId="PDP_SPC_CONTENT_03" description="PDP Specific Content 01" hasTable="N" parentTypeId=""/>
+<ProductContentType productContentTypeId="ATTACH_URL_01" description="Product Attachemnet 1'" hasTable="N" parentTypeId=""/>
+<ProductContentType productContentTypeId="ATTACH_URL_02" description="Product Attachemnet 2'" hasTable="N" parentTypeId=""/>
+<ProductContentType productContentTypeId="ATTACH_URL_03" description="Product Attachemnet 3'" hasTable="N" parentTypeId=""/>
+
+
 
 <!-- Party CONTENT TYPE -->
 <PartyContentType partyContentTypeId="DESCRIPTION" description="Short Description" hasTable="N" parentTypeId=""/>
@@ -136,11 +141,38 @@
 <FeatureDataResourceType featureDataResourceTypeId="PLP_SWATCH_IMAGE_URL" description="PLP Default Swatch Image URL" hasTable="N"/>
 <FeatureDataResourceType featureDataResourceTypeId="PDP_SWATCH_IMAGE_URL" description="PDP Default Swatch Image URL" hasTable="N"/>
 
+<!-- STATUS TYPE -->
+<StatusItem description="Held" sequenceId="97" statusCode="HELD" statusId="ITEM_HOLD" statusTypeId="ORDER_ITEM_STATUS"/>
+<StatusValidChange condition="" statusId="ORDER_REJECTED" statusIdTo="ORDER_HOLD" transitionName="Hold Order"/>
+<StatusValidChange condition="" statusId="ITEM_HOLD" statusIdTo="ITEM_APPROVED" transitionName="Approve Item"/>
+<StatusValidChange condition="" statusId="ITEM_HOLD" statusIdTo="ITEM_CANCELLED" transitionName="Cancel Item"/>
+<StatusValidChange condition="" statusId="ITEM_REJECTED" statusIdTo="ITEM_HOLD" transitionName="Hold Item"/>
+
 <!-- Payment Gateway Config -->
 <PaymentGatewayConfigType paymentGatewayConfigTypeId="SAGEPAYTOKEN" hasTable="N" description="SagePay Token Payment Gateway"/>
 <PaymentGatewayConfigType paymentGatewayConfigTypeId="EBS" hasTable="N" description="EBS Payment Gateway"/>
 <PaymentGatewayConfigType paymentGatewayConfigTypeId="TENDER_CARD" hasTable="N" description="Tender Gift Card Payment Gateway"/>
 <PaymentGatewayConfigType paymentGatewayConfigTypeId="PAYNETZ" hasTable="N" description="Atom PayNetz Payment Gateway"/>
+<PaymentGatewayConfigType paymentGatewayConfigTypeId="FDGG" hasTable="N" description="First Data Global Gateway E4 Payment Gateway"/>
+    <!-- Payment Gateway Config -->
+    <PaymentGatewayConfig paymentGatewayConfigId="SAGEPAYTOKEN_CONFIG" paymentGatewayConfigTypeId="SAGEPAYTOKEN" description="SagePay Token Config"/>
+    <PaymentGatewaySagePayToken paymentGatewayConfigId="SAGEPAYTOKEN_CONFIG"/>
+
+    <!-- EBS Payment Gateway Config -->
+    <PaymentGatewayConfig paymentGatewayConfigId="EBS_CONFIG" paymentGatewayConfigTypeId="EBS" description="EBS Config"/>
+    <PaymentGatewayEbs paymentGatewayConfigId="EBS_CONFIG"/>
+
+    <!-- Tender Card Payment Gateway Config -->
+    <PaymentGatewayConfig paymentGatewayConfigId="TENDER_CARD_CONFIG" paymentGatewayConfigTypeId="TENDER_CARD" description="Tender Gift Card Config"/>
+    <PaymentGatewayTenderCard paymentGatewayConfigId="TENDER_CARD_CONFIG"/>
+
+    <!-- Atom PayNetz Payment Gateway Config -->
+    <PaymentGatewayConfig paymentGatewayConfigId="PAYNETZ_CONFIG" paymentGatewayConfigTypeId="PAYNETZ" description="Atom PayNetz Config"/>
+    <PaymentGatewayPayNetz paymentGatewayConfigId="PAYNETZ_CONFIG"/>
+
+    <PaymentGatewayConfig paymentGatewayConfigId="FDGG_CONFIG" paymentGatewayConfigTypeId="FDGG" description="First Data Global Gateway E4 Payment Gateway"/>
+    <PaymentGatewayFdgg paymentGatewayConfigId="FDGG_CONFIG"/>
+
 
 <!-- Shipment Gateway Config -->
 <ShipmentGatewayConfigType shipmentGatewayConfTypeId="BLUEDART" hasTable="N" description="BLUEDART Shipment Gateway"/>
@@ -194,5 +226,10 @@
 <!--  OrderAdjustmentType -->
 <OrderAdjustmentType description="Loyalty Point Redemption" hasTable="N" orderAdjustmentTypeId="LOYALTY_POINTS" parentTypeId=""/>
 <!--  End of OrderAdjustmentType -->
+
+<!--  OrderAdjustmentType -->
+<OrderAdjustmentType description="Loyalty Point Redemption" hasTable="N" orderAdjustmentTypeId="LOYALTY_POINTS" parentTypeId=""/>
+<!--  End of OrderAdjustmentType -->
+
 
 </entity-engine-xml>

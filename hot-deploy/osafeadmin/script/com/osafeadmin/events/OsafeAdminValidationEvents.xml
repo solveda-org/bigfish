@@ -160,4 +160,184 @@
         </if-not-empty>
     </simple-method>
     
+    <simple-method method-name="validateProductAttributes" short-description="validate specific product attributes">
+    	<!-- this method takes: productId, attrName, attrValue, productAttributMap -->
+    	<if-not-empty field="attrName"> 
+    		<if-not-empty field="attrValue">
+    			
+    			<if-compare operator="equals" value="BF_INVENTORY_TOT" field="attrName" type="String">
+		    		<set field="bfTotalInventory" from-field="attrValue"/>
+			    	<if-not-empty field="bfTotalInventory"> 
+			            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isSignedInteger" ret-field="bfTotalInventoryVaild">
+			               <string value="${bfTotalInventory}"></string>
+			            </call-class-method>
+			            <if-compare operator="equals" value="false" field="bfTotalInventoryVaild" type="Boolean">
+			                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryError"/>
+			                <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
+			            <else>
+			                <if>
+			                    <condition>
+			                    <and>
+			                        <if-compare operator="greater-equals" value="-9999" field="bfTotalInventory" type="Long"/>
+			                        <if-compare operator="less-equals" value="99999" field="bfTotalInventory" type="Long"/>
+			                    </and>
+			                    </condition>
+			                <then>
+			                </then>
+			                <else>
+			                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryError"/>
+			                    <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
+			                </else>
+			                </if>
+			            </else>
+			            </if-compare>
+			        </if-not-empty>
+		        </if-compare>
+    			
+		    	<if-compare operator="equals" value="BF_INVENTORY_WHS" field="attrName" type="String">
+		    		<set field="bfWHInventory" from-field="attrValue"/>
+			    	<if-not-empty field="bfWHInventory"> 
+			            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isSignedInteger" ret-field="bfWHInventoryVaild">
+			               <string value="${bfWHInventory}"></string>
+			            </call-class-method>
+			            <if-compare operator="equals" value="false" field="bfWHInventoryVaild" type="Boolean">
+			                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFWHInventoryError"/>
+			                <string-to-list string="${tempErrorMessage}" message-field="bfWHInventory" list="error_list"/>
+			            <else>
+			                <if>
+			                    <condition>
+			                    <and>
+			                        <if-compare operator="greater-equals" value="-9999" field="bfWHInventory" type="Long"/>
+			                        <if-compare operator="less-equals" value="99999" field="bfWHInventory" type="Long"/>
+			                    </and>
+			                    </condition>
+			                <then>
+			                </then>
+			                <else>
+			                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFWHInventoryError"/>
+			                    <string-to-list string="${tempErrorMessage}" message-field="bfWHInventory" list="error_list"/>
+			                </else>
+			                </if>
+			            </else>
+			            </if-compare>
+			        </if-not-empty>
+		        </if-compare>
+		        
+		        
+		        
+		        <if>
+		        	<condition>
+		        		<or>
+		        			<!-- <if-compare operator="equals" value="PDP_QTY_MAX" field="attrName" type="String"/> -->
+		        			<if-compare operator="equals" value="PDP_QTY_MIN" field="attrName" type="String"/>
+		        			<!-- <if-compare operator="equals" value="PDP_QTY_DEFAULT" field="attrName" type="String"/> -->
+		        		</or>
+		        	</condition>
+		        	<then>
+		        		<set field="pdpQuantityMin" from-field="productAttributMap.PDP_QTY_MIN"/>
+		        		<set field="pdpQuantityMax" from-field="productAttributMap.PDP_QTY_MAX"/>
+		        		<set field="pdpQuantityDefault" from-field="productAttributMap.PDP_QTY_DEFAULT"/>
+		        		
+		        		<set field="pdpQuantityMinMaxSetCount" value="0" type="Integer"/>
+				        <if-not-empty field="pdpQuantityMin">
+				        	<call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="isNumber" ret-field="isNumber">
+					            <field field="pdpQuantityMin"/>
+					        </call-class-method>
+					        <if-compare field="isNumber" operator="equals" value="false">
+					            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPdpQtyMinError"/>
+					            <string-to-list string="${tempErrorMessage}" message-field="pdpQuantityMin" list="error_list"/>
+						        <else>
+						        	<if-compare field="pdpQuantityMin" operator="greater" value="0" type="Long">
+						        		<set field="pdpQuantityMinSet" value="Y"/>
+						        		<calculate field="pdpQuantityMinMaxSetCount">
+						        			<calcop operator="add" >
+						        				<calcop operator="get" field="pdpQuantityMinMaxSetCount"/>
+				               					<number value="1"/>
+						        			</calcop>
+						        		</calculate>
+						        		<else>
+						        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PdpQtyMinGreaterThanZeroError"/>
+					            			<string-to-list string="${tempErrorMessage}" message-field="pdpQuantityMin" list="error_list"/>
+						        		</else>
+						        	</if-compare>
+						        </else>
+					        </if-compare>
+				        </if-not-empty>
+				        
+				        <if-not-empty field="pdpQuantityMax">
+				        	<call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="isNumber" ret-field="isNumber">
+					            <field field="pdpQuantityMax"/>
+					        </call-class-method>
+					        <if-compare field="isNumber" operator="equals" value="false">
+					            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPdpQtyMaxError"/>
+					            <string-to-list string="${tempErrorMessage}" message-field="pdpQuantityMax" list="error_list"/>
+					            <else>
+					            	<calculate field="pdpQuantityMinMaxSetCount">
+					        			<calcop operator="add" >
+					        				<calcop operator="get" field="pdpQuantityMinMaxSetCount"/>
+				              				<number value="1"/>
+					        			</calcop>
+					        		</calculate>
+					            </else>
+					        </if-compare>
+				        </if-not-empty>
+				        
+				        <if-compare field="pdpQuantityMinMaxSetCount" operator="greater" value="0" type="Integer">
+				        	<if-compare field="pdpQuantityMinMaxSetCount" operator="equals" value="1" type="Integer">
+				        		<!-- if only one is entered -->
+				        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BothSetPdpQtyMinMaxError"/>
+					            <string-to-list string="${tempErrorMessage}" message-field="pdpQuantityMax" list="error_list"/>
+					            <else>
+					            	<if-compare field="pdpQuantityMinMaxSetCount" operator="equals" value="2" type="Integer">
+					            		<!-- if both are entered -->
+					            		<if-compare-field field="pdpQuantityMax" operator="greater-equals" to-field="pdpQuantityMin" type="Integer">
+					            			<!-- both min and max are set and they both passed validation pdpQuantityMinMaxSetCount = 3 -->
+							            	<calculate field="pdpQuantityMinMaxSetCount">
+							        			<calcop operator="add" >
+							        				<calcop operator="get" field="pdpQuantityMinMaxSetCount"/>
+						              				<number value="1"/>
+							        			</calcop>
+							        		</calculate>
+					            			<else>
+					            				<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PdpQtyMaxNotGreaterThanMinError"/>
+					           					 <string-to-list string="${tempErrorMessage}" message-field="pdpQuantityMax" list="error_list"/>
+					            			</else>
+				        				</if-compare-field>
+					            	</if-compare>
+					            </else>
+				        	</if-compare>
+						</if-compare>
+						
+						<if-not-empty field="pdpQuantityDefault">
+							<call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="isNumber" ret-field="isNumber">
+					            <field field="pdpQuantityDefault"/>
+					        </call-class-method>
+					        <if-compare field="isNumber" operator="equals"  value="false">
+					            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPdpQtyDefaultError"/>
+					            <string-to-list string="${tempErrorMessage}" message-field="pdpQuantityDefault" list="error_list"/>
+					            <else>
+					            	<if-compare field="pdpQuantityMinMaxSetCount" operator="equals" value="3" type="Integer">
+					            		<if-compare-field field="pdpQuantityDefault" operator="greater"  to-field="pdpQuantityMax" type="Integer">
+					            			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PdpQtyDefaultWithinMinMaxError"/>
+					           				<string-to-list string="${tempErrorMessage}" message-field="pdpQuantityDefault" list="error_list"/>
+					           				<else>
+					           					<if-compare-field field="pdpQuantityDefault" operator="less" to-field="pdpQuantityMin" type="Integer">
+					           						<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PdpQtyDefaultWithinMinMaxError"/>
+					           						<string-to-list string="${tempErrorMessage}" message-field="pdpQuantityDefault" list="error_list"/>
+					           					</if-compare-field>
+					           				</else>
+					            		</if-compare-field>
+					            	</if-compare>
+					            </else>
+					        </if-compare>
+						</if-not-empty>
+					
+		        	</then>
+		        </if>
+		        
+	        </if-not-empty>
+        </if-not-empty>
+        
+    </simple-method>
+    
 </simple-methods>

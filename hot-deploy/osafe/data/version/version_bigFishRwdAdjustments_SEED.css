@@ -188,7 +188,7 @@
 
 	 /* hides primary navigation navigation list */
 	 #eCommerceNavBar #eCommerceNavBarMenu {
-		 display: none;
+		 /* display: none; */
 	 }
 
 	 /* Puts Navigation into one column */ 
@@ -213,6 +213,14 @@
 	 #eCommerceNavBarMenu ul {
 		 display: none;
 	 }
+	 
+	 /* hide/show navigation when using show/hide nav widget. On expanded screen, both of these classes should be display block */
+	 .showNavBarMenu{
+		display: block;
+	}
+	.hideNavBarMenu{
+		display: none;
+	}
 
 	 /* Removes Last Degree of Bread Crumb */ 
  	#breadcrumb li:last-child {

@@ -12,4 +12,6 @@
   <input type="button" class="standardBtn <#if (productFacetValueErrorList?has_content)>errorMark</#if>" name="facetValuesButton" id="facetValuesButton" value="${uiLabelMap.FacetValuesButton}" onClick="javascript:showXLSData('facetValueData','productFacetValueError','${detailInfoBoxHeading!}: ${uiLabelMap.ProductFacetValuesHeading}');"/>
 
   <input type="button" class="standardBtn <#if (productManufacturerErrorList?has_content)>errorMark</#if>" name="manufacturerButton" id="manufacturerButton" value="${uiLabelMap.ManufacturerBtn}" onClick="javascript:showXLSData('manufacturerData','productManufacturerError','${detailInfoBoxHeading!}: ${uiLabelMap.ManufacturerHeading}');"/>
+  
+  <input type="button" class="standardBtn <#if (productAttributesErrorList?has_content)>errorMark</#if>" name="productAttributesButton" id="productAttributesButton" value="${uiLabelMap.ProductAttributesBtn}" onClick="javascript:showXLSData('productAttributesData','productAttributesError','${detailInfoBoxHeading!}: ${uiLabelMap.ProductAttributesHeading}');"/>
 </div>

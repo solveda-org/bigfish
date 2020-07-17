@@ -119,13 +119,15 @@
         <property name="osafe.home" value="../../hot-deploy/osafe"></property>
 
         <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeUiLabels.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiLabels.xml" keyValues="key" fileType="XML" preserveExtra="false"/>
+    	<mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeAdminUiLabels.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafeadmin/config/OSafeAdminUiLabels.xml" keyValues="key" fileType="XML" preserveExtra="false"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeUiSequence.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiSequence.xml" keyValues="key" fileType="XML" preserveExtra="false"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_recurrence.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_recurrence.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_clickatell.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_clickatell.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_pinnacle.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_pinnacle.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_email_styles.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_email_styles.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
     	<mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_alerts.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_alerts.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
-        <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeProperties.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template" keyValues="key" fileType="XML" preserveExtra="false"/>
+    	<mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_personalization.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_personalization.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+    	<mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeProperties.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template" keyValues="key" fileType="XML" preserveExtra="false"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_clientDeployment.properties" toFilePath="${osafe.deployemt.home}/client-deployment.properties" keyValues="key" fileType="PROPERTIES" preserveExtra="false"/>
 
         <antcall target="osafe-deployment" inheritall="true"/>
@@ -136,13 +138,15 @@
         <property name="osafe.home" value="../../hot-deploy/osafe"></property>
 
         <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeUiLabels.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiLabels.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+		<mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeAdminUiLabels.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafeadmin/config/OSafeAdminUiLabels.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeUiSequence.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiSequence.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_recurrence.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_recurrence.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_clickatell.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_clickatell.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_pinnacle.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_pinnacle.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_email_styles.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_email_styles.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
     	<mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_alerts.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_alerts.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
-        <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeProperties.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template" keyValues="key" fileType="XML" preserveExtra="false"/>
+		<mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_personalization.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_personalization.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+		<mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeProperties.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template" keyValues="key" fileType="XML" preserveExtra="false"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_clientDeployment.properties" toFilePath="${osafe.deployemt.home}/client-deployment.properties" keyValues="key" fileType="PROPERTIES" preserveExtra="false"/>
 
         <antcall target="osafe-deployment" inheritall="true"/>
@@ -192,6 +196,8 @@
 
         <!-- Create osafe ui label if not exist -->
         <createToFile file="${osafe.home}/data/version/version_OsafeUiLabels.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiLabels.xml"/>
+    	<!-- Create osafe admin ui label if not exist -->
+    	<createToFile file="${osafe.home}/data/version/version_OsafeAdminUiLabels.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafeadmin/config/OSafeAdminUiLabels.xml"/>
         <!-- Create osafe ui sequence if not exist -->
         <createToFile file="${osafe.home}/data/version/version_OsafeUiSequence.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiSequence.xml"/>
         <!-- Create Parameters Recurrence if not exist -->
@@ -204,7 +210,9 @@
         <createToFile file="${osafe.home}/data/version/version_parameters_email_styles.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_email_styles.xml"/>
     	<!-- Create Parameters Alerts if not exist -->
     	<createToFile file="${osafe.home}/data/version/version_parameters_alerts.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_alerts.xml"/>
-        <!-- Create osafe properties if not exist -->
+    	<!-- Create Parameters Personalization if not exist -->
+    	<createToFile file="${osafe.home}/data/version/version_parameters_personalization.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_personalization.xml"/>
+    	<!-- Create osafe properties if not exist -->
         <createToFile file="${osafe.home}/data/version/version_OsafeProperties.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template"/>
         <!-- Create client Deployment properties if not exist -->
         <createToFile file="${osafe.home}/data/version/version_clientDeployment.properties" tofile="${osafe.deployemt.home}/client-deployment.properties"/>
@@ -476,6 +484,8 @@
              	<filter token="username.lowercase" value="${username.lowercase}"/>
             	<filter token="password.lowercase" value="${password.lowercase}"/>
              	<filter token="password.encrypt" value="${password.encrypt}"/>
+             	<filter token="max.failed.logins" value="${max.failed.logins}"/>
+             	<filter token="login.disable.minutes" value="${login.disable.minutes}"/>
              </filterset>
          </copy>
          <move file="${osafe.deployemt.home}/ofbiz/framework/security/config/security.properties" todir="../../framework/security/config" overwrite="true" failonerror="false"/>

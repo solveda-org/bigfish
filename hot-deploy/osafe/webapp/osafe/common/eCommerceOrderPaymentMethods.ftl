@@ -76,7 +76,7 @@
 		<h3>${uiLabelMap.PaymentInformationHeading}</h3>
 		<div>
 			<!-- REMAINING PAYMENT SECTION (Will display the balance due) -->
-			<div id="js_remainingPayment" class="container remainingPayment">
+			<div id="js_remainingPayment" class="container currency remainingPayment">
 				<h4>${uiLabelMap.RemainingPaymentHeading}</h4>
 				<label>${uiLabelMap.RemainingPaymentCaption}</label>
 				<#assign remainingPayment = shoppingCart.getGrandTotal().subtract(shoppingCart.getPaymentTotal())! />
@@ -155,42 +155,50 @@
 				    </div>
 
                         <!--CC -->
-					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry creditCardEntry")}
-					    ${setRequestAttribute("attributeStyle", "display:none;")}
-					    ${setRequestAttribute("attributeId", "PAYOPT_CC_NEW")}
-					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionCreditCardNew")}
-
-                        <!--EXISTING CC -->
-					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry creditCardExistEntry")}
-					    ${setRequestAttribute("attributeStyle", "display:none;")}
-					    ${setRequestAttribute("attributeId", "PAYOPT_CC_EXIST")}
-					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionCreditCardExist")}
+       			  		<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_CC")>
+						    ${setRequestAttribute("attributeClass", "entryForm paymentEntry creditCardEntry")}
+						    ${setRequestAttribute("attributeStyle", "display:none;")}
+						    ${setRequestAttribute("attributeId", "PAYOPT_CC_NEW")}
+						    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionCreditCardNew")}
+	
+	                        <!--EXISTING CC -->
+						    ${setRequestAttribute("attributeClass", "entryForm paymentEntry creditCardExistEntry")}
+						    ${setRequestAttribute("attributeStyle", "display:none;")}
+						    ${setRequestAttribute("attributeId", "PAYOPT_CC_EXIST")}
+						    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionCreditCardExist")}
+						</#if>
 
                         <!--EFT -->
-					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry eftEntry")}
-					    ${setRequestAttribute("attributeStyle", "display:none;")}
-					    ${setRequestAttribute("attributeId", "PAYOPT_EFT_NEW")}
-					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEftNew")}
-                        <!--EXISTING EFT -->
-					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry eftExistEntry")}
-					    ${setRequestAttribute("attributeStyle", "display:none;")}
-					    ${setRequestAttribute("attributeId", "PAYOPT_EFT_EXIST")}
-					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEftExist")}
+    			      	<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_EFT")>
+						    ${setRequestAttribute("attributeClass", "entryForm paymentEntry eftEntry")}
+						    ${setRequestAttribute("attributeStyle", "display:none;")}
+						    ${setRequestAttribute("attributeId", "PAYOPT_EFT_NEW")}
+						    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEftNew")}
+	                        <!--EXISTING EFT -->
+						    ${setRequestAttribute("attributeClass", "entryForm paymentEntry eftExistEntry")}
+						    ${setRequestAttribute("attributeStyle", "display:none;")}
+						    ${setRequestAttribute("attributeId", "PAYOPT_EFT_EXIST")}
+						    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEftExist")}
+						</#if>
                         <!--PAYPAL -->
 					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry paypalEntry")}
 					    ${setRequestAttribute("attributeStyle", "display:none;")}
 					    ${setRequestAttribute("attributeId", "PAYOPT_PAYPAL")}
 					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionPayPal")}
                         <!--PAYNETZ -->
-					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry payNetzEntry")}
-					    ${setRequestAttribute("attributeStyle", "display:none;")}
-					    ${setRequestAttribute("attributeId", "PAYOPT_PAYNETZ")}
-					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionPayNetz")}
+			            <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_PAYNETZ")>
+						    ${setRequestAttribute("attributeClass", "entryForm paymentEntry payNetzEntry")}
+						    ${setRequestAttribute("attributeStyle", "display:none;")}
+						    ${setRequestAttribute("attributeId", "PAYOPT_PAYNETZ")}
+						    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionPayNetz")}
+					    </#if>
                         <!--EBS -->
-					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry ebsEntry")}
-					    ${setRequestAttribute("attributeStyle", "display:none;")}
-					    ${setRequestAttribute("attributeId", "PAYOPT_EBS")}
-					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEbs")}
+			            <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_EBS")>
+						    ${setRequestAttribute("attributeClass", "entryForm paymentEntry ebsEntry")}
+						    ${setRequestAttribute("attributeStyle", "display:none;")}
+						    ${setRequestAttribute("attributeId", "PAYOPT_EBS")}
+						    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEbs")}
+					    </#if>
 					    	  
         	 <#else>
 					<#-- DETERMINE THE SELECTED PAYMENT METHOD RADIO BUTTON ON LOAD OF THE SCREEN -->

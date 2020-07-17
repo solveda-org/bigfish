@@ -411,4 +411,32 @@
         </section>
     </screen>
     
+    <screen name="uploadFileDialog">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="dialogPurpose" value="uploadFile_"/>
+                <set field="dialogBoxTitle" value=""/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
+                            <html-template-decorator-section name="uploadFile_DialogBox">
+                                <container id="eCommerceUploadFileContainer">
+                                    <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
+	                                <platform-specific>
+	                                    <html>
+                                			<html-template location="component://osafe/webapp/osafe/common/pdp/pdpFileUploadDialog.ftl"/>
+                                    	</html>
+                                    </platform-specific>
+                                </container>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
 </screens>

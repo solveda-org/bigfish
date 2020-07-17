@@ -155,6 +155,7 @@
                     <li><a href="javascript:void(0);javascript:alert('${uiLabelMap.VirtualProductAddToCartError}');" ><span class="adminAddCartIcon"></span>${uiLabelMap.AddToCartTooltip}</a></li>
                   </#if>
                   <li><a href="<@ofbizUrl>${productContentSpotListAction}?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="contentSpotIcon"></span>${uiLabelMap.ProductContentSpotTooltip}</a></li>
+                  <li><a href="<@ofbizUrl>productAttributeDetail?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="productAttributeIcon"></span>${uiLabelMap.ProductAttributeDetailTooltip}</a></li>    
                 </ul>
               </div>
             </div>

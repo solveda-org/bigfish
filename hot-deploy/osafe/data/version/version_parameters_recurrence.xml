@@ -7,14 +7,8 @@
 
 <resource xmlns:xsi="http://www.w3.org/01/XMLSchema-instance">
 
-    <property key="FREQUENCY">
+    <property key="RECURRENCE_FREQ_DEFAULT">
         <value xml:lang="en">30</value>
         <description>Determines the frequency in days when placing a recurring order</description>
     </property>
-
-    <property key="FREQUENCY_2">
-        <value xml:lang="en">30</value>
-        <description>Determines the frequency in days when placing a recurring order</description>
-    </property>
-
 </resource>

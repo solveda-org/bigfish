@@ -206,9 +206,14 @@ public class OsafeAdminUtil {
     }
     
     /** 
-     * Returns a Generic Product Price for given ProductId and ProductPriceTypeId
+     * Returns a Generic Product Price for given ProductId and ProductPriceTypeId, ProductPricePurposeId
      */
     public static GenericValue getProductPrice(ServletRequest request, String productId, String productPriceTypeId) {
+    	return getProductPrice(request,productId,productPriceTypeId,"PURCHASE");
+    }
+    
+    
+    public static GenericValue getProductPrice(ServletRequest request, String productId, String productPriceTypeId, String productPricePurposeId) {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         List<GenericValue> productPriceList = FastList.newInstance();
         List<GenericValue> productPriceListFiltered = FastList.newInstance();
@@ -216,7 +221,7 @@ public class OsafeAdminUtil {
         if(UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productPriceTypeId))
         {
             try {
-                productPriceList = delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", productPriceTypeId), UtilMisc.toList("-fromDate"));
+                productPriceList = delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", productPriceTypeId,"productPricePurposeId", productPricePurposeId), UtilMisc.toList("-fromDate"));
                 if(UtilValidate.isNotEmpty(productPriceList))
                 {
                     productPriceListFiltered = EntityUtil.filterByDate(productPriceList);

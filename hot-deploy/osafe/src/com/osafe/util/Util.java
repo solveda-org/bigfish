@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.servlet.ServletRequest;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -1129,6 +1130,39 @@ public class Util {
         SimpleDateFormat dyFormat = new SimpleDateFormat(sFormat);
 
         return dyFormat.format(tStamp);
+    }
+    
+    /** 
+     * Returns a Generic Product Price for given ProductId and ProductPriceTypeId, ProductPricePurposeId
+     */
+    public static GenericValue getProductPrice(ServletRequest request, String productId, String productPriceTypeId) {
+    	return getProductPrice(request,productId,productPriceTypeId,"PURCHASE");
+    }
+    
+    
+    public static GenericValue getProductPrice(ServletRequest request, String productId, String productPriceTypeId, String productPricePurposeId) {
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        List<GenericValue> productPriceList = FastList.newInstance();
+        List<GenericValue> productPriceListFiltered = FastList.newInstance();
+        GenericValue productPrice = null;
+        if(UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productPriceTypeId))
+        {
+            try {
+                productPriceList = delegator.findByAndCache("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", productPriceTypeId,"productPricePurposeId", productPricePurposeId), UtilMisc.toList("-fromDate"));
+                if(UtilValidate.isNotEmpty(productPriceList))
+                {
+                    productPriceListFiltered = EntityUtil.filterByDate(productPriceList);
+                    if(UtilValidate.isNotEmpty(productPriceListFiltered))
+                    {
+                        productPrice = EntityUtil.getFirst(productPriceListFiltered);
+                    }
+                }
+            }
+            catch (Exception e) {
+                Debug.logWarning(e, module);
+            }
+        }
+        return productPrice;
     }
     
 }

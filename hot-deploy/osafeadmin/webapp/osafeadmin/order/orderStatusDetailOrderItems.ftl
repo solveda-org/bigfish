@@ -48,12 +48,12 @@
             <tr class="dataRow <#if rowClass == "2">even<#else>odd></#if>">
                   
 	            <td class="actionOrderCol <#if !orderItem_has_next>lastRow</#if> firstCol">
-	              <#if orderItem.statusId == "ITEM_APPROVED">
+	              <#if (orderItem.statusId == "ITEM_APPROVED" || orderItem.statusId == "ITEM_HOLD")>
 	                <div class="statusChangeOrderCheckbox">
 	                  <input type="checkbox" class="orderItemSeqId checkBoxEntry" name="orderItemSeqId-${orderItem_index}" id="orderItemSeqId-${rowNo}" value="${orderItem.orderItemSeqId!}" <#if parameters.get("orderItemSeqId-${rowNo}")?has_content>checked</#if> onchange="javascript:getOrderRefundData();"/>
 	                </div>
 	              </#if>
-	              <#if (orderItem.statusId != "ITEM_APPROVED")>
+	              <#if (orderItem.statusId != "ITEM_APPROVED" && orderItem.statusId != "ITEM_HOLD")>
 	                  <div class="itemCancelCheckboxInfo" style="display:none">
 	                      <#assign toolTipData = uiLabelMap.ItemsCancelInfo />
 	                      <a onMouseover="showTooltip(event,'${toolTipData!}');" onMouseout="hideTooltip()"><span class="informationIcon"></span></a>

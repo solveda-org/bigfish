@@ -234,13 +234,19 @@
         <#if (maxAltImages > 0)>
 	        <#list 1..maxAltImages as imageNo>
 	            <td class="nameCol">
+	              <#if product.get("addImage"+imageNo)?has_content>
                     ${product.get("addImage"+imageNo)}
+                  </#if>
                 </td>
 	            <td class="nameCol">
+	              <#if product.get("xtraLargeImage"+imageNo)?has_content>
                     ${product.get("xtraLargeImage"+imageNo)} 
+                  </#if>
                 </td>
 	            <td class="nameCol">
+	              <#if product.get("xtraDetailImage"+imageNo)?has_content>
 	                ${product.get("xtraDetailImage"+imageNo)} 
+	              </#if>
 	            </td>
 	        </#list>
         </#if>

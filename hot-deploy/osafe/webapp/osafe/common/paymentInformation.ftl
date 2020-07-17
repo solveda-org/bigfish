@@ -69,6 +69,72 @@
 			                 </li>
 				          </ul>
 				       </#if>
+	          <#elseif "EFT_ACCOUNT" == paymentMethod.paymentMethodTypeId>
+		               <#assign orderPaymentPreferences = paymentMethod.getRelated("OrderPaymentPreference")>
+		               <#assign orderPaymentPreference = ""/>
+		               <#if orderPaymentPreferences?has_content>
+		                    <#assign orderPaymentPreference = orderPaymentPreferences[0]!"">
+		               </#if>
+		                <#assign eftAccount = paymentMethod.getRelatedOne("EftAccount")>
+			          <ul class="displayDetail eftAccount">
+			             <li>
+			              <div>
+	                        <h4>${uiLabelMap.EftAccountHeading}</h4>
+				            <label>${uiLabelMap.BankNameCaption}</label>
+				            <span>${eftAccount.bankName!""}</span>
+			              </div>
+			             </li>
+		                <#assign acctNumDisplay = "">
+		                <#assign acctNumber = eftAccount.accountNumber?if_exists>
+		                <#if acctNumber?has_content>
+		                    <#assign size = acctNumber?length - 4>
+		                    <#if (size > 0)>
+		                        <#list 0 .. size-1 as foo>
+		                            <#assign acctNumDisplay = acctNumDisplay + "X">
+		                        </#list>
+		                        <#assign acctNumDisplay = acctNumDisplay + "-" + acctNumber[size .. size + 3]>
+		                    <#else>
+		                        <#-- but if the card number has less than four digits (ie, it was entered incorrectly), display it in full -->
+		                        <#assign acctNumDisplay = acctNumber>
+		                    </#if>
+		                </#if>
+		                <#if acctNumDisplay?has_content>
+			             <li>
+			              <div>
+			                <label>${uiLabelMap.AccountNumberCaption}</label>
+			                <span>${acctNumDisplay}</span>
+			              </div>
+			             </li>
+			            </#if>
+		                <#assign acctNumDisplay = "">
+		                <#assign acctNumber = eftAccount.routingNumber?if_exists>
+		                <#if acctNumber?has_content>
+		                    <#assign size = acctNumber?length - 4>
+		                    <#if (size > 0)>
+		                        <#list 0 .. size-1 as foo>
+		                            <#assign acctNumDisplay = acctNumDisplay + "X">
+		                        </#list>
+		                        <#assign acctNumDisplay = acctNumDisplay + "-" + acctNumber[size .. size + 3]>
+		                    <#else>
+		                        <#-- but if the card number has less than four digits (ie, it was entered incorrectly), display it in full -->
+		                        <#assign acctNumDisplay = acctNumber>
+		                    </#if>
+		                </#if>
+		                <#if acctNumDisplay?has_content>
+			             <li>
+			              <div>
+			                <label>${uiLabelMap.RoutingNumberCaption}</label>
+			                <span>${acctNumDisplay}</span>
+			              </div>
+			             </li>
+			            </#if>
+			             <li>
+			              <div>
+			                <label>${uiLabelMap.AmountCaption}</label>
+			                <span><@ofbizCurrency amount=orderPaymentPreference.maxAmount isoCode=currencyUom rounding=globalContext.currencyRounding/></span>
+			              </div>
+			             </li>
+			          </ul>
 	          <#elseif "EXT_PAYPAL" == paymentMethod.paymentMethodTypeId>
 			          <ul class="displayDetail payPalInfo">
 			             <li>

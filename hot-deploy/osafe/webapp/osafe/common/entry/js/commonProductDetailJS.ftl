@@ -4,6 +4,8 @@
   <#if !PDP_QTY_DEFAULT?has_content || !(Static["com.osafe.util.Util"].isNumber(PDP_QTY_DEFAULT))>
   	<#assign PDP_QTY_DEFAULT = "1"/>
   </#if>
+  
+  <#assign personalizationDefaultMap = Static["org.ofbiz.base.util.UtilProperties"].getResourceBundleMap("parameters_personalization", locale)>
 
   jQuery(function() 
   {
@@ -19,6 +21,8 @@
       {
           var sortedList = jQuery(data).find('#js_'+screen+'reviewList');
           jQuery('#js_'+screen+'reviewList').replaceWith(sortedList);
+          var sortPagingList = jQuery(data).find('#js_'+screen+'reviewPagingList');
+          jQuery('#js_'+screen+'reviewPagingList').replaceWith(sortPagingList);
       });
     }
 
@@ -952,6 +956,308 @@
     <#if isPdpInStoreOnly?exists>
         checkProductInStore('${isPdpInStoreOnly}');
     </#if>
+  });
+  
+  function updateImageText(idx) 
+  {
+  		<#assign textPersonalization = productAtrributeMap.PT_TEXT_PERSONALIZE!/>
+		<#if textPersonalization?has_content && textPersonalization == "TRUE">
+	    	jQuery('#js_productDetailsImageContainer').css("position", "relative");
+	    	
+	    	var img = document.getElementById('js_mainImage'); 
+			var img_Width = img.clientWidth;
+			var img_Height = img.clientHeight;
+	    	
+	    	if(jQuery('#js_imageTextArea').length)
+			{
+				jQuery('#js_imageTextArea').css("width", img_Width + "px");
+			}
+	    	
+	        var updateText = jQuery('#textLine_' + idx).val();
+	        var textDivId = "textOverImg_" + idx;
+	        if(jQuery('#' + textDivId).length)
+	        {
+		        jQuery('#' + textDivId).text(updateText);
+			}
+			else
+			{	
+				textAreaHeight = "${personalizationDefaultMap.PT_AREA_HEIGHT!"46%"}";
+				textAreaPosLeft = "${personalizationDefaultMap.PT_AREA_POS_LEFT!"50px"}";
+				textAreaPosRight = "${personalizationDefaultMap.PT_AREA_POS_RIGHT!"50px"}";
+				textAreaPosBottom = "${personalizationDefaultMap.PT_AREA_POS_BOTTOM!"3"}";
+				<#if productAtrributeMap.PT_AREA_HEIGHT?has_content>
+					textAreaHeight = "${productAtrributeMap.PT_AREA_HEIGHT!}";
+				</#if>
+				<#if productAtrributeMap.PT_AREA_POS_LEFT?has_content>
+					textAreaPosLeft = "${productAtrributeMap.PT_AREA_POS_LEFT!}";
+				</#if>
+				<#if productAtrributeMap.PT_AREA_POS_RIGHT?has_content>
+					textAreaPosRight = "${productAtrributeMap.PT_AREA_POS_RIGHT!}";
+				</#if>
+				<#if productAtrributeMap.PT_AREA_POS_BOTTOM?has_content>
+					textAreaPosBottom = "${productAtrributeMap.PT_AREA_POS_BOTTOM!}";
+				</#if>
+				
+				<#assign textLinesNum = personalizationDefaultMap.PT_TEXT_LINES_NUM!"3"/>
+				<#if productAtrributeMap.PT_TEXT_LINES_NUM?has_content>
+					<#assign textLinesNum = productAtrributeMap.PT_TEXT_LINES_NUM!/>
+				</#if>
+				
+				<#if textLinesNum?has_content && Static["com.osafe.util.Util"].isNumber(textLinesNum) && (textLinesNum?number &gt; 0)>
+					if(!jQuery('#js_imageTextArea').length)
+					{
+						jQuery('<div id="js_imageTextArea" style="position:absolute; width: ' + img_Width + 'px; z-index: 2; bottom:0; height: ' + textAreaHeight + '; padding-left: ' + textAreaPosLeft + '; padding-right: ' + textAreaPosRight + '; padding-bottom:' + textAreaPosBottom + ';"><div id="js_innerTextArea" style="height:100%; width:100%;"><div id="js_textHolder" style="position:relative;"></div></div></div>').prependTo('#js_productDetailsImageContainer');
+					}
+					
+					var isInserted = 'N';
+					var isOtherTextFound = 'N';
+					var lastIdxFound = -1;
+					jQuery('.js_personalizedTextLine').each(function() 
+			        {
+			            var personalizedLineId = jQuery(this).attr('id');
+			            personalizedLineIdArr = personalizedLineId.split('_');
+			            personalizedLineIdx = personalizedLineIdArr[1];
+			            
+			            existingId = "textOverImg_" + personalizedLineIdx;
+			            if(jQuery('#' + existingId).length)
+	        			{
+	        				isOtherTextFound = 'Y';
+	        				lastIdxFound = Number(personalizedLineIdx);
+				            if(Number(personalizedLineIdx) > Number(idx))
+				            {
+				            	jQuery('#' + existingId).before('<div class="textOverImg" id="' + textDivId + '">' + updateText + '</div>');
+				            	isInserted = 'Y';
+				            	return false;
+			            	}
+			            }
+			            
+			        });
+			        
+					if(isInserted == 'N')
+					{
+						if(isOtherTextFound == 'N')
+						{
+							jQuery('<div class="textOverImg" id="' + textDivId + '">' + updateText + '</div>').prependTo('#js_textHolder');
+						}
+						else
+						{
+							jQuery('#textOverImg_' + lastIdxFound).after('<div class="textOverImg" id="' + textDivId + '">' + updateText + '</div>');
+						}
+					}
+				</#if>
+			}
+			
+			var container = document.getElementById('js_innerTextArea'); 
+			var content = document.getElementById('js_textHolder'); 
+			jQuery(content).css("top", (container.clientHeight -content.clientHeight)/2) + "px";
+			
+			var txtHeight = Number(0);
+			jQuery('.textOverImg').each(function() 
+	        {
+	        	txtHeight = Number(txtHeight) + Number(jQuery(this).height());
+	        });
+	        var halfTxtHeight = Number(txtHeight/2);
+			
+			textColor = "${StringUtil.wrapString(personalizationDefaultMap.PT_TEXT_COLOR)!""}";
+			<#if productAtrributeMap.PT_TEXT_COLOR?has_content>
+				textColor = "${StringUtil.wrapString(productAtrributeMap.PT_TEXT_COLOR)!}";
+			</#if>
+			if(textColor != "")
+	  		{
+	  			jQuery('.textOverImg').css("color", textColor);
+	  		}
+	  		
+	  		fontWeight = "${personalizationDefaultMap.PT_FONT_WEIGHT!""}";
+	  		<#if productAtrributeMap.PT_FONT_WEIGHT?has_content>
+				fontWeight = "${productAtrributeMap.PT_FONT_WEIGHT!}";
+			</#if>
+			if(fontWeight != "")
+	  		{
+	  			jQuery('.textOverImg').css("font-weight", fontWeight);
+	  		}
+		</#if>
+        
+  }
+  function updateImageTextSize(idx) 
+  {
+  		if(jQuery('#fontSize_' + idx).length)
+        {
+	  		var updateFontEnum = jQuery('#fontSize_' + idx).val();
+	  		if(updateFontEnum =="")
+	  		{
+	  			updateFontEnum = "${personalizationDefaultMap.PT_DEFAULT_FONT_SIZE!}";
+	  			<#if productAtrributeMap.PT_DEFAULT_FONT_SIZE?has_content>
+					updateFontEnum = "${productAtrributeMap.PT_DEFAULT_FONT_SIZE!}";
+				</#if>
+	  		}
+	  		var updateFont = "20";
+	  		<#assign fontSizeEnums = delegator.findByAndCache("Enumeration", Static["org.ofbiz.base.util.UtilMisc"].toMap("enumTypeId", "FONT_SIZE"))/>  
+	      	<#if fontSizeEnums?has_content>
+	      		<#list fontSizeEnums as fontSizeEnum>
+	      			if(updateFontEnum == "${fontSizeEnum.enumId!}")
+	      			{
+	      				updateFont = "${fontSizeEnum.enumCode!}";
+	      			}
+	          	</#list>
+	      	</#if>
+	      	
+	      	
+	      	<#-- We currently support defining line bottom margins for 7 (enumerated) font size values -->
+	      	updateFontEnumArr = updateFontEnum.split('_');
+			updateFontEnumSizeLevel = updateFontEnumArr[2];
+			updateTextMarginBottom = "-10px";
+			if(updateFontEnumSizeLevel == "1")
+	  		{
+				updateTextMarginBottom = "${personalizationDefaultMap.PT_MARG_BOTTOM_FNT_1!"-3px"}";
+				<#if productAtrributeMap.PT_MARG_BOTTOM_FNT_1?has_content>
+					updateTextMarginBottom = "${productAtrributeMap.PT_MARG_BOTTOM_FNT_1!}";
+				</#if>
+			}
+			else if(updateFontEnumSizeLevel == "2")
+	  		{
+				updateTextMarginBottom = "${personalizationDefaultMap.PT_MARG_BOTTOM_FNT_2!"-4px"}";
+				<#if productAtrributeMap.PT_MARG_BOTTOM_FNT_2?has_content>
+					updateTextMarginBottom = "${productAtrributeMap.PT_MARG_BOTTOM_FNT_2!}";
+				</#if>
+			}
+			else if(updateFontEnumSizeLevel == "3")
+	  		{
+				updateTextMarginBottom = "${personalizationDefaultMap.PT_MARG_BOTTOM_FNT_3!"-5px"}";
+				<#if productAtrributeMap.PT_MARG_BOTTOM_FNT_3?has_content>
+					updateTextMarginBottom = "${productAtrributeMap.PT_MARG_BOTTOM_FNT_3!}";
+				</#if>
+			}
+			else if(updateFontEnumSizeLevel == "4")
+	  		{
+				updateTextMarginBottom = "${personalizationDefaultMap.PT_MARG_BOTTOM_FNT_4!"-7px"}";
+				<#if productAtrributeMap.PT_MARG_BOTTOM_FNT_4?has_content>
+					updateTextMarginBottom = "${productAtrributeMap.PT_MARG_BOTTOM_FNT_4!}";
+				</#if>
+			}
+			else if(updateFontEnumSizeLevel == "5")
+	  		{
+				updateTextMarginBottom = "${personalizationDefaultMap.PT_MARG_BOTTOM_FNT_5!"-8px"}";
+				<#if productAtrributeMap.PT_MARG_BOTTOM_FNT_5?has_content>
+					updateTextMarginBottom = "${productAtrributeMap.PT_MARG_BOTTOM_FNT_5!}";
+				</#if>
+			}
+			else if(updateFontEnumSizeLevel == "6")
+	  		{
+				updateTextMarginBottom = "${personalizationDefaultMap.PT_MARG_BOTTOM_FNT_6!"-9px"}";
+				<#if productAtrributeMap.PT_MARG_BOTTOM_FNT_6?has_content>
+					updateTextMarginBottom = "${productAtrributeMap.PT_MARG_BOTTOM_FNT_6!}";
+				</#if>
+			}
+			else if(updateFontEnumSizeLevel == "7")
+	  		{
+				updateTextMarginBottom = "${personalizationDefaultMap.PT_MARG_BOTTOM_FNT_7!"-10px"}";
+				<#if productAtrributeMap.PT_MARG_BOTTOM_FNT_7?has_content>
+					updateTextMarginBottom = "${productAtrributeMap.PT_MARG_BOTTOM_FNT_7!}";
+				</#if>
+			}
+	      	
+	      	
+	  		var textDivId = "textOverImg_" + idx;
+	        if(jQuery('#' + textDivId).length)
+	        {
+		        jQuery('#' + textDivId).css("font-size", updateFont + "px");
+		        jQuery('#' + textDivId).css("margin-bottom", updateTextMarginBottom);
+			}
+			
+			var container = document.getElementById('js_innerTextArea'); 
+			var content = document.getElementById('js_textHolder'); 
+			jQuery(content).css("top", (container.clientHeight -content.clientHeight)/2) + "px";
+		}
+  }
+  
+  function updateImageTextFont() 
+  {
+  		if(jQuery('#js_fontEnum').length)
+  		{
+	  		var updateFontFamilyEnum = jQuery('#js_fontEnum').val();
+	  		if(updateFontFamilyEnum =="")
+	  		{
+	  			updateFontFamilyEnum = "${personalizationDefaultMap.PT_DEFALUT_FONT!}";
+	  			<#if productAtrributeMap.PT_DEFALUT_FONT?has_content>
+					updateFontFamilyEnum = "${productAtrributeMap.PT_DEFALUT_FONT!}";
+				</#if>
+	  		}
+	  		var updateFontFamily = "Arial";
+	  		<#assign fontFamilyEnums = delegator.findByAndCache("Enumeration", Static["org.ofbiz.base.util.UtilMisc"].toMap("enumTypeId", "FONT_FAMILY"))/>  
+	      	<#if fontSizeEnums?has_content>
+	      		<#list fontFamilyEnums as fontFamilyEnum>
+	      			if(updateFontFamilyEnum == "${fontFamilyEnum.enumId!}")
+	      			{
+	      				updateFontFamily = "${fontFamilyEnum.description!}";
+	      			}
+	          	</#list>
+	      	</#if>
+	
+	        if(jQuery('.textOverImg').length)
+	        {
+		        jQuery('.textOverImg').css("font-family", updateFontFamily);
+			}
+		}
+  }
+  
+  function updateImageTextAlignment() 
+  {
+  		if(jQuery('#js_textAlign').length)
+  		{
+	  		var updateTextAlignEnum = jQuery('#js_textAlign').val();
+	  		if(updateTextAlignEnum =="")
+	  		{
+	  			updateTextAlignEnum = "${personalizationDefaultMap.PT_DEFALUT_TEXT_ALIGN!}";
+	  			<#if productAtrributeMap.PT_TEXT_DEFALUT_ALIGN?has_content>
+					updateTextAlignEnum = "${productAtrributeMap.PT_TEXT_DEFALUT_ALIGN!}";
+				</#if>
+	  		}
+	  		var updateTextAlign = "Arial";
+	  		<#assign textAlignEnums = delegator.findByAndCache("Enumeration", Static["org.ofbiz.base.util.UtilMisc"].toMap("enumTypeId", "TEXT_ALIGN"))/>  
+	      	<#if textAlignEnums?has_content>
+	      		<#list textAlignEnums as textAlignEnum>
+	      			if(updateTextAlignEnum == "${textAlignEnum.enumId!}")
+	      			{
+	      				updateTextAlign = "${textAlignEnum.description!}";
+	      			}
+	          	</#list>
+	      	</#if>
+	
+	        if(jQuery('.textOverImg').length)
+	        {
+		        jQuery('.textOverImg').css("text-align", updateTextAlign);
+			}
+		}
+  }
+  
+  function updatePersonalizationMap(elm) 
+  {
+  		textLinesNum = "${personalizationDefaultMap.PT_TEXT_LINES_NUM!}";
+		<#if productAtrributeMap.PT_TEXT_LINES_NUM?has_content>
+			textLinesNum = "${productAtrributeMap.PT_TEXT_LINES_NUM!}";
+		</#if>
+  		var value = jQuery(elm).val();
+  		var name = jQuery(elm).attr("name");
+  		jQuery.get('<@ofbizUrl>updatePersonalizationMap?textLinesNum='+textLinesNum+'&inputName='+name+'&'+name+'='+value+'&callback=Y&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+            
+        });
+  }
+  
+  
+  jQuery(document).ready(function()
+  {
+  	<#assign textLinesNum = personalizationDefaultMap.PT_TEXT_LINES_NUM!/>
+	<#if productAtrributeMap.PT_TEXT_LINES_NUM?has_content>
+		<#assign textLinesNum = productAtrributeMap.PT_TEXT_LINES_NUM!/>
+	</#if>
+	<#if textLinesNum?has_content && Static["com.osafe.util.Util"].isNumber(textLinesNum) && (textLinesNum?number &gt; 0)>
+		<#list 0 .. (textLinesNum?number-1) as idx>
+			updateImageText('${idx!}');
+			updateImageTextSize('${idx!}');
+		</#list>
+	</#if>
+	updateImageTextFont();
+	updateImageTextAlignment();
   });
 
 </#if>

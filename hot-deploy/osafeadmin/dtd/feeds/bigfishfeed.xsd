@@ -323,11 +323,10 @@
       <xsd:element name="ProductCategory" type="ProductCategoryType" minOccurs="0"/>
       <xsd:element name="Products" type="ProductsType" minOccurs="0"/>
       <xsd:element name="ProductAssociation" type="ProductAssociationType" minOccurs="0"/>
-      
       <xsd:element name="ProductFacetGroup" type="ProductFacetCatGroupType" minOccurs="0"/>
       <xsd:element name="ProductFacetValue" type="ProductFacetValueType" minOccurs="0"/>
-      
       <xsd:element name="ProductManufacturer" type="ProductManufacturerType" minOccurs="0"/>
+      <xsd:element name="ProductAttribute" type="ProductAttributesType" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
   
@@ -409,6 +408,7 @@
     <xsd:all>
       <xsd:element type="ListPriceType" name="ListPrice" minOccurs="1"/>
       <xsd:element type="SalesPriceType" name="SalesPrice" minOccurs="1"/>
+      <xsd:element type="RecurringPriceType" name="RecurringPrice" minOccurs="1"/>
     </xsd:all>
   </xsd:complexType>
   
@@ -422,6 +422,15 @@
   </xsd:complexType>
   
   <xsd:complexType name="SalesPriceType">
+    <xsd:all>
+      <xsd:element type="xsd:string" name="Price" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Currency" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="FromDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ThruDate" default="" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+                  
+  <xsd:complexType name="RecurringPriceType">
     <xsd:all>
       <xsd:element type="xsd:string" name="Price" default="" minOccurs="0"/>
       <xsd:element type="xsd:string" name="Currency" default="" minOccurs="1"/>
@@ -687,7 +696,6 @@
     </xsd:all>
   </xsd:complexType>
 
-  <!-- definition of Product Feature Swatch elements -->
   <xsd:complexType name="ProductManufacturerType">
     <xsd:sequence>
       <xsd:element type="ManufacturerType" name="Manufacturer" minOccurs="0" maxOccurs="unbounded"/>
@@ -719,6 +727,20 @@
       <xsd:element name="StateProvince" type="xsd:string" default="" minOccurs="1"/>
       <xsd:element name="ZipPostCode" type="xsd:string" default="" minOccurs="1"/>
       <xsd:element name="Country" type="xsd:string" default="" minOccurs="1"/>
+    </xsd:all>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ProductAttributesType">
+    <xsd:sequence>
+      <xsd:element type="CustomProductAttributeType" name="Attribute" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="CustomProductAttributeType">
+    <xsd:all>
+      <xsd:element type="xsd:string" name="ProductId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="AttrName" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="AttrValue" default="" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
   
